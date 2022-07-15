@@ -4,8 +4,9 @@ plugins {
 	id 'java'
 }
 
+archivesBaseName = 'backend'
 group = 'com.EntertainmentViet'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
 
 configurations {
@@ -18,13 +19,24 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	mapstructVersion = "1.5.2.Final"
+	lombokVersion = "1.18.22"
+	lombokMapstructBindingVersion = "0.2.0"
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.flywaydb:flyway-core'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }

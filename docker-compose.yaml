@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  backend:
+    container_name: backend-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ve-backend:latest
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PWD=postgres
+    ports:
+      - 8080:8080
+    networks:
+      - internal-network
+  db:
+    image: postgis/postgis:14-3.2-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
