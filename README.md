@@ -10,8 +10,7 @@ The repository for backend server of Viet Entertainment using azul-jdk 17.0.3 an
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
 2. Commit all changes: `git commit -am "message"`
-3. Build app: `gradle stage`
-4. Deploy changes to SQA: `git push heroku main`
+3. Deploy changes to SQA: `git push heroku main`
 
 
 #### Some helpful command with heroku
@@ -20,6 +19,7 @@ The repository for backend server of Viet Entertainment using azul-jdk 17.0.3 an
 * Restart the app: `heroku restart`
 * Check app environment variable: `heroku config` 
 * Check app logs: `heroku logs --tail`
+* Clear database: `heroku pg:reset DATABASE --confirm <app_name>`
 
 ### Access to backend database through db client
 1. Go to Heroku App dashboard

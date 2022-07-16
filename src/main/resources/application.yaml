@@ -9,3 +9,8 @@ spring:
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
     hibernate:
       ddl-auto: update  # TODO: update back to "validate" when finish making database schema
+
+  flyway:
+    enabled: true
+    locations:
+      - classpath:db/migration
