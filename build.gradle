@@ -30,7 +30,8 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.flywaydb:flyway-core'
+	implementation 'org.hibernate:hibernate-spatial'
+//	implementation 'org.flywaydb:flyway-core'
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
@@ -44,3 +45,6 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
