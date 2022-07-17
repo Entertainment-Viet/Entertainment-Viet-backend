@@ -24,14 +24,16 @@ ext {
 	mapstructVersion = "1.5.2.Final"
 	lombokVersion = "1.18.22"
 	lombokMapstructBindingVersion = "0.2.0"
+	keycloakVersion = "16.1.1"
 }
 
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
-//	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
+//	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+	implementation 'org.keycloak:keycloak-spring-boot-starter'
 	implementation "org.flywaydb:flyway-core"
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
@@ -41,6 +43,12 @@ dependencies {
 	runtimeOnly "org.postgresql:postgresql"
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 	testImplementation "org.springframework.security:spring-security-test"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
+	}
 }
 
 tasks.named('test') {
