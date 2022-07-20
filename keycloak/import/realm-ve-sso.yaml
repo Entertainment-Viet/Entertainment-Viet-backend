@@ -1,6 +1,6 @@
 realm: "ve-sso"
 enabled: true
-displayName: "Philippines Fuel Marking"
+displayName: "Viet Entertainment"
 bruteForceProtected: true
 failureFactor: 10
 roles:

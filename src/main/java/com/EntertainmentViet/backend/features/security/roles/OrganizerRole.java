@@ -6,4 +6,5 @@ public enum OrganizerRole {
   ADD_ORGANIZER,
   UPDATE_ORGANIZER,
   DELETE_ORGANIZER,
+  ;
 }
