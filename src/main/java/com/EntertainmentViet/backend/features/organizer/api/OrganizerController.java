@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/organizers")
+@RequestMapping(path = OrganizerController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
 public class OrganizerController {
+
+  public static final String REQUEST_MAPPING_PATH = "/organizers";
 
   private final OrganizerBoundary organizerService;
 
