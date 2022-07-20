@@ -1,0 +1,11 @@
+{
+  clientId: "backend",
+  redirectUris: [
+      "$(properties:properties/$(env:ENVIRONMENT).properties::host)/api/*",
+  ],
+  webOrigins: [
+      "+",
+  ],
+  directAccessGrantsEnabled: true,
+  publicClient: true,
+},

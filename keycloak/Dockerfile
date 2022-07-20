@@ -1,0 +1,9 @@
+ARG KEYCLOAK_CONFIG_CLI_VERSION=5.2.0
+ARG KEYCLOAK_VERSION=16.1.1
+
+FROM adorsys/keycloak-config-cli:${KEYCLOAK_CONFIG_CLI_VERSION}-${KEYCLOAK_VERSION}
+
+COPY import /
+
+# Configurable Environment Variables
+ENV ENVIRONMENT=local

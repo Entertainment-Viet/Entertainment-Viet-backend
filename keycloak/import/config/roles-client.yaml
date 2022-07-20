@@ -1,0 +1,17 @@
+"backend": [
+  {
+    "name": "BROWSE_ORGANIZER"
+  },
+  {
+    "name": "READ_ORGANIZER"
+  },
+  {
+    "name": "ADD_ORGANIZER"
+  },
+  {
+    "name": "UPDATE_ORGANIZER"
+  },
+  {
+    "name": "DELETE_ORGANIZER"
+  }
+]
