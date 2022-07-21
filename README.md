@@ -3,9 +3,10 @@
 The repository for backend server of Viet Entertainment using azul-jdk 17.0.3 and connecting with PostgreSQL 14 database
 
 ### Run locally
-1. docker-compose up -d
-2. The server will be launch in localhost:8080
-3. The backend will be exposed at localhost:5432 with account (postgres/postgres)
+1. ./gradlew clean bootJar 
+2. docker-compose up -d
+3. The server will be launch in localhost:8080
+4. The backend will be exposed at localhost:5432 with account (postgres/postgres)
 
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
