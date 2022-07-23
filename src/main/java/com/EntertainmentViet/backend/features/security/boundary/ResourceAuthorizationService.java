@@ -1,17 +1,20 @@
-package com.EntertainmentViet.backend.features.security;
+package com.EntertainmentViet.backend.features.security.boundary;
 
 import com.EntertainmentViet.backend.features.organizer.api.OrganizerController;
+import com.EntertainmentViet.backend.features.security.api.SecurityController;
 import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthorizationService implements AuthorizationBoundary<HttpSecurity> {
+public class ResourceAuthorizationService implements ResourceAuthorizationBoundary<HttpSecurity> {
 
   @Override
   public void authorizeRequests(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
+    http.csrf().disable()
+        .authorizeRequests()
+        .antMatchers(SecurityController.REQUEST_MAPPING_PATH + "/login").permitAll()
         .antMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
         .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
         .anyRequest().permitAll();

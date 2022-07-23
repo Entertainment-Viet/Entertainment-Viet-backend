@@ -25,6 +25,7 @@ ext {
 	lombokVersion = "1.18.22"
 	lombokMapstructBindingVersion = "0.2.0"
 	keycloakVersion = "16.1.1"
+	commonLangVersion = "3.12.0"
 }
 
 dependencies {
@@ -33,9 +34,11 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-webflux:${springVersion}"
 	implementation 'org.keycloak:keycloak-spring-boot-starter'
 	implementation "org.flywaydb:flyway-core"
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"

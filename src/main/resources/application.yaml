@@ -22,4 +22,6 @@ keycloak:
   public-client: true
   principal-attribute: preferred_username
   use-resource-role-mappings: true
-  verify-token-audience: true
+
+secret:
+  clientSecret: Z6POqTB2rwUGXbEnWi6tGtBEVjuM1y3g
