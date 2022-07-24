@@ -24,4 +24,4 @@ keycloak:
   use-resource-role-mappings: true
 
 secret:
-  clientSecret: Z6POqTB2rwUGXbEnWi6tGtBEVjuM1y3g
+  clientSecret: TtbZiskCIa6zsJUgcaRHGQzcTTJUDOAY

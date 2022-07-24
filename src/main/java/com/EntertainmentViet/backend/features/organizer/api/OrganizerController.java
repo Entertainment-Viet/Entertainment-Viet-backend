@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.api;
 
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
-import com.EntertainmentViet.backend.sharedAbstraction.AbstractApiController;
+import com.EntertainmentViet.backend.abstraction.AbstractApiController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

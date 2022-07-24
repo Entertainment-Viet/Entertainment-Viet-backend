@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @NoArgsConstructor
 @Getter
 @Setter
-public class LoginTokenDto {
+public class LoginResponseDto {
   private String accessToken;
-  private Integer expiresIn;
+  private Instant accessExpiresIn;
   private String refreshToken;
-  private Integer refreshExpiresIn;
+  private Instant refreshExpiresIn;
+  private String idToken;
 }

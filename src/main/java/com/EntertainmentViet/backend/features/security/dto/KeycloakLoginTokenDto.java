@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class SuccessLoginResponseDto {
+public class KeycloakLoginTokenDto {
   @JsonProperty("access_token")
   private String accessToken;
 
@@ -25,6 +25,9 @@ public class SuccessLoginResponseDto {
 
   @JsonProperty("token_type")
   private String tokenType;
+
+  @JsonProperty("id_token")
+  private String idToken;
 
   @JsonProperty("not-before-policy")
   private Integer notBeforePolicy;

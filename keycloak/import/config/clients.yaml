@@ -10,5 +10,10 @@
   ],
   standardFlowEnabled: true,
   directAccessGrantsEnabled: true,
-  publicClient: true,
+  publicClient: false,
+  clientAuthenticatorType: "client-secret",
+  secret: "$(properties:properties/$(env:ENVIRONMENT).properties::client_secret)",
+  attributes: {
+    access.token.lifespan: 6
+  }
 },
