@@ -3,20 +3,17 @@ package com.EntertainmentViet.backend.features.security.boundary;
 import com.EntertainmentViet.backend.config.properties.KeycloakProperties;
 import com.EntertainmentViet.backend.config.properties.SecretProperties;
 import com.EntertainmentViet.backend.features.security.dto.*;
+import com.EntertainmentViet.backend.utils.JwtUtils;
+import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
-import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.KeycloakDeployment;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.util.Optional;
 
@@ -48,12 +45,12 @@ public class AuthenticationService implements AuthenticationBoundary {
         .retrieve()
         .onStatus(HttpStatus.UNAUTHORIZED::equals,
             response -> response.bodyToMono(String.class).map(Exception::new))
-        .bodyToMono(KeycloakLoginTokenDto.class)
+        .bodyToMono(KeycloakTokenDto.class)
         .onErrorMap(e -> {
-          log.error("Get error when getting token from keycloak", e);
+          log.warn("Can not login to keycloak for user: " + request.getUsername());
           return e;
         })
-        .onErrorReturn(new KeycloakLoginTokenDto())
+        .onErrorReturn(new KeycloakTokenDto())
         .block(timeout);
 
     if (loginResponse.getAccessToken() == null) {
@@ -63,7 +60,15 @@ public class AuthenticationService implements AuthenticationBoundary {
   }
 
   @Override
-  public void logout(Duration timeout, LogoutRequestDto request) {
+  public boolean logout(Duration timeout, LogoutRequestDto request) {
+    String requestUser = JwtUtils.getPayloadFromToken(request.getIdToken())
+                                 .map(jwtClaimsSet -> jwtClaimsSet.getClaims().get(JwtUtils.PREFERRED_USERNAME).toString())
+                                 .orElse(null);
+
+    if (requestUser == null) {
+      return false; // Indicate error
+    }
+
     keycloakTokenApiClient.post()
         .uri("/protocol/openid-connect/logout")
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -74,31 +79,48 @@ public class AuthenticationService implements AuthenticationBoundary {
         .retrieve()
         .bodyToMono(Void.class)
         .onErrorMap(e -> {
-          log.error("Get error when revoking token in keycloak", e);
+          log.error("Can not logout user: " + requestUser);
           return e;
         })
         .block(timeout);
 
-//    keycloakSessionLogout(request);
-//    servletSessionLogout(request);
+    return true;
   }
 
+  @Override
+  public Optional<LoginResponseDto> refreshToken(Duration timeout, RefreshRequestDto request) {
+    String requestUser = JwtUtils.getPayloadFromToken(request.getIdToken())
+        .map(jwtClaimsSet -> jwtClaimsSet.getClaims().get(JwtUtils.PREFERRED_USERNAME).toString())
+        .orElse(null);
 
-//  private void servletSessionLogout(HttpServletRequest request) {
-//    try {
-//      request.logout();
-//    } catch (ServletException e) {
-//      log.error("Can not logout from keycloak.",e);
-//    }
-//  }
-//
-//  private void keycloakSessionLogout(HttpServletRequest request){
-//    RefreshableKeycloakSecurityContext context = getKeycloakSecurityContext(request);
-//    KeycloakDeployment keycloakDeployment = context.getDeployment();
-//    context.logout(keycloakDeployment);
-//  }
-//
-//  private RefreshableKeycloakSecurityContext getKeycloakSecurityContext(HttpServletRequest request){
-//    return (RefreshableKeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-//  }
+    if (requestUser == null) {
+      return Optional.empty();
+    }
+
+    var loginResponse = keycloakTokenApiClient.post()
+        .uri("/protocol/openid-connect/token")
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+        .body(BodyInserters.fromFormData("grant_type", "refresh_token")
+            .with("refresh_token", request.getRefreshToken())
+            .with("client_id", keycloakProperties.getResource())
+            .with("client_secret", secretProperties.getClientSecret())
+            .with("scope", "openid")
+        )
+        .retrieve()
+        .onStatus(HttpStatus.BAD_REQUEST::equals,
+            response -> response.bodyToMono(String.class).map(Exception::new))
+        .bodyToMono(KeycloakTokenDto.class)
+        .onErrorMap(e -> {
+          log.warn("Can not get access token for user: " + requestUser);
+          return e;
+        })
+        .onErrorReturn(new KeycloakTokenDto())
+        .block(timeout);
+
+    if (loginResponse.getAccessToken() == null) {
+      return Optional.empty();
+    }
+    return Optional.of(keycloakTokenMapper.toLoginResponseDto(loginResponse));
+  }
+
 }

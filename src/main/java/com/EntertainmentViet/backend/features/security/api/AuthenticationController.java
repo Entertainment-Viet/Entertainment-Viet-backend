@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.features.security.boundary.AuthenticationBo
 import com.EntertainmentViet.backend.features.security.dto.LoginRequestDto;
 import com.EntertainmentViet.backend.features.security.dto.LoginResponseDto;
 import com.EntertainmentViet.backend.features.security.dto.LogoutRequestDto;
+import com.EntertainmentViet.backend.features.security.dto.RefreshRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,6 @@ public class AuthenticationController {
 
   private final AuthenticationBoundary authenticationService;
 
-
-  /**
-   * Makes Keycloak Login.
-   *
-   * @return {@link LoginResponseDto}
-   */
   @PostMapping(path = "/login")
   public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto request) {
     return authenticationService.login(REQUEST_TIMEOUT, request)
@@ -39,16 +34,20 @@ public class AuthenticationController {
         .orElse(new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED));
   }
 
-  /**
-   * Makes Keycloak Logout.
-   *
-   * @param request the request
-   * @return redirect to logout page
-   */
-  @GetMapping(path = "/logout")
+  @PostMapping(path = "/logout")
   public ResponseEntity<Void> logout(@RequestBody LogoutRequestDto request) {
-    authenticationService.logout(REQUEST_TIMEOUT, request);
+    boolean isSuccess = authenticationService.logout(REQUEST_TIMEOUT, request);
+    if (!isSuccess) {
+      return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+    }
     return new ResponseEntity<>(null, HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/refresh")
+  public ResponseEntity<LoginResponseDto> refreshToken(@RequestBody RefreshRequestDto request) {
+    return authenticationService.refreshToken(REQUEST_TIMEOUT, request)
+        .map( loginResponseDto -> new ResponseEntity<>(loginResponseDto, HttpStatus.OK))
+        .orElse(new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED));
   }
 
 }

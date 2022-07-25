@@ -19,7 +19,7 @@ public abstract class KeycloakTokenMapper {
   @BeanMapping(ignoreUnmappedSourceProperties = {"tokenType", "notBeforePolicy", "sessionState", "scope", "expiresIn", "refreshExpiresIn"})
   @Mapping(source = "accessToken", target = "accessExpiresIn", qualifiedByName = "toExpiredTime")
   @Mapping(source = "refreshToken", target = "refreshExpiresIn", qualifiedByName = "toExpiredTime")
-  public abstract LoginResponseDto toLoginResponseDto(KeycloakLoginTokenDto keycloakLoginTokenDto);
+  public abstract LoginResponseDto toLoginResponseDto(KeycloakTokenDto keycloakTokenDto);
 
   @Named("toExpiredTime")
   protected Instant toExpiredTime(String token) {

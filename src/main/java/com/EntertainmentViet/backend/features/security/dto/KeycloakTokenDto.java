@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class KeycloakLoginTokenDto {
+public class KeycloakTokenDto {
   @JsonProperty("access_token")
   private String accessToken;
 
