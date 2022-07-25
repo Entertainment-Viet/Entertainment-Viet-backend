@@ -11,6 +11,7 @@ The repository for backend server of Viet Entertainment, here is the version for
 2. docker-compose up -d
 3. The server will be launch in localhost:8080
 4. The backend will be exposed at localhost:5432 with account (postgres/postgres)
+5. The keycloak server will be at localhost:18080/auth
 
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
