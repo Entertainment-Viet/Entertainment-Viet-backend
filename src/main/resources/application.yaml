@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: /api
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}
@@ -23,5 +27,3 @@ keycloak:
   principal-attribute: preferred_username
   use-resource-role-mappings: true
 
-secret:
-  clientSecret: TtbZiskCIa6zsJUgcaRHGQzcTTJUDOAY

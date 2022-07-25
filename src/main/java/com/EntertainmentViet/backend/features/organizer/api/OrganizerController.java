@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.organizer.api;
 
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
-import com.EntertainmentViet.backend.abstraction.AbstractApiController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,9 +12,9 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(path = OrganizerController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
-public class OrganizerController extends AbstractApiController {
+public class OrganizerController {
 
-  public static final String REQUEST_MAPPING_PATH = AbstractApiController.API_ROOT + "/organizers";
+  public static final String REQUEST_MAPPING_PATH = "/organizers";
 
   private final OrganizerBoundary organizerService;
 
