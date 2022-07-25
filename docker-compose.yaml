@@ -25,11 +25,34 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - '5432:5432'
+      - 5432:5432
     volumes:
       - db:/var/lib/postgresql/data
     networks:
       - internal-network
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    environment:
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: keycloak
+      DB_ADDR: keycloak-db
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      DB_PORT: 5432
+      DB_DATABASE: keycloakdb
+      DB_VENDOR: postgres
+    ports:
+      - 18080:8080
+    depends_on:
+      - postgresql-keycloak
+  keycloak-db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+      POSTGRES_DB: keycloakdb
+    volumes:
+      - keycloakdb:/var/lib/postgresql/data
 
 networks:
   internal-network:
@@ -37,4 +60,6 @@ networks:
 
 volumes:
   db:
+    driver: local
+  keycloakdb:
     driver: local

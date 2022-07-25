@@ -1,0 +1,14 @@
+{
+  clientId: "backend",
+  protocol: "openid-connect",
+  enabled: true,
+  redirectUris: [
+      "$(properties:properties/$(env:ENVIRONMENT).properties::host)/*",
+  ],
+  webOrigins: [
+      "+",
+  ],
+  standardFlowEnabled: true,
+  directAccessGrantsEnabled: true,
+  publicClient: true,
+},

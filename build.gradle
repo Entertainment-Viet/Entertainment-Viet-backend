@@ -24,16 +24,19 @@ ext {
 	mapstructVersion = "1.5.2.Final"
 	lombokVersion = "1.18.22"
 	lombokMapstructBindingVersion = "0.2.0"
+	commonLangVersion = "3.12.0"
 }
 
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
-//	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springVersion}"
 	implementation "org.flywaydb:flyway-core"
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
+	implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -42,6 +45,7 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 	testImplementation "org.springframework.security:spring-security-test"
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

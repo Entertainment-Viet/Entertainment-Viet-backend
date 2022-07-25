@@ -1,0 +1,54 @@
+{
+  "username": "root",
+  "enabled": true,
+  "realmRoles": [
+    "ADMIN",
+    "TALENT",
+    "ORGANIZER",
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "root"
+    }
+  ]
+},
+{
+  "username": "admin",
+  "enabled": true,
+  "realmRoles": [
+    "ADMIN"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "admin"
+    }
+  ]
+},
+{
+  "username": "organizer",
+  "enabled": true,
+  "realmRoles": [
+    "ORGANIZER"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "organizer"
+    }
+  ]
+},
+{
+  "username": "talent",
+  "enabled": true,
+  "realmRoles": [
+    "TALENT"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "talent"
+    }
+  ]
+},

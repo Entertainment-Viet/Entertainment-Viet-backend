@@ -1,0 +1,42 @@
+[
+  {
+    "name": "ADMIN",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
+            "BROWSE_ORGANIZER",
+            "READ_ORGANIZER",
+            "ADD_ORGANIZER",
+            "UPDATE_ORGANIZER",
+            "DELETE_ORGANIZER"
+        ]
+      }
+    }
+  },
+  {
+    "name": "TALENT",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
+            "BROWSE_ORGANIZER"
+        ]
+      }
+    }
+  },
+  {
+    "name": "ORGANIZER",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
+            "READ_ORGANIZER",
+            "ADD_ORGANIZER",
+            "UPDATE_ORGANIZER",
+            "DELETE_ORGANIZER"
+        ]
+      }
+    }
+  }
+]

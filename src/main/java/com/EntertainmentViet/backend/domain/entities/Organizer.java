@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 public class Organizer implements User {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue
   private long id;
 
 //  @NotNull

@@ -1,0 +1,16 @@
+realm: "ve-sso"
+enabled: true
+displayName: "Viet Entertainment"
+bruteForceProtected: true
+failureFactor: 10
+roles:
+  realm:
+    $(file:UTF-8:config/roles-realm.yaml)
+  client:
+    $(file:UTF-8:config/roles-client.yaml)
+clients: [
+  $(file:UTF-8:config/clients.yaml)
+]
+users: [
+  $(file:UTF-8:config/users.yaml)
+]

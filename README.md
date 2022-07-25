@@ -1,6 +1,10 @@
 # Viet-Entertainment-backend
 
-The repository for backend server of Viet Entertainment using azul-jdk 17.0.3 and connecting with PostgreSQL 14 database
+The repository for backend server of Viet Entertainment, here is the version for its component:
+  - JDK: azul-zulu 17.0.3
+  - PostgreSQL: 14
+  - Postgis: 3.2
+  - Keycloak 16.1.1 
 
 ### Run locally
 1. ./gradlew clean bootJar 
