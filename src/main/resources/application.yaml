@@ -17,13 +17,9 @@ spring:
     enabled: true
     locations:
       - classpath:db/migration
-
-keycloak:
-  realm: ve-sso
-  resource: backend
-  auth-server-url: http://localhost:18080/auth
-  ssl-required: external
-  public-client: true
-  principal-attribute: preferred_username
-  use-resource-role-mappings: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:18080/auth/realms/ve-sso
 

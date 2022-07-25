@@ -11,11 +11,11 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
   @Override
   public void authorizeRequests(HttpSecurity http) throws Exception {
-    http.csrf().disable()
-        .authorizeRequests()
-        .antMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
-        .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
-        .anyRequest().permitAll();
+    http
+        .authorizeHttpRequests(authorize -> authorize
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
+            .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
+            .anyRequest().authenticated());
   }
 
   private String anyPathAfter(String pattern) {

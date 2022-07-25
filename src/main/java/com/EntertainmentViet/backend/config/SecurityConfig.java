@@ -2,57 +2,74 @@ package com.EntertainmentViet.backend.config;
 
 import com.EntertainmentViet.backend.features.security.boundary.ResourceAuthorizationBoundary;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
-import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.keycloak.adapters.springsecurity.management.HttpSessionManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.SecurityFilterChain;
 
-@KeycloakConfiguration
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+public class SecurityConfig {
+
+  private static final String CLIENT_ID = "backend";
 
   private final ResourceAuthorizationBoundary<HttpSecurity> resourceAuthorizationBoundary;
 
-  @Autowired
-  public void configureGlobal(AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(keycloakAuthenticationProvider());
-  }
-
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    super.configure(http);
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     resourceAuthorizationBoundary.authorizeRequests(http);
-    http.exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
+    http
+        .oauth2ResourceServer()
+        .jwt()
+        .jwtAuthenticationConverter(new CustomJwtAuthenticationConverter(CLIENT_ID));
+
+    return http.build();
   }
 
-  @Bean
-  @Override
-  protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-    return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
-  }
+  private class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+    private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
-  @Bean
-  @Override
-  @ConditionalOnMissingBean(HttpSessionManager.class)
-  protected HttpSessionManager httpSessionManager() {
-    return new HttpSessionManager();
-  }
+    private final String resourceId;
 
-  /**
-   * Enable Single Sign Out
-   */
-  @Bean
-  public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-    return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+    public CustomJwtAuthenticationConverter(String resourceId) {
+      this.resourceId = resourceId;
+    }
+
+    @Override
+    public AbstractAuthenticationToken convert(final Jwt source) {
+      Collection<GrantedAuthority> authorities = Stream.concat(defaultGrantedAuthoritiesConverter.convert(source)
+                  .stream(),
+              extractResourceRoles(source, resourceId).stream())
+          .collect(Collectors.toSet());
+      return new JwtAuthenticationToken(source, authorities);
+    }
+
+    private static Collection<? extends GrantedAuthority> extractResourceRoles(final Jwt jwt, final String resourceId) {
+      Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
+      Map<String, Object> resource;
+      Collection<String> resourceRoles;
+      if (resourceAccess != null && (resource = (Map<String, Object>) resourceAccess.get(resourceId)) != null &&
+          (resourceRoles = (Collection<String>) resource.get("roles")) != null)
+        return resourceRoles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toSet());
+      return Collections.emptySet();
+    }
   }
 }
