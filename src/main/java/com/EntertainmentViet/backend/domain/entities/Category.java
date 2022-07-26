@@ -3,28 +3,22 @@ package com.EntertainmentViet.backend.domain.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
-@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class Organizer implements User {
+public class Category {
 
   @Id
   @GeneratedValue
   private Long id;
 
-//  @NotNull
-  private String address;
+  private String name;
 
-//  @NotNull
-  private Boolean temporary;
+  private Long parentId;
 }
