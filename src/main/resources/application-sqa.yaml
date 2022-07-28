@@ -9,3 +9,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://shielded-escarpment-36770.herokuapp.com/auth/realms/ve-sso
+
+security:
+  allowed_origins:
+    - http://localhost:3000
+    - https://comfy-cheesecake-9cf057.netlify.app

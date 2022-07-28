@@ -23,3 +23,6 @@ spring:
         jwt:
           issuer-uri: http://localhost:18080/auth/realms/ve-sso
 
+security:
+  allowed_origins:
+    - http://localhost:3000
