@@ -18,9 +18,9 @@ public class OrganizerController {
 
   private final OrganizerBoundary organizerService;
 
-  @GetMapping(value = "/{id}")
-  public OrganizerDto findById(@PathVariable("id") Long id) {
-    return organizerService.findById(id);
+  @GetMapping(value = "/{uid}")
+  public OrganizerDto findById(@PathVariable("uid") Long uid) {
+    return organizerService.findByUid(uid);
   }
 
   @PostMapping(
@@ -29,6 +29,24 @@ public class OrganizerController {
   @ResponseStatus(HttpStatus.CREATED)
   public Long create(@RequestBody @Valid OrganizerDto organizerDto) {
     return organizerService.create(organizerDto);
+  }
+
+  @PutMapping(value = "/{uid}")
+  public Long updateById(@PathVariable("uid") Long uid) {
+    // TODO
+    return null;
+  }
+
+  @GetMapping(value = "/{uid}/cash")
+  public Long receivePayment(@PathVariable("uid") Long uid) {
+    // TODO
+    return null;
+  }
+
+  @PostMapping(value = "/{uid}/cash")
+  public Long proceedPayment(@PathVariable("uid") Long uid) {
+    // TODO
+    return null;
   }
 
 }

@@ -2,9 +2,9 @@
   "username": "root",
   "enabled": true,
   "realmRoles": [
-    "ADMIN",
-    "TALENT",
-    "ORGANIZER",
+    "FULL_ADMIN",
+    "VERIFIED_TALENT",
+    "VERIFIED_ORGANIZER",
   ],
   "credentials": [
     {
@@ -14,15 +14,15 @@
   ]
 },
 {
-  "username": "admin",
+  "username": "readonly_admin",
   "enabled": true,
   "realmRoles": [
-    "ADMIN"
+    "READONLY_ADMIN"
   ],
   "credentials": [
     {
       "type": "password",
-      "value": "admin"
+      "value": "readonly_admin"
     }
   ]
 },
@@ -30,7 +30,7 @@
   "username": "organizer",
   "enabled": true,
   "realmRoles": [
-    "ORGANIZER"
+    "VERIFIED_ORGANIZER"
   ],
   "credentials": [
     {
@@ -40,15 +40,41 @@
   ]
 },
 {
-  "username": "talent",
+  "username": "guest_organizer",
   "enabled": true,
   "realmRoles": [
-    "TALENT"
+      "GUEST_ORGANIZER"
   ],
   "credentials": [
     {
       "type": "password",
-      "value": "talent"
+      "value": "guest_organizer"
+    }
+  ]
+},
+{
+  "username": "guest_talent",
+  "enabled": true,
+  "realmRoles": [
+    "GUEST_TALENT"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "guest_talent"
+    }
+  ]
+},
+{
+  "username": "talent",
+  "enabled": true,
+  "realmRoles": [
+      "VERIFIED_TALENT"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "guest_talent"
     }
   ]
 },

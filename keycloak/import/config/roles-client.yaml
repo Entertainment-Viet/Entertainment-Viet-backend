@@ -1,17 +1,188 @@
 "backend": [
-  {
-    "name": "BROWSE_ORGANIZER"
-  },
-  {
-    "name": "READ_ORGANIZER"
-  },
-  {
-    "name": "ADD_ORGANIZER"
-  },
-  {
-    "name": "UPDATE_ORGANIZER"
-  },
-  {
-    "name": "DELETE_ORGANIZER"
-  }
+    {
+        "name": "VERIFY_ORGANIZER"
+    },
+    {
+        "name": "SELF_READ_ORGANIZER"
+    },
+    {
+        "name": "SELF_UPDATE_ORGANIZER"
+    },
+    {
+        "name": "RECEIVE_ORGANIZER_CASH"
+    },
+    {
+        "name": "PAY_ORGANIZER_CASH"
+    },
+    {
+        "name": "BROWSE_JOBOFFER"
+    },
+    {
+        "name": "ADD_JOBOFFER"
+    },
+    {
+        "name": "READ_JOBOFFER"
+    },
+    {
+        "name": "UPDATE_JOBOFFER"
+    },
+    {
+        "name": "DELETE_JOBOFFER"
+    },
+    {
+        "name": "BROWSE_EVENT"
+    },
+    {
+        "name": "ADD_EVENT"
+    },
+    {
+        "name": "READ_EVENT"
+    },
+    {
+        "name": "UPDATE_EVENT"
+    },
+    {
+        "name": "DELETE_EVENT"
+    },
+    {
+        "name": "APPLY_ORGANIZER_EVENT"
+    },
+    {
+        "name": "BROWSE_EVENT_APPLICANT"
+    },
+    {
+        "name": "ACCEPT_EVENT_APPLICANT"
+    },
+    {
+        "name": "REJECT_EVENT_APPLICANT"
+    },
+    {
+        "name": "VERIFY_TALENT"
+    },
+    {
+        "name": "SELF_READ_TALENT"
+    },
+    {
+        "name": "SELF_UPDATE_TALENT"
+    },
+    {
+        "name": "RECEIVE_TALENT_CASH"
+    },
+    {
+        "name": "PAY_TALENT_CASH"
+    },
+    {
+        "name": "BROWSE_PACKAGE"
+    },
+    {
+        "name": "ADD_PACKAGE"
+    },
+    {
+        "name": "READ_PACKAGE"
+    },
+    {
+        "name": "UPDATE_PACKAGE"
+    },
+    {
+        "name": "DELETE_PACKAGE"
+    },
+    {
+        "name": "ORDER_TALENT_PACKAGE"
+    },
+    {
+        "name": "BROWSE_PACKAGE_ORDER"
+    },
+    {
+        "name": "ACCEPT_PACKAGE_ORDER"
+    },
+    {
+        "name": "REJECT_PACKAGE_ORDER"
+    },
+    {
+        "name": "BROWSE_BOOKING_ORGANIZER"
+    },
+    {
+        "name": "ACCEPT_BOOKING_ORGANIZER"
+    },
+    {
+        "name": "CANCEL_BOOKING_ORGANIZER"
+    },
+    {
+        "name": "BROWSE_BOOKING_TALENT"
+    },
+    {
+        "name": "ACCEPT_BOOKING_TALENT"
+    },
+    {
+        "name": "CANCEL_BOOKING_TALENT"
+    },
+    {
+        "name": "READ_BOOKING"
+    },
+    {
+        "name": "ADD_BOOKING"
+    },
+    {
+        "name": "UPDATE_BOOKING"
+    },
+    {
+        "name": "BROWSE_ADVERTISEMENT"
+    },
+    {
+        "name": "ADD_ADVERTISEMENT"
+    },
+    {
+        "name": "READ_ADVERTISEMENT"
+    },
+    {
+        "name": "UPDATE_ADVERTISEMENT"
+    },
+    {
+        "name": "DELETE_ADVERTISEMENT"
+    },
+    {
+        "name": "GET_ADVERTISEMENT_CASH"
+    },
+    {
+        "name": "PAY_ADVERTISEMENT_CASH"
+    },
+    {
+        "name": "ADMIN_BROWSE_ORGANIZER"
+    },
+    {
+        "name": "ADMIN_APPROVE_ORGANIZER"
+    },
+    {
+        "name": "ADMIN_UPDATE_ORGANIZER"
+    },
+    {
+        "name": "ADMIN_DEACTIVE_ORGANIZER"
+    },
+    {
+        "name": "ADMIN_BROWSE_TALENT"
+    },
+    {
+        "name": "ADMIN_APPROVE_TALENT"
+    },
+    {
+        "name": "ADMIN_UPDATE_TALENT"
+    },
+    {
+        "name": "ADMIN_DEACTIVE_TALENT"
+    },
+    {
+        "name": "ADMIN_BROWSE_ADVERTISEMENT"
+    },
+    {
+        "name": "ADMIN_APPROVE_ADVERTISEMENT"
+    },
+    {
+        "name": "ADMIN_DELETE_ADVERTISEMENT"
+    },
+    {
+        "name": "ADMIN_UPDATE_ADVERTISEMENT"
+    },
+{
+        "name": "READ_CATEGORY"
+}
 ]

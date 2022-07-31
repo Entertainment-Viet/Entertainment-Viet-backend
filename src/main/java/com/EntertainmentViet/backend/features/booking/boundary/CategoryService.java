@@ -14,8 +14,4 @@ public class CategoryService implements CategoryBoundary {
     return Arrays.asList(CategoryDto.builder().name("Hiphop").parentName("Dance").build());
   }
 
-  @Override
-  public CategoryDto findById(Long id) {
-    return CategoryDto.builder().name("Dance").build();
-  }
 }

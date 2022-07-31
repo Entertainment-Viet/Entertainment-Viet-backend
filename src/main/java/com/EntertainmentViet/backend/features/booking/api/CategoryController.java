@@ -24,8 +24,4 @@ public class CategoryController {
     return categoryService.findAll();
   }
 
-  @GetMapping("/{id}")
-  public CategoryDto findById(@PathVariable("id") Long id) {
-    return categoryService.findById(id);
-  }
 }

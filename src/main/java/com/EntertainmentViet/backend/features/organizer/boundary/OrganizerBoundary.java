@@ -4,7 +4,7 @@ import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 
 public interface OrganizerBoundary {
 
-  OrganizerDto findById(Long id);
+  OrganizerDto findByUid(Long uid);
 
   Long create(OrganizerDto organizerDto);
 }

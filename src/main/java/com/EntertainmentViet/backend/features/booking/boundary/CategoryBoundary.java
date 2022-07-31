@@ -7,6 +7,4 @@ import java.util.List;
 public interface CategoryBoundary {
 
   List<CategoryDto> findAll();
-
-  CategoryDto findById(Long id);
 }
