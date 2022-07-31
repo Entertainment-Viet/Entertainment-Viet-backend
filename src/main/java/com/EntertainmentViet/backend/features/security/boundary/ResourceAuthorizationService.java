@@ -191,11 +191,11 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
   }
 
   private String ofPath(String pattern) {
-    return pattern.replaceAll("(?:\\{[a-zA-Z\\_]*\\})", "**");
+    return pattern.replaceAll("(?:\\{[a-zA-Z\\_]*\\})", "*");
   }
 
   private String anyPathAfter(String pattern) {
-    return ofPath(pattern) + "/**";
+    return ofPath(pattern) + "/*";
   }
 
   private String ofPaymentPath(String pattern) {
