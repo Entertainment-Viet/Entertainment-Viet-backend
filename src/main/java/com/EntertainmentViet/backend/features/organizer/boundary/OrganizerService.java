@@ -15,7 +15,7 @@ public class OrganizerService implements OrganizerBoundary {
   private final OrganizerMapper organizerMapper;
 
   @Override
-  public OrganizerDto findById(Long id) {
+  public OrganizerDto findByUid(Long id) {
     return organizerRepository.findById(id).map(organizerMapper::toDto).orElse(null);
   }
 
