@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
+import com.EntertainmentViet.backend.features.booking.api.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.TalentBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.EventBookingController;
@@ -26,6 +27,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
   public void authorizeRequests(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
+            // User creation mapping
             .mvcMatchers(HttpMethod.POST, ofPath(UserController.REQUEST_MAPPING_PATH))
             .permitAll()
 
@@ -180,6 +182,10 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_DELETE_ADVERTISEMENT.name())
             .mvcMatchers(HttpMethod.DELETE , anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_ADVERTISEMENT.name())
+
+            // Category mapping
+            .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
+            .hasAuthority(CategoryRole.READ_CATEGORY.name())
 
             .anyRequest().authenticated());
   }

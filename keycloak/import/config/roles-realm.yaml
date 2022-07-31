@@ -79,7 +79,8 @@
             "READ_EVENT",
             "BROWSE_EVENT_APPLICANT",
             "BROWSE_BOOKING_ORGANIZER",
-            "READ_BOOKING"
+            "READ_BOOKING",
+            "READ_CATEGORY"
         ]
       }
     }
@@ -144,7 +145,8 @@
             "BROWSE_BOOKING_TALENT",
             "READ_BOOKING",
             "BROWSE_ADVERTISEMENT",
-            "READ_ADVERTISEMENT"
+            "READ_ADVERTISEMENT",
+            "READ_CATEGORY"
         ]
       }
     }

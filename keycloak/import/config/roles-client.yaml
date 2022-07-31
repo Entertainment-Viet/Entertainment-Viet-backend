@@ -181,5 +181,8 @@
     },
     {
         "name": "ADMIN_UPDATE_ADVERTISEMENT"
-    }
+    },
+{
+        "name": "READ_CATEGORY"
+}
 ]
