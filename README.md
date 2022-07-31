@@ -6,6 +6,8 @@ The repository for backend server of Viet Entertainment, here is the version for
   - Postgis: 3.2
   - Keycloak 16.1.1 
 
+The `keycloak` folder store the automation configuration for keycloak. Refer its README for more information
+
 ### Run locally
 1. ./gradlew clean bootJar 
 2. docker-compose up -d
@@ -15,8 +17,9 @@ The repository for backend server of Viet Entertainment, here is the version for
 
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
-2. Commit all changes: `git commit -am "message"`
-3. Deploy changes to SQA: `git push heroku main`
+2. Connect to app on heroku: ` heroku git:remote boiling-shore-81192`
+3. Commit all changes: `git commit -am "message"`
+4. Deploy changes to SQA: `git push heroku main`
 
 
 #### Some helpful command with heroku
