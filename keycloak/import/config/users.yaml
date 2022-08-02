@@ -74,7 +74,7 @@
   "credentials": [
     {
       "type": "password",
-      "value": "guest_talent"
+      "value": "talent"
     }
   ]
 },
