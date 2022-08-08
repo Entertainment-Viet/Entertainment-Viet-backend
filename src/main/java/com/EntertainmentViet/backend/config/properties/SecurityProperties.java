@@ -15,5 +15,5 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class SecurityProperties {
-  private List<String> allowedOrigins = new ArrayList<String>();
+  private List<String> allowedOrigins = new ArrayList<>();
 }
