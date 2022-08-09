@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities;
 
+import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
@@ -27,7 +29,8 @@ import java.time.Instant;
     typeClass = PostgreSQLEnumType.class
 )
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public abstract class User extends Account {
+@EntityListeners({AuditableListener.class})
+public abstract class User extends Account implements Auditable {
 
   private String phoneNumber;
 

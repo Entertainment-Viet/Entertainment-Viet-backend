@@ -36,3 +36,38 @@ The `keycloak` folder store the automation configuration for keycloak. Refer its
 3. Go To Settings
 4. Click on Credentials (this information can change dynamically, make sure check the data again before connect)
 5. Copy database information for connection
+
+
+## Development ##
+
+### Adding Flyway migration ### 
+The Flyway migration script naming convention should be V*YYYYMMDD_HHmmss__xxx_name*.
+Where:
+  - YYYY: year
+  - MM: month
+  - DD: day of the month
+  - HH: hour 
+  - mm: minute 
+  - ss: second
+  - xxx: script type (DDL/DML)
+  - name: script name
+
+### Debug Hibernate generated SQL 
+```yaml
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true    
+        format_sql: true   
+        
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
+```
