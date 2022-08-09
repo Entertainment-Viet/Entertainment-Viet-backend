@@ -1,7 +1,12 @@
 package com.EntertainmentViet.backend.features.organizer.dao;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.EntertainmentViet.backend.features.common.dao.IdentifiableRepository;
+import org.springframework.stereotype.Repository;
 
-public interface OrganizerRepository extends JpaRepository<Organizer, Long> {
+import javax.transaction.Transactional;
+
+@Repository
+@Transactional
+public interface OrganizerRepository extends IdentifiableRepository<Organizer> {
 }
