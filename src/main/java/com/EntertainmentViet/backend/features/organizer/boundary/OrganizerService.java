@@ -6,6 +6,8 @@ import com.EntertainmentViet.backend.features.organizer.dto.OrganizerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class OrganizerService implements OrganizerBoundary {
@@ -15,13 +17,13 @@ public class OrganizerService implements OrganizerBoundary {
   private final OrganizerMapper organizerMapper;
 
   @Override
-  public OrganizerDto findByUid(Long id) {
-    return organizerRepository.findById(id).map(organizerMapper::toDto).orElse(null);
+  public OrganizerDto findByUid(UUID id) {
+    return organizerRepository.findByUid(id).map(organizerMapper::toDto).orElse(null);
   }
 
   @Override
-  public Long create(OrganizerDto organizerDto) {
+  public OrganizerDto create(OrganizerDto organizerDto) {
     var newOrganizer = organizerRepository.save(organizerMapper.toModel(organizerDto));
-    return newOrganizer.getId();
+    return organizerMapper.toDto(newOrganizer);
   }
 }

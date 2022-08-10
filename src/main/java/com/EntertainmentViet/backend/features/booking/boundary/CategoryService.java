@@ -9,9 +9,10 @@ import java.util.List;
 @Service
 public class CategoryService implements CategoryBoundary {
 
+  // TODO
   @Override
   public List<CategoryDto> findAll() {
-    return Arrays.asList(CategoryDto.builder().name("Hiphop").parentName("Dance").build());
+    return null;
   }
 
 }

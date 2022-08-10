@@ -19,9 +19,10 @@ public class CategoryController {
 
   private final CategoryBoundary categoryService;
 
-  @GetMapping()
-  public List<CategoryDto> findAll() {
-    return categoryService.findAll();
-  }
+  // TODO
+//  @GetMapping()
+//  public List<CategoryDto> findAll() {
+//    return categoryService.findAll();
+//  }
 
 }
