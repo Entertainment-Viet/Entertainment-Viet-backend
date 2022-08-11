@@ -12,8 +12,8 @@ import org.mapstruct.Named;
 public abstract class OrganizerMapper {
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"id", "jobOffers", "events", "bookings", "feedbacks"}) // TODO: enable jobOffers source mapping
-  @Mapping(target = "jobOfferDto", ignore = true) // TODO: remove and fix this
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
+  @Mapping(target = "jobOfferDto", ignore = true) // TODO: remove and fix this
   public abstract OrganizerDto toDto(Organizer organizer);
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"jobOfferDto"}) // TODO: remove and fix this

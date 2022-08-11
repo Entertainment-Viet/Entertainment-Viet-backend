@@ -3,7 +3,9 @@ package com.EntertainmentViet.backend.domain.entities.booking;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Price;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import java.time.Instant;
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
 )
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class JobDetail implements Serializable {
 
   @Id
@@ -53,4 +56,8 @@ public class JobDetail implements Serializable {
   private Instant performanceTime;
 
   private String note;
+
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private JsonNode extensions;
 }
