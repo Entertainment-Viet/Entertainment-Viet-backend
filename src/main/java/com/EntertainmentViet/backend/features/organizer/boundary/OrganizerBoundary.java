@@ -2,9 +2,11 @@ package com.EntertainmentViet.backend.features.organizer.boundary;
 
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 
+import java.util.UUID;
+
 public interface OrganizerBoundary {
 
-  OrganizerDto findByUid(Long uid);
+  OrganizerDto findByUid(UUID uid);
 
-  Long create(OrganizerDto organizerDto);
+  OrganizerDto create(OrganizerDto organizerDto);
 }
