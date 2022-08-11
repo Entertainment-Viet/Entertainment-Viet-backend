@@ -1,1 +1,0 @@
-ALTER TABLE job_detail ADD extensions JSONB;

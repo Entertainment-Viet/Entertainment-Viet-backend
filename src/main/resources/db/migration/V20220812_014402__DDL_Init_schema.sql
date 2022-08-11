@@ -146,6 +146,7 @@ CREATE TABLE job_detail (
    min DOUBLE PRECISION,
    max DOUBLE PRECISION,
    currency CURRENCY_TYPE NOT NULL,
+   extensions JSONB,
    CONSTRAINT pk_jobdetail PRIMARY KEY (id)
 );
 
@@ -282,3 +283,13 @@ ALTER TABLE open_position_applicant ADD CONSTRAINT uc_open_position_applicant_ap
 ALTER TABLE open_position_applicant ADD CONSTRAINT fk_opeposapp_on_booking FOREIGN KEY (applicant_id) REFERENCES booking (id);
 ALTER TABLE open_position_applicant ADD CONSTRAINT fk_opeposapp_on_event_open_position FOREIGN KEY (open_position_id) REFERENCES event_open_position (id);
 
+-- Table: shopping_cart --
+
+DROP TABLE IF EXISTS shopping_cart CASCADE;
+CREATE TABLE shopping_cart (
+  id BIGINT NOT NULL,
+   cart_item TEXT NOT NULL,
+   shoppable_id BIGINT NOT NULL
+);
+
+ALTER TABLE shopping_cart ADD CONSTRAINT fk_shopping_cart_organizer FOREIGN KEY (id) REFERENCES organizer (id);

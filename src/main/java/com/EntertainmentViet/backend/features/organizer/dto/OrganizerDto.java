@@ -14,6 +14,4 @@ import lombok.experimental.SuperBuilder;
 public class OrganizerDto extends UserDto {
 
   private JobOfferDto jobOfferDto;
-
-  private String extensions;
 }
