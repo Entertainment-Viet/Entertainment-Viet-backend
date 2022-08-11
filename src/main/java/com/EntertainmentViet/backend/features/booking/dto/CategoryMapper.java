@@ -10,13 +10,13 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class)
 public abstract class CategoryMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "parent"})
-    @Mapping(target = "id", source = "category.uid")
-    @Mapping(target = "parentName", source = "parent", qualifiedByName = "parentName")
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @Mapping(target = "id", source = "uid")
+    @Mapping(target = "parentName", source = "parent", qualifiedByName = "toParentName")
     public abstract CategoryDto toDto(Category category);
 
-    @Named("parentName")
-    public String parentName(Category category) {
+    @Named("toParentName")
+    public String toParentName(Category category) {
         return category != null ? category.getName() : null;
     }
 
