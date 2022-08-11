@@ -11,6 +11,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class CategoryDto {
 
+  private String id;
+
   private String name;
 
   private String parentName;
