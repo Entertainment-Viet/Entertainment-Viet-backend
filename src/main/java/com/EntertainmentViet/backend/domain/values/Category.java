@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.values;
 
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ import java.io.Serializable;
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
 )
-public class Category implements Serializable {
+public class Category extends Identifiable implements Serializable {
 
   @Id
   @GeneratedValue
