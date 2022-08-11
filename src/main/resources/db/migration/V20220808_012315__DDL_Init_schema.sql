@@ -80,6 +80,8 @@ CREATE TABLE admin (
 DROP TABLE IF EXISTS talent_feedback CASCADE;
 CREATE TABLE talent_feedback (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
+   content TEXT,
    admin_id BIGINT,
    uid UUID NOT NULL,
    talent_id BIGINT NOT NULL,
@@ -94,6 +96,8 @@ ALTER TABLE talent_feedback ADD CONSTRAINT FK_TALENTFEEDBACK_ON_TALENT FOREIGN K
 DROP TABLE IF EXISTS organizer_feedback CASCADE;
 CREATE TABLE organizer_feedback (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
+   content TEXT,
    admin_id BIGINT,
    uid UUID NOT NULL,
    organizer_id BIGINT NOT NULL,
@@ -108,6 +112,7 @@ ALTER TABLE organizer_feedback ADD CONSTRAINT FK_ORGANIZERFEEDBACK_ON_ORGANIZER 
 DROP TABLE IF EXISTS review CASCADE;
 CREATE TABLE review (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
    talent_id BIGINT NOT NULL,
    comment TEXT,
    score INTEGER NOT NULL,
