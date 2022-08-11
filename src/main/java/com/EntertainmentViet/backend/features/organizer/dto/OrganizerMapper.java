@@ -11,9 +11,9 @@ import org.mapstruct.Named;
 @Mapper(config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "jobOffers", "events", "bookings", "feedbacks"}) // TODO: enable jobOffers source mapping
-  @Mapping(target = "jobOfferDto", ignore = true) // TODO: remove and fix this
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "jobOffers", "events", "bookings", "feedbacks", "shoppables"}) // TODO: enable jobOffers source mapping
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
+  @Mapping(target = "jobOfferDto", ignore = true) // TODO: remove and fix this
   public abstract OrganizerDto toDto(Organizer organizer);
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"jobOfferDto"}) // TODO: remove and fix this
@@ -23,6 +23,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "events", ignore = true) // TODO: remove and fix this
   @Mapping(target = "bookings", ignore = true) // TODO: remove and fix this
   @Mapping(target = "feedbacks", ignore = true) // TODO: remove and fix this
+  @Mapping(target = "shoppables", ignore = true) // TODO: remove and fix this
   public abstract Organizer toModel(OrganizerDto organizerDto);
 
   @Named("toUserStateKey")
