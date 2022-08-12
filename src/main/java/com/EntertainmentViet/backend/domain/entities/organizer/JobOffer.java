@@ -1,8 +1,11 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
+import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,21 +49,12 @@ public class JobOffer extends Identifiable {
   @NotNull
   private Organizer organizer;
 
-  public void sendOffer(JobDetail detail, Organizer organizer) {
-    setJobDetail(detail);
-    setOrganizer(organizer);
-  }
-
-  public void cancelOffer() {
-    setJobDetail(null);
-    setOrganizer(null);
-  }
-
-  public void addOrganizer(Organizer organizer) {
-    setOrganizer(organizer);
-  }
-
-  public void removeOrganizer() {
-    setOrganizer(null);
+  public Booking sendOffer(Talent talent) {
+    Booking booking = new Booking();
+    booking.setJobDetail(getJobDetail());
+    booking.setTalent(talent);
+    booking.setOrganizer(getOrganizer());
+    booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+    return booking;
   }
 }

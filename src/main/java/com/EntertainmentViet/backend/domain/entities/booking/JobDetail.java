@@ -60,12 +60,4 @@ public class JobDetail implements Serializable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
-
-  public void addCategory(Category category) {
-    setCategory(category);
-  }
-
-  public void removeCategory() {
-    setCategory(null);
-  }
 }
