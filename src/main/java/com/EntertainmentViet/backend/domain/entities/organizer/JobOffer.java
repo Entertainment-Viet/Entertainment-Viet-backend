@@ -54,7 +54,7 @@ public class JobOffer extends Identifiable {
     booking.setJobDetail(getJobDetail());
     booking.setTalent(talent);
     booking.setOrganizer(getOrganizer());
-    booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+    booking.setStatus(BookingStatus.TALENT_PENDING);
     return booking;
   }
 }
