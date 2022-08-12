@@ -1,8 +1,11 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
+import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,4 +48,13 @@ public class JobOffer extends Identifiable {
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   private Organizer organizer;
+
+  public Booking sendOffer(Talent talent) {
+    Booking booking = new Booking();
+    booking.setJobDetail(getJobDetail());
+    booking.setTalent(talent);
+    booking.setOrganizer(getOrganizer());
+    booking.setStatus(BookingStatus.TALENT_PENDING);
+    return booking;
+  }
 }
