@@ -11,8 +11,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
-    hibernate:
-      ddl-auto: validate
   flyway:
     enabled: true
     locations:
@@ -22,6 +20,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:18080/auth/realms/ve-sso
+
+hibernate:
+  hbm2ddl:
+    auto: validate
 
 security:
   allowed_origins:
