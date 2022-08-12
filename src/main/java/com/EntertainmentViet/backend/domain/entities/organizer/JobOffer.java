@@ -45,4 +45,22 @@ public class JobOffer extends Identifiable {
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   private Organizer organizer;
+
+  public void sendOffer(JobDetail detail, Organizer organizer) {
+    setJobDetail(detail);
+    setOrganizer(organizer);
+  }
+
+  public void cancelOffer() {
+    setJobDetail(null);
+    setOrganizer(null);
+  }
+
+  public void addOrganizer(Organizer organizer) {
+    setOrganizer(organizer);
+  }
+
+  public void removeOrganizer() {
+    setOrganizer(null);
+  }
 }
