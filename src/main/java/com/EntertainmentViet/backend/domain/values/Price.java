@@ -37,4 +37,7 @@ public class Price implements Serializable {
   @NotNull
   private Currency currency;
 
+  public boolean isFixedPrice() {
+    return min.equals(max);
+  }
 }

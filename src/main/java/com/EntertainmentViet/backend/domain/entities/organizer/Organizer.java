@@ -102,4 +102,20 @@ public class Organizer extends User {
     feedback.setOrganizer(null);
   }
 
+  public void review(Talent talent, Review review) {
+
+  }
+
+  public void addPackageToCart(Package talentPackage) {
+
+  }
+
+  public void finishCartShopping() {
+
+  }
+
+  public void pay(Price price) {
+
+  }
+
 }
