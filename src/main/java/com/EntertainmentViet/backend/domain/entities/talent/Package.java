@@ -41,6 +41,9 @@ public class Package extends Identifiable implements Shoppable {
   @NotBlank
   private String name;
 
+  @NotNull
+  private boolean isActive;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   private Talent talent;

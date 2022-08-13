@@ -2,6 +2,8 @@ package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
+import com.EntertainmentViet.backend.domain.values.UserInputText;
+import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +34,13 @@ public class Review implements Auditable, Serializable{
   @NotNull
   private Talent talent;
 
-  // TODO: Maybe change this to entity since there can be multiple translation we require user to input
-  private String comment;
+  @Embedded
+  @AttributeOverrides({
+      @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = Review_.COMMENT + "_" + UserInputText_.INPUT_LANG)),
+      @AttributeOverride( name = UserInputText_.RAW_INPUT, column = @Column(name = Review_.COMMENT + "_" + UserInputText_.RAW_INPUT)),
+      @AttributeOverride( name = UserInputText_.INPUT_TRANSLATION, column = @Column(name = Review_.COMMENT + "_" + UserInputText_.INPUT_TRANSLATION))
+  })
+  private UserInputText comment;
 
   @Min(0)
   @Max(10)
