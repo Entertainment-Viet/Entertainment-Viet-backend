@@ -23,7 +23,7 @@ public abstract class UserDto extends AccountDto {
 
   private Instant createdAt;
 
-  private String language;
-
   private String userState;
+
+  private String extensions;
 }

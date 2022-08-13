@@ -31,6 +31,8 @@ public class Event extends Identifiable implements Advertisable {
   @GeneratedValue
   private Long id;
 
+  private String name;
+
   @NotNull
   private Boolean isActive;
 

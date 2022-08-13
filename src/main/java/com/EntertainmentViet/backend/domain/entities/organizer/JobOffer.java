@@ -34,6 +34,8 @@ public class JobOffer extends Identifiable {
   @GeneratedValue
   private Long id;
 
+  private String name;
+
   @NotNull
   private Boolean isActive;
 

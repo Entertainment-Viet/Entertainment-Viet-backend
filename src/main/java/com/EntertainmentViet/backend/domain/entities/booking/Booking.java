@@ -49,6 +49,8 @@ public class Booking extends Identifiable implements Auditable {
 
   private Instant createdAt;
 
+  private boolean isPaid;
+
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "booking_status")
   @Type( type = "pgsql_enum" )
