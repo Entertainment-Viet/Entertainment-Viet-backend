@@ -12,6 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class JobOfferDto extends IdentifiableDto {
 
+  private String name;
+
   private Boolean isActive;
 
   private Integer quantity;
