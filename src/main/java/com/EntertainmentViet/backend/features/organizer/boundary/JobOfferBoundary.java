@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface JobOfferBoundary {
 
     List<JobOfferDto> findByOrganizerUid(UUID uid);
+
+    JobOfferDto findByOrganizerUidAndUid(UUID organizerUid, UUID uid);
 }

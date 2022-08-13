@@ -26,7 +26,13 @@ public class JobOfferController {
   private final JobOfferBoundary jobOfferService;
 
   @GetMapping()
-  public CompletableFuture<List<JobOfferDto>> findByOrganizerUid(@PathVariable("organizer_uid") UUID organizer_uid) {
-    return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUid(organizer_uid));
+  public CompletableFuture<List<JobOfferDto>> findByOrganizerUid(@PathVariable("organizer_uid") UUID organizerUid) {
+    return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUid(organizerUid));
+  }
+
+  @GetMapping(value = "/{uid}")
+  public CompletableFuture<JobOfferDto> findByOrganizerUid(@PathVariable("organizer_uid") UUID organizerUid,
+                                                                 @PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUidAndUid(organizerUid, uid));
   }
 }

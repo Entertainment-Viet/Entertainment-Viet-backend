@@ -21,4 +21,9 @@ public class JobOfferService implements JobOfferBoundary {
     public List<JobOfferDto> findByOrganizerUid(UUID uid) {
         return jobOfferRepository.findByOrganizerUid(uid).stream().map(jobOfferMapper::toDto).toList();
     }
+
+    @Override
+    public JobOfferDto findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
+        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid));
+    }
 }

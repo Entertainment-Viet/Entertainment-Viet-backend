@@ -17,4 +17,10 @@ public interface JobOfferRepository extends IdentifiableRepository<JobOffer> {
             "from JobOffer j " +
             "where j.organizer.uid = :uid ")
     List<JobOffer> findByOrganizerUid(UUID uid);
+
+
+    @Query("select j " +
+            "from JobOffer j " +
+            "where j.organizer.uid = :organizerUid and j.uid = :uid ")
+    JobOffer findByOrganizerUidAndUid(UUID organizerUid, UUID uid);
 }
