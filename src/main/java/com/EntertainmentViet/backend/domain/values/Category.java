@@ -34,6 +34,6 @@ public class Category extends Identifiable implements Serializable {
   @NotBlank
   private String name;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private Category parent;
 }
