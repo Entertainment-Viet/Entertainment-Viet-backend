@@ -12,6 +12,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Embeddable
 @TypeDef(
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull;
     typeClass = PostgreSQLEnumType.class
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class UserInputText {
+public class UserInputText implements Serializable {
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "support_language")
