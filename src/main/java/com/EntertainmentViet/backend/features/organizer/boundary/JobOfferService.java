@@ -24,6 +24,6 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public JobOfferDto findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid));
+        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid).orElse(null));
     }
 }
