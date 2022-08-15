@@ -4,6 +4,10 @@ import com.EntertainmentViet.backend.domain.standardTypes.SupportLanguage;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -15,6 +19,10 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class

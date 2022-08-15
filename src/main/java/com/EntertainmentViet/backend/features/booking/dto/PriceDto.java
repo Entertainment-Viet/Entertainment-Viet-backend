@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.booking.dto;
 
-import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,9 +9,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class CategoryDto extends IdentifiableDto {
+public class PriceDto {
+  private Double min;
 
-  private String name;
-
-  private String parentName;
+  private Double max;
 }

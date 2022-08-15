@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api;
 
-import com.EntertainmentViet.backend.features.booking.dto.JobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.JobOfferBoundary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

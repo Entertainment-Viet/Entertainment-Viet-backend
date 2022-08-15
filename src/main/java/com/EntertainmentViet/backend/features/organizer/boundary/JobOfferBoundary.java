@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary;
 
-import com.EntertainmentViet.backend.features.booking.dto.JobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 
 import java.util.List;
 import java.util.UUID;
