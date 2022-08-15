@@ -9,6 +9,6 @@ import java.util.UUID;
 
 @NoRepositoryBean
 @Transactional
-public interface IdentifiableRepository<T extends Identifiable> extends BaseRepository<T> {
-  Optional<T> findByUid(UUID id);
+public interface IdentifiableRepository<T extends Identifiable> extends BaseRepository<T, Long> {
+  Optional<T> findByUid(UUID uid);
 }

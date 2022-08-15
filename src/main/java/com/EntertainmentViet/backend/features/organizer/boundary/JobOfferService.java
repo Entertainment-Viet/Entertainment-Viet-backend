@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.boundary;
 
-import com.EntertainmentViet.backend.features.booking.dto.JobOfferDto;
-import com.EntertainmentViet.backend.features.booking.dto.JobOfferMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.JobOfferMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.JobOfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +24,6 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public JobOfferDto findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid));
+        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid).orElse(null));
     }
 }

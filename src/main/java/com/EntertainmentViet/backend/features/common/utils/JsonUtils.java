@@ -22,6 +22,6 @@ public class JsonUtils {
   }
 
   public String nodeToJson(JsonNode node) {
-    return node.toString();
+    return node != null ? node.toString() : "";
   }
 }

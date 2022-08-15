@@ -2,6 +2,10 @@ package com.EntertainmentViet.backend.domain.values;
 
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -13,6 +17,10 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
 @TypeDef(
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
@@ -26,6 +34,7 @@ public class Price implements Serializable {
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "currency_type")
   @Type( type = "pgsql_enum" )
-  @NotNull  private Currency currency;
+  @NotNull
+  private Currency currency;
 
 }

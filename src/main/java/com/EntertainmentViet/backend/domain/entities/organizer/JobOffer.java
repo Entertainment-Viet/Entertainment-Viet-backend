@@ -42,7 +42,7 @@ public class JobOffer extends Identifiable {
   @NotNull
   private Integer quantity;
 
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "job_detail_id", referencedColumnName = JobDetail_.ID)
   @NotNull
   private JobDetail jobDetail;

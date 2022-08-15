@@ -48,7 +48,7 @@ public class JobDetail implements Serializable {
   @GeneratedValue
   private Long id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id")
   private Category category;
 
