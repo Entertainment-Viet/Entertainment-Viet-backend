@@ -8,7 +8,8 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
+import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -103,19 +105,27 @@ public class Organizer extends User {
   }
 
   public void review(Talent talent, Review review) {
-
+    var bookingTalents = bookings.stream().map(Booking::getTalent).collect(Collectors.toList());
+    if (bookingTalents.contains(talent)) {
+      talent.addReview(review);
+    }
   }
 
   public void addPackageToCart(Package talentPackage) {
-
+    shoppables.add(talentPackage);
   }
 
   public void finishCartShopping() {
-
+    for (Shoppable shoppable : shoppables) {
+      shoppable.finishCartItem();
+    }
+    shoppables.clear();
   }
 
-  public void pay(Price price) {
-
+  public void pay(Booking booking) {
+    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name())) {
+      booking.setPaid(true);
+    }
   }
 
 }

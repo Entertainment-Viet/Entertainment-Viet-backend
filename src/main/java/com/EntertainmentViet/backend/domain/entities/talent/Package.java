@@ -60,4 +60,11 @@ public class Package extends Identifiable implements Shoppable {
       inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = Booking_.ID)
   )
   private Set<Booking> orders;
+
+  @Override
+  public Booking finishCartItem() {
+    return null;
+  }
+
+
 }
