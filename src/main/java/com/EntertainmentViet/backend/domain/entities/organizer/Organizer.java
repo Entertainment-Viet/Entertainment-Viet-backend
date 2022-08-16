@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import lombok.EqualsAndHashCode;
@@ -27,6 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuperBuilder
@@ -79,6 +81,13 @@ public class Organizer extends User {
     event.setOrganizer(this);
   }
 
+  public void disableEvent(UUID eventUid) {
+    events.stream()
+        .filter(event -> event.getUid() == eventUid)
+        .findFirst()
+        .ifPresent( event -> event.setIsActive(false));
+  }
+
   public void removeEvent(Event event) {
     events.remove(event);
     event.setOrganizer(null);
@@ -93,6 +102,31 @@ public class Organizer extends User {
     bookings.remove(booking);
     booking.setOrganizer(null);
   }
+
+  public void updateBookingInfo(UUID bookingUid, Booking newBookingInfo) {
+    bookings.stream()
+        .filter(booking -> booking.getUid() == bookingUid)
+        .findFirst()
+        .ifPresent(booking -> {
+          booking.updateInfo(newBookingInfo);
+          booking.setStatus(BookingStatus.TALENT_PENDING);
+    });
+  }
+
+  public void acceptBooking(UUID bookingUid) {
+    bookings.stream()
+        .filter(booking -> booking.getUid() == bookingUid)
+        .findFirst()
+        .ifPresent(booking -> booking.setStatus(BookingStatus.CONFIRMED));
+  }
+
+  public void rejectBooking(UUID bookingUid) {
+    bookings.stream()
+        .filter(booking -> booking.getUid() == bookingUid)
+        .findFirst()
+        .ifPresent(booking -> booking.setStatus(BookingStatus.CANCELLED));
+  }
+
 
   public void addFeedback(OrganizerFeedback feedback) {
     feedbacks.add(feedback);

@@ -70,4 +70,7 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private JobDetail jobDetail;
 
+  public void updateInfo(Booking newData) {
+
+  }
 }
