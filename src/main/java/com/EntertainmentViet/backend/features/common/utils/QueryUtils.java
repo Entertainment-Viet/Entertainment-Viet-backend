@@ -21,14 +21,14 @@ public class QueryUtils {
     return new Root<>();
   }
 
-  public <T> JPAQuery<T> combineJoinExpressionFrom(JPAQuery<T> query, JoinExpression<T>... joinExpressions) {
+  public <T> JPAQuery<T> combineJoinExpressionFrom(JPAQuery<T> query, JoinExpression... joinExpressions) {
     Arrays.asList(joinExpressions).forEach(joinExpression -> joinExpression.getJoin(query));
     return query;
   }
 
   public static class Root<T> {
     private JPAQuery<T> base;
-    private JoinExpression<T>[] joinPaths;
+    private JoinExpression[] joinPaths;
 
     public Root() {}
 
