@@ -9,6 +9,7 @@ public enum BookingStatus {
   CONFIRMED("booking.status.confirmed"),
   CANCELLED("booking.status.cancelled"),
   FINISHED("booking.status.finished"),
+  ARCHIVED("booking.status.archived"),
   ;
 
   private static final Map<String, BookingStatus> BY_I18N_KEY = new HashMap<>();
