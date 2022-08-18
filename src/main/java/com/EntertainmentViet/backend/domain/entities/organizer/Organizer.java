@@ -54,7 +54,7 @@ public class Organizer extends User {
   // Need to change this when upgrade to hibernate 6: https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#mapping-column-any
   @ManyToAny(metaColumn = @Column(name = "cart_item"))
   @AnyMetaDef(
-      idType = "integer", metaType = "string",
+      idType = "long", metaType = "string",
       metaValues = {
         @MetaValue(value = "Package", targetEntity = Package.class)
       })
