@@ -9,8 +9,6 @@ import com.EntertainmentViet.backend.features.booking.boundary.JobDetailPredicat
 import com.EntertainmentViet.backend.features.common.JoinExpression;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
-import com.EntertainmentViet.backend.features.organizer.dao.JobOfferPredicate;
-import com.EntertainmentViet.backend.features.talent.dao.TalentPredicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
