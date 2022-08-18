@@ -31,6 +31,23 @@ CREATE TYPE work_type AS ENUM (
     'PERIOD_CONTRACT'
 );
 
+DROP TYPE IF EXISTS feedback_status CASCADE;
+CREATE TYPE feedback_status AS ENUM (
+    'NEW',
+    'IN_PROGRESS',
+    'SOLVED',
+    'REJECT'
+);
+
+DROP TYPE IF EXISTS support_language CASCADE;
+CREATE TYPE support_language AS ENUM (
+    'ENGLISH',
+    'VIETNAMESE',
+    'GERMAN',
+    'FRANCE'
+);
+
+
 -- Table: organizer --
 
 DROP TABLE IF EXISTS organizer CASCADE;
@@ -39,12 +56,14 @@ CREATE TABLE organizer (
    phone_number TEXT,
    email TEXT,
    address TEXT,
-   bio TEXT,
    created_at TIMESTAMP WITH TIME ZONE,
-   language TEXT,
    user_state USER_STATE,
    display_name TEXT NOT NULL,
    uid UUID NOT NULL,
+   extensions JSONB,
+   bio_input_lang SUPPORT_LANGUAGE,
+   bio_raw_input TEXT,
+   bio_input_translation JSONB,
    CONSTRAINT pk_organizer PRIMARY KEY (id)
 );
 
@@ -56,12 +75,14 @@ CREATE TABLE talent (
    phone_number TEXT,
    email TEXT,
    address TEXT,
-   bio TEXT,
    created_at TIMESTAMP WITH TIME ZONE,
-   language TEXT,
    user_state USER_STATE,
    display_name TEXT NOT NULL,
    uid UUID NOT NULL,
+   extensions JSONB,
+   bio_input_lang SUPPORT_LANGUAGE,
+   bio_raw_input TEXT,
+   bio_input_translation JSONB,
    CONSTRAINT pk_talent PRIMARY KEY (id)
 );
 
@@ -80,8 +101,13 @@ CREATE TABLE admin (
 DROP TABLE IF EXISTS talent_feedback CASCADE;
 CREATE TABLE talent_feedback (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
+   status FEEDBACK_STATUS,
    admin_id BIGINT,
    uid UUID NOT NULL,
+   content_input_lang SUPPORT_LANGUAGE,
+   content_raw_input TEXT,
+   content_input_translation JSONB,
    talent_id BIGINT NOT NULL,
    CONSTRAINT pk_talentfeedback PRIMARY KEY (id)
 );
@@ -94,8 +120,13 @@ ALTER TABLE talent_feedback ADD CONSTRAINT FK_TALENTFEEDBACK_ON_TALENT FOREIGN K
 DROP TABLE IF EXISTS organizer_feedback CASCADE;
 CREATE TABLE organizer_feedback (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
+   status FEEDBACK_STATUS,
    admin_id BIGINT,
    uid UUID NOT NULL,
+   content_input_lang SUPPORT_LANGUAGE,
+   content_raw_input TEXT,
+   content_input_translation JSONB,
    organizer_id BIGINT NOT NULL,
    CONSTRAINT pk_organizerfeedback PRIMARY KEY (id)
 );
@@ -108,9 +139,12 @@ ALTER TABLE organizer_feedback ADD CONSTRAINT FK_ORGANIZERFEEDBACK_ON_ORGANIZER 
 DROP TABLE IF EXISTS review CASCADE;
 CREATE TABLE review (
   id BIGINT NOT NULL,
+   created_at TIMESTAMP WITH TIME ZONE,
    talent_id BIGINT NOT NULL,
-   comment TEXT,
    score INTEGER NOT NULL,
+   comment_input_lang SUPPORT_LANGUAGE,
+   comment_raw_input TEXT,
+   comment_input_translation JSONB,
    CONSTRAINT pk_review PRIMARY KEY (id)
 );
 
@@ -137,10 +171,13 @@ CREATE TABLE job_detail (
    work_type WORK_TYPE NOT NULL,
    performance_duration BIGINT NOT NULL,
    performance_time TIMESTAMP WITH TIME ZONE,
-   note TEXT,
+   note_input_lang SUPPORT_LANGUAGE,
+   note_raw_input TEXT,
+   note_input_translation JSONB,
    min DOUBLE PRECISION,
    max DOUBLE PRECISION,
    currency CURRENCY_TYPE NOT NULL,
+   extensions JSONB,
    CONSTRAINT pk_jobdetail PRIMARY KEY (id)
 );
 
@@ -152,6 +189,7 @@ DROP TABLE IF EXISTS job_offer CASCADE;
 CREATE TABLE job_offer (
   id BIGINT NOT NULL,
    uid UUID NOT NULL,
+   name TEXT,
    is_active BOOLEAN NOT NULL,
    quantity INTEGER NOT NULL,
    job_detail_id BIGINT NOT NULL,
@@ -168,6 +206,7 @@ DROP TABLE IF EXISTS booking CASCADE;
 CREATE TABLE booking (
   id BIGINT NOT NULL,
    uid UUID NOT NULL,
+   is_paid BOOLEAN,
    created_at TIMESTAMP WITH TIME ZONE,
    status BOOKING_STATUS NOT NULL,
    organizer_id BIGINT NOT NULL,
@@ -188,6 +227,7 @@ CREATE TABLE package (
    uid UUID NOT NULL,
    name TEXT NOT NULL,
    talent_id BIGINT NOT NULL,
+   is_active BOOLEAN,
    job_detail_id BIGINT NOT NULL,
    CONSTRAINT pk_package PRIMARY KEY (id)
 );
@@ -213,6 +253,7 @@ DROP TABLE IF EXISTS event CASCADE;
 CREATE TABLE event (
   id BIGINT NOT NULL,
    uid UUID NOT NULL,
+   name VARCHAR(255),
    is_active BOOLEAN NOT NULL,
    occurrence_address TEXT NOT NULL,
    occurrence_time TIMESTAMP WITH TIME ZONE,
@@ -276,4 +317,3 @@ CREATE TABLE open_position_applicant (
 ALTER TABLE open_position_applicant ADD CONSTRAINT uc_open_position_applicant_applicant UNIQUE (applicant_id);
 ALTER TABLE open_position_applicant ADD CONSTRAINT fk_opeposapp_on_booking FOREIGN KEY (applicant_id) REFERENCES booking (id);
 ALTER TABLE open_position_applicant ADD CONSTRAINT fk_opeposapp_on_event_open_position FOREIGN KEY (open_position_id) REFERENCES event_open_position (id);
-

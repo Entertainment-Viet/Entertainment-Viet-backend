@@ -11,10 +11,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
-    hibernate:
-      ddl-auto: validate
   flyway:
     enabled: true
+    outOfOrder: false
     locations:
       - classpath:db/migration
   security:
@@ -23,6 +22,17 @@ spring:
         jwt:
           issuer-uri: http://localhost:18080/auth/realms/ve-sso
 
+hibernate:
+  hbm2ddl:
+    auto: validate
+
 security:
   allowed_origins:
     - http://localhost:3000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+

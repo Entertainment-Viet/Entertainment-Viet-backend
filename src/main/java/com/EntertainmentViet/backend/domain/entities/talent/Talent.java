@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -25,13 +25,13 @@ import java.util.List;
 public class Talent extends User implements Advertisable {
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Review> reviews;
+  private Set<Review> reviews;
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Booking> bookings;
+  private Set<Booking> bookings;
 
   @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<TalentFeedback> feedbacks;
+  private Set<TalentFeedback> feedbacks;
 
   public void addReview(Review review) {
     reviews.add(review);

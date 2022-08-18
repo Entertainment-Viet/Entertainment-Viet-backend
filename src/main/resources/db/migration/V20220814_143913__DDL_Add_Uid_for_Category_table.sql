@@ -1,0 +1,1 @@
+ALTER TABLE category ADD uid UUID;

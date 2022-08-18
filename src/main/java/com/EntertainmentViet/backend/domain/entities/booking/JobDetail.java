@@ -3,7 +3,11 @@ package com.EntertainmentViet.backend.domain.entities.booking;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.domain.values.UserInputText;
+import com.EntertainmentViet.backend.domain.values.UserInputText_;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +15,18 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Duration;
@@ -26,6 +41,7 @@ import java.time.Instant;
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
 )
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class JobDetail implements Serializable {
 
   @Id
@@ -52,5 +68,15 @@ public class JobDetail implements Serializable {
   @NotNull
   private Instant performanceTime;
 
-  private String note;
+  @Embedded
+  @AttributeOverrides({
+      @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = JobDetail_.NOTE + "_" + UserInputText_.INPUT_LANG)),
+      @AttributeOverride( name = UserInputText_.RAW_INPUT, column = @Column(name = JobDetail_.NOTE + "_" + UserInputText_.RAW_INPUT)),
+      @AttributeOverride( name = UserInputText_.INPUT_TRANSLATION, column = @Column(name = JobDetail_.NOTE + "_" + UserInputText_.INPUT_TRANSLATION))
+  })
+  private UserInputText note;
+
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private JsonNode extensions;
 }

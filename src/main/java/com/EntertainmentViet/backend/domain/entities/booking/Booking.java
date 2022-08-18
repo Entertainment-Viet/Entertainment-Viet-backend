@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
+import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
+import com.EntertainmentViet.backend.domain.entities.Auditable;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
@@ -16,6 +18,7 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -37,13 +40,16 @@ import java.time.Instant;
     typeClass = PostgreSQLEnumType.class
 )
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Booking extends Identifiable {
+@EntityListeners({AuditableListener.class})
+public class Booking extends Identifiable implements Auditable {
 
   @Id
   @GeneratedValue
   private Long id;
 
   private Instant createdAt;
+
+  private boolean isPaid;
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "booking_status")
@@ -64,4 +70,7 @@ public class Booking extends Identifiable {
   @NotNull
   private JobDetail jobDetail;
 
+  public void updateInfo(Booking newData) {
+
+  }
 }
