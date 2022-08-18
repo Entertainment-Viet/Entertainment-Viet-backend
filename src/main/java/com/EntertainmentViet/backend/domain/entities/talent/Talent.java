@@ -109,13 +109,13 @@ public class Talent extends User implements Advertisable {
     return newApplication;
   }
 
-  public OptionalDouble getAvgReviewScore() {
+  public OptionalDouble obtainAvgReviewScore() {
     return reviews.stream()
         .mapToInt(Review::getScore)
         .average();
   }
 
-  public OptionalDouble getScore() {
+  public OptionalDouble obtainScore() {
     return TalentScoreCalculator.calculateScore(getExtensions().get(SCORE_METRIC_PATH));
   }
 
@@ -128,7 +128,7 @@ public class Talent extends User implements Advertisable {
     }
   }
 
-  public Double getWithdrawableCash() {
+  public Double obtainWithdrawableCash() {
     return bookings.stream()
         .filter(Booking::isPaid)
         .filter(booking -> booking.getStatus() != BookingStatus.ARCHIVED)
