@@ -17,11 +17,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping(path = BookingInfoController.REQUEST_MAPPING_PATH)
+@RequestMapping(path = BookingController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
 @Async
 @Validated
-public class BookingInfoController {
+public class BookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/bookings";
 

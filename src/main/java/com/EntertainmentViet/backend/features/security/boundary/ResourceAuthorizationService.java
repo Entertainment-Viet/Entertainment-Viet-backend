@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
+import com.EntertainmentViet.backend.features.booking.api.BookingController;
 import com.EntertainmentViet.backend.features.booking.api.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.TalentBookingController;
@@ -197,6 +198,14 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
+
+            // Booking mapping
+            .mvcMatchers(HttpMethod.POST , ofPath(BookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.ADD_BOOKING.name())
+            .mvcMatchers(HttpMethod.GET , anyPathAfter(BookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.READ_BOOKING.name())
+            .mvcMatchers(HttpMethod.PUT , anyPathAfter(BookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.UPDATE_BOOKING.name())
 
             .anyRequest().authenticated());
   }
