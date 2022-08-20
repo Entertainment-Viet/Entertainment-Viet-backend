@@ -6,4 +6,9 @@ import java.util.UUID;
 public interface BookingBoundary {
 
     BookingDto findByUid(UUID uid);
+
+    BookingDto create(BookingDto bookingDto);
+
+    BookingDto update(BookingDto bookingDto, UUID uid);
+
 }

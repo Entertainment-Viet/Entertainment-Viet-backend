@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -20,9 +21,9 @@ public class BookingDto extends Identifiable {
 
     private String status;
 
-    private String organizerUid;
+    private UUID organizerUid;
 
-    private String talentUid;
+    private UUID talentUid;
 
     private JobDetailDto jobDetailDto;
 }

@@ -6,10 +6,12 @@ import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
+@Transactional
 public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> implements BookingRepository {
 
   private final BookingPredicate bookingPredicate;
