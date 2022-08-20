@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ManyToAny;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Entity
+@Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Organizer extends User {
 
@@ -116,9 +118,12 @@ public class Organizer extends User {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid() == bookingUid)
+        .filter(Booking::checkIfFixedPrice)
         .findFirst()
-        .ifPresent(booking -> booking.setStatus(BookingStatus.CONFIRMED));
-  }
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CONFIRMED),
+            () -> log.error("Can not accept the booking: ", bookingUid)
+        );  }
 
   public void rejectBooking(UUID bookingUid) {
     bookings.stream()
@@ -126,7 +131,6 @@ public class Organizer extends User {
         .findFirst()
         .ifPresent(booking -> booking.setStatus(BookingStatus.CANCELLED));
   }
-
 
   public void addFeedback(OrganizerFeedback feedback) {
     feedbacks.add(feedback);
@@ -157,7 +161,7 @@ public class Organizer extends User {
   }
 
   public void pay(Booking booking) {
-    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name())) {
+    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfFixedPrice()) {
       booking.setPaid(true);
     }
   }
