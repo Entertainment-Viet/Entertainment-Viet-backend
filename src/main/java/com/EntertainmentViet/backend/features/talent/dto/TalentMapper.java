@@ -31,8 +31,24 @@ public abstract class TalentMapper {
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract TalentDto toDto(Talent talent);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"bio", "reviews", "bookings", "feedbacks"})
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
+    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "reviews", ignore = true) // TODO: remove and fix this
+    @Mapping(target = "bookings", ignore = true) // TODO: remove and fix this
+    @Mapping(target = "feedbacks", ignore = true) // TODO: remove and fix this
+    @Mapping(target = "bio", ignore = true) // TODO: remove and fix this
+    public abstract Talent toModel(TalentDto talentDto);
+
+
     @Named("toUserStateKey")
     public String toUserStateKey(UserState userState) {
         return userState != null ? userState.i18nKey : null;
+    }
+
+    @Named("toUserState")
+    public UserState toUserState(String i18nKey) {
+        return UserState.ofI18nKey(i18nKey);
     }
 }

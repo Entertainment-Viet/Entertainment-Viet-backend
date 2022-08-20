@@ -24,21 +24,6 @@ public class TalentRepositoryImpl extends BaseRepositoryImpl<Talent, Long> imple
   }
 
   @Override
-  public List<Talent> findAll() {
-    QueryUtils.Root<Talent> root = QueryUtils.createRoot();
-
-    var queryRoot = root.base(talentPredicate.getRootBase(queryFactory))
-            .joinPaths(talentPredicate.joinAll())
-            .build();
-
-    QueryUtils.Query<Talent> query = QueryUtils.createQuery();
-
-    return query.root(queryRoot)
-            .predicates()
-            .getAll();
-  }
-
-  @Override
   public Optional<Talent> findByUid(UUID uid) {
     QueryUtils.Root<Talent> root = QueryUtils.createRoot();
 
