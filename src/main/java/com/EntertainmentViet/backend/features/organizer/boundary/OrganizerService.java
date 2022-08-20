@@ -23,6 +23,7 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public OrganizerDto create(OrganizerDto organizerDto) {
+    organizerDto.setUid(null);  // Remove UID pass by user when create
     var newOrganizer = organizerRepository.save(organizerMapper.toModel(organizerDto));
     return organizerMapper.toDto(newOrganizer);
   }

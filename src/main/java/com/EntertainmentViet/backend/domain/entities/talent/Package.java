@@ -42,7 +42,7 @@ public class Package extends Identifiable implements Shoppable {
   private String name;
 
   @NotNull
-  private boolean isActive;
+  private Boolean isActive;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
