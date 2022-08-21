@@ -69,5 +69,7 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
-
 ```
+
+### REST docs ###
+All the endpoint is documented in the link: `http://localhost:8080/api/swagger-ui/index.html#/`

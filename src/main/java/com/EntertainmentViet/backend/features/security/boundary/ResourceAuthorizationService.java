@@ -199,6 +199,14 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
 
+            // Spring docs mapping
+            .mvcMatchers(HttpMethod.GET, anyPathAfter("/swagger-ui"))
+            .permitAll()
+            .mvcMatchers(HttpMethod.GET, ofPath("/api-docs"))
+            .permitAll()
+            .mvcMatchers(HttpMethod.GET, anyPathAfter("/api-docs"))
+            .permitAll()
+
             // Booking mapping
             .mvcMatchers(HttpMethod.POST , ofPath(BookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ADD_BOOKING.name())
