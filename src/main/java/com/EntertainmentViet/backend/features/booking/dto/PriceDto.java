@@ -13,4 +13,6 @@ public class PriceDto {
   private Double min;
 
   private Double max;
+
+  private String currency;
 }
