@@ -9,7 +9,6 @@ import com.EntertainmentViet.backend.features.booking.dao.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dao.CategoryRepository;
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
 import com.EntertainmentViet.backend.features.booking.dto.JobDetailMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.dao.TalentRepository;
@@ -31,8 +30,6 @@ public class BookingService implements BookingBoundary {
 
     private final TalentRepository talentRepository;
 
-    private final JobDetailRepository jobDetailRepository;
-
     private final JobDetailMapper jobDetailMapper;
 
     private final CategoryRepository categoryRepository;
@@ -44,24 +41,50 @@ public class BookingService implements BookingBoundary {
 
     @Override
     @Transactional
-    public BookingDto create(BookingDto bookingDto) {
+    public UUID create(BookingDto bookingDto) throws Exception {
         Organizer organizer = organizerRepository.findByUid(bookingDto.getOrganizerUid()).orElse(null);
         Talent talent = talentRepository.findByUid(bookingDto.getTalentUid()).orElse(null);
         JobDetail jobDetail = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
         Category category = categoryRepository.findByName(jobDetail.getCategory().getName()).orElse(null);
-        jobDetail.setCategory(category);
 
+        if (organizer == null || talent == null || jobDetail == null || category == null) {
+            throw new Exception();
+        }
+
+        jobDetail.setCategory(category);
         Booking booking = bookingMapper.toModel(bookingDto);
         booking.setOrganizer(organizer);
         booking.setTalent(talent);
         booking.setJobDetail(jobDetail);
 
         var newBooking = bookingRepository.save(booking);
-        return bookingMapper.toDto(newBooking);
+        return bookingMapper.toDto(newBooking).getUid();
     }
 
     @Override
-    public BookingDto update(BookingDto bookingDto, UUID uid) {
-        return null;
+    public UUID update(BookingDto bookingDto, UUID uid) throws Exception {
+        Booking bookingCheck = bookingRepository.findByUid(uid).orElse(null);
+        if (bookingCheck != null) {
+            JobDetail jobDetail = bookingCheck.getJobDetail();
+            Category category = categoryRepository.findByName(bookingDto.getJobDetailDto().getCategory().getName()).orElse(null);
+            jobDetail.setCategory(category);
+
+            JobDetail jobDetailUpdate = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
+            jobDetail.setPrice(jobDetailUpdate.getPrice());
+            jobDetail.setWorkType(jobDetailUpdate.getWorkType());
+            jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
+            jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
+            jobDetail.setNote(jobDetailUpdate.getNote());
+            jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+
+            bookingCheck.setJobDetail(jobDetail);
+
+            Booking update = bookingMapper.toModel(bookingDto);
+            bookingCheck.setStatus(update.getStatus());
+            bookingCheck.setPaid(update.isPaid());
+            var newBooking = bookingRepository.save(bookingCheck);
+            return newBooking.getUid();
+        }
+        throw new Exception();
     }
 }

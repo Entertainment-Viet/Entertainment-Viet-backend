@@ -36,11 +36,11 @@ public class BookingController {
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<BookingDto>> create(HttpServletRequest request, @RequestBody @Valid BookingDto bookingDto) {
+  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid BookingDto bookingDto) throws Exception {
     var newBookingDto = bookingService.create(bookingDto);
     return  CompletableFuture.completedFuture(
             ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newBookingDto.getUid()))
+                    .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
                     .body(newBookingDto)
     );
   }
@@ -50,12 +50,12 @@ public class BookingController {
           produces = MediaType.APPLICATION_JSON_VALUE,
           value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<ResponseEntity<BookingDto>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid BookingDto bookingDto) throws Exception {
+  public CompletableFuture<ResponseEntity<UUID>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid BookingDto bookingDto) throws Exception {
     try {
       var newBookingDto = bookingService.update(bookingDto, uid);
       return  CompletableFuture.completedFuture(
               ResponseEntity
-                      .created(RestUtils.getCreatedLocationUri(request, newBookingDto.getUid()))
+                      .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
                       .body(newBookingDto)
       );
     } catch (Exception e) {

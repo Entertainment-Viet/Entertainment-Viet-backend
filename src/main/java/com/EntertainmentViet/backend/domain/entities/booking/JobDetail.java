@@ -38,7 +38,7 @@ public class JobDetail implements Serializable {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "category_id", updatable = false, insertable = false)
+  @JoinColumn(name = "category_id")
   private Category category;
 
   @Enumerated(EnumType.STRING)

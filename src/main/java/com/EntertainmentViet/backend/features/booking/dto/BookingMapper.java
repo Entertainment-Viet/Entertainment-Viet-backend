@@ -18,7 +18,6 @@ import java.util.UUID;
 }, config = MappingConfig.class)
 @RequiredArgsConstructor
 public abstract class BookingMapper {
-
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "isPaid", source = "paid")
     @Mapping(target = "status", source = "status.i18nKey")

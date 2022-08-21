@@ -7,8 +7,8 @@ public interface BookingBoundary {
 
     BookingDto findByUid(UUID uid);
 
-    BookingDto create(BookingDto bookingDto);
+    UUID create(BookingDto bookingDto) throws Exception;
 
-    BookingDto update(BookingDto bookingDto, UUID uid);
+    UUID update(BookingDto bookingDto, UUID uid) throws Exception;
 
 }
