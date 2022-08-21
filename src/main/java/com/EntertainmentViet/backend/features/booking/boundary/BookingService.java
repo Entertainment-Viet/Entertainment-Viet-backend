@@ -78,10 +78,6 @@ public class BookingService implements BookingBoundary {
             jobDetail.setExtensions(jobDetailUpdate.getExtensions());
 
             bookingCheck.setJobDetail(jobDetail);
-
-            Booking update = bookingMapper.toModel(bookingDto);
-            bookingCheck.setStatus(update.getStatus());
-            bookingCheck.setPaid(update.isPaid());
             var newBooking = bookingRepository.save(bookingCheck);
             return newBooking.getUid();
         }
