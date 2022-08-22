@@ -29,6 +29,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,16 +43,16 @@ import java.util.stream.Collectors;
 public class Organizer extends User {
 
   @OneToMany(mappedBy = JobOffer_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<JobOffer> jobOffers;
+  private Set<JobOffer> jobOffers;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Event> events;
+  private Set<Event> events;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Booking> bookings;
+  private Set<Booking> bookings;
 
   @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrganizerFeedback> feedbacks;
+  private Set<OrganizerFeedback> feedbacks;
 
   // Need to change this when upgrade to hibernate 6: https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#mapping-column-any
   @ManyToAny(metaColumn = @Column(name = "cart_item"))
@@ -66,7 +67,7 @@ public class Organizer extends User {
       inverseJoinColumns = @JoinColumn(name = "shoppable_id")
   )
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private List<Shoppable> shoppables;
+  private Set<Shoppable> shoppables;
 
   public void addJobOffer(JobOffer jobOffer) {
     jobOffers.add(jobOffer);
