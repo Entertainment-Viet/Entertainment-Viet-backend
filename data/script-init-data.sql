@@ -1,5 +1,5 @@
 -- Add category
-insert into category values
+insert into category (id, name, parent_id, uid) values
 (1, 'Dịch vụ 1', null, 'a4e0a204-193a-4d49-bfc5-429fffcb9dde'),
 (2, 'Dịch vụ 2', null, '6885ba7a-d3f8-4e71-bee1-39fef806f8c2'),
 (3, 'Dịch vụ 3', null, '6e4b05d0-9829-474e-bcdb-461962f516ac'),
@@ -12,9 +12,9 @@ insert into category values
 (10, 'Dịch vụ 10', null, 'a0fafa8a-454c-4875-b002-d0fe718b1dc5');
 
 -- Add organizer
-insert into organizer values
+insert into organizer (id, phone_number, email, address, created_at, user_state, display_name, uid, extensions, bio_input_lang, bio_raw_input, bio_input_translation) values
 (1, '+84 93 720 92 61', 'jhf18032@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi',
-'cc5291f7-523c-4129-8f34-6f599c13ebb9', null, 'VIETNAMESE', 'Test 1', null),
+'cc5291f7-523c-4129-8f34-6f599c13ebb1', null, 'VIETNAMESE', 'Test 1', null),
 (2, '+84 93 721 92 61', 'jhf180sdf32@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 2',
 '5f5ae5f9-919d-4088-b1fe-e6eb4a7602ff', null, 'VIETNAMESE', 'Test 2', null),
 (3, '+84 93 722 92 61', 'jhf180sdfsdf32@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 3',
@@ -35,7 +35,7 @@ insert into organizer values
 '8218a647-80c7-4a85-accb-87e3528556f1', null, 'VIETNAMESE', 'Test 10', null);
 
 -- Add job_detail
-insert into job_detail values
+insert into job_detail (id, category_id, work_type, performance_duration, performance_time, note_input_lang, note_raw_input, note_input_translation, min, max, currency, extensions) values
 (1, 1, 'SINGLE_TIME', 1231231, '2022-08-18 19:42:44.843000 +00:00', 'VIETNAMESE', 'Test 1', null, 678678, 123123123, 'VND', null),
 (2, 2, 'SINGLE_TIME', 1231435, '2022-08-18 19:42:44.843000 +00:00', 'VIETNAMESE', 'Test 2', null, 345345, 123123123, 'VND', null),
 (3, 3, 'SINGLE_TIME', 1231231345, '2022-08-18 19:42:44.843000 +00:00', 'VIETNAMESE', 'Test 3', null, 345345, 123123123, 'VND', null),
@@ -47,8 +47,9 @@ insert into job_detail values
 (9, 9, 'SINGLE_TIME', 1231234531, '2022-08-18 19:42:44.843000 +00:00', 'VIETNAMESE', 'Test 9', null, 345345345, 345345345345, 'VND', null),
 (10, 10, 'SINGLE_TIME', 1233451231, '2022-08-18 19:42:44.843000 +00:00', 'VIETNAMESE', 'Test 10', null, 345345345, 12312312312, 'VND', null);
 
+
 -- Add job_offer
-insert into job_offer values
+insert into job_offer (id, uid, name, is_active, quantity, job_detail_id, organizer_id) values
 (1, 'b0405757-efe6-4b48-aac9-e8db6cfcda09', 'Offer 1', true, 123123, 1, 1),
 (2, '0b66300f-4737-42bc-b226-a1a9062377c8', 'Offer 2', true, 1231323, 2, 2),
 (3, 'b4162b69-8749-42ce-a967-7d8ffbc0ca8d', 'Offer 3', true, 1231223, 3, 3),
@@ -61,7 +62,8 @@ insert into job_offer values
 (10, 'f8689ec3-10c1-4458-a8a9-b02b32de5fd0', 'Offer 10', true, 1236123, 10, 10);
 
 -- Add talent
-insert into talent values
+
+insert into talent (id, phone_number, email, address, created_at, user_state, display_name, uid, extensions, bio_input_lang, bio_raw_input, bio_input_translation) values
 (1, '+84 93 720 92 61', 'jhf18032@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi',
 'cc5291f7-523c-4129-8f34-6f599c13ebb9', null, 'VIETNAMESE', 'Test 1', null),
 (2, '+84 93 721 92 61', 'jhf180sdf32@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 2',
@@ -73,7 +75,7 @@ insert into talent values
 (5, '+84 93 724 92 61', 'jhf18sdf032@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 5',
 'b299a265-1b9b-41ca-89ba-fc7a1abbaf77', null, 'VIETNAMESE', 'Test 5', null),
 (6, '+84 93 725 92 61', 'jhf1fff8032@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 6',
-'cc5291f7-523c-4129-8f34-6f599c13ebb9', null, 'VIETNAMESE', 'Test 6', null),
+'cc5291f7-523c-4129-8f34-6f599c13ebb0', null, 'VIETNAMESE', 'Test 6', null),
 (7, '+84 93 726 92 61', 'jhf18324032@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 7',
 '5fcc4613-908a-4d0c-9472-9dc51f53c6ed', null, 'VIETNAMESE', 'Test 7', null),
 (8, '+84 93 727 92 61', 'jhf18032342@xcoxc.com', 'Group 3Phu Thinh Block, Nguyen Hue Street', '2022-08-18 19:42:44.843000 +00:00', 'GUEST', 'Khôi Khôi 8',
@@ -84,7 +86,7 @@ insert into talent values
 '8218a647-80c7-4a85-accb-87e3528556f1', null, 'VIETNAMESE', 'Test 10', null);
 
 -- Add booking
-insert into booking values
+insert into booking (id, uid, is_paid, created_at, status, organizer_id, talent_id, job_detail_id) values
 (1, 'ec30d150-ee90-420a-8fdd-038844795788', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 1, 1),
 (2, 'e4bc6184-609f-4be6-9240-91ddeb15dd87', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 2, 2, 2),
 (3, 'd8b9fc05-ec72-4c12-9f8b-aa9b68a598a3', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 3, 3, 3),
@@ -97,7 +99,7 @@ insert into booking values
 (10, '3513e3d4-6123-42cd-81b4-d95ffca78b14', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 10, 10, 10);
 
 -- Add package
-insert into package values
+insert into package (id, uid, name, talent_id, is_active, job_detail_id) values
 (1, 'a7d73bd4-cfd7-4869-86dc-7ec587047e41', 'Package 1', 1, true, 1),
 (2, 'bc99559d-636a-414a-bbe6-b25435bce018', 'Package 2', 2, true, 2),
 (3, '611f6897-a138-4208-a765-e5b84d77910c', 'Package 3', 3, true, 3),
@@ -110,11 +112,11 @@ insert into package values
 (10, '41f8588a-e751-4d42-b441-4d0b2f2fa1fe', 'Package 10', 10, true, 10);
 
 -- Add admin
-insert into admin values
+insert into admin (id, display_name, uid) values
 (1, 'Admin', '74bcd4eb-0384-4ab9-ab2f-679f8127dc04');
 
 -- Add feedback
-insert into talent_feedback values
+insert into talent_feedback (id, created_at, status, admin_id, uid, content_input_lang, content_raw_input, content_input_translation, talent_id) values
 (1, '2022-08-18 19:42:44.843000 +00:00', 'SOLVED', 1, 'b9650052-04a7-4ecf-b656-b9398f2f6823', 'VIETNAMESE', 'Test 1', null, 1),
 (2, '2022-08-18 19:42:44.843000 +00:00', 'SOLVED', 1, 'ce0fd09e-4157-4d95-b004-9f52ba0da311', 'VIETNAMESE', 'Test 2', null, 2),
 (3, '2022-08-18 19:42:44.843000 +00:00', 'SOLVED', 1, '3717b1ae-4e16-46cc-8bb2-39944d5d13d7', 'VIETNAMESE', 'Test 3', null, 3),
