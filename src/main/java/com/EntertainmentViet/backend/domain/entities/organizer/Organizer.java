@@ -62,7 +62,7 @@ public class Organizer extends User {
       })
   @JoinTable(
       name = "shopping_cart",
-      joinColumns = @JoinColumn(name = Organizer_.ID),
+      joinColumns = @JoinColumn(name = "organizer_id"),
       inverseJoinColumns = @JoinColumn(name = "shoppable_id")
   )
   @Cascade(org.hibernate.annotations.CascadeType.ALL)
