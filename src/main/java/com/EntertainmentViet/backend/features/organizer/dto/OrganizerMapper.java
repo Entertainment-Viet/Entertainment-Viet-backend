@@ -17,9 +17,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Mapper(uses = {
@@ -58,7 +56,7 @@ public abstract class OrganizerMapper {
   }
 
   @Named("toShoppablesDto")
-  public List<ShoppableDto> toShoppablesDto(List<Shoppable> shoppables) {
+  public List<ShoppableDto> toShoppablesDto(Set<Shoppable> shoppables) {
     // TODO fix this
     List<ShoppableDto> resultList = new ArrayList<>();
     for (Shoppable shoppable : shoppables ){
@@ -72,9 +70,9 @@ public abstract class OrganizerMapper {
   }
 
   @Named("toShoppables")
-  public List<Shoppable> toShoppables(List<ShoppableDto> dtos) {
+  public Set<Shoppable> toShoppables(List<ShoppableDto> dtos) {
     // TODO fix this
-    List<Shoppable> resultList = new ArrayList<>();
+    Set<Shoppable> resultList = new HashSet<>();
     for (ShoppableDto dto : dtos ){
       if (dto instanceof Package) {
         resultList.add(Package.builder().build());
