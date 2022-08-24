@@ -1,7 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.Shoppable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
@@ -32,7 +31,7 @@ import java.util.Set;
 @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Package extends Identifiable implements Shoppable {
+public class Package extends Identifiable {
 
   @Id
   @GeneratedValue
@@ -61,10 +60,8 @@ public class Package extends Identifiable implements Shoppable {
   )
   private Set<Booking> orders;
 
-  @Override
   public Booking finishCartItem() {
     return null;
   }
-
 
 }

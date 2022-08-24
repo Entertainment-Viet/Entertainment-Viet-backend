@@ -92,15 +92,15 @@ insert into booking (id, uid, is_paid, created_at, status, organizer_id, talent_
 (3, 'd8b9fc05-ec72-4c12-9f8b-aa9b68a598a3', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 2, 3),
 (4, '2873ad11-13e0-4c2f-b8d3-1c7af9081979', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 4, 4, 4),
 (5, '69601014-c397-4753-8c6b-33c271b52c42', true, '2022-08-18 19:42:44.843000 +00:00', 'CANCELLED', 5, 4, 5),
-(6, '57b7e64c-961e-483a-87d4-ea7d810167bb', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 4, 6),
-(7, '2446e876-f430-4cf4-85c8-ab78393c9728', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 7, 7, 7),
-(8, '944179a3-8e0c-4807-90b7-3b9e6f19880d', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 8, 8, 8),
-(9, '9ded56ea-d4cc-4766-a787-185d108192f7', true, '2022-08-18 19:42:44.843000 +00:00', 'ARCHIVED', 9, 9, 9),
+(6, '57b7e64c-961e-483a-87d4-ea7d810167bb', true, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 4, 1),
+(7, '2446e876-f430-4cf4-85c8-ab78393c9728', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 7, 2),
+(8, '944179a3-8e0c-4807-90b7-3b9e6f19880d', false, '2022-08-18 19:42:44.843000 +00:00', 'TALENT_PENDING', 1, 8, 1),
+(9, '9ded56ea-d4cc-4766-a787-185d108192f7', true, '2022-08-18 19:42:44.843000 +00:00', 'ARCHIVED', 2, 9, 3),
 (10, '3513e3d4-6123-42cd-81b4-d95ffca78b14', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 10, 10, 10),
 (11, '728944c9-8b8b-4946-8a25-a1b67f227974', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 4, 4, 1),
 (12, '94871295-c57f-4e53-89f0-416d1b81c97a', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 5, 5, 2),
 (13, 'a8cf3e71-839c-45b7-823d-fdb29bb2e625', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 4, 6, 6),
-(14, 'cdac42ba-b77f-4965-a4e2-86028a5cfe2c', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 10, 10, 5);
+(14, 'cdac42ba-b77f-4965-a4e2-86028a5cfe2c', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 10, 10, 5),
 (15, '2f371708-22f5-11ed-861d-0242ac120002', true, '2022-08-18 19:42:44.843000 +00:00', 'FINISHED', 3, 2, 5);
 
 -- Add package
@@ -159,7 +159,7 @@ INSERT INTO event_open_position (id, uid, event_id, job_offer_id) VALUES
 (2, '00dd9128-9dac-4444-a548-e99bf295d8a8', 1, 2),
 (3, '9a7ec4ff-efde-4799-8144-c0f7253b0826', 2, 3),
 (4, '27b8867a-55c7-4651-85e3-783598bf6cf4', 1, 4),
-(5, 'c4c18fdc-b2cb-49cd-9cbf-86030c94cd63', 3, 1);
+(5, 'c4c18fdc-b2cb-49cd-9cbf-86030c94cd63', 3, 5);
 
 INSERT INTO open_position_applicant (applicant_id, open_position_id) VALUES
 (6, 1),
@@ -178,13 +178,13 @@ INSERT INTO review (id, created_at, talent_id, score, comment_input_lang, commen
 (2, '2022-08-18 19:42:44.843000 +00:00', 1, 4, 'VIETNAMESE', 'well', NULL),
 (3, '2022-08-18 19:42:44.843000 +00:00', 1, 1, 'VIETNAMESE', 'bad', NULL);
 
--- Add shopping_cart
-INSERT INTO shopping_cart (organizer_id, cart_item, shoppable_id) VALUES
-(1, 'Package', 1),
-(1, 'Package', 2),
-(1, 'Package', 3),
-(3, 'Package', 4),
-(2, 'Package', 5);
+-- Add organizer_shopping_cart
+INSERT INTO organizer_shopping_cart (organizer_id, package_id) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(3, 1);
+
 
 -- Add advertisement
 INSERT INTO talent_advertisement (id, expired_time, priority, uid, talent_id) VALUES

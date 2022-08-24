@@ -1,16 +1,13 @@
 package com.EntertainmentViet.backend.features.organizer.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
-import com.EntertainmentViet.backend.domain.entities.Shoppable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
-import com.EntertainmentViet.backend.features.common.dto.ShoppableDto;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
-import com.EntertainmentViet.backend.features.talent.dto.PackageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -35,14 +32,14 @@ public abstract class OrganizerMapper {
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-  @Mapping(target = "shoppables", source = "shoppables", qualifiedByName = "toShoppablesDto")
+  @Mapping(target = "shoppingCart", source = "shoppingCart", qualifiedByName = "toShoppingCartUid")
   public abstract OrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-  @Mapping(target = "shoppables", source = "shoppables", qualifiedByName = "toShoppables")
+  @Mapping(target = "shoppingCart", source = "shoppingCart", qualifiedByName = "toShoppingCart")
   public abstract Organizer toModel(OrganizerDto organizerDto);
 
   @Named("toUserStateKey")
@@ -55,30 +52,21 @@ public abstract class OrganizerMapper {
     return UserState.ofI18nKey(i18nKey);
   }
 
-  @Named("toShoppablesDto")
-  public List<ShoppableDto> toShoppablesDto(Set<Shoppable> shoppables) {
-    // TODO fix this
-    List<ShoppableDto> resultList = new ArrayList<>();
-    for (Shoppable shoppable : shoppables ){
-      if (shoppable instanceof Package) {
-        resultList.add(PackageDto.builder().build());
-      } else {
-        log.warn("Can not convert shoppable item in organizer entity to organizerDto ");
-      }
+  @Named("toShoppingCartUid")
+  public List<UUID> toShoppingCartUid(Set<Package> shoppingCart) {
+    List<UUID> resultList = new ArrayList<>();
+    for (Package cartItem : shoppingCart ){
+      resultList.add(cartItem.getUid());
     }
     return resultList;
   }
 
-  @Named("toShoppables")
-  public Set<Shoppable> toShoppables(List<ShoppableDto> dtos) {
+  @Named("toShoppingCart")
+  public Set<Package> toShoppingCart(List<UUID> uidList) {
     // TODO fix this
-    Set<Shoppable> resultList = new HashSet<>();
-    for (ShoppableDto dto : dtos ){
-      if (dto instanceof Package) {
-        resultList.add(Package.builder().build());
-      } else {
-        log.warn("Can not convert shoppable dto in organizerDto");
-      }
+    Set<Package> resultList = new HashSet<>();
+    for (UUID uid : uidList ){
+      resultList.add(Package.builder().build());
     }
     return resultList;
   }

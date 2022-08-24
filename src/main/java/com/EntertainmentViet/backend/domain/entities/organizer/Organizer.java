@@ -1,11 +1,12 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import com.EntertainmentViet.backend.domain.entities.Shoppable;
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
+import com.EntertainmentViet.backend.domain.entities.talent.Package_;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -22,12 +23,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.MetaValue;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -43,31 +39,24 @@ import java.util.stream.Collectors;
 public class Organizer extends User {
 
   @OneToMany(mappedBy = JobOffer_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<JobOffer> jobOffers;
+  private List<JobOffer> jobOffers;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Event> events;
+  private List<Event> events;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Booking> bookings;
+  private List<Booking> bookings;
 
   @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<OrganizerFeedback> feedbacks;
+  private List<OrganizerFeedback> feedbacks;
 
-  // Need to change this when upgrade to hibernate 6: https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#mapping-column-any
-  @ManyToAny(metaColumn = @Column(name = "cart_item"))
-  @AnyMetaDef(
-      idType = "long", metaType = "string",
-      metaValues = {
-        @MetaValue(value = "Package", targetEntity = Package.class)
-      })
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
-      name = "shopping_cart",
-      joinColumns = @JoinColumn(name = "organizer_id"),
-      inverseJoinColumns = @JoinColumn(name = "shoppable_id")
+      name = "organizer_shopping_cart",
+      joinColumns = @JoinColumn( name = "organizer_id", referencedColumnName = Organizer_.ID),
+      inverseJoinColumns = @JoinColumn( name = "package_id", referencedColumnName = Package_.ID)
   )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private Set<Shoppable> shoppables;
+  private Set<Package> shoppingCart;
 
   public void addJobOffer(JobOffer jobOffer) {
     jobOffers.add(jobOffer);
@@ -151,14 +140,14 @@ public class Organizer extends User {
   }
 
   public void addPackageToCart(Package talentPackage) {
-    shoppables.add(talentPackage);
+    shoppingCart.add(talentPackage);
   }
 
   public void finishCartShopping() {
-    for (Shoppable shoppable : shoppables) {
-      shoppable.finishCartItem();
+    for (Package cartItem : shoppingCart) {
+      addBooking(cartItem.finishCartItem());
     }
-    shoppables.clear();
+    shoppingCart.clear();
   }
 
   public void pay(Booking booking) {
