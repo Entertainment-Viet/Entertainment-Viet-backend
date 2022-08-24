@@ -20,12 +20,10 @@ public class JobDetailPredicate extends BasePredicate<JobDetail> {
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
 
-  @Override
   public JPAQuery<JobDetail> getRootBase(JPAQueryFactory queryFactory) {
     return queryFactory.selectFrom(jobDetail);
   }
 
-  @Override
   public JoinExpression joinAll() {
     return query -> QueryUtils.combineJoinExpressionFrom(query, joinCategory());
   }

@@ -40,12 +40,10 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     return query -> query.leftJoin(booking.jobDetail, jobDetail).fetchJoin();
   }
 
-  @Override
   public JPAQuery<Booking> getRootBase(JPAQueryFactory queryFactory) {
     return queryFactory.selectFrom(booking);
   }
 
-  @Override
   public JoinExpression joinAll() {
     return query -> QueryUtils.combineJoinExpressionFrom(query,
             joinTalent(),

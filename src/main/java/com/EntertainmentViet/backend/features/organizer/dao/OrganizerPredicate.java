@@ -2,14 +2,16 @@ package com.EntertainmentViet.backend.features.organizer.dao;
 
 import com.EntertainmentViet.backend.domain.entities.admin.QOrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
+import com.EntertainmentViet.backend.domain.entities.organizer.*;
+import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
+import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
+import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.booking.dao.BookingPredicate;
 import com.EntertainmentViet.backend.features.common.JoinExpression;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,51 +26,55 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
-  private final QEvent event = QEvent.event;
+  private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
+  private final QCategory category = QCategory.category;
+  private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
+  private final QEvent event = QEvent.event;
   private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
 
-  private final JobOfferPredicate jobOfferPredicate;
-  private final BookingPredicate bookingPredicate;
+  public Predicate joinAll(JPAQueryFactory queryFactory) {
+    // join jobOffers
+    var organizers = queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.jobOffers, jobOffer).fetchJoin()
+        .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .fetch();
 
-  public JoinExpression joinJobOffer() {
-    return query -> query.leftJoin(organizer.jobOffers, jobOffer).fetchJoin();
-  }
+    // join bookings
+    organizers = queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.bookings, booking).fetchJoin()
+        .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(booking.talent, QTalent.talent).fetchJoin()
+        .where(organizer.in(organizers))
+        .fetch();
 
-  public JoinExpression joinEvent() {
-    return query -> query.leftJoin(organizer.events, event).fetchJoin();
-  }
+    // join events
+    organizers = queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.events, event).fetchJoin()
+        .where(organizer.in(organizers))
+        .fetch();
 
-  public JoinExpression joinBooking() {
-    return query -> query.leftJoin(organizer.bookings, booking).fetchJoin();
-  }
+    queryFactory.select(event).from(event).distinct()
+        .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
+        .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
+        .where(event.organizer.in(organizers))
+        .fetch();
 
-  public JoinExpression joinOrganizerFeedback() {
-    return query -> query.leftJoin(organizer.feedbacks, organizerFeedback).fetchJoin();
-  }
+    // join feedbacks
+    organizers = queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.feedbacks, organizerFeedback).fetchJoin()
+        .where(organizer.in(organizers))
+        .fetch();
 
-  public JoinExpression joinShoppable() {
-    return query -> query.leftJoin(organizer.shoppables).fetchJoin();
-  }
+    // join shoppables
+    queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.shoppingCart).fetchJoin()
+        .where(organizer.in(organizers))
+        .fetch();
 
-  @Override
-  public JPAQuery<Organizer> getRootBase(JPAQueryFactory queryFactory) {
-    return queryFactory.selectFrom(organizer);
-  }
-
-  @Override
-  public JoinExpression joinAll() {
-    return query -> QueryUtils.combineJoinExpressionFrom(query,
-        joinJobOffer(),
-        joinEvent(),
-//        eventPredicate.joinAll(), //TODO implement predicate first
-        joinBooking(),
-        joinOrganizerFeedback(),
-//        organizerFeedbackPredicate.joinAll(),  //TODO implement predicate first
-        jobOfferPredicate.joinAll(),
-        bookingPredicate.joinAll(),
-        joinShoppable()
-    );
+    return null;
   }
 
   @Override

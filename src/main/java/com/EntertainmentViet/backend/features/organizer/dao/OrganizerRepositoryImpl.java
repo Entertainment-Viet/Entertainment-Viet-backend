@@ -1,8 +1,9 @@
 package com.EntertainmentViet.backend.features.organizer.dao;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.ExpressionUtils;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
@@ -19,16 +20,13 @@ public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long>
 
   @Override
   public Optional<Organizer> findByUid(UUID uid) {
-    QueryUtils.Root<Organizer> root = QueryUtils.createRoot();
+    QOrganizer organizer = QOrganizer.organizer;
 
-    var queryRoot = root.base(organizerPredicate.getRootBase(queryFactory))
-        .joinPaths(organizerPredicate.joinAll())
-        .build();
-
-    QueryUtils.Query<Organizer> query = QueryUtils.createQuery();
-
-    return query.root(queryRoot)
-        .predicates(organizerPredicate.uidEqual(uid))
-        .get();
+    return Optional.ofNullable(queryFactory.selectFrom(organizer)
+        .where(ExpressionUtils.allOf(
+            organizerPredicate.joinAll(queryFactory),
+            organizerPredicate.uidEqual(uid))
+        )
+        .fetchOne());
   }
 }

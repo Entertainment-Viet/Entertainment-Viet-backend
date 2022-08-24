@@ -43,12 +43,10 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     return query -> query.leftJoin(talent.feedbacks, feedback).fetchJoin();
   }
 
-  @Override
   public JPAQuery<Talent> getRootBase(JPAQueryFactory queryFactory) {
     return queryFactory.selectFrom(talent);
   }
 
-  @Override
   public JoinExpression joinAll() {
     return query -> QueryUtils.combineJoinExpressionFrom(query,
             joinBooking(),

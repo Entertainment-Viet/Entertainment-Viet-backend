@@ -8,6 +8,6 @@ import org.mapstruct.Mapper;
 @Mapper(config = MappingConfig.class)
 public abstract class TalentFeedBackMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "uid", "createdAt", "talent", "status", "admin", "content"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "createdAt", "talent", "status", "admin", "content"})
     public abstract TalentFeedBackDto toDto(TalentFeedback talentFeedback);
 }

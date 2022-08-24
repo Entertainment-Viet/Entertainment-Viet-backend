@@ -28,12 +28,10 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
     return query -> query.leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin();
   }
 
-  @Override
   public JPAQuery<JobOffer> getRootBase(JPAQueryFactory queryFactory) {
     return queryFactory.selectFrom(jobOffer);
   }
 
-  @Override
   public JoinExpression joinAll() {
     return query -> QueryUtils.combineJoinExpressionFrom(query,
         joinJobDetail(),

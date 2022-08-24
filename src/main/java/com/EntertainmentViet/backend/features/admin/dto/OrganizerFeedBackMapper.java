@@ -10,12 +10,11 @@ import org.mapstruct.Mapping;
 public abstract class OrganizerFeedBackMapper {
 
     // TODO fix mapping
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "uid", "createdAt", "organizer", "status", "admin", "content"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "createdAt", "organizer", "status", "admin", "content"})
     public abstract OrganizerFeedBackDto toDto(OrganizerFeedback talentFeedback);
 
     // TODO fix mapping
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "status", ignore = true)
