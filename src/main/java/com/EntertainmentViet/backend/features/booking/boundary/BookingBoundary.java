@@ -1,14 +1,15 @@
 package com.EntertainmentViet.backend.features.booking.boundary;
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BookingBoundary {
 
-    BookingDto findByUid(UUID uid);
+    Optional<BookingDto> findByUid(UUID uid);
 
-    UUID create(BookingDto bookingDto) throws Exception;
+    Optional<UUID> create(BookingDto bookingDto);
 
-    UUID update(BookingDto bookingDto, UUID uid) throws Exception;
+    Optional<UUID> update(BookingDto bookingDto, UUID uid);
 
 }

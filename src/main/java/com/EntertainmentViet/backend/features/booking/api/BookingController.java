@@ -28,20 +28,25 @@ public class BookingController {
   private final BookingBoundary bookingService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<BookingDto> findByUid(@PathVariable("uid") UUID uid) {
-    return CompletableFuture.completedFuture(bookingService.findByUid(uid));
+  public CompletableFuture<ResponseEntity<BookingDto>> findByUid(@PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(bookingService.findByUid(uid)
+            .map(bookingDto -> ResponseEntity
+                    .ok()
+                    .body(bookingDto)
+            ).orElse(ResponseEntity.badRequest().build()));
   }
 
   @PostMapping(
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid BookingDto bookingDto) throws Exception {
-    var newBookingDto = bookingService.create(bookingDto);
-    return  CompletableFuture.completedFuture(
-            ResponseEntity
+  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid BookingDto bookingDto) {
+    return  CompletableFuture.completedFuture(bookingService.create(bookingDto)
+            .map(newBookingDto -> ResponseEntity
                     .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
                     .body(newBookingDto)
+            )
+            .orElse(ResponseEntity.badRequest().build())
     );
   }
 
@@ -50,16 +55,13 @@ public class BookingController {
           produces = MediaType.APPLICATION_JSON_VALUE,
           value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<ResponseEntity<UUID>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid BookingDto bookingDto) throws Exception {
-    try {
-      var newBookingDto = bookingService.update(bookingDto, uid);
-      return  CompletableFuture.completedFuture(
-              ResponseEntity
-                      .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
-                      .body(newBookingDto)
-      );
-    } catch (Exception e) {
-      throw e;
-    }
+  public CompletableFuture<ResponseEntity<UUID>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid BookingDto bookingDto) {
+    return  CompletableFuture.completedFuture(bookingService.update(bookingDto, uid)
+            .map(newBookingDto -> ResponseEntity
+                    .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
+                    .body(newBookingDto)
+            )
+            .orElse(ResponseEntity.badRequest().build())
+    );
   }
 }
