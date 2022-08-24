@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.boundary;
 
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.talent.dao.TalentRepository;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
@@ -7,6 +8,7 @@ import com.EntertainmentViet.backend.features.talent.dto.TalentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,30 +20,31 @@ public class TalentService implements TalentBoundary {
     private final TalentMapper talentMapper;
 
     @Override
-    public TalentDto findByUid(UUID uid) {
-        return talentMapper.toDto(talentRepository.findByUid(uid).orElse(null));
+    public Optional<TalentDto> findByUid(UUID uid) {
+        return talentRepository.findByUid(uid).map(talentMapper::toDto);
     }
     @Override
-    public TalentDto create(TalentDto talentDto) {
+    public Optional<UUID> create(TalentDto talentDto) {
+        talentDto.setUid(null);
         var newTalent = talentRepository.save(talentMapper.toModel(talentDto));
-        return talentMapper.toDto(newTalent);
+        return Optional.ofNullable(newTalent.getUid());
     }
 
     @Override
-    public TalentDto update(TalentDto talentDto, UUID uid) throws Exception {
-        Talent talentCheck = talentRepository.findByUid(uid).orElse(null);
-        if (talentCheck != null) {
-            Talent talentUpdate = talentMapper.toModel(talentDto);
-            talentCheck.setDisplayName(talentUpdate.getDisplayName());
-            talentCheck.setPhoneNumber(talentUpdate.getPhoneNumber());
-            talentCheck.setEmail(talentUpdate.getEmail());
-            talentCheck.setBio(talentUpdate.getBio());
-            talentCheck.setExtensions(talentUpdate.getExtensions());
-            talentCheck.setUserState(talentUpdate.getUserState());
+    public Optional<UUID> update(TalentDto talentDto, UUID uid){
+        return talentRepository.findByUid(uid)
+                .map(talent -> updateTalentInfo(talent, talentMapper.toModel(talentDto)))
+                .map(talentRepository::save)
+                .map(Identifiable::getUid);
+    }
 
-            var updated = talentRepository.save(talentCheck);
-            return talentMapper.toDto(updated);
-        }
-        throw new Exception();
+    private Talent updateTalentInfo(Talent talent, Talent newInfo) {
+        talent.setPhoneNumber(newInfo.getPhoneNumber());
+        talent.setEmail(newInfo.getEmail());
+        talent.setAddress(newInfo.getAddress());
+        talent.setBio(newInfo.getBio());
+        talent.setExtensions(newInfo.getExtensions());
+        talent.setDisplayName(newInfo.getDisplayName());
+        return talent;
     }
 }

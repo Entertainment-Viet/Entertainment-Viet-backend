@@ -1,7 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.api;
 
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +28,26 @@ public class TalentController {
   private final TalentBoundary talentService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<TalentDto> findByUid(@PathVariable("uid") UUID uid) {
-    return CompletableFuture.completedFuture(talentService.findByUid(uid));
+  public CompletableFuture<ResponseEntity<TalentDto>> findByUid(@PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(talentService.findByUid(uid)
+            .map( talentDto -> ResponseEntity
+                    .ok()
+                    .body(talentDto)
+            )
+            .orElse( ResponseEntity.notFound().build()));
   }
 
   @PostMapping(
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<TalentDto>> create(HttpServletRequest request, @RequestBody @Valid TalentDto talentDto) {
-    var newTalentDto = talentService.create(talentDto);
-    return  CompletableFuture.completedFuture(
-            ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newTalentDto.getUid()))
-                    .body(newTalentDto)
+  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid TalentDto talentDto) {
+    return  CompletableFuture.completedFuture(talentService.create(talentDto)
+            .map(newTalentUid -> ResponseEntity
+                    .created(RestUtils.getCreatedLocationUri(request, newTalentUid))
+                    .body(newTalentUid)
+            )
+            .orElse(ResponseEntity.badRequest().build())
     );
   }
 
@@ -51,16 +56,12 @@ public class TalentController {
           produces = MediaType.APPLICATION_JSON_VALUE,
           value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<ResponseEntity<TalentDto>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid TalentDto talentDto) throws Exception {
-    try {
-      var newTalentDto = talentService.update(talentDto, uid);
-      return  CompletableFuture.completedFuture(
-              ResponseEntity
-                      .created(RestUtils.getCreatedLocationUri(request, newTalentDto.getUid()))
-                      .body(newTalentDto)
-      );
-    } catch (Exception e) {
-      throw e;
-    }
+  public CompletableFuture<ResponseEntity<UUID>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid TalentDto talentDto) {
+    return  CompletableFuture.completedFuture(talentService.update(talentDto, uid)
+            .map(updatedTalentUid -> ResponseEntity
+                    .ok()
+                    .body(updatedTalentUid)
+            ).orElse(ResponseEntity.badRequest().build())
+    );
   }
 }
