@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,20 +36,20 @@ public class BookingService implements BookingBoundary {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public BookingDto findByUid(UUID uid) {
-        return bookingMapper.toDto(bookingRepository.findByUid(uid).orElse(null));
+    public Optional<BookingDto> findByUid(UUID uid) {
+        return bookingRepository.findByUid(uid).map(bookingMapper::toDto);
     }
 
     @Override
     @Transactional
-    public UUID create(BookingDto bookingDto) throws Exception {
+    public Optional<UUID> create(BookingDto bookingDto) {
         Organizer organizer = organizerRepository.findByUid(bookingDto.getOrganizerUid()).orElse(null);
         Talent talent = talentRepository.findByUid(bookingDto.getTalentUid()).orElse(null);
         JobDetail jobDetail = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
         Category category = categoryRepository.findByName(jobDetail.getCategory().getName()).orElse(null);
 
         if (organizer == null || talent == null || jobDetail == null || category == null) {
-            throw new Exception();
+            Optional.empty();
         }
 
         jobDetail.setCategory(category);
@@ -56,13 +57,15 @@ public class BookingService implements BookingBoundary {
         booking.setOrganizer(organizer);
         booking.setTalent(talent);
         booking.setJobDetail(jobDetail);
+        booking.setId(null);
+        booking.setUid(null);
 
         var newBooking = bookingRepository.save(booking);
-        return bookingMapper.toDto(newBooking).getUid();
+        return Optional.ofNullable(newBooking.getUid());
     }
 
     @Override
-    public UUID update(BookingDto bookingDto, UUID uid) throws Exception {
+    public Optional<UUID> update(BookingDto bookingDto, UUID uid) {
         Booking bookingCheck = bookingRepository.findByUid(uid).orElse(null);
         if (bookingCheck != null) {
             JobDetail jobDetail = bookingCheck.getJobDetail();
@@ -79,8 +82,8 @@ public class BookingService implements BookingBoundary {
 
             bookingCheck.setJobDetail(jobDetail);
             var newBooking = bookingRepository.save(bookingCheck);
-            return newBooking.getUid();
+            return Optional.ofNullable(newBooking.getUid());
         }
-        throw new Exception();
+        return Optional.empty();
     }
 }

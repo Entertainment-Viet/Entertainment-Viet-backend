@@ -1,13 +1,13 @@
 package com.EntertainmentViet.backend.features.talent.boundary;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface TalentBoundary {
-    TalentDto findByUid(UUID uid);
+    Optional<TalentDto> findByUid(UUID uid);
 
-    TalentDto create(TalentDto talentDto);
+    Optional<UUID> create(TalentDto talentDto);
 
-    TalentDto update(TalentDto talentDto, UUID uid) throws Exception;
+    Optional<UUID> update(TalentDto talentDto, UUID uid);
 }
