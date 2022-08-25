@@ -58,7 +58,7 @@ public class BookingController {
   public CompletableFuture<ResponseEntity<UUID>> update(HttpServletRequest request,@PathVariable("uid") UUID uid, @RequestBody @Valid BookingDto bookingDto) {
     return  CompletableFuture.completedFuture(bookingService.update(bookingDto, uid)
             .map(newBookingDto -> ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
+                    .ok()
                     .body(newBookingDto)
             )
             .orElse(ResponseEntity.badRequest().build())

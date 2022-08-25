@@ -57,6 +57,8 @@ public class BookingService implements BookingBoundary {
         booking.setOrganizer(organizer);
         booking.setTalent(talent);
         booking.setJobDetail(jobDetail);
+        booking.setId(null);
+        booking.setUid(null);
 
         var newBooking = bookingRepository.save(booking);
         return Optional.ofNullable(newBooking.getUid());
@@ -76,6 +78,7 @@ public class BookingService implements BookingBoundary {
             jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
             jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
             jobDetail.setNote(jobDetailUpdate.getNote());
+            jobDetail.setExtensions(jobDetailUpdate.getExtensions());
 
             bookingCheck.setJobDetail(jobDetail);
             var newBooking = bookingRepository.save(bookingCheck);
