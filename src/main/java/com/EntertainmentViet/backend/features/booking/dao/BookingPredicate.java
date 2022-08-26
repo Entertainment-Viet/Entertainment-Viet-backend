@@ -6,13 +6,9 @@ import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.features.booking.boundary.JobDetailPredicate;
-import com.EntertainmentViet.backend.features.common.JoinExpression;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,6 +25,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QBooking booking = QBooking.booking;
   private final QCategory category = QCategory.category;
 
+  @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(booking).distinct()
         .leftJoin(booking.talent, talent).fetchJoin()

@@ -32,6 +32,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QEvent event = QEvent.event;
   private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
 
+  @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     // join jobOffers
     var organizers = queryFactory.selectFrom(organizer).distinct()

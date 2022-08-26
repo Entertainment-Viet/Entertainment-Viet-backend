@@ -16,6 +16,8 @@ import java.util.UUID;
 @Transactional
 public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> implements BookingRepository {
 
+  private final QBooking booking = QBooking.booking;
+
   private final BookingPredicate bookingPredicate;
 
   public BookingRepositoryImpl(EntityManager em, BookingPredicate bookingPredicate) {
@@ -25,8 +27,6 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
 
   @Override
   public Optional<Booking> findByUid(UUID uid) {
-    QBooking booking = QBooking.booking;
-
     return Optional.ofNullable(queryFactory.selectFrom(booking)
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),

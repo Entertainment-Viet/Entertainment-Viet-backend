@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long> implements OrganizerRepository {
 
+  private final QOrganizer organizer = QOrganizer.organizer;
+
   private final OrganizerPredicate organizerPredicate;
 
   public OrganizerRepositoryImpl(EntityManager em, OrganizerPredicate organizerPredicate) {
@@ -20,8 +22,6 @@ public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long>
 
   @Override
   public Optional<Organizer> findByUid(UUID uid) {
-    QOrganizer organizer = QOrganizer.organizer;
-
     return Optional.ofNullable(queryFactory.selectFrom(organizer)
         .where(ExpressionUtils.allOf(
             organizerPredicate.joinAll(queryFactory),

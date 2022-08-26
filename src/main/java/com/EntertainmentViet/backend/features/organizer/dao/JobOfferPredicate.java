@@ -3,12 +3,10 @@ package com.EntertainmentViet.backend.features.organizer.dao;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
-import com.EntertainmentViet.backend.features.booking.boundary.JobDetailPredicate;
-import com.EntertainmentViet.backend.features.common.JoinExpression;
+import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,22 +19,16 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
 
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
+  private final QCategory category = QCategory.category;
 
-  private final JobDetailPredicate jobDetailPredicate;
+  @Override
+  public Predicate joinAll(JPAQueryFactory queryFactory) {
+    queryFactory.selectFrom(jobOffer).distinct()
+        .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .fetch();
 
-  public JoinExpression joinJobDetail() {
-    return query -> query.leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin();
-  }
-
-  public JPAQuery<JobOffer> getRootBase(JPAQueryFactory queryFactory) {
-    return queryFactory.selectFrom(jobOffer);
-  }
-
-  public JoinExpression joinAll() {
-    return query -> QueryUtils.combineJoinExpressionFrom(query,
-        joinJobDetail(),
-        jobDetailPredicate.joinAll()
-    );
+    return null;
   }
 
   public BooleanExpression belongToOrganizer(UUID uid) {

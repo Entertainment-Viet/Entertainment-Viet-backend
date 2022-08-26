@@ -1,10 +1,9 @@
 package com.EntertainmentViet.backend.features.booking.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
+import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -15,6 +14,8 @@ import java.util.Optional;
 @Transactional
 public class JobDetailRepositoryImpl extends BaseRepositoryImpl<JobDetail, Long> implements JobDetailRepository {
 
+  private final QJobDetail jobDetail = QJobDetail.jobDetail;
+
   private final JobDetailPredicate jobDetailPredicate;
 
   public JobDetailRepositoryImpl(EntityManager em, JobDetailPredicate jobDetailPredicate) {
@@ -23,16 +24,12 @@ public class JobDetailRepositoryImpl extends BaseRepositoryImpl<JobDetail, Long>
   }
 
   @Override
-  public Optional<JobDetail> findById(Long id) {
-    QueryUtils.Root<JobDetail> root = QueryUtils.createRoot();
-
-    var queryRoot = root.base(jobDetailPredicate.getRootBase(queryFactory))
-            .joinPaths(jobDetailPredicate.joinAll())
-            .build();
-
-    QueryUtils.Query<JobDetail> query = QueryUtils.createQuery();
-    return query.root(queryRoot)
-            .predicates(jobDetailPredicate.uidEqual(id))
-            .get();
+  public Optional<JobDetail> findById(Long uid) {
+    return Optional.ofNullable(queryFactory.selectFrom(jobDetail)
+        .where(ExpressionUtils.allOf(
+            jobDetailPredicate.joinAll(queryFactory),
+            jobDetailPredicate.uidEqual(uid))
+        )
+        .fetchOne());
   }
 }
