@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.features.organizer.dto.OrganizerMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,9 +27,16 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public Optional<UUID> create(OrganizerDto organizerDto) {
-    organizerDto.setUid(null);  // Remove UID pass by user when create
-    var newOrganizer = organizerRepository.save(organizerMapper.toModel(organizerDto));
-    return Optional.ofNullable(newOrganizer.getUid());
+    var newOrganizer = organizerMapper.toModel(organizerDto);
+    newOrganizer.setUid(null);
+    newOrganizer.setId(null);
+    newOrganizer.setBookings(Collections.emptyList());
+    newOrganizer.setEvents(Collections.emptyList());
+    newOrganizer.setFeedbacks(Collections.emptyList());
+    newOrganizer.setJobOffers(Collections.emptyList());
+    newOrganizer.setShoppingCart(Collections.emptySet());
+
+    return Optional.ofNullable(organizerRepository.save(newOrganizer).getUid());
   }
 
   @Override

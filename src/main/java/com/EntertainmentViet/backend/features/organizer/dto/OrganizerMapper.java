@@ -54,6 +54,9 @@ public abstract class OrganizerMapper {
 
   @Named("toShoppingCartUid")
   public List<UUID> toShoppingCartUid(Set<Package> shoppingCart) {
+    if (shoppingCart == null) {
+      return Collections.emptyList();
+    }
     List<UUID> resultList = new ArrayList<>();
     for (Package cartItem : shoppingCart ){
       resultList.add(cartItem.getUid());
@@ -63,7 +66,9 @@ public abstract class OrganizerMapper {
 
   @Named("toShoppingCart")
   public Set<Package> toShoppingCart(List<UUID> uidList) {
-    // TODO fix this
+    if (uidList == null) {
+      return Collections.emptySet();
+    }
     Set<Package> resultList = new HashSet<>();
     for (UUID uid : uidList ){
       resultList.add(Package.builder().build());
