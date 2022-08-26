@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.api;
 import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.JobOfferBoundary;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,13 @@ public class JobOfferController {
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<JobOfferDto> findByOrganizerUid(@PathVariable("organizer_uid") UUID organizerUid,
-                                                                 @PathVariable("uid") UUID uid) {
-    return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUidAndUid(organizerUid, uid));
+  public CompletableFuture<ResponseEntity<JobOfferDto>> findByOrganizerUid(@PathVariable("organizer_uid") UUID organizerUid,
+                                                                          @PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUidAndUid(organizerUid, uid)
+            .map( talentDto -> ResponseEntity
+                    .ok()
+                    .body(talentDto)
+            )
+            .orElse( ResponseEntity.notFound().build()));
   }
 }

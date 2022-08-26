@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,7 +24,7 @@ public class JobOfferService implements JobOfferBoundary {
     }
 
     @Override
-    public JobOfferDto findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-        return jobOfferMapper.toDto(jobOfferRepository.findByOrganizerUidAndUid(organizerUid, uid).orElse(null));
+    public Optional<JobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
+        return jobOfferRepository.findByUid(uid).map(jobOfferMapper::toDto);
     }
 }
