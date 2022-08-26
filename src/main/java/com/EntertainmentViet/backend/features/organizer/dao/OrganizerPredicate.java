@@ -67,7 +67,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .where(organizer.in(organizers))
         .fetch();
 
-    // join shoppables
+    // join shoppingCart
     queryFactory.selectFrom(organizer).distinct()
         .leftJoin(organizer.shoppingCart).fetchJoin()
         .where(organizer.in(organizers))

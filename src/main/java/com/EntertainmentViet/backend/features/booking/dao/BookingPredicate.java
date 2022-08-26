@@ -5,10 +5,12 @@ import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
+import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.booking.boundary.JobDetailPredicate;
 import com.EntertainmentViet.backend.features.common.JoinExpression;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,32 +27,17 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
+  private final QCategory category = QCategory.category;
 
-  private final JobDetailPredicate jobDetailPredicate;
+  public Predicate joinAll(JPAQueryFactory queryFactory) {
+    queryFactory.selectFrom(booking).distinct()
+        .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(booking.organizer, organizer).fetchJoin()
+        .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .fetch();
 
-  public JoinExpression joinTalent() {
-    return query -> query.leftJoin(booking.talent, talent).fetchJoin();
-  }
-
-  public JoinExpression joinOrganizer () {
-    return query -> query.leftJoin(booking.organizer, organizer).fetchJoin();
-  }
-
-  public JoinExpression  joinJobDetail() {
-    return query -> query.leftJoin(booking.jobDetail, jobDetail).fetchJoin();
-  }
-
-  public JPAQuery<Booking> getRootBase(JPAQueryFactory queryFactory) {
-    return queryFactory.selectFrom(booking);
-  }
-
-  public JoinExpression joinAll() {
-    return query -> QueryUtils.combineJoinExpressionFrom(query,
-            joinTalent(),
-            joinOrganizer(),
-            joinJobDetail(),
-            jobDetailPredicate.joinAll()
-    );
+    return null;
   }
 
   @Override
