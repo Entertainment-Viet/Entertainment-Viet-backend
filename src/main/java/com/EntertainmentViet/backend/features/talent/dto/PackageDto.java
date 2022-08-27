@@ -16,8 +16,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class PackageDto extends IdentifiableDto {
-  //TODO
-  private Long id;
 
   private String name;
 
