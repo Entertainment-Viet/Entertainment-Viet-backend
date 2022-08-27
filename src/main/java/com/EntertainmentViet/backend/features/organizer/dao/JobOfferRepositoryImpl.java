@@ -1,8 +1,10 @@
 package com.EntertainmentViet.backend.features.organizer.dao;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
+import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,6 +15,8 @@ import java.util.UUID;
 @Repository
 public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> implements JobOfferRepository {
 
+  private final QJobOffer jobOffer = QJobOffer.jobOffer;
+
   private final JobOfferPredicate jobOfferPredicate;
 
   public JobOfferRepositoryImpl(EntityManager em, JobOfferPredicate jobOfferPredicate) {
@@ -22,47 +26,33 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
 
   @Override
   public List<JobOffer> findByOrganizerUid(UUID uid) {
-    QueryUtils.Root<JobOffer> root = QueryUtils.createRoot();
-
-    var queryRoot = root.base(jobOfferPredicate.getRootBase(queryFactory))
-        .joinPaths(jobOfferPredicate.joinAll())
-        .build();
-
-    QueryUtils.Query<JobOffer> query = QueryUtils.createQuery();
-
-    return query.root(queryRoot)
-        .predicates(jobOfferPredicate.belongToOrganizer(uid))
-        .getAll();
+    return queryFactory.selectFrom(jobOffer)
+        .where(ExpressionUtils.allOf(
+            jobOfferPredicate.joinAll(queryFactory),
+            jobOfferPredicate.belongToOrganizer(uid))
+        )
+        .fetch();
   }
 
   @Override
   public Optional<JobOffer> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-    QueryUtils.Root<JobOffer> root = QueryUtils.createRoot();
-
-    var queryRoot = root.base(jobOfferPredicate.getRootBase(queryFactory))
-        .joinPaths(jobOfferPredicate.joinAll())
-        .build();
-
-    QueryUtils.Query<JobOffer> query = QueryUtils.createQuery();
-
-    return query.root(queryRoot)
-        .predicates(
+    return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
+        .where(ExpressionUtils.allOf(
+            jobOfferPredicate.joinAll(queryFactory),
             jobOfferPredicate.belongToOrganizer(organizerUid),
             jobOfferPredicate.uidEqual(uid))
-        .get();
+        )
+        .fetchOne());
   }
 
   @Override
   public Optional<JobOffer> findByUid(UUID uid) {
-    QueryUtils.Root<JobOffer> root = QueryUtils.createRoot();
 
-    var queryRoot = root.base(jobOfferPredicate.getRootBase(queryFactory))
-        .joinPaths(jobOfferPredicate.joinAll())
-        .build();
-
-    QueryUtils.Query<JobOffer> query = QueryUtils.createQuery();
-    return query.root(queryRoot)
-        .predicates(jobOfferPredicate.uidEqual(uid))
-        .get();
+    return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
+        .where(ExpressionUtils.allOf(
+            jobOfferPredicate.joinAll(queryFactory),
+            jobOfferPredicate.uidEqual(uid))
+        )
+        .fetchOne());
   }
 }

@@ -1,8 +1,10 @@
 package com.EntertainmentViet.backend.features.booking.dao;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
+import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @Transactional
 public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> implements BookingRepository {
 
+  private final QBooking booking = QBooking.booking;
+
   private final BookingPredicate bookingPredicate;
 
   public BookingRepositoryImpl(EntityManager em, BookingPredicate bookingPredicate) {
@@ -23,15 +27,11 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
 
   @Override
   public Optional<Booking> findByUid(UUID uid) {
-    QueryUtils.Root<Booking> root = QueryUtils.createRoot();
-
-    var queryRoot = root.base(bookingPredicate.getRootBase(queryFactory))
-            .joinPaths(bookingPredicate.joinAll())
-            .build();
-
-    QueryUtils.Query<Booking> query = QueryUtils.createQuery();
-    return query.root(queryRoot)
-            .predicates(bookingPredicate.uidEqual(uid))
-            .get();
+    return Optional.ofNullable(queryFactory.selectFrom(booking)
+        .where(ExpressionUtils.allOf(
+            bookingPredicate.joinAll(queryFactory),
+            bookingPredicate.uidEqual(uid))
+        )
+        .fetchOne());
   }
 }
