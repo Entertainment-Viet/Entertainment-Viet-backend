@@ -35,27 +35,38 @@ public class OrganizerController {
   private final OrganizerBoundary organizerService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<OrganizerDto> findByUid(@PathVariable("uid") UUID uid) throws InterruptedException {
-    return CompletableFuture.completedFuture(organizerService.findByUid(uid));
+  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(@PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(organizerService.findByUid(uid)
+        .map( organizerDto -> ResponseEntity
+            .ok()
+            .body(organizerDto)
+        )
+        .orElse( ResponseEntity.notFound().build())
+    );
   }
 
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<OrganizerDto>> create(HttpServletRequest request, @RequestBody @Valid OrganizerDto organizerDto) {
-    var newOrganizerDto = organizerService.create(organizerDto);
-    return  CompletableFuture.completedFuture(
-        ResponseEntity
-            .created(RestUtils.getCreatedLocationUri(request,newOrganizerDto.getUid()))
-            .body(newOrganizerDto)
+  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid OrganizerDto organizerDto) {
+    return  CompletableFuture.completedFuture(organizerService.create(organizerDto)
+        .map(newOrganizerUid -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newOrganizerUid))
+            .body(newOrganizerUid)
+        )
+        .orElse(ResponseEntity.badRequest().build())
     );
   }
 
   @PutMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<OrganizerDto>> updateById(@PathVariable("uid") Long uid) {
-    // TODO
-    return null;
+  public CompletableFuture<ResponseEntity<UUID>> updateById(@PathVariable("uid") UUID uid, @RequestBody @Valid OrganizerDto organizerDto) {
+    return  CompletableFuture.completedFuture(organizerService.update(organizerDto, uid)
+        .map(updatedOrganizerUid -> ResponseEntity
+            .ok()
+            .body(updatedOrganizerUid)
+        ).orElse(ResponseEntity.badRequest().build())
+    );
   }
 
   @GetMapping(value = "/{uid}/cash")

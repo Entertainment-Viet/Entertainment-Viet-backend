@@ -23,9 +23,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.time.Instant;
+import java.util.List;
 import java.util.OptionalDouble;
 import java.util.UUID;
-import java.util.Set;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -39,13 +39,13 @@ public class Talent extends User implements Advertisable {
   private static final String SCORE_METRIC_PATH = "scoreMetrics";
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Review> reviews;
+  private List<Review> reviews;
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Booking> bookings;
+  private List<Booking> bookings;
 
   @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<TalentFeedback> feedbacks;
+  private List<TalentFeedback> feedbacks;
 
   public void addReview(Review review) {
     reviews.add(review);

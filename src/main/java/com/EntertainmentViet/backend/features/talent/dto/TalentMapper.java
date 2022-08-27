@@ -24,9 +24,6 @@ public abstract class TalentMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "reviews", "bookings", "feedbacks"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
-    @Mapping(target = "reviews", ignore = true) // TODO: remove and fix this
-    @Mapping(target = "bookings", ignore = true) // TODO: remove and fix this
-    @Mapping(target = "feedbacks", ignore = true) // TODO: remove and fix this
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract TalentDto toDto(Talent talent);
@@ -35,10 +32,7 @@ public abstract class TalentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-    @Mapping(target = "reviews", ignore = true) // TODO: remove and fix this
-    @Mapping(target = "bookings", ignore = true) // TODO: remove and fix this
-    @Mapping(target = "feedbacks", ignore = true) // TODO: remove and fix this
-    @Mapping(target = "bio", ignore = true) // TODO: remove and fix this
+    @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Talent toModel(TalentDto talentDto);
 
 

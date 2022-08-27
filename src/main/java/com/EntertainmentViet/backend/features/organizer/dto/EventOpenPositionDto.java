@@ -1,27 +1,25 @@
 package com.EntertainmentViet.backend.features.organizer.dto;
 
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
+import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
-public class JobOfferDto extends IdentifiableDto {
+public class EventOpenPositionDto extends IdentifiableDto {
 
-  private String name;
+  private UUID eventId;
 
-  private Boolean isActive;
+  private JobOfferDto jobOffer;
 
-  private Integer quantity;
-
-  private JobDetailDto jobDetail;
-
-  private UUID organizerId;
+  private List<BookingDto> applicants;
 }

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.dto;
 
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
+import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,15 +15,18 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PackageDto {
+public class PackageDto extends IdentifiableDto {
+  //TODO
+  private Long id;
 
-    private List<BookingDto> orders;
+  private String name;
 
-    private String name;
+  private Boolean isActive;
 
-    private boolean isActive;
+  private UUID talentId;
 
-    private UUID talentId;
+  private JobDetailDto jobDetail;
 
-    private JobDetailDto jobDetail;
+  private List<BookingDto> orders;
+
 }
