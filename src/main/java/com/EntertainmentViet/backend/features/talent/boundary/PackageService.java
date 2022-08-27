@@ -59,6 +59,7 @@ public class PackageService implements PackageBoundary {
         Package aPackage = packageMapper.toModel(packageDto);
         aPackage.setTalent(talent);
         aPackage.setJobDetail(jobDetail);
+        aPackage.setIsActive(true);
         aPackage.setId(null);
         aPackage.setUid(null);
 
