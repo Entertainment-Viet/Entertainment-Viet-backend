@@ -46,7 +46,7 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public Optional<UUID> create(JobOfferDto jobOfferDto, UUID organizerUid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
-        JobDetail jobDetail = jobDetailMapper.toModel(jobOfferDto.getJobDetailDto());
+        JobDetail jobDetail = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
         Category category = categoryRepository.findByName(jobDetail.getCategory().getName()).orElse(null);
 
         if (jobDetail == null || category == null || organizer == null) {
@@ -71,10 +71,10 @@ public class JobOfferService implements JobOfferBoundary {
         if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId() == organizer.getId()) {
             if (jobOffer != null) {
                 JobDetail jobDetail = jobOffer.getJobDetail();
-                Category category = categoryRepository.findByName(jobOfferDto.getJobDetailDto().getCategory().getName()).orElse(null);
+                Category category = categoryRepository.findByName(jobOfferDto.getJobDetail().getCategory().getName()).orElse(null);
                 jobDetail.setCategory(category);
 
-                JobDetail jobDetailUpdate = jobDetailMapper.toModel(jobOfferDto.getJobDetailDto());
+                JobDetail jobDetailUpdate = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
                 jobDetail.setPrice(jobDetailUpdate.getPrice());
                 jobDetail.setWorkType(jobDetailUpdate.getWorkType());
                 jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
