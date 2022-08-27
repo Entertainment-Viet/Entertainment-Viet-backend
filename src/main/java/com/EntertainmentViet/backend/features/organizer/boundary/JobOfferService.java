@@ -67,8 +67,8 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
-        if (organizer != null) {
-            JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
+        JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
+        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId() == organizer.getId()) {
             if (jobOffer != null) {
                 JobDetail jobDetail = jobOffer.getJobDetail();
                 Category category = categoryRepository.findByName(jobOfferDto.getJobDetailDto().getCategory().getName()).orElse(null);
@@ -96,7 +96,8 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public void delete(UUID uid, UUID organizerUid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
-        if (organizer != null) {
+        JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
+        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId() == organizer.getId()) {
             jobOfferRepository.deleteById(jobOfferRepository.findByUid(uid).orElse(null).getId());
         }
     }
