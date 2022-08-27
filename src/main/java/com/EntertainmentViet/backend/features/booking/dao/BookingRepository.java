@@ -1,6 +1,6 @@
-package com.EntertainmentViet.backend.features.talent.dao;
+package com.EntertainmentViet.backend.features.booking.dao;
 
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiableRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Repository
 @Transactional
-public interface TalentRepository extends IdentifiableRepository<Talent> {
+public interface BookingRepository extends IdentifiableRepository<Booking> {
 
-    Optional<Talent> findByUid(UUID uid);
+    Optional<Booking> findByUid(UUID uid);
 }

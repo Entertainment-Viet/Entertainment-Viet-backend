@@ -1,12 +1,10 @@
-package com.EntertainmentViet.backend.features.talent.dao;
+package com.EntertainmentViet.backend.features.booking.dao;
 
-import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.entities.talent.QReview;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.Predicate;
@@ -19,36 +17,21 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class TalentPredicate extends IdentifiablePredicate<Talent> {
+public class BookingPredicate extends IdentifiablePredicate<Booking> {
 
   private final QTalent talent = QTalent.talent;
-  private final QReview review = QReview.review;
-  private final QTalentFeedback feedback = QTalentFeedback.talentFeedback;
-  private final QBooking booking = QBooking.booking;
+  private final QOrganizer organizer = QOrganizer.organizer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
+  private final QBooking booking = QBooking.booking;
   private final QCategory category = QCategory.category;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
-
-    // join bookings
-    var talents = queryFactory.selectFrom(talent).distinct()
-        .leftJoin(talent.bookings, booking).fetchJoin()
+    queryFactory.selectFrom(booking).distinct()
+        .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(booking.organizer, organizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
-        .fetch();
-
-    // join review
-    talents = queryFactory.selectFrom(talent).distinct()
-        .leftJoin(talent.reviews, review).fetchJoin()
-        .where(talent.in(talents))
-        .fetch();
-
-    // join talentFeedback
-    queryFactory.selectFrom(talent).distinct()
-        .leftJoin(talent.feedbacks, feedback).fetchJoin()
-        .where(talent.in(talents))
         .fetch();
 
     return null;
@@ -56,6 +39,6 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
 
   @Override
   public BooleanExpression uidEqual(UUID uid) {
-    return talent.uid.eq(uid);
+    return booking.uid.eq(uid);
   }
 }

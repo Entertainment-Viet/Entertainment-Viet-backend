@@ -8,11 +8,13 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(config = MappingConfig.class)
 @RequiredArgsConstructor
 public abstract class CategoryMapper {
 
+    @Autowired
     private CategoryRepository categoryRepository;
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})

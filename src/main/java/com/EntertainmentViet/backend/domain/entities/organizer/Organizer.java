@@ -1,11 +1,12 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import com.EntertainmentViet.backend.domain.entities.Shoppable;
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
+import com.EntertainmentViet.backend.domain.entities.talent.Package_;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -16,18 +17,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.AnyMetaDef;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.MetaValue;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,6 +34,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Entity
+@Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Organizer extends User {
 
@@ -51,20 +50,13 @@ public class Organizer extends User {
   @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrganizerFeedback> feedbacks;
 
-  // Need to change this when upgrade to hibernate 6: https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#mapping-column-any
-  @ManyToAny(metaColumn = @Column(name = "cart_item"))
-  @AnyMetaDef(
-      idType = "long", metaType = "string",
-      metaValues = {
-        @MetaValue(value = "Package", targetEntity = Package.class)
-      })
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
-      name = "shopping_cart",
-      joinColumns = @JoinColumn(name = Organizer_.ID),
-      inverseJoinColumns = @JoinColumn(name = "shoppable_id")
+      name = "organizer_shopping_cart",
+      joinColumns = @JoinColumn( name = "organizer_id", referencedColumnName = Organizer_.ID),
+      inverseJoinColumns = @JoinColumn( name = "package_id", referencedColumnName = Package_.ID)
   )
-  @Cascade(org.hibernate.annotations.CascadeType.ALL)
-  private List<Shoppable> shoppables;
+  private Set<Package> shoppingCart;
 
   public void addJobOffer(JobOffer jobOffer) {
     jobOffers.add(jobOffer);
@@ -116,9 +108,12 @@ public class Organizer extends User {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid() == bookingUid)
+        .filter(Booking::checkIfFixedPrice)
         .findFirst()
-        .ifPresent(booking -> booking.setStatus(BookingStatus.CONFIRMED));
-  }
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CONFIRMED),
+            () -> log.error("Can not accept the booking: ", bookingUid)
+        );  }
 
   public void rejectBooking(UUID bookingUid) {
     bookings.stream()
@@ -126,7 +121,6 @@ public class Organizer extends User {
         .findFirst()
         .ifPresent(booking -> booking.setStatus(BookingStatus.CANCELLED));
   }
-
 
   public void addFeedback(OrganizerFeedback feedback) {
     feedbacks.add(feedback);
@@ -146,18 +140,18 @@ public class Organizer extends User {
   }
 
   public void addPackageToCart(Package talentPackage) {
-    shoppables.add(talentPackage);
+    shoppingCart.add(talentPackage);
   }
 
   public void finishCartShopping() {
-    for (Shoppable shoppable : shoppables) {
-      shoppable.finishCartItem();
+    for (Package cartItem : shoppingCart) {
+      addBooking(cartItem.finishCartItem());
     }
-    shoppables.clear();
+    shoppingCart.clear();
   }
 
   public void pay(Booking booking) {
-    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name())) {
+    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfFixedPrice()) {
       booking.setPaid(true);
     }
   }

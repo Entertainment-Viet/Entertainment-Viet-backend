@@ -22,17 +22,27 @@ import org.mapstruct.Named;
         config = MappingConfig.class)
 public abstract class TalentMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "reviews", "bookings", "feedbacks"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
-    @Mapping(target = "reviews", source = "reviews")
-    @Mapping(target = "bookings", source = "bookings")
-    @Mapping(target = "feedbacks", source = "feedbacks")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract TalentDto toDto(Talent talent);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"bio", "reviews", "bookings", "feedbacks"})
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
+    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+    public abstract Talent toModel(TalentDto talentDto);
+
+
     @Named("toUserStateKey")
     public String toUserStateKey(UserState userState) {
         return userState != null ? userState.i18nKey : null;
+    }
+
+    @Named("toUserState")
+    public UserState toUserState(String i18nKey) {
+        return UserState.ofI18nKey(i18nKey);
     }
 }

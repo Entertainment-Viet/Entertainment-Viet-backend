@@ -50,4 +50,8 @@ public class EventOpenPosition extends Identifiable {
       inverseJoinColumns = @JoinColumn( name = "applicant_id", referencedColumnName = Booking_.ID)
   )
   private Set<Booking> applicants;
+
+  public void addApplicant(Booking booking) {
+    applicants.add(booking);
+  }
 }
