@@ -11,13 +11,12 @@ import org.mapstruct.Mapping;
 public abstract class JobOfferMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "organizer"})
-    @Mapping(target = "jobDetailDto", source = "jobDetail")
+    @Mapping(target = "organizerId", ignore = true) // TODO fix this
     public abstract JobOfferDto toDto(JobOffer jobOffer);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"jobDetailDto"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"organizerId"})
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "jobDetail", ignore = true)
-    public abstract JobOffer toModel(JobOfferDto jobOfferDto);
+    @Mapping(target = "organizer", ignore = true) // TODO fix this
+    public abstract JobOffer toModel(JobOfferDto jobDetailDto);
 
 }
