@@ -77,12 +77,7 @@ public class JobOfferController {
 
   @DeleteMapping(value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<HttpStatus> delete(@PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
-    try {
-      jobOfferService.delete(uid, organizerUid);
-      return new ResponseEntity<>(HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  public void delete(@PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
+    jobOfferService.delete(uid, organizerUid);
   }
 }
