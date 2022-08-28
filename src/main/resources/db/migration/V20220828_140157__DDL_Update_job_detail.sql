@@ -1,0 +1,1 @@
+ALTER TABLE job_detail ADD location TEXT;
