@@ -20,7 +20,7 @@ public class JobDetailDto {
 
   private PriceDto price;
 
-  private Duration performanceDuration;
+  private Long performanceDuration;
 
   private Instant performanceTime;
 
