@@ -35,7 +35,7 @@ public class PackageBookingService implements PackageBookingBoundary {
         Package packageTalent = packageRepository.findByUid(packageBookingDto.getPackageId()).orElse(null);
         Organizer organizer = organizerRepository.findByUid(packageBookingDto.getOrganizerId()).orElse(null);
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
-        if (packageTalent != null && organizer != null && talent != null && packageTalent.getTalent().getId() == talent.getId()) {
+        if (packageTalent != null && organizer != null && talent != null && packageTalent.getTalent().getId().equals(talent.getId())) {
             organizer.addPackageToCart(packageTalent);
             organizerRepository.save(organizer);
             return true;
@@ -47,7 +47,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     public List<BookingDto> listBooking(UUID talentId, UUID packageId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (talent != null && packageTalent != null && packageTalent.getTalent().getId() == talent.getId()) {
+        if (talent != null && packageTalent != null && packageTalent.getTalent().getId().equals(talent.getId())) {
             return packageRepository.findByUid(packageId).map(packageMapper::toDto).orElse(null).getOrders();
         }
         return new ArrayList<>();
@@ -57,7 +57,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     public Optional<UUID> acceptBooking(UUID talentId, UUID packageId, UUID bookingId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (talent != null && packageTalent != null && packageTalent.getTalent().getId() == talent.getId()) {
+        if (talent != null && packageTalent != null && packageTalent.getTalent().getId().equals(talent.getId())) {
             talent.acceptBooking(bookingId);
             talentRepository.save(talent);
             return Optional.ofNullable(bookingId);
@@ -69,7 +69,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     public Optional<UUID> rejectBooking(UUID talentId, UUID packageId, UUID bookingId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (talent != null && packageTalent != null && packageTalent.getTalent().getId() == talent.getId()) {
+        if (talent != null && packageTalent != null && packageTalent.getTalent().getId().equals(talent.getId())) {
             talent.rejectBooking(bookingId);
             talentRepository.save(talent);
             return Optional.ofNullable(bookingId);
