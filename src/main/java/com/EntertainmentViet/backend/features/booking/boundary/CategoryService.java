@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 @Service
@@ -21,5 +23,10 @@ public class CategoryService implements CategoryBoundary {
   @Override
   public List<CategoryDto> findAll() {
     return categoryRepository.findAll().stream().map(categoryMapper::toDto).toList();
+  }
+
+  @Override
+  public Optional<CategoryDto> findByUid(UUID uid) {
+    return Optional.ofNullable(categoryMapper.toDto(categoryRepository.findByUid(uid).orElse(null)));
   }
 }

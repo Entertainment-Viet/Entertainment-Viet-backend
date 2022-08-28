@@ -49,7 +49,7 @@ public class PackageService implements PackageBoundary {
     public Optional<UUID> create(PackageDto packageDto, UUID talentId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         JobDetail jobDetail = jobDetailMapper.toModel(packageDto.getJobDetail());
-        Category category = categoryRepository.findByName(jobDetail.getCategory().getName()).orElse(null);
+        Category category = categoryRepository.findByUid(jobDetail.getCategory().getUid()).orElse(null);
 
         if (jobDetail == null || category == null || talent == null) {
             Optional.empty();
@@ -73,7 +73,7 @@ public class PackageService implements PackageBoundary {
         Package aPackage = packageRepository.findByUid(uid).orElse(null);
         if (talent != null && aPackage != null && aPackage.getTalent().getId() == talent.getId()) {
             JobDetail jobDetail = aPackage.getJobDetail();
-            Category category = categoryRepository.findByName(packageDto.getJobDetail().getCategory().getName()).orElse(null);
+            Category category = categoryRepository.findByUid(packageDto.getJobDetail().getCategory().getUid()).orElse(null);
             jobDetail.setCategory(category);
 
             JobDetail jobDetailUpdate = jobDetailMapper.toModel(packageDto.getJobDetail());

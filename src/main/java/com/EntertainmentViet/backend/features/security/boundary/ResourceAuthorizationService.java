@@ -8,10 +8,7 @@ import com.EntertainmentViet.backend.features.booking.api.BookingController;
 import com.EntertainmentViet.backend.features.booking.api.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.TalentBookingController;
-import com.EntertainmentViet.backend.features.organizer.api.EventBookingController;
-import com.EntertainmentViet.backend.features.organizer.api.EventController;
-import com.EntertainmentViet.backend.features.organizer.api.JobOfferController;
-import com.EntertainmentViet.backend.features.organizer.api.OrganizerController;
+import com.EntertainmentViet.backend.features.organizer.api.*;
 import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
 import com.EntertainmentViet.backend.features.security.roles.BookingRole;
@@ -67,17 +64,20 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(EventApplicantRole.REJECT_EVENT_APPLICANT.name())
 
             // Event mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(EventController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.BROWSE_EVENT.name())
-            .mvcMatchers(HttpMethod.POST, ofPath(EventController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.ADD_EVENT.name())
 
-            .mvcMatchers(HttpMethod.GET, anyPathAfter(EventController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.READ_EVENT.name())
-            .mvcMatchers(HttpMethod.PUT, anyPathAfter(EventController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.UPDATE_EVENT.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.DELETE_EVENT.name())
+
+            .mvcMatchers(HttpMethod.GET, ofPath(EventController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventRole.BROWSE_EVENT.name())
 
             // Organizer Booking mapping
             .mvcMatchers(HttpMethod.GET, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH))
@@ -160,6 +160,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Talent manage mapping
             .mvcMatchers(HttpMethod.POST , ofPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.VERIFY_TALENT.name())
+            .mvcMatchers(HttpMethod.GET , ofPath(TalentController.REQUEST_MAPPING_PATH))
+            .hasAuthority(TalentRole.BROWSE_TALENT.name())
             .mvcMatchers(HttpMethod.GET , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.SELF_READ_TALENT.name())
             .mvcMatchers(HttpMethod.PUT , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
@@ -197,6 +199,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
+            .hasAuthority(CategoryRole.READ_CATEGORY.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
 
             // Spring docs mapping

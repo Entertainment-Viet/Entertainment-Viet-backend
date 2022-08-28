@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.booking.api;
 import com.EntertainmentViet.backend.features.booking.boundary.CategoryBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -28,5 +31,15 @@ public class CategoryController {
   public CompletableFuture<List<CategoryDto>> findAll() {
     return CompletableFuture.completedFuture(categoryService.findAll());
   }
+
+  @GetMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<CategoryDto>> findAll(@PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(categoryService.findByUid(uid)
+        .map( categoryDto -> ResponseEntity
+            .ok()
+            .body(categoryDto)
+        )
+        .orElse( ResponseEntity.notFound().build())
+    );  }
 
 }
