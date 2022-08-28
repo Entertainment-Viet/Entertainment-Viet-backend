@@ -68,6 +68,8 @@ public class JobDetail implements Serializable {
   @NotNull
   private Instant performanceTime;
 
+  private String location;
+
   @Embedded
   @AttributeOverrides({
       @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = JobDetail_.NOTE + "_" + UserInputText_.INPUT_LANG)),

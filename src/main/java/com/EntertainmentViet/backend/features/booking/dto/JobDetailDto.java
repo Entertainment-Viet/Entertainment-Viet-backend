@@ -24,6 +24,8 @@ public class JobDetailDto {
 
   private Instant performanceTime;
 
+  private String location;
+
   private String note;
 
   private String extensions;
