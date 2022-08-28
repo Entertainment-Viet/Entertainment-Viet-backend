@@ -145,7 +145,7 @@ public class Organizer extends User {
 
   public void finishCartShopping() {
     for (Package cartItem : shoppingCart) {
-      addBooking(cartItem.finishCartItem());
+      addBooking(cartItem.orderPackage(this));
     }
     shoppingCart.clear();
   }
@@ -154,6 +154,12 @@ public class Organizer extends User {
     if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfFixedPrice()) {
       booking.setPaid(true);
     }
+  }
+
+  public void makeBookingFromJobOffer(JobOffer jobOffer, Talent talent) {
+    Booking newBooking = jobOffer.sendOffer(talent);
+    addBooking(newBooking);
+    talent.addBooking(newBooking);
   }
 
 }
