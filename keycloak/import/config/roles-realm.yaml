@@ -80,7 +80,8 @@
             "BROWSE_EVENT_APPLICANT",
             "BROWSE_BOOKING_ORGANIZER",
             "READ_BOOKING",
-            "READ_CATEGORY"
+            "READ_CATEGORY",
+            "BROWSE_TALENT"
         ]
       }
     }

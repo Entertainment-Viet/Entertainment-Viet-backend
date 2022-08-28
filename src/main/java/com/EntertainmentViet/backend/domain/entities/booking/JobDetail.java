@@ -68,6 +68,8 @@ public class JobDetail implements Serializable {
   @NotNull
   private Instant performanceTime;
 
+  private String location;
+
   @Embedded
   @AttributeOverrides({
       @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = JobDetail_.NOTE + "_" + UserInputText_.INPUT_LANG)),
@@ -79,4 +81,16 @@ public class JobDetail implements Serializable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
+
+  public JobDetail clone() {
+    return JobDetail.builder()
+        .category(getCategory())
+        .workType(getWorkType())
+        .price(getPrice())
+        .performanceDuration(getPerformanceDuration())
+        .performanceTime(getPerformanceTime())
+        .location(getLocation())
+        .note(getNote())
+        .build();
+  }
 }
