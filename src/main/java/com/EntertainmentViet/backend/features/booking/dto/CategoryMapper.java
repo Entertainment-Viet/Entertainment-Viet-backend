@@ -10,6 +10,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.UUID;
+
 @Mapper(config = MappingConfig.class)
 @RequiredArgsConstructor
 public abstract class CategoryMapper {
@@ -19,10 +21,12 @@ public abstract class CategoryMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "parentName", source = "parent", qualifiedByName = "toParentName")
+    @Mapping(target = "parentUid", source = "parent", qualifiedByName = "toParentUid")
     public abstract CategoryDto toDto(Category category);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"parentName"})
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "parent", source = "parentName", qualifiedByName = "toParentCategory")
+    @Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentCategory")
     public abstract Category toModel(CategoryDto categoryDto);
 
     @Named("toParentName")
@@ -30,8 +34,13 @@ public abstract class CategoryMapper {
         return category != null ? category.getName() : null;
     }
 
+    @Named("toParentUid")
+    public UUID toParentUid(Category category) {
+        return category != null ? category.getUid() : null;
+    }
+
     @Named("toParentCategory")
-    public Category toParentName(String parentName) {
-        return categoryRepository.findByName(parentName).orElse(null);
+    public Category toParentCategory(UUID uid) {
+        return categoryRepository.findByUid(uid).orElse(null);
     }
 }

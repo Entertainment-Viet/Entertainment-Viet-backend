@@ -46,7 +46,7 @@ public class BookingService implements BookingBoundary {
         Organizer organizer = organizerRepository.findByUid(bookingDto.getOrganizerUid()).orElse(null);
         Talent talent = talentRepository.findByUid(bookingDto.getTalentUid()).orElse(null);
         JobDetail jobDetail = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
-        Category category = categoryRepository.findByName(jobDetail.getCategory().getName()).orElse(null);
+        Category category = categoryRepository.findByUid(jobDetail.getCategory().getUid()).orElse(null);
 
         if (organizer == null || talent == null || jobDetail == null || category == null) {
             Optional.empty();
@@ -69,7 +69,7 @@ public class BookingService implements BookingBoundary {
         Booking bookingCheck = bookingRepository.findByUid(uid).orElse(null);
         if (bookingCheck != null) {
             JobDetail jobDetail = bookingCheck.getJobDetail();
-            Category category = categoryRepository.findByName(bookingDto.getJobDetailDto().getCategory().getName()).orElse(null);
+            Category category = categoryRepository.findByUid(bookingDto.getJobDetailDto().getCategory().getUid()).orElse(null);
             jobDetail.setCategory(category);
 
             JobDetail jobDetailUpdate = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
