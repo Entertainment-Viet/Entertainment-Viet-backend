@@ -4,8 +4,8 @@ plugins {
 	id 'java'
 }
 
+version = '0.2.0'
 group = 'com.EntertainmentViet'
-version = '0.0.1'
 sourceCompatibility = '17'
 
 configurations {
@@ -35,6 +35,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
 	implementation "com.vladmihalcea:hibernate-types-55:${hibernateTypeVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
+	implementation "org.flywaydb:flyway-core"
 	annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
 
 	// QueryDsl
@@ -48,7 +49,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springVersion}"
-	implementation "org.flywaydb:flyway-core"
+
 	implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
 	implementation "org.apache.commons:commons-collections4:${commonCollectionVersion}"
 
