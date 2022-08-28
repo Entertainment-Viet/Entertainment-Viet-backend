@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface CategoryRepository extends IdentifiableRepository<Category> {
-  Optional<Category> findByName(String name);
 }

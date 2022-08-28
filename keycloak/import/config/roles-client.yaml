@@ -57,6 +57,9 @@
         "name": "REJECT_EVENT_APPLICANT"
     },
     {
+        "name": "BROWSE_TALENT"
+    },
+    {
         "name": "VERIFY_TALENT"
     },
     {
