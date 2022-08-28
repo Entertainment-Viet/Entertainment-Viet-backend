@@ -33,7 +33,7 @@ public class BookingController {
             .map(bookingDto -> ResponseEntity
                     .ok()
                     .body(bookingDto)
-            ).orElse(ResponseEntity.badRequest().build()));
+            ).orElse(ResponseEntity.notFound().build()));
   }
 
   @PostMapping(
