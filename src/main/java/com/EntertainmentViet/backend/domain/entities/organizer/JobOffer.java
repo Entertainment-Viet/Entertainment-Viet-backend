@@ -53,7 +53,7 @@ public class JobOffer extends Identifiable {
 
   public Booking sendOffer(Talent talent) {
     Booking booking = new Booking();
-    booking.setJobDetail(getJobDetail());
+    booking.setJobDetail(getJobDetail().clone());
     booking.setTalent(talent);
     booking.setOrganizer(getOrganizer());
     booking.setStatus(BookingStatus.TALENT_PENDING);

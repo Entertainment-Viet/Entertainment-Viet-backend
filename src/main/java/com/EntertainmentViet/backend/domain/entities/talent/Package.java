@@ -5,6 +5,8 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -60,8 +63,26 @@ public class Package extends Identifiable {
   )
   private Set<Booking> orders;
 
-  public Booking finishCartItem() {
-    return null;
+  public Booking orderPackage(Organizer organizer) {
+    Booking booking = new Booking();
+    booking.setJobDetail(getJobDetail().clone());
+    booking.setTalent(talent);
+    booking.setOrganizer(organizer);
+    booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+    return booking;
   }
 
+  public void acceptOrder(UUID orderUid) {
+    orders.stream()
+        .filter(orders -> orders.getUid() == orderUid)
+        .findFirst()
+        .ifPresent(orders -> orders.setStatus(BookingStatus.CONFIRMED));
+  }
+
+  public void rejectOrder(UUID orderUid) {
+    orders.stream()
+        .filter(orders -> orders.getUid() == orderUid)
+        .findFirst()
+        .ifPresent(orders -> orders.setStatus(BookingStatus.CANCELLED));
+  }
 }

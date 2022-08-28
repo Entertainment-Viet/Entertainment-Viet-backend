@@ -81,4 +81,16 @@ public class JobDetail implements Serializable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
+
+  public JobDetail clone() {
+    return JobDetail.builder()
+        .category(getCategory())
+        .workType(getWorkType())
+        .price(getPrice())
+        .performanceDuration(getPerformanceDuration())
+        .performanceTime(getPerformanceTime())
+        .location(getLocation())
+        .note(getNote())
+        .build();
+  }
 }
