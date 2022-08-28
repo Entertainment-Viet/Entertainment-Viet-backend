@@ -40,7 +40,12 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public Optional<JobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-        return jobOfferRepository.findByUid(uid).map(jobOfferMapper::toDto);
+        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
+        JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
+        if (organizer != null && jobOffer.getOrganizer().getUid().equals(organizerUid)) {
+            return Optional.ofNullable(jobOfferMapper.toDto(jobOffer));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -68,7 +73,7 @@ public class JobOfferService implements JobOfferBoundary {
     public Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId() == organizer.getId()) {
+        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId().equals(organizer.getId())) {
             if (jobOffer != null) {
                 JobDetail jobDetail = jobOffer.getJobDetail();
                 Category category = categoryRepository.findByUid(jobOfferDto.getJobDetail().getCategory().getUid()).orElse(null);
@@ -97,7 +102,7 @@ public class JobOfferService implements JobOfferBoundary {
     public void delete(UUID uid, UUID organizerUid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId() == organizer.getId()) {
+        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId().equals(organizer.getId())) {
             jobOfferRepository.deleteById(jobOfferRepository.findByUid(uid).orElse(null).getId());
         }
     }

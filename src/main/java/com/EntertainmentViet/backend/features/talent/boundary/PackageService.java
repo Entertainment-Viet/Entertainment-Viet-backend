@@ -39,8 +39,9 @@ public class PackageService implements PackageBoundary {
     @Override
     public Optional<PackageDto> findByUid(UUID talentId, UUID uid) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
-        if (talent != null) {
-            return packageRepository.findByUid(uid).map(packageMapper::toDto);
+        Package packageCheck = packageRepository.findByUid(uid).orElse(null);
+        if (talent != null && packageCheck.getTalent().getUid().equals(talentId)) {
+            return Optional.ofNullable(packageMapper.toDto(packageCheck));
         }
         return Optional.empty();
     }
@@ -71,7 +72,7 @@ public class PackageService implements PackageBoundary {
     public Optional<UUID> update(PackageDto packageDto, UUID talentId, UUID uid) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package aPackage = packageRepository.findByUid(uid).orElse(null);
-        if (talent != null && aPackage != null && aPackage.getTalent().getId() == talent.getId()) {
+        if (talent != null && aPackage != null && aPackage.getTalent().getId().equals(talent.getId())) {
             JobDetail jobDetail = aPackage.getJobDetail();
             Category category = categoryRepository.findByUid(packageDto.getJobDetail().getCategory().getUid()).orElse(null);
             jobDetail.setCategory(category);
@@ -97,7 +98,7 @@ public class PackageService implements PackageBoundary {
     public void delete(UUID uid, UUID talentId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package aPackage = packageRepository.findByUid(uid).orElse(null);
-        if (talent != null && aPackage != null && aPackage.getTalent().getId() == talent.getId()) {
+        if (talent != null && aPackage != null && aPackage.getTalent().getId().equals(talent.getId())) {
             packageRepository.deleteById(packageRepository.findByUid(uid).orElse(null).getId());
         }
     }

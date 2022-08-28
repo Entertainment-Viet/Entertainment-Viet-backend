@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.dao;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
+import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.Predicate;
@@ -21,9 +22,12 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
 
+  private final QOrganizer organizer = QOrganizer.organizer;
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(jobOffer).distinct()
+        .leftJoin(jobOffer.organizer, organizer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .fetch();
