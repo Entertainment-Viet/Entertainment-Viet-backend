@@ -81,7 +81,8 @@
             "BROWSE_BOOKING_ORGANIZER",
             "READ_BOOKING",
             "READ_CATEGORY",
-            "BROWSE_TALENT"
+            "BROWSE_TALENT",
+            "BROWSE_PACKAGE"
         ]
       }
     }
@@ -268,6 +269,17 @@
         "backend": [
             "ADMIN_DEACTIVE_TALENT",
             "ADMIN_DELETE_ADVERTISEMENT"
+        ]
+      }
+    }
+  },
+  {
+    "name": "KEYCLOAK_ADMINISTRATIVE",
+    "composites": {
+      "realm": null,
+      "client": {
+        "realm-management": [
+            "manage-users"
         ]
       }
     }

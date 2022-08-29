@@ -14,3 +14,5 @@ The configuration is divided into separated components inside `import` folder:
 ### How to use
 1. `cd keycloak`
 2. `docker-compose -f docker-compose-keycloak.yaml --env-file env-files/.env.local up --build`
+
+- For running on SQA: `docker-compose -f docker-compose-keycloak.yaml --env-file env-files/.env.sqa up --build`
