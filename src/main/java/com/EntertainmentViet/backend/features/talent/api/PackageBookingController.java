@@ -1,18 +1,14 @@
 package com.EntertainmentViet.backend.features.talent.api;
 
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.PackageBookingBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.PackageBookingDto;
-import com.EntertainmentViet.backend.features.talent.dto.PackageDto;
-import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +32,7 @@ public class PackageBookingController {
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<Boolean> acceptBooking(@RequestBody @Valid PackageBookingDto packageBookingDto,
+  public CompletableFuture<Boolean> addPackageToShoppingCart(@RequestBody @Valid PackageBookingDto packageBookingDto,
           @PathVariable("talent_uid") UUID talentId,
           @PathVariable("package_uid") UUID packageId) {
     return  CompletableFuture.completedFuture(packageBookingService.addPackageToShoppingCart(talentId, packageId, packageBookingDto));

@@ -84,6 +84,7 @@ public class PackageService implements PackageBoundary {
             jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
             jobDetail.setNote(jobDetailUpdate.getNote());
             jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+            jobDetail.setLocation(jobDetailUpdate.getLocation());
 
             aPackage.setJobDetail(jobDetail);
             aPackage.setName(packageDto.getName());
@@ -95,11 +96,13 @@ public class PackageService implements PackageBoundary {
     }
 
     @Override
-    public void delete(UUID uid, UUID talentId) {
+    public void delete(UUID uid, UUID talentId) throws Exception {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package aPackage = packageRepository.findByUid(uid).orElse(null);
         if (talent != null && aPackage != null && aPackage.getTalent().getId().equals(talent.getId())) {
             packageRepository.deleteById(packageRepository.findByUid(uid).orElse(null).getId());
+        } else {
+            throw new Exception();
         }
     }
 }
