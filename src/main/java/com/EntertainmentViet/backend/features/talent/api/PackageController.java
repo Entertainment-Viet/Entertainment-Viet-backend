@@ -78,11 +78,9 @@ public class PackageController {
   @DeleteMapping(value = "/{uid}")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public ResponseEntity<HttpStatus> delete(@PathVariable("uid") UUID uid, @PathVariable("talent_uid") UUID talentId) {
-    try {
-      packageService.delete(uid, talentId);
+    if (packageService.delete(uid, talentId)) {
       return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 }

@@ -17,5 +17,5 @@ public interface PackageBoundary {
 
     Optional<UUID> update(PackageDto packageDto, UUID talentId, UUID uid);
 
-    void delete(UUID uid, UUID talentId) throws Exception;
+    Boolean delete(UUID uid, UUID talentId);
 }

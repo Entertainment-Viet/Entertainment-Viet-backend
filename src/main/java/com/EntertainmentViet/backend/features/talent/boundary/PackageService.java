@@ -96,13 +96,14 @@ public class PackageService implements PackageBoundary {
     }
 
     @Override
-    public void delete(UUID uid, UUID talentId) throws Exception {
+    public Boolean delete(UUID uid, UUID talentId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package aPackage = packageRepository.findByUid(uid).orElse(null);
         if (talent != null && aPackage != null && aPackage.getTalent().getId().equals(talent.getId())) {
             packageRepository.deleteById(packageRepository.findByUid(uid).orElse(null).getId());
+            return true;
         } else {
-            throw new Exception();
+            return false;
         }
     }
 }
