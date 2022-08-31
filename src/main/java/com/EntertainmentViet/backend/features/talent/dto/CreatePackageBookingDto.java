@@ -11,9 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PackageBookingDto {
-
-    private UUID packageId;
-
+public class CreatePackageBookingDto {
     private UUID organizerId;
 }
