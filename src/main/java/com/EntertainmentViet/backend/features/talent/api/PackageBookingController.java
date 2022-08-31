@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.talent.api;
 
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.talent.boundary.PackageBookingBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.PackageBookingDto;
+import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,41 +31,37 @@ public class PackageBookingController {
   @PostMapping(
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<Boolean> addPackageToShoppingCart(@RequestBody @Valid PackageBookingDto packageBookingDto,
+  public CompletableFuture<ResponseEntity<Void>> addPackageToShoppingCart(@RequestBody @Valid CreatePackageBookingDto createPackageBookingDto,
           @PathVariable("talent_uid") UUID talentId,
           @PathVariable("package_uid") UUID packageId) {
-    return  CompletableFuture.completedFuture(packageBookingService.addPackageToShoppingCart(talentId, packageId, packageBookingDto));
+    if (packageBookingService.addPackageToShoppingCart(talentId, packageId, createPackageBookingDto)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
   @PostMapping(value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<ResponseEntity<UUID>> acceptBooking(
+  public CompletableFuture<ResponseEntity<Void>> acceptBooking(
           @PathVariable("talent_uid") UUID talentId,
           @PathVariable("package_uid") UUID packageId,
           @PathVariable("uid") UUID bookingId) {
-    return  CompletableFuture.completedFuture(packageBookingService.acceptBooking(talentId, packageId, bookingId)
-            .map(newBookingInfo -> ResponseEntity
-                    .ok()
-                    .body(newBookingInfo)
-            )
-            .orElse(ResponseEntity.badRequest().build())
-    );
+    if (packageBookingService.acceptBooking(talentId, packageId, bookingId)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
   @PutMapping(value = "/{uid}")
   @ResponseStatus(HttpStatus.OK)
-  public CompletableFuture<ResponseEntity<UUID>> rejectBooking(
+  public CompletableFuture<ResponseEntity<Void>> rejectBooking(
           @PathVariable("talent_uid") UUID talentId,
           @PathVariable("package_uid") UUID packageId,
           @PathVariable("uid") UUID bookingId) {
-    return  CompletableFuture.completedFuture(packageBookingService.rejectBooking(talentId, packageId, bookingId)
-            .map(newBookingInfo -> ResponseEntity
-                    .ok()
-                    .body(newBookingInfo)
-            )
-            .orElse(ResponseEntity.badRequest().build())
-    );
+    if (packageBookingService.rejectBooking(talentId, packageId, bookingId)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
 }
