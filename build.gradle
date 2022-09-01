@@ -49,7 +49,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springVersion}"
-
+	implementation 'org.apache.httpcomponents:httpclient'
 	implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
 	implementation "org.apache.commons:commons-collections4:${commonCollectionVersion}"
 

@@ -2,10 +2,12 @@ package com.EntertainmentViet.backend.features.organizer.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -14,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrganizerService implements OrganizerBoundary {
 
   private final OrganizerRepository organizerRepository;
@@ -27,6 +30,7 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public Optional<UUID> create(OrganizerDto organizerDto) {
+    // TODO add check not exist username
     var newOrganizer = organizerMapper.toModel(organizerDto);
     newOrganizer.setUid(null);
     newOrganizer.setId(null);
@@ -35,6 +39,7 @@ public class OrganizerService implements OrganizerBoundary {
     newOrganizer.setFeedbacks(Collections.emptyList());
     newOrganizer.setJobOffers(Collections.emptyList());
     newOrganizer.setShoppingCart(Collections.emptySet());
+    newOrganizer.setUserState(UserState.GUEST);
 
     return Optional.ofNullable(organizerRepository.save(newOrganizer).getUid());
   }
@@ -45,6 +50,19 @@ public class OrganizerService implements OrganizerBoundary {
         .map(organizer -> updateOrganizerInfo(organizer, organizerMapper.toModel(organizerDto)))
         .map(organizerRepository::save)
         .map(Identifiable::getUid);
+  }
+
+  @Override
+  public boolean verify(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+
+    if (organizer == null) {
+      log.warn(String.format("Can not find organizer with id '%s'", uid));
+      return false;
+    }
+    organizer.verifyAccount();
+    organizerRepository.save(organizer);
+    return true;
   }
 
   private Organizer updateOrganizerInfo(Organizer organizer, Organizer newInfo) {

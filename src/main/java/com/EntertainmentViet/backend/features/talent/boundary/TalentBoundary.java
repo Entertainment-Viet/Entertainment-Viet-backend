@@ -10,4 +10,6 @@ public interface TalentBoundary {
     Optional<UUID> create(TalentDto talentDto);
 
     Optional<UUID> update(TalentDto talentDto, UUID uid);
+
+    boolean verify(UUID uid);
 }

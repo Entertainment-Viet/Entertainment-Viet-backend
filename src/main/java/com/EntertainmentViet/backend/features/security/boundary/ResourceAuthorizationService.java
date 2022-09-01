@@ -37,7 +37,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
     http
         .authorizeHttpRequests(authorize -> authorize
             // User creation mapping
-            .mvcMatchers(HttpMethod.POST, ofPath(UserController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(UserController.REQUEST_MAPPING_PATH))
             .permitAll()
 
             // Job offer mapping

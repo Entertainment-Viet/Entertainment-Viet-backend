@@ -1,9 +1,9 @@
 package com.EntertainmentViet.backend.features.talent.api;
 
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Async
 @Validated
+@Slf4j
 public class TalentController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents";
@@ -37,18 +38,13 @@ public class TalentController {
             .orElse( ResponseEntity.notFound().build()));
   }
 
-  @PostMapping(
-          consumes = MediaType.APPLICATION_JSON_VALUE,
-          produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<UUID>> create(HttpServletRequest request, @RequestBody @Valid TalentDto talentDto) {
-    return  CompletableFuture.completedFuture(talentService.create(talentDto)
-            .map(newTalentUid -> ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newTalentUid))
-                    .body(newTalentUid)
-            )
-            .orElse(ResponseEntity.badRequest().build())
-    );
+  @PostMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<UUID>> verify(@PathVariable("uid") UUID uid) {
+    if (talentService.verify(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    log.warn(String.format("Can not verify talent account with id '%s'", uid));
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
   @PutMapping(
