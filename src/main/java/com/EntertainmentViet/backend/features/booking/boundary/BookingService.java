@@ -79,6 +79,7 @@ public class BookingService implements BookingBoundary {
             jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
             jobDetail.setNote(jobDetailUpdate.getNote());
             jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+            jobDetail.setLocation(jobDetailUpdate.getLocation());
 
             bookingCheck.setJobDetail(jobDetail);
             var newBooking = bookingRepository.save(bookingCheck);
