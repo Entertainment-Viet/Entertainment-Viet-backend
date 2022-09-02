@@ -11,4 +11,20 @@
   standardFlowEnabled: true,
   directAccessGrantsEnabled: true,
   publicClient: true,
+  protocolMappers: [
+    {
+      name: "UidMapper",
+      protocol: "openid-connect",
+      protocolMapper: "oidc-usermodel-attribute-mapper",
+      consentRequired: false,
+      config: {
+        userinfo.token.claim: "true",
+        user.attribute: "uid",
+        id.token.claim: "true",
+        access.token.claim: "true",
+        claim.name: "uid",
+        jsonType.label: "String"
+      }
+    }
+  ]
 },

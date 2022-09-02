@@ -2,9 +2,20 @@
   "username": "root",
   "enabled": true,
   "realmRoles": [
-    "FULL_ADMIN",
-    "VERIFIED_TALENT",
-    "VERIFIED_ORGANIZER",
+    "ADMIN_ARCHIVE_ORGANIZER_ACCESS",
+    "ADMIN_ARCHIVE_TALENT_ACCESS",
+    "ADMIN_READ_ORGANIZER_ACCESS",
+    "ADMIN_RESOLVE_TALENT_ACCESS",
+    "ADMIN_READ_TALENT_ACCESS",
+    "ADMIN_RESOLVE_ORGANIZER_ACCESS",
+    "ORGANIZER_MODIFY_ACCESS",
+    "ORGANIZER_WRITE_ACCESS",
+    "ORGANIZER_READ_ACCESS",
+    "ORGANIZER_PAYMENT_ACCESS",
+    "TALENT_MODIFY_ACCESS",
+    "TALENT_READ_ACCESS",
+    "TALENT_WRITE_ACCESS",
+    "TALENT_PAYMENT_ACCESS"
   ],
   "credentials": [
     {
@@ -17,7 +28,8 @@
   "username": "readonly_admin",
   "enabled": true,
   "realmRoles": [
-    "READONLY_ADMIN"
+    "ADMIN_READ_ORGANIZER_ACCESS",
+    "ADMIN_READ_TALENT_ACCESS"
   ],
   "credentials": [
     {
@@ -30,7 +42,10 @@
   "username": "organizer",
   "enabled": true,
   "realmRoles": [
-    "VERIFIED_ORGANIZER"
+    "ORGANIZER_MODIFY_ACCESS",
+    "ORGANIZER_WRITE_ACCESS",
+    "ORGANIZER_READ_ACCESS",
+    "ORGANIZER_PAYMENT_ACCESS"
   ],
   "credentials": [
     {
@@ -43,7 +58,7 @@
   "username": "guest_organizer",
   "enabled": true,
   "realmRoles": [
-      "GUEST_ORGANIZER"
+    "ORGANIZER_READ_ACCESS"
   ],
   "credentials": [
     {
@@ -56,7 +71,7 @@
   "username": "guest_talent",
   "enabled": true,
   "realmRoles": [
-    "GUEST_TALENT"
+    "TALENT_READ_ACCESS"
   ],
   "credentials": [
     {
@@ -69,7 +84,10 @@
   "username": "talent",
   "enabled": true,
   "realmRoles": [
-      "VERIFIED_TALENT"
+    "TALENT_MODIFY_ACCESS",
+    "TALENT_READ_ACCESS",
+    "TALENT_WRITE_ACCESS",
+    "TALENT_PAYMENT_ACCESS"
   ],
   "credentials": [
     {
@@ -81,9 +99,12 @@
 {
   "username": "ssoadmin",
   "enabled": true,
-  "realmRoles": [
-      "KEYCLOAK_ADMINISTRATIVE"
-  ],
+  "clientRoles": {
+    "realm-management": [
+        "view-users",
+        "manage-users"
+    ]
+  },
   "credentials": [
     {
       "type": "password",
