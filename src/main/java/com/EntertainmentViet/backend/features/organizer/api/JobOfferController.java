@@ -76,8 +76,10 @@ public class JobOfferController {
   }
 
   @DeleteMapping(value = "/{uid}")
-  @ResponseStatus(HttpStatus.OK)
-  public void delete(@PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
-    jobOfferService.delete(uid, organizerUid);
+  public CompletableFuture<ResponseEntity<Void>> delete(@PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
+    if (jobOfferService.delete(uid, organizerUid)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 }

@@ -86,6 +86,7 @@ public class JobOfferService implements JobOfferBoundary {
                 jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
                 jobDetail.setNote(jobDetailUpdate.getNote());
                 jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+                jobDetail.setLocation(jobDetailUpdate.getLocation());
 
                 jobOffer.setJobDetail(jobDetail);
                 jobOffer.setName(jobOfferDto.getName());
@@ -99,11 +100,13 @@ public class JobOfferService implements JobOfferBoundary {
     }
 
     @Override
-    public void delete(UUID uid, UUID organizerUid) {
+    public boolean delete(UUID uid, UUID organizerUid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
         if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId().equals(organizer.getId())) {
             jobOfferRepository.deleteById(jobOfferRepository.findByUid(uid).orElse(null).getId());
+            return true;
         }
+        return false;
     }
 }
