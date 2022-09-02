@@ -26,7 +26,6 @@ public class OrganizerBookingController {
   }
 
   @PostMapping(value = "/{uid}")
-  @ResponseStatus(HttpStatus.OK)
   public CompletableFuture<ResponseEntity<Void>> acceptBooking(
           @PathVariable("organizer_uid") UUID organizerId,
           @PathVariable("uid") UUID bookingId) {
@@ -37,7 +36,6 @@ public class OrganizerBookingController {
   }
 
   @PutMapping(value = "/{uid}")
-  @ResponseStatus(HttpStatus.OK)
   public CompletableFuture<ResponseEntity<Void>> rejectBooking(
           @PathVariable("organizer_uid") UUID organizerId,
           @PathVariable("uid") UUID bookingId) {

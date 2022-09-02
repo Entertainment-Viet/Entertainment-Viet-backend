@@ -72,7 +72,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
     private boolean isOrganizerWithUid(Organizer organizer) {
         if (organizer == null) {
-            log.warn(String.format("Can not find package with id '%s' ", organizer.getUid()));
+            log.warn(String.format("Can not find organizer with id '%s' ", organizer.getUid()));
             return false;
         }
         return true;
