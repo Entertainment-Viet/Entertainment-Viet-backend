@@ -30,6 +30,14 @@ security:
   allowed_origins:
     - http://localhost:3000
 
+authentication:
+  keycloak:
+    realm: ve-sso
+    resource: backend
+    serverUrl: http://localhost:18080/auth
+    adminUsername: ssoadmin
+    adminPassword: ssoadmin  # TODO try to use keystore to hide this
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

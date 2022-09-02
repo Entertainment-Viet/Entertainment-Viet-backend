@@ -65,4 +65,25 @@ public abstract class User extends Account implements Auditable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
+
+  public boolean verifyAccount() {
+    if (userState.equals(UserState.GUEST)) {
+      setUserState(UserState.VERIFIED);
+      return true;
+    }
+    return false;
+  }
+
+  public boolean verifyPayment() {
+    if (userState.equals(UserState.VERIFIED)) {
+      userState = UserState.CHARGEABLE;
+      return true;
+    }
+    return false;
+  }
+
+  public boolean archive() {
+    userState = UserState.ARCHIVED;
+    return true;
+  }
 }

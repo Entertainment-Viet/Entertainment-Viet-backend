@@ -107,7 +107,7 @@ insert into booking (id, uid, is_paid, created_at, status, organizer_id, talent_
 insert into package (id, uid, name, talent_id, is_active, job_detail_id) values
 (100000, 'a7d73bd4-cfd7-4869-86dc-7ec587047e41', 'Package 1', 100000, true, 100000),
 (200000, 'bc99559d-636a-414a-bbe6-b25435bce018', 'Package 2', 100000, true, 200000),
-(300000, '611f6897-a138-4208-a765-e5b84d77910c', 'Package 3', 100000, false, 300000),
+(300000, '611f6897-a138-4208-a765-e5b84d77910c', 'Package 3', 500000, false, 300000),
 (400000, 'c655035c-d0b8-4dc9-8375-8ba5598a25d5', 'Package 4', 200000, true, 400000),
 (500000, '60e2d4a7-a735-4b2a-8f23-dd4059511259', 'Package 5', 200000, true, 500000),
 (600000, 'f24ed3c3-7ab0-44df-a957-863a8c5c81d1', 'Package 6', 600000, true, 600000),

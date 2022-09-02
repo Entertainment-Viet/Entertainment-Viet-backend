@@ -2,17 +2,21 @@ package com.EntertainmentViet.backend.features.talent.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.talent.dao.TalentRepository;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.TalentMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TalentService implements TalentBoundary {
 
     private final TalentRepository talentRepository;
@@ -25,9 +29,17 @@ public class TalentService implements TalentBoundary {
     }
     @Override
     public Optional<UUID> create(TalentDto talentDto) {
-        talentDto.setUid(null);
-        var newTalent = talentRepository.save(talentMapper.toModel(talentDto));
-        return Optional.ofNullable(newTalent.getUid());
+        // TODO add check not exist username
+
+        var newTalent = talentMapper.toModel(talentDto);
+        newTalent.setUid(null);
+        newTalent.setId(null);
+        newTalent.setReviews(Collections.emptyList());
+        newTalent.setBookings(Collections.emptyList());
+        newTalent.setFeedbacks(Collections.emptyList());
+        newTalent.setUserState(UserState.GUEST);
+
+        return Optional.ofNullable(talentRepository.save(newTalent).getUid());
     }
 
     @Override
@@ -36,6 +48,19 @@ public class TalentService implements TalentBoundary {
                 .map(talent -> updateTalentInfo(talent, talentMapper.toModel(talentDto)))
                 .map(talentRepository::save)
                 .map(Identifiable::getUid);
+    }
+
+    @Override
+    public boolean verify(UUID uid) {
+        var talent = talentRepository.findByUid(uid).orElse(null);
+
+        if (talent == null) {
+            log.warn(String.format("Can not find organizer with id '%s'", uid));
+            return false;
+        }
+        talent.verifyAccount();
+        talentRepository.save(talent);
+        return true;
     }
 
     private Talent updateTalentInfo(Talent talent, Talent newInfo) {

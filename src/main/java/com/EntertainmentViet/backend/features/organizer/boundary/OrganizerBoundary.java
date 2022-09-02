@@ -12,4 +12,6 @@ public interface OrganizerBoundary {
   Optional<UUID> create(OrganizerDto organizerDto);
 
   Optional<UUID> update(OrganizerDto organizerDto, UUID uid);
+
+  boolean verify(UUID uid);
 }
