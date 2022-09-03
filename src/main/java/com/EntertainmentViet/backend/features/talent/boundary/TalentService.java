@@ -60,7 +60,9 @@ public class TalentService implements TalentBoundary {
             log.warn(String.format("Can not find organizer with id '%s'", uid));
             return false;
         }
-        talent.verifyAccount();
+        if (!talent.verifyAccount()) {
+            return false;
+        }
         talentRepository.save(talent);
         return true;
     }

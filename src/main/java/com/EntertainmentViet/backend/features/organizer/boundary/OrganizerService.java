@@ -63,7 +63,9 @@ public class OrganizerService implements OrganizerBoundary {
       log.warn(String.format("Can not find organizer with id '%s'", uid));
       return false;
     }
-    organizer.verifyAccount();
+    if (!organizer.verifyAccount()) {
+      return false;
+    }
     organizerRepository.save(organizer);
     return true;
   }

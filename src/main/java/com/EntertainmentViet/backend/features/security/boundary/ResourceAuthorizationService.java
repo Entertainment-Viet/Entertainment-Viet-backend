@@ -27,6 +27,7 @@ import com.EntertainmentViet.backend.features.talent.api.PackageController;
 import com.EntertainmentViet.backend.features.talent.api.TalentController;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -220,6 +221,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.UPDATE_BOOKING.name())
 
             .anyRequest().authenticated());
+  }
+
+  @Override
+  public void ignoreCsrfPaths(CsrfConfigurer<HttpSecurity> csrfConfigurer) {
+    csrfConfigurer.ignoringAntMatchers(
+        anyPathAfter(UserController.REQUEST_MAPPING_PATH)
+    );
   }
 
   private String ofPath(String pattern) {
