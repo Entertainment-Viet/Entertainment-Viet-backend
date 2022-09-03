@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.api;
 
+import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
+import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class TalentController {
 
   private final TalentBoundary talentService;
 
+  private final UserBoundary userService;
+
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<TalentDto>> findByUid(@PathVariable("uid") UUID uid) {
     return CompletableFuture.completedFuture(talentService.findByUid(uid)
@@ -40,8 +44,12 @@ public class TalentController {
 
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> verify(@PathVariable("uid") UUID uid) {
-    if (talentService.verify(uid)) {
-      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    try {
+      if (userService.verifyTalent(uid)) {
+        return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+      }
+    } catch (KeycloakUnauthorizedException ex) {
+      log.error("Can not verify talent account in keycloak server", ex);
     }
     log.warn(String.format("Can not verify talent account with id '%s'", uid));
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());

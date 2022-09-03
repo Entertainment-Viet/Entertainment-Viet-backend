@@ -1,11 +1,14 @@
 package com.EntertainmentViet.backend.features.admin.boundary;
 
+import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
+import com.EntertainmentViet.backend.features.admin.dto.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
+import com.EntertainmentViet.backend.features.admin.dto.CreatedOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
-import com.EntertainmentViet.backend.features.security.dto.CreatedUserDto;
+import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
 import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
@@ -27,45 +30,71 @@ public class UserService implements UserBoundary {
 
   @Override
   @Transactional(rollbackFor = {KeycloakUserConflictException.class, KeycloakUnauthorizedException.class})
-  public Optional<UUID> createOrganizer(OrganizerDto organizerDto) throws KeycloakUnauthorizedException, KeycloakUserConflictException {
-    var newUid = organizerService.create(organizerDto);
+  public Optional<UUID> createOrganizer(CreatedOrganizerDto createdOrganizerDto) throws KeycloakUnauthorizedException, KeycloakUserConflictException {
+    // TODO decrypt password after adding encryption feature
+
+    var keycloakUserDto = CreatedKeycloakUserDto.builder()
+        .username(createdOrganizerDto.getUsername())
+        .email(createdOrganizerDto.getEmail())
+        .firstName(createdOrganizerDto.getDisplayName())
+        .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdOrganizerDto.getPassword()).build()))
+        .groups(List.of("GUEST_ORGANIZER"))
+        .build();
+
+    var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var createdOrganizerDto = CreatedUserDto.builder()
-          .username(organizerDto.getDisplayName())
-          .email(organizerDto.getEmail())
-          .firstName(newUid.get().toString())
-          .credentials(List.of(CreatedUserDto.CredentialDto.builder().value(organizerDto.getDisplayName()).build()))
-          .realmRoles(List.of("GUEST_ORGANIZER"))
+      var organizerDto = OrganizerDto.builder()
+          .displayName(createdOrganizerDto.getDisplayName())
+          .email(createdOrganizerDto.getEmail())
+          .phoneNumber(createdOrganizerDto.getPhoneNumber())
+          .address(createdOrganizerDto.getAddress())
+          .bio(createdOrganizerDto.getBio())
           .build();
 
-      if (keycloakService.createUser(createdOrganizerDto)) {
-        return newUid;
-      }
+      return organizerService.create(organizerDto, newUid.get());
     }
     return Optional.empty();
   }
 
   @Override
   @Transactional(rollbackFor = {KeycloakUserConflictException.class, KeycloakUnauthorizedException.class})
-  public Optional<UUID> createTalent(TalentDto talentDto) throws KeycloakUnauthorizedException, KeycloakUserConflictException {
-    var newUid = talentService.create(talentDto);
+  public Optional<UUID> createTalent(CreatedTalentDto createdTalentDto) throws KeycloakUnauthorizedException, KeycloakUserConflictException {
+    // TODO decrypt password after adding encryption feature
+
+    var keycloakUserDto = CreatedKeycloakUserDto.builder()
+        .username(createdTalentDto.getUsername())
+        .email(createdTalentDto.getEmail())
+        .firstName(createdTalentDto.getDisplayName())
+        .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdTalentDto.getPassword()).build()))
+        .groups(List.of("GUEST_TALENT"))
+        .build();
+
+    var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var createdTalentDto = CreatedUserDto.builder()
-          .username(talentDto.getDisplayName())
-          .email(talentDto.getEmail())
-          .firstName(newUid.get().toString())
-          .credentials(List.of(CreatedUserDto.CredentialDto.builder().value(talentDto.getDisplayName()).build()))
-          .realmRoles(List.of("GUEST_TALENT"))
+      var talentDto = TalentDto.builder()
+          .displayName(createdTalentDto.getDisplayName())
+          .email(createdTalentDto.getEmail())
+          .phoneNumber(createdTalentDto.getPhoneNumber())
+          .address(createdTalentDto.getAddress())
+          .bio(createdTalentDto.getBio())
           .build();
 
-      if (keycloakService.createUser(createdTalentDto)) {
-        return newUid;
-      }
+      return talentService.create(talentDto, newUid.get());
     }
-    return Optional.empty();  }
+    return Optional.empty();
+  }
 
+  @Override
+  @Transactional(rollbackFor = {KeycloakUnauthorizedException.class})
+  public boolean verifyOrganizer(UUID uid) throws KeycloakUnauthorizedException {
+    return organizerService.verify(uid) && keycloakService.addUserToGroup(uid, KeycloakConstant.groupToId.get("VERIFIED_ORGANIZER"));
+  }
 
-
+  @Override
+  @Transactional(rollbackFor = {KeycloakUnauthorizedException.class})
+  public boolean verifyTalent(UUID uid) throws KeycloakUnauthorizedException {
+    return talentService.verify(uid) && keycloakService.addUserToGroup(uid, KeycloakConstant.groupToId.get("VERIFIED_TALENT"));
+  }
 }

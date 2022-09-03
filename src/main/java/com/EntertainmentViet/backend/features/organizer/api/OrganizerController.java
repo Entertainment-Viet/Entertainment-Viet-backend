@@ -1,12 +1,14 @@
 package com.EntertainmentViet.backend.features.organizer.api;
 
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
+import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +34,10 @@ public class OrganizerController {
 
   private final OrganizerBoundary organizerService;
 
+  private final UserBoundary userService;
+
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(@PathVariable("uid") UUID uid, JwtAuthenticationToken authentication) {
     return CompletableFuture.completedFuture(organizerService.findByUid(uid)
         .map( organizerDto -> ResponseEntity
             .ok()
@@ -45,8 +49,12 @@ public class OrganizerController {
 
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> verify(@PathVariable("uid") UUID uid) {
-    if (organizerService.verify(uid)) {
-      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    try {
+      if (userService.verifyOrganizer(uid)) {
+        return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+      }
+    } catch (KeycloakUnauthorizedException ex) {
+      log.error("Can not verify organizer account in keycloak server", ex);
     }
     log.warn(String.format("Can not verify organizer account with id '%s'", uid));
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());

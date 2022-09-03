@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-public class CreatedUserDto {
+public class CreatedKeycloakUserDto {
   @Builder.Default
   private Boolean enabled = true;
 
@@ -26,7 +26,7 @@ public class CreatedUserDto {
 
   private List<CredentialDto> credentials;
 
-  private List<String> realmRoles;
+  private List<String> groups;
 
   @NoArgsConstructor
   @Getter
