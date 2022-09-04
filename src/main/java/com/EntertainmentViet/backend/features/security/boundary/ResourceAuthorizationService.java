@@ -4,7 +4,6 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
-import com.EntertainmentViet.backend.features.booking.api.BookingController;
 import com.EntertainmentViet.backend.features.booking.api.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.TalentBookingController;
@@ -83,6 +82,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Organizer Booking mapping
             .mvcMatchers(HttpMethod.GET, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.BROWSE_BOOKING_ORGANIZER.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.ADD_BOOKING.name())
+
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.READ_BOOKING.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.UPDATE_BOOKING.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ACCEPT_BOOKING_ORGANIZER.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
@@ -147,6 +153,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Talent booking mapping
             .mvcMatchers(HttpMethod.GET , ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.BROWSE_BOOKING_TALENT.name())
+            .mvcMatchers(HttpMethod.POST , ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.ADD_BOOKING.name())
+
+            .mvcMatchers(HttpMethod.GET , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.READ_BOOKING.name())
+            .mvcMatchers(HttpMethod.PUT , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(BookingRole.UPDATE_BOOKING.name())
             .mvcMatchers(HttpMethod.POST , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ACCEPT_BOOKING_TALENT.name())
             .mvcMatchers(HttpMethod.DELETE , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
@@ -211,14 +224,6 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .permitAll()
             .mvcMatchers(HttpMethod.GET, anyPathAfter("/api-docs"))
             .permitAll()
-
-            // Booking mapping
-            .mvcMatchers(HttpMethod.POST , ofPath(BookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(BookingRole.ADD_BOOKING.name())
-            .mvcMatchers(HttpMethod.GET , anyPathAfter(BookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(BookingRole.READ_BOOKING.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(BookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(BookingRole.UPDATE_BOOKING.name())
 
             .anyRequest().authenticated());
   }
