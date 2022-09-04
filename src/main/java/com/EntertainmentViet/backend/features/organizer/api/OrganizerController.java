@@ -2,10 +2,13 @@ package com.EntertainmentViet.backend.features.organizer.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
+import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -37,18 +40,30 @@ public class OrganizerController {
   private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(@PathVariable("uid") UUID uid, JwtAuthenticationToken authentication) {
+  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+
+    if (uid != RestUtils.getUidFromToken(token)) {
+      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
     return CompletableFuture.completedFuture(organizerService.findByUid(uid)
-        .map( organizerDto -> ResponseEntity
+        .map(organizerDto -> ResponseEntity
             .ok()
             .body(organizerDto)
         )
-        .orElse( ResponseEntity.notFound().build())
+        .orElse(ResponseEntity.notFound().build())
     );
   }
 
   @PostMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<UUID>> verify(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<UUID>> verify(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+
+    if (uid != RestUtils.getUidFromToken(token)) {
+      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
     try {
       if (userService.verifyOrganizer(uid)) {
         return CompletableFuture.completedFuture(ResponseEntity.ok().build());
@@ -61,7 +76,14 @@ public class OrganizerController {
   }
 
   @PutMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<UUID>> updateById(@PathVariable("uid") UUID uid, @RequestBody @Valid OrganizerDto organizerDto) {
+  public CompletableFuture<ResponseEntity<UUID>> updateById(JwtAuthenticationToken token,
+                                                            @PathVariable("uid") UUID uid, @RequestBody @Valid OrganizerDto organizerDto) {
+
+    if (uid != RestUtils.getUidFromToken(token)) {
+      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
     return  CompletableFuture.completedFuture(organizerService.update(organizerDto, uid)
         .map(updatedOrganizerUid -> ResponseEntity
             .ok()
@@ -71,13 +93,13 @@ public class OrganizerController {
   }
 
   @GetMapping(value = "/{uid}/cash")
-  public Long receivePayment(@PathVariable("uid") Long uid) {
+  public Long receivePayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {
     // TODO
     return null;
   }
 
   @PostMapping(value = "/{uid}/cash")
-  public Long proceedPayment(@PathVariable("uid") Long uid) {
+  public Long proceedPayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {
     // TODO
     return null;
   }

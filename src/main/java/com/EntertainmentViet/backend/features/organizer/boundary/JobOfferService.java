@@ -12,6 +12,7 @@ import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.JobOfferMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.JobOfferRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class JobOfferService implements JobOfferBoundary {
 
     private final JobOfferRepository jobOfferRepository;
@@ -40,12 +42,17 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public Optional<JobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
-        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (organizer != null && jobOffer.getOrganizer().getUid().equals(organizerUid)) {
-            return Optional.ofNullable(jobOfferMapper.toDto(jobOffer));
+        if (jobOffer == null) {
+            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        if (!isJobOfferBelongToOrganizerWithUid(jobOffer, organizerUid)) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(jobOfferMapper.toDto(jobOffer));
     }
 
     @Override
@@ -55,6 +62,7 @@ public class JobOfferService implements JobOfferBoundary {
         Category category = categoryRepository.findByUid(jobDetail.getCategory().getUid()).orElse(null);
 
         if (jobDetail == null || category == null || organizer == null) {
+            log.warn("Can not find required information to create new job-offer");
             Optional.empty();
         }
 
@@ -71,42 +79,64 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid) {
-        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId().equals(organizer.getId())) {
-            if (jobOffer != null) {
-                JobDetail jobDetail = jobOffer.getJobDetail();
-                Category category = categoryRepository.findByUid(jobOfferDto.getJobDetail().getCategory().getUid()).orElse(null);
-                jobDetail.setCategory(category);
-
-                JobDetail jobDetailUpdate = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
-                jobDetail.setPrice(jobDetailUpdate.getPrice());
-                jobDetail.setWorkType(jobDetailUpdate.getWorkType());
-                jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
-                jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
-                jobDetail.setNote(jobDetailUpdate.getNote());
-                jobDetail.setExtensions(jobDetailUpdate.getExtensions());
-                jobDetail.setLocation(jobDetailUpdate.getLocation());
-
-                jobOffer.setJobDetail(jobDetail);
-                jobOffer.setName(jobOfferDto.getName());
-                jobOffer.setIsActive(jobOfferDto.getIsActive());
-                jobOffer.setQuantity(jobOfferDto.getQuantity());
-                var newJobOffer = jobOfferRepository.save(jobOffer);
-                return Optional.ofNullable(newJobOffer.getUid());
-            }
+        if (jobOffer == null) {
+            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        if (!isJobOfferBelongToOrganizerWithUid(jobOffer, organizerUid)) {
+            return Optional.empty();
+        }
+
+        JobDetail jobDetail = jobOffer.getJobDetail();
+        Category category = categoryRepository.findByUid(jobOfferDto.getJobDetail().getCategory().getUid()).orElse(null);
+        jobDetail.setCategory(category);
+
+        JobDetail jobDetailUpdate = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
+        jobDetail.setPrice(jobDetailUpdate.getPrice());
+        jobDetail.setWorkType(jobDetailUpdate.getWorkType());
+        jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
+        jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
+        jobDetail.setNote(jobDetailUpdate.getNote());
+        jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+        jobDetail.setLocation(jobDetailUpdate.getLocation());
+
+        jobOffer.setJobDetail(jobDetail);
+        jobOffer.setName(jobOfferDto.getName());
+        jobOffer.setIsActive(jobOfferDto.getIsActive());
+        jobOffer.setQuantity(jobOfferDto.getQuantity());
+        var newJobOffer = jobOfferRepository.save(jobOffer);
+        return Optional.ofNullable(newJobOffer.getUid());
     }
 
     @Override
     public boolean delete(UUID uid, UUID organizerUid) {
-        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (organizer != null && jobOffer != null && jobOffer.getOrganizer().getId().equals(organizer.getId())) {
-            jobOfferRepository.deleteById(jobOfferRepository.findByUid(uid).orElse(null).getId());
-            return true;
+        if (jobOffer == null) {
+            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+            return false;
         }
-        return false;
+
+        if (!isJobOfferBelongToOrganizerWithUid(jobOffer, organizerUid)) {
+            return false;
+        }
+
+        jobOfferRepository.deleteById(jobOffer.getId());
+        return true;
+    }
+
+    private boolean isJobOfferBelongToOrganizerWithUid(JobOffer jobOffer, UUID organizerUid) {
+        if (jobOffer.getOrganizer() == null) {
+            log.warn(String.format("Can not find organizer owning the joboffer with id '%s'", jobOffer.getUid()));
+            return false;
+        }
+
+        Organizer organizer = jobOffer.getOrganizer();
+        if (!organizer.getUid().equals(organizerUid)) {
+            log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", jobOffer.getUid(), organizerUid));
+            return false;
+        }
+        return true;
     }
 }
