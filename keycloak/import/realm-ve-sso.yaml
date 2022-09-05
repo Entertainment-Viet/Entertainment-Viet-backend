@@ -11,6 +11,9 @@ roles:
 clients: [
   $(file:UTF-8:config/clients.yaml)
 ]
+groups: [
+  $(file:UTF-8:config/groups.yaml)
+]
 users: [
   $(file:UTF-8:config/users.yaml)
 ]

@@ -9,6 +9,7 @@ import com.EntertainmentViet.backend.features.talent.dto.TalentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -28,11 +29,11 @@ public class TalentService implements TalentBoundary {
         return talentRepository.findByUid(uid).map(talentMapper::toDto);
     }
     @Override
-    public Optional<UUID> create(TalentDto talentDto) {
+    public Optional<UUID> create(TalentDto talentDto, UUID uid) {
         // TODO add check not exist username
 
         var newTalent = talentMapper.toModel(talentDto);
-        newTalent.setUid(null);
+        newTalent.setUid(uid);
         newTalent.setId(null);
         newTalent.setReviews(Collections.emptyList());
         newTalent.setBookings(Collections.emptyList());
@@ -51,6 +52,7 @@ public class TalentService implements TalentBoundary {
     }
 
     @Override
+    @Transactional
     public boolean verify(UUID uid) {
         var talent = talentRepository.findByUid(uid).orElse(null);
 
@@ -58,7 +60,9 @@ public class TalentService implements TalentBoundary {
             log.warn(String.format("Can not find organizer with id '%s'", uid));
             return false;
         }
-        talent.verifyAccount();
+        if (!talent.verifyAccount()) {
+            return false;
+        }
         talentRepository.save(talent);
         return true;
     }

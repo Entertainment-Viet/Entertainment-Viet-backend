@@ -3,12 +3,14 @@ package com.EntertainmentViet.backend.features.organizer.boundary;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -29,10 +31,10 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
-  public Optional<UUID> create(OrganizerDto organizerDto) {
+  public Optional<UUID> create(OrganizerDto organizerDto, UUID uid) {
     // TODO add check not exist username
     var newOrganizer = organizerMapper.toModel(organizerDto);
-    newOrganizer.setUid(null);
+    newOrganizer.setUid(uid);
     newOrganizer.setId(null);
     newOrganizer.setBookings(Collections.emptyList());
     newOrganizer.setEvents(Collections.emptyList());
@@ -53,6 +55,7 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
+  @Transactional
   public boolean verify(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
 
@@ -60,7 +63,9 @@ public class OrganizerService implements OrganizerBoundary {
       log.warn(String.format("Can not find organizer with id '%s'", uid));
       return false;
     }
-    organizer.verifyAccount();
+    if (!organizer.verifyAccount()) {
+      return false;
+    }
     organizerRepository.save(organizer);
     return true;
   }

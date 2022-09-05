@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public interface BookingBoundary {
 
-    Optional<BookingDto> findByUid(UUID uid);
+    Optional<BookingDto> findByUid(UUID ownerUid, UUID uid);
 
-    Optional<UUID> create(BookingDto bookingDto);
+    Optional<UUID> create(UUID ownerUid, BookingDto bookingDto);
 
-    Optional<UUID> update(BookingDto bookingDto, UUID uid);
+    Optional<UUID> update(UUID ownerUid, UUID uid, BookingDto bookingDto);
 
 }

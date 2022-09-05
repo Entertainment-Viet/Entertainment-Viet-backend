@@ -10,5 +10,5 @@
   ],
   standardFlowEnabled: true,
   directAccessGrantsEnabled: true,
-  publicClient: true,
+  publicClient: true
 },

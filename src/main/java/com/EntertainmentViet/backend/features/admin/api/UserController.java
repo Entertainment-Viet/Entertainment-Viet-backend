@@ -3,8 +3,9 @@ package com.EntertainmentViet.backend.features.admin.api;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
+import com.EntertainmentViet.backend.features.admin.dto.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
+import com.EntertainmentViet.backend.features.admin.dto.CreatedOrganizerDto;
 import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +35,9 @@ public class UserController {
   @PostMapping(value = "/organizers",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<UUID>> createOrganizer(HttpServletRequest request, @RequestBody @Valid OrganizerDto organizerDto) {
+  public CompletableFuture<ResponseEntity<UUID>> createOrganizer(HttpServletRequest request, @RequestBody @Valid CreatedOrganizerDto createdOrganizerDto) {
     try {
-      return CompletableFuture.completedFuture(userService.createOrganizer(organizerDto)
+      return CompletableFuture.completedFuture(userService.createOrganizer(createdOrganizerDto)
           .map(newOrganizerUid -> ResponseEntity
               .created(RestUtils.getCreatedLocationUri(request, newOrganizerUid))
               .body(newOrganizerUid)
@@ -54,10 +53,9 @@ public class UserController {
   @PostMapping(value = "/talents",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  @ResponseStatus(HttpStatus.CREATED)
-  public CompletableFuture<ResponseEntity<UUID>> createTalent(HttpServletRequest request, @RequestBody @Valid TalentDto talentDto) {
+  public CompletableFuture<ResponseEntity<UUID>> createTalent(HttpServletRequest request, @RequestBody @Valid CreatedTalentDto createdTalentDto) {
     try {
-      return CompletableFuture.completedFuture(userService.createTalent(talentDto)
+      return CompletableFuture.completedFuture(userService.createTalent(createdTalentDto)
           .map(newTalentUid -> ResponseEntity
               .created(RestUtils.getCreatedLocationUri(request, newTalentUid))
               .body(newTalentUid)

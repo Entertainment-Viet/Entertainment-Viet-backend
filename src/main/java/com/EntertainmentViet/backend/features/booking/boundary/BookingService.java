@@ -36,13 +36,15 @@ public class BookingService implements BookingBoundary {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Optional<BookingDto> findByUid(UUID uid) {
-        return bookingRepository.findByUid(uid).map(bookingMapper::toDto);
+    public Optional<BookingDto> findByUid(UUID ownerUid, UUID uid) {
+        return bookingRepository.findByUid(uid)
+            .filter(booking -> booking.getTalent().getUid().equals(ownerUid) || booking.getOrganizer().getUid().equals(ownerUid))
+            .map(bookingMapper::toDto);
     }
 
     @Override
     @Transactional
-    public Optional<UUID> create(BookingDto bookingDto) {
+    public Optional<UUID> create(UUID ownerUid, BookingDto bookingDto) {
         Organizer organizer = organizerRepository.findByUid(bookingDto.getOrganizerUid()).orElse(null);
         Talent talent = talentRepository.findByUid(bookingDto.getTalentUid()).orElse(null);
         JobDetail jobDetail = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
@@ -50,6 +52,10 @@ public class BookingService implements BookingBoundary {
 
         if (organizer == null || talent == null || jobDetail == null || category == null) {
             Optional.empty();
+        }
+
+        if (!ownerUid.equals(talent.getUid()) && !ownerUid.equals(organizer.getUid())) {
+            return Optional.empty();
         }
 
         jobDetail.setCategory(category);
@@ -65,26 +71,32 @@ public class BookingService implements BookingBoundary {
     }
 
     @Override
-    public Optional<UUID> update(BookingDto bookingDto, UUID uid) {
-        Booking bookingCheck = bookingRepository.findByUid(uid).orElse(null);
-        if (bookingCheck != null) {
-            JobDetail jobDetail = bookingCheck.getJobDetail();
-            Category category = categoryRepository.findByUid(bookingDto.getJobDetailDto().getCategory().getUid()).orElse(null);
-            jobDetail.setCategory(category);
-
-            JobDetail jobDetailUpdate = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
-            jobDetail.setPrice(jobDetailUpdate.getPrice());
-            jobDetail.setWorkType(jobDetailUpdate.getWorkType());
-            jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
-            jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
-            jobDetail.setNote(jobDetailUpdate.getNote());
-            jobDetail.setExtensions(jobDetailUpdate.getExtensions());
-            jobDetail.setLocation(jobDetailUpdate.getLocation());
-
-            bookingCheck.setJobDetail(jobDetail);
-            var newBooking = bookingRepository.save(bookingCheck);
-            return Optional.ofNullable(newBooking.getUid());
+    public Optional<UUID> update(UUID ownerUid, UUID uid, BookingDto bookingDto) {
+        var bookingOptional = bookingRepository.findByUid(uid);
+        if (!bookingOptional.isPresent()) {
+            return Optional.empty();
         }
-        return Optional.empty();
+
+        Booking updatingBooking = bookingOptional.get();
+        if (!ownerUid.equals(updatingBooking.getTalent().getUid()) && !ownerUid.equals(updatingBooking.getOrganizer().getUid())) {
+            return Optional.empty();
+        }
+
+        JobDetail jobDetail = updatingBooking.getJobDetail();
+        Category category = categoryRepository.findByUid(bookingDto.getJobDetailDto().getCategory().getUid()).orElse(null);
+        jobDetail.setCategory(category);
+
+        JobDetail jobDetailUpdate = jobDetailMapper.toModel(bookingDto.getJobDetailDto());
+        jobDetail.setPrice(jobDetailUpdate.getPrice());
+        jobDetail.setWorkType(jobDetailUpdate.getWorkType());
+        jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
+        jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
+        jobDetail.setNote(jobDetailUpdate.getNote());
+        jobDetail.setExtensions(jobDetailUpdate.getExtensions());
+        jobDetail.setLocation(jobDetailUpdate.getLocation());
+
+        updatingBooking.setJobDetail(jobDetail);
+        var newBooking = bookingRepository.save(updatingBooking);
+        return Optional.ofNullable(newBooking.getUid());
     }
 }
