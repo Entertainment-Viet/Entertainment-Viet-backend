@@ -9,6 +9,8 @@ public class IdentifiableListener {
 
   @PrePersist
   public void updateUidPrePersist(Identifiable identifiable) {
-    identifiable.setUid(UUID.randomUUID());
+    if (identifiable.getUid() == null) {
+      identifiable.setUid(UUID.randomUUID());
+    }
   }
 }

@@ -62,22 +62,34 @@ public class Talent extends User implements Advertisable {
     booking.setTalent(this);
   }
 
-  public void acceptBooking(UUID bookingUid) {
-    bookings.stream()
-        .filter(booking -> booking.getUid() == bookingUid)
-        .filter(Booking::checkIfFixedPrice)
+  public boolean acceptBooking(UUID bookingUid) {
+    return bookings.stream()
+        .filter(booking -> booking.getUid().equals(bookingUid))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
         .findFirst()
-        .ifPresentOrElse(
-            booking -> booking.setStatus(BookingStatus.CONFIRMED),
-            () -> log.error("Can not accept the booking: ", bookingUid)
-        );
+        .map( booking -> {
+          booking.setStatus(BookingStatus.CONFIRMED);
+          return true;
+        })
+        .orElseGet(() -> {
+          log.warn(String.format("Can not accept the booking: %s", bookingUid));
+          return false;
+        });
   }
 
-  public void rejectBooking(UUID bookingUid) {
-    bookings.stream()
-        .filter(booking -> booking.getUid() == bookingUid)
+  public boolean rejectBooking(UUID bookingUid) {
+    return bookings.stream()
+        .filter(booking -> booking.getUid().equals(bookingUid))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
         .findFirst()
-        .ifPresent(booking -> booking.setStatus(BookingStatus.CANCELLED));
+        .map( booking -> {
+          booking.setStatus(BookingStatus.CANCELLED);
+          return true;
+        })
+        .orElseGet(() -> {
+          log.warn(String.format("Can not reject the booking: %s", bookingUid));
+          return false;
+        });
   }
 
   public void removeBooking(Booking booking) {

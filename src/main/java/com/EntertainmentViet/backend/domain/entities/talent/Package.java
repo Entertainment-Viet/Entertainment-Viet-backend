@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,6 +35,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Slf4j
 public class Package extends Identifiable {
 
   @Id
@@ -72,17 +74,33 @@ public class Package extends Identifiable {
     return booking;
   }
 
-  public void acceptOrder(UUID orderUid) {
-    orders.stream()
-        .filter(orders -> orders.getUid() == orderUid)
+  public boolean acceptOrder(UUID orderUid) {
+    return orders.stream()
+        .filter(orders -> orders.getUid().equals(orderUid))
+        .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
         .findFirst()
-        .ifPresent(orders -> orders.setStatus(BookingStatus.CONFIRMED));
+        .map( orders -> {
+          orders.setStatus(BookingStatus.CONFIRMED);
+          return true;
+        })
+        .orElseGet(() -> {
+          log.warn(String.format("Can not accept the order: %s", orderUid));
+          return false;
+        });
   }
 
-  public void rejectOrder(UUID orderUid) {
-    orders.stream()
-        .filter(orders -> orders.getUid() == orderUid)
+  public boolean rejectOrder(UUID orderUid) {
+    return orders.stream()
+        .filter(orders -> orders.getUid().equals(orderUid))
+        .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
         .findFirst()
-        .ifPresent(orders -> orders.setStatus(BookingStatus.CANCELLED));
+        .map( orders -> {
+          orders.setStatus(BookingStatus.CANCELLED);
+          return true;
+        })
+        .orElseGet(() -> {
+          log.warn(String.format("Can not reject the order: %s", orderUid));
+          return false;
+        });
   }
 }

@@ -11,9 +11,14 @@ public abstract class ReviewMapper {
 
     // TODO
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "createdAt", "talent", "comment", "score"})
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "comment", ignore = true)
+    @Mapping(target = "score", ignore = true)
     public abstract ReviewDto toDto(Review review);
 
     // TODO
+    @BeanMapping(ignoreUnmappedSourceProperties = {"createdAt", "talent", "comment", "score"})
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "talent", ignore = true)

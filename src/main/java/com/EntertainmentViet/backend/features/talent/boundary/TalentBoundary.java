@@ -7,7 +7,9 @@ import java.util.UUID;
 public interface TalentBoundary {
     Optional<TalentDto> findByUid(UUID uid);
 
-    Optional<UUID> create(TalentDto talentDto);
+    Optional<UUID> create(TalentDto talentDto, UUID uid);
 
     Optional<UUID> update(TalentDto talentDto, UUID uid);
+
+    boolean verify(UUID uid);
 }

@@ -13,6 +13,9 @@ public class JsonUtils {
   private final ObjectMapper mapper = new ObjectMapper();
 
   public JsonNode jsonToNode(String jsonString) {
+    if (jsonString == null) {
+      return null;
+    }
     try {
       return mapper.readTree(jsonString);
     } catch (JsonProcessingException e) {

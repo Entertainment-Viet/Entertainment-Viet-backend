@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.config;
 import com.EntertainmentViet.backend.features.security.boundary.ResourceAuthorizationBoundary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.Customizer;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +38,10 @@ public class SecurityConfig {
         .oauth2ResourceServer()
         .jwt()
         .jwtAuthenticationConverter(new CustomJwtAuthenticationConverter(CLIENT_ID));
+
+    resourceAuthorizationBoundary.ignoreCsrfPaths(http.csrf());
+    http.csrf()
+        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
     return http.build();
   }

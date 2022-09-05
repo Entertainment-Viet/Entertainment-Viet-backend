@@ -1,0 +1,57 @@
+{
+  name: "FULL_ADMIN",
+  realmRoles: [
+      "ADMIN_ARCHIVE_ORGANIZER_ACCESS",
+      "ADMIN_ARCHIVE_TALENT_ACCESS",
+      "ADMIN_READ_ORGANIZER_ACCESS",
+      "ADMIN_RESOLVE_TALENT_ACCESS",
+      "ADMIN_READ_TALENT_ACCESS",
+      "ADMIN_RESOLVE_ORGANIZER_ACCESS"
+  ]
+},
+{
+  name: "READONLY_ADMIN",
+  realmRoles: [
+      "ADMIN_READ_ORGANIZER_ACCESS",
+      "ADMIN_READ_TALENT_ACCESS"
+  ]
+},
+{
+  name: "GUEST_ORGANIZER",
+  realmRoles: [
+      "ORGANIZER_READ_ACCESS"
+  ]
+},
+{
+  name: "VERIFIED_ORGANIZER",
+  realmRoles: [
+      "ORGANIZER_MODIFY_ACCESS",
+      "ORGANIZER_WRITE_ACCESS",
+      "ORGANIZER_READ_ACCESS",
+      "ORGANIZER_PAYMENT_ACCESS"
+  ]
+},
+{
+  name: "GUEST_TALENT",
+  realmRoles: [
+      "TALENT_READ_ACCESS"
+  ]
+},
+{
+  name: "VERIFIED_TALENT",
+  realmRoles: [
+      "TALENT_MODIFY_ACCESS",
+      "TALENT_READ_ACCESS",
+      "TALENT_WRITE_ACCESS",
+      "TALENT_PAYMENT_ACCESS"
+  ]
+},
+{
+  name: "KEYCLOAK_ADMINISTRATIVE",
+  clientRoles: {
+    realm-management: [
+        "view-users",
+        "manage-users"
+    ]
+  }
+}

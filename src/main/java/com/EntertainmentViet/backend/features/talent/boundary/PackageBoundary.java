@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.talent.boundary;
 
-import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 import com.EntertainmentViet.backend.features.talent.dto.PackageDto;
 
 import java.util.List;
@@ -17,5 +16,5 @@ public interface PackageBoundary {
 
     Optional<UUID> update(PackageDto packageDto, UUID talentId, UUID uid);
 
-    Boolean delete(UUID uid, UUID talentId);
+    boolean delete(UUID uid, UUID talentId);
 }

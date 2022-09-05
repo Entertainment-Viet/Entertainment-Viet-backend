@@ -16,5 +16,5 @@ public interface JobOfferBoundary {
 
     Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid);
 
-    void delete(UUID uid, UUID organizerUid);
+    boolean delete(UUID uid, UUID organizerUid);
 }
