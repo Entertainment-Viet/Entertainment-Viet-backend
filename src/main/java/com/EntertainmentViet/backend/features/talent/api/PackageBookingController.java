@@ -27,7 +27,7 @@ public class PackageBookingController {
   private final PackageBookingBoundary packageBookingService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<BookingDto>>> listBooking(JwtAuthenticationToken token, 
+  public CompletableFuture<ResponseEntity<List<BookingDto>>> listBooking(JwtAuthenticationToken token,
                                                          @PathVariable("talent_uid") UUID talentUid,
                                                          @PathVariable("package_uid") UUID packageUid) {
 
@@ -35,7 +35,7 @@ public class PackageBookingController {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
-    
+
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(packageBookingService.listBooking(talentUid, packageUid)));
   }
 
@@ -47,8 +47,8 @@ public class PackageBookingController {
                                                                           @PathVariable("talent_uid") UUID talentUid,
                                                                           @PathVariable("package_uid") UUID packageUid) {
 
-    if (talentUid != RestUtils.getUidFromToken(token)) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
+    if (createPackageBookingDto.getOrganizerId() != RestUtils.getUidFromToken(token)) {
+      log.warn(String.format("The token don't have enough access right to proceed with this api. Require update permission to organizer with id '%s'", createPackageBookingDto.getOrganizerId()));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
     

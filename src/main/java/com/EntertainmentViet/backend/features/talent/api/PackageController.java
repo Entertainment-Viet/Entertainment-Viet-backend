@@ -32,24 +32,13 @@ public class PackageController {
   private final PackageBoundary packageService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<PackageDto>>> findAll(JwtAuthenticationToken token, @PathVariable("talent_uid") UUID talentUid) {
-
-    if (talentUid != RestUtils.getUidFromToken(token)) {
-      log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
+  public CompletableFuture<ResponseEntity<List<PackageDto>>> findAll(@PathVariable("talent_uid") UUID talentUid) {
 
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(packageService.findByTalentUid(talentUid)));
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<PackageDto>> findByUid(JwtAuthenticationToken token,
-                                                                 @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
-
-    if (talentUid != RestUtils.getUidFromToken(token)) {
-      log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
+  public CompletableFuture<ResponseEntity<PackageDto>> findByUid(@PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
     return CompletableFuture.completedFuture(packageService.findByUid(talentUid, uid)
             .map( packageDto -> ResponseEntity
