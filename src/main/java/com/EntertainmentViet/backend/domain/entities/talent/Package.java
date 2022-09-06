@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -74,33 +75,25 @@ public class Package extends Identifiable {
     return booking;
   }
 
-  public boolean acceptOrder(UUID orderUid) {
-    return orders.stream()
+  public void acceptOrder(UUID orderUid) {
+    orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
-        .findFirst()
-        .map( orders -> {
-          orders.setStatus(BookingStatus.CONFIRMED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not accept the order: %s", orderUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            order -> order.setStatus(BookingStatus.CONFIRMED),
+            () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
+        );
   }
 
-  public boolean rejectOrder(UUID orderUid) {
-    return orders.stream()
+  public void rejectOrder(UUID orderUid) {
+    orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
-        .findFirst()
-        .map( orders -> {
-          orders.setStatus(BookingStatus.CANCELLED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not reject the order: %s", orderUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            order -> order.setStatus(BookingStatus.CANCELLED),
+            () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
+        );
   }
 }

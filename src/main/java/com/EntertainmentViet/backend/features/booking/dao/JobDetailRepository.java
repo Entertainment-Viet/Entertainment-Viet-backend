@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.booking.boundary;
+package com.EntertainmentViet.backend.features.booking.dao;
 
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;

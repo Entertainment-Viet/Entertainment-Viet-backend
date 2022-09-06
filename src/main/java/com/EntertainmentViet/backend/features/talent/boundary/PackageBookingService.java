@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.talent.boundary;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
@@ -37,10 +38,10 @@ public class PackageBookingService implements PackageBookingBoundary {
             return false;
         }
 
-        if (packageTalent == null) {
-            log.warn(String.format("Can not find package with id '%s' ", packageId));
+        if (!isPackageWithUidExist(packageTalent, packageId)) {
             return false;
         }
+
         if (!isPackageBelongToTalentWithUid(packageTalent, talentId)) {
             return false;
         }
@@ -52,8 +53,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     @Override
     public List<BookingDto> listBooking(UUID talentId, UUID packageId) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (packageTalent == null) {
-            log.warn(String.format("Can not find package with id '%s' ", packageId));
+        if (!isPackageWithUidExist(packageTalent, packageId)) {
             return Collections.emptyList();
         }
 
@@ -66,35 +66,51 @@ public class PackageBookingService implements PackageBookingBoundary {
     @Override
     public boolean acceptBooking(UUID talentId, UUID packageId, UUID bookingId) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (packageTalent == null) {
-            log.warn(String.format("Can not find package with id '%s' ", packageId));
+        if (!isPackageWithUidExist(packageTalent, packageId)) {
             return false;
         }
+
         if (!isPackageBelongToTalentWithUid(packageTalent, talentId)) {
             return false;
         }
-        if (packageTalent.acceptOrder(bookingId)) {
+
+        try {
+            packageTalent.acceptOrder(bookingId);
             packageRepository.save(packageTalent);
-            return true;
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean rejectBooking(UUID talentId, UUID packageId, UUID bookingId) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
-        if (packageTalent == null) {
-            log.warn(String.format("Can not find package with id '%s' ", packageId));
+        if (!isPackageWithUidExist(packageTalent, packageId)) {
             return false;
         }
+
         if (!isPackageBelongToTalentWithUid(packageTalent, talentId)) {
             return false;
         }
-        if (packageTalent.rejectOrder(bookingId)) {
+
+        try {
+            packageTalent.rejectOrder(bookingId);
             packageRepository.save(packageTalent);
-            return true;
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    private boolean isPackageWithUidExist(Package packageTalent, UUID uid) {
+        if (packageTalent == null) {
+            log.warn(String.format("Can not find package with id '%s' ", uid));
+            return false;
+        }
+        return true;
     }
 
     private boolean isPackageBelongToTalentWithUid(Package packageTalent, UUID talentId) {

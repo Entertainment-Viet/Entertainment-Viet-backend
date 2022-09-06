@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -25,6 +27,7 @@ import java.util.List;
 @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Slf4j
 public class Event extends Identifiable implements Advertisable {
 
   @Id
@@ -57,5 +60,15 @@ public class Event extends Identifiable implements Advertisable {
   public void removeOpenPosition(EventOpenPosition eventOpenPosition) {
     openPositions.remove(eventOpenPosition);
     eventOpenPosition.setEvent(null);
+  }
+
+  public void updateOpenPosition(UUID positionUid, EventOpenPosition eventOpenPosition) {
+    openPositions.stream()
+        .filter(position -> position.getUid().equals(positionUid))
+        .findAny()
+        .ifPresentOrElse(
+            position -> position.updateInfo(eventOpenPosition),
+            () -> log.warn(String.format("Can not update information of openPosition with uid '%s'", positionUid))
+        );
   }
 }
