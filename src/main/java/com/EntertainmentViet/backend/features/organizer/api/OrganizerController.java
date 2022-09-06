@@ -5,7 +5,6 @@ import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
-import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -40,12 +39,7 @@ public class OrganizerController {
   private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-
-    if (uid != RestUtils.getUidFromToken(token)) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
+  public CompletableFuture<ResponseEntity<OrganizerDto>> findByUid(@PathVariable("uid") UUID uid) {
 
     return CompletableFuture.completedFuture(organizerService.findByUid(uid)
         .map(organizerDto -> ResponseEntity

@@ -35,12 +35,7 @@ public class TalentController {
   private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<TalentDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-
-    if (uid != RestUtils.getUidFromToken(token)) {
-      log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
+  public CompletableFuture<ResponseEntity<TalentDto>> findByUid(@PathVariable("uid") UUID uid) {
 
     return CompletableFuture.completedFuture(talentService.findByUid(uid)
             .map( talentDto -> ResponseEntity

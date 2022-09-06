@@ -43,7 +43,7 @@ public class JobOfferController {
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<JobOfferDto>> findByOrganizerUid(JwtAuthenticationToken token,
+  public CompletableFuture<ResponseEntity<JobOfferDto>> findByUid(JwtAuthenticationToken token,
                                                                            @PathVariable("organizer_uid") UUID organizerUid,
                                                                           @PathVariable("uid") UUID uid) {
 
