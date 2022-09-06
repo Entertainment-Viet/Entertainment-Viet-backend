@@ -10,6 +10,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import lombok.EqualsAndHashCode;
@@ -62,34 +63,26 @@ public class Talent extends User implements Advertisable {
     booking.setTalent(this);
   }
 
-  public boolean acceptBooking(UUID bookingUid) {
-    return bookings.stream()
+  public void acceptBooking(UUID bookingUid) {
+    bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .findFirst()
-        .map( booking -> {
-          booking.setStatus(BookingStatus.CONFIRMED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not accept the booking: %s", bookingUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CONFIRMED),
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
   }
 
-  public boolean rejectBooking(UUID bookingUid) {
-    return bookings.stream()
+  public void rejectBooking(UUID bookingUid) {
+    bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .findFirst()
-        .map( booking -> {
-          booking.setStatus(BookingStatus.CANCELLED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not reject the booking: %s", bookingUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CANCELLED),
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
   }
 
   public void removeBooking(Booking booking) {

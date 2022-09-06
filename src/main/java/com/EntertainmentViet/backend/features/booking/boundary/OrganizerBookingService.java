@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.booking.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
@@ -29,50 +30,72 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
     @Override
     public List<BookingDto> listBooking(UUID organizerId) {
-        Organizer organizer = organizerRepository.findByUid(organizerId).orElse(null);
-        if (isOrganizerWithUid(organizer)) {
-            return organizer.getBookings().stream().map(bookingMapper::toDto).collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return organizerRepository.findByUid(organizerId)
+            .map(organizer -> organizer.getBookings().stream().map(bookingMapper::toDto).collect(Collectors.toList()))
+            .orElse(Collections.emptyList());
     }
 
     @Override
     public boolean acceptBooking(UUID organizerId, UUID bookingId) {
-        Organizer organizer = organizerRepository.findByUid(organizerId).orElse(null);
         Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
-        if (isOrganizerWithUid(organizer)) {
-            if (booking.getOrganizer().getUid().equals(organizerId)) {
-                if (organizer.acceptBooking(bookingId)) {
-                    organizerRepository.save(organizer);
-                    return true;
-                }
-            }
-            log.warn(String.format("Booking not in organizer with id '%s' ", organizer.getUid()));
+        if (!isBookingWithUid(booking, bookingId)) {
             return false;
         }
-        return false;
+
+        if (!isBookingBelongToOrganizerWithUid(booking, organizerId)) {
+            return false;
+        }
+
+        try {
+            Organizer organizer = booking.getOrganizer();
+            organizer.acceptBooking(bookingId);
+            organizerRepository.save(organizer);
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override
     public boolean rejectBooking(UUID organizerId, UUID bookingId) {
-        Organizer organizer = organizerRepository.findByUid(organizerId).orElse(null);
         Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
-        if (isOrganizerWithUid(organizer)) {
-            if (booking.getOrganizer().getUid().equals(organizerId)) {
-                if (organizer.rejectBooking(bookingId)) {
-                    organizerRepository.save(organizer);
-                    return true;
-                }
-            }
-            log.warn(String.format("Booking not in organizer with id '%s' ", organizer.getUid()));
+        if (!isBookingWithUid(booking, bookingId)) {
             return false;
         }
-        return false;
+
+        if (!isBookingBelongToOrganizerWithUid(booking, organizerId)) {
+            return false;
+        }
+
+        try {
+            Organizer organizer = booking.getOrganizer();
+            organizer.rejectBooking(bookingId);
+            organizerRepository.save(organizer);
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
-    private boolean isOrganizerWithUid(Organizer organizer) {
-        if (organizer == null) {
-            log.warn(String.format("Can not find organizer with id '%s' ", organizer.getUid()));
+    private boolean isBookingWithUid(Booking booking, UUID uid) {
+        if (booking == null) {
+            log.warn(String.format("Can not find booking with id '%s' ", uid));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isBookingBelongToOrganizerWithUid(Booking booking, UUID organizerUid) {
+        if (booking.getOrganizer() == null) {
+            log.warn(String.format("Can not find organizer owning the booking with id '%s'", booking.getUid()));
+            return false;
+        }
+
+        Organizer organizer = booking.getOrganizer();
+        if (!organizer.getUid().equals(organizerUid)) {
+            log.warn(String.format("Can not find any booking with id '%s' belong to organizer with id '%s'", booking.getUid(), organizerUid));
             return false;
         }
         return true;

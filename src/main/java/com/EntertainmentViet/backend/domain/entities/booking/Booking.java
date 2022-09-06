@@ -71,7 +71,9 @@ public class Booking extends Identifiable implements Auditable {
   private JobDetail jobDetail;
 
   public void updateInfo(Booking newData) {
-    // TODO
+    if (newData.getJobDetail() != null) {
+      jobDetail.updateInfo(newData.getJobDetail());
+    }
   }
 
   public boolean checkIfFixedPrice() {

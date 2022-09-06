@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.advertisement;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.values.Price;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,4 +32,17 @@ public abstract class Advertisement<T extends Advertisable> extends Identifiable
   @NotNull
   private Integer priority;
 
+  public Price calculateFee(Instant newExpiredTime) {
+    return null;
+  }
+
+  public void cancel() {
+    setExpiredTime(Instant.now());
+  }
+
+  public void extendTime(Instant newExpiredTime) {
+    var requiredFee = calculateFee(newExpiredTime);
+    // TODO check if fee is paid yet
+    setExpiredTime(newExpiredTime);
+  }
 }

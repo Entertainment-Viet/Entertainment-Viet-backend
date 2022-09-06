@@ -93,4 +93,25 @@ public class JobDetail implements Serializable {
         .note(getNote())
         .build();
   }
+
+  public void updateInfo(JobDetail newData) {
+    if (newData.getCategory() != null) {
+      setCategory(newData.getCategory());
+    }
+    if (newData.getPrice() != null) {
+      setPrice(newData.getPrice());
+    }
+    if (newData.getPerformanceDuration() != null) {
+      setPerformanceDuration(newData.getPerformanceDuration());
+    }
+    if (newData.getPerformanceTime() != null) {
+      setPerformanceTime(newData.getPerformanceTime());
+    }
+    if (newData.getLocation() != null) {
+      setLocation(newData.getLocation());
+    }
+    if (newData.getNote() != null) {
+      setNote(newData.getNote());
+    }
+  }
 }

@@ -59,4 +59,19 @@ public class JobOffer extends Identifiable {
     booking.setStatus(BookingStatus.TALENT_PENDING);
     return booking;
   }
+
+  public void updateInfo(JobOffer newData) {
+    if (newData.getName() != null) {
+      setName(newData.getName());
+    }
+    if (newData.getIsActive() != null) {
+      setIsActive(newData.getIsActive());
+    }
+    if (newData.getQuantity() != null) {
+      setQuantity(newData.getQuantity());
+    }
+    if (newData.getJobDetail() != null) {
+      jobDetail.updateInfo(newData.getJobDetail());
+    }
+  }
 }

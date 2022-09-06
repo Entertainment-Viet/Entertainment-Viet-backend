@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.values.Category;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.CategoryRepository;
 import com.EntertainmentViet.backend.features.booking.dto.JobDetailMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
@@ -43,8 +44,7 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public Optional<JobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (jobOffer == null) {
-            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+        if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return Optional.empty();
         }
 
@@ -80,8 +80,7 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (jobOffer == null) {
-            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+        if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return Optional.empty();
         }
 
@@ -113,8 +112,7 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public boolean delete(UUID uid, UUID organizerUid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
-        if (jobOffer == null) {
-            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+        if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return false;
         }
 
@@ -122,10 +120,22 @@ public class JobOfferService implements JobOfferBoundary {
             return false;
         }
 
-        jobOfferRepository.deleteById(jobOffer.getId());
+        try {
+            jobOfferRepository.deleteById(jobOffer.getId());
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
+        }
         return true;
     }
 
+    private boolean isJobOfferWithUidExist(JobOffer jobOffer, UUID uid) {
+        if (jobOffer == null) {
+            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+            return false;
+        }
+        return true;
+    }
     private boolean isJobOfferBelongToOrganizerWithUid(JobOffer jobOffer, UUID organizerUid) {
         if (jobOffer.getOrganizer() == null) {
             log.warn(String.format("Can not find organizer owning the joboffer with id '%s'", jobOffer.getUid()));

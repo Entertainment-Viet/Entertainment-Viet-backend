@@ -4,12 +4,12 @@ import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Package_;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import lombok.EqualsAndHashCode;
@@ -18,10 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.AnyMetaDef;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.ManyToAny;
-import org.hibernate.annotations.MetaValue;
 
 import javax.persistence.*;
 import java.util.List;
@@ -98,41 +94,36 @@ public class Organizer extends User {
   public void updateBookingInfo(UUID bookingUid, Booking newBookingInfo) {
     bookings.stream()
         .filter(booking -> booking.getUid() == bookingUid)
-        .findFirst()
-        .ifPresent(booking -> {
-          booking.updateInfo(newBookingInfo);
-          booking.setStatus(BookingStatus.TALENT_PENDING);
-    });
+        .findAny()
+        .ifPresentOrElse(
+            booking -> {
+              booking.updateInfo(newBookingInfo);
+              booking.setStatus(BookingStatus.TALENT_PENDING);
+            },
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
   }
 
-  public boolean acceptBooking(UUID bookingUid) {
-    return bookings.stream()
+  public void acceptBooking(UUID bookingUid) {
+    bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .findFirst()
-        .map( booking -> {
-          booking.setStatus(BookingStatus.CONFIRMED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not accept the booking: %s", bookingUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CONFIRMED),
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
   }
 
-  public boolean rejectBooking(UUID bookingUid) {
-    return bookings.stream()
+  public void rejectBooking(UUID bookingUid) {
+    bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .findFirst()
-        .map( booking -> {
-          booking.setStatus(BookingStatus.CANCELLED);
-          return true;
-        })
-        .orElseGet(() -> {
-          log.warn(String.format("Can not reject the booking: %s", bookingUid));
-          return false;
-        });
+        .findAny()
+        .ifPresentOrElse(
+            booking -> booking.setStatus(BookingStatus.CANCELLED),
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
   }
 
   public void addFeedback(OrganizerFeedback feedback) {
