@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.dto;
 
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackDto;
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class TalentDto extends UserDto {
 
     private List<ReviewDto> reviews;
 
-    private List<BookingDto> bookings;
+    private List<ReadBookingDto> bookings;
 
     private List<TalentFeedBackDto> feedbacks;
 }

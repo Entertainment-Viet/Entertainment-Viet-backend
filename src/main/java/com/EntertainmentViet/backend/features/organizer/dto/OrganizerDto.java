@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.dto;
 
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackDto;
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class OrganizerDto extends UserDto {
 
   private List<EventDto> events;
 
-  private List<BookingDto> bookings;
+  private List<ReadBookingDto> bookings;
 
   private List<OrganizerFeedBackDto> feedbacks;
 

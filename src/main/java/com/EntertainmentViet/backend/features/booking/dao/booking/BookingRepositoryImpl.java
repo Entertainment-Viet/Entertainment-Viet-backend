@@ -1,9 +1,8 @@
-package com.EntertainmentViet.backend.features.booking.dao;
+package com.EntertainmentViet.backend.features.booking.dao.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
 

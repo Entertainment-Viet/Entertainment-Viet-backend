@@ -1,7 +1,7 @@
-package com.EntertainmentViet.backend.features.booking.api;
+package com.EntertainmentViet.backend.features.booking.api.category;
 
-import com.EntertainmentViet.backend.features.booking.boundary.CategoryBoundary;
-import com.EntertainmentViet.backend.features.booking.dto.CategoryDto;
+import com.EntertainmentViet.backend.features.booking.boundary.category.CategoryBoundary;
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 

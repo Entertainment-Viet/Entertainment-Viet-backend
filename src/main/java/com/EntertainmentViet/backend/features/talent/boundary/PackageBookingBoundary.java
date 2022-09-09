@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.boundary;
 
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public interface PackageBookingBoundary {
 
     boolean addPackageToShoppingCart(UUID talentId, UUID packageId, CreatePackageBookingDto createPackageBookingDto);
 
-    List<BookingDto> listBooking(UUID talentId, UUID packageId);
+    List<ReadBookingDto> listBooking(UUID talentId, UUID packageId);
 
     boolean acceptBooking(UUID talentId, UUID packageId, UUID bookingId);
 

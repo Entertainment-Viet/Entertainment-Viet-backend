@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.dto;
 
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +23,8 @@ public class PackageDto extends IdentifiableDto {
 
   private UUID talentId;
 
-  private JobDetailDto jobDetail;
+  private ReadJobDetailDto jobDetail;
 
-  private List<BookingDto> orders;
+  private List<ReadBookingDto> orders;
 
 }

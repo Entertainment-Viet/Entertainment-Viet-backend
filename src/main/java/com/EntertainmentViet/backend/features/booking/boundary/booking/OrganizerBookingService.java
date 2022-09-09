@@ -1,12 +1,12 @@
-package com.EntertainmentViet.backend.features.booking.boundary;
+package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.booking.dao.BookingRepository;
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
-import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
+import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
+import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,9 +29,9 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
 
     @Override
-    public List<BookingDto> listBooking(UUID organizerId) {
+    public List<ReadBookingDto> listBooking(UUID organizerId) {
         return organizerRepository.findByUid(organizerId)
-            .map(organizer -> organizer.getBookings().stream().map(bookingMapper::toDto).collect(Collectors.toList()))
+            .map(organizer -> organizer.getBookings().stream().map(bookingMapper::toReadDto).collect(Collectors.toList()))
             .orElse(Collections.emptyList());
     }
 

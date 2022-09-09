@@ -1,6 +1,7 @@
-package com.EntertainmentViet.backend.features.booking.dto;
+package com.EntertainmentViet.backend.features.booking.dto.booking;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class BookingDto extends Identifiable {
+public class ReadBookingDto extends Identifiable {
 
     private Instant createdAt;
 
@@ -25,5 +26,5 @@ public class BookingDto extends Identifiable {
 
     private UUID talentUid;
 
-    private JobDetailDto jobDetailDto;
+    private ReadJobDetailDto jobDetail;
 }

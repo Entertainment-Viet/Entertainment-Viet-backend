@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.booking.dto;
+package com.EntertainmentViet.backend.features.booking.dto.category;
 
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;

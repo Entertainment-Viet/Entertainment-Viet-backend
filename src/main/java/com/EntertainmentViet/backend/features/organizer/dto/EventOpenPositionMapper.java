@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
-import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
+import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

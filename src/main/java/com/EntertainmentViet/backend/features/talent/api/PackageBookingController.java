@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.api;
 
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.PackageBookingBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
@@ -27,9 +27,9 @@ public class PackageBookingController {
   private final PackageBookingBoundary packageBookingService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<BookingDto>>> listBooking(JwtAuthenticationToken token,
-                                                         @PathVariable("talent_uid") UUID talentUid,
-                                                         @PathVariable("package_uid") UUID packageUid) {
+  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                             @PathVariable("talent_uid") UUID talentUid,
+                                                                             @PathVariable("package_uid") UUID packageUid) {
 
     if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));

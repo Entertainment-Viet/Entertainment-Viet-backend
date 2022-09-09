@@ -1,6 +1,6 @@
-package com.EntertainmentViet.backend.features.booking.boundary;
+package com.EntertainmentViet.backend.features.booking.boundary.category;
 
-import com.EntertainmentViet.backend.features.booking.dto.CategoryDto;
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,8 +4,8 @@ import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.BookingMapper;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.dao.PackageRepository;
 import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
@@ -51,14 +51,14 @@ public class PackageBookingService implements PackageBookingBoundary {
     }
 
     @Override
-    public List<BookingDto> listBooking(UUID talentId, UUID packageId) {
+    public List<ReadBookingDto> listBooking(UUID talentId, UUID packageId) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
         if (!isPackageWithUidExist(packageTalent, packageId)) {
             return Collections.emptyList();
         }
 
         if (isPackageBelongToTalentWithUid(packageTalent, talentId)) {
-            return packageTalent.getOrders().stream().map(bookingMapper::toDto).collect(Collectors.toList());
+            return packageTalent.getOrders().stream().map(bookingMapper::toReadDto).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }

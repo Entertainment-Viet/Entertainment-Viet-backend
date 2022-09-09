@@ -1,20 +1,21 @@
-package com.EntertainmentViet.backend.features.booking.dto;
+package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Duration;
 import java.time.Instant;
+import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
-public class JobDetailDto {
+public class CreateJobDetailDto {
 
-  private CategoryDto category;
+  private UUID categoryUid;
 
   private String workType;
 

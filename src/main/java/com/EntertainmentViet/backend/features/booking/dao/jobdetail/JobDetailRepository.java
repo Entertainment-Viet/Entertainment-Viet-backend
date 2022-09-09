@@ -1,7 +1,6 @@
-package com.EntertainmentViet.backend.features.booking.dao;
+package com.EntertainmentViet.backend.features.booking.dao.jobdetail;
 
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailDto;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepository;
 import org.springframework.stereotype.Repository;
 

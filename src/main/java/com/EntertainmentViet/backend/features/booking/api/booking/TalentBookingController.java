@@ -1,7 +1,9 @@
-package com.EntertainmentViet.backend.features.booking.api;
+package com.EntertainmentViet.backend.features.booking.api.booking;
 
-import com.EntertainmentViet.backend.features.booking.boundary.BookingBoundary;
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
+import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +33,10 @@ public class TalentBookingController {
   private final BookingBoundary bookingService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<BookingDto>> findByUid(JwtAuthenticationToken token,
-                                                                 @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
+                                                                     @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -51,14 +53,14 @@ public class TalentBookingController {
           produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<UUID>> create(JwtAuthenticationToken token, HttpServletRequest request,
                                                         @PathVariable("talent_uid") UUID talentUid,
-                                                        @RequestBody @Valid BookingDto bookingDto) {
+                                                        @RequestBody @Valid CreateBookingDto createBookingDto) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.create(talentUid, bookingDto)
+    return  CompletableFuture.completedFuture(bookingService.createForTalent(talentUid, createBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
                     .body(newBookingDto)
@@ -73,14 +75,14 @@ public class TalentBookingController {
           value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, @PathVariable("uid") UUID uid,
                                                         @PathVariable("talent_uid") UUID talentUid,
-                                                        @RequestBody @Valid BookingDto bookingDto) {
+                                                        @RequestBody @Valid UpdateBookingDto updateBookingDto) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.update(talentUid, uid, bookingDto)
+    return  CompletableFuture.completedFuture(bookingService.update(talentUid, uid, updateBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .ok()
                     .body(newBookingDto)

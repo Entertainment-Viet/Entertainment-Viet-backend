@@ -1,13 +1,12 @@
 package com.EntertainmentViet.backend.features.organizer.boundary;
 
-import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.booking.dao.CategoryRepository;
-import com.EntertainmentViet.backend.features.booking.dto.JobDetailMapper;
+import com.EntertainmentViet.backend.features.booking.dao.jobdetail.CategoryRepository;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.JobOfferMapper;

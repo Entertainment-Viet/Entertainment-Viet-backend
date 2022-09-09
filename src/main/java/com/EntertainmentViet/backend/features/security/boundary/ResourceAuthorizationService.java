@@ -4,10 +4,11 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
-import com.EntertainmentViet.backend.features.booking.api.CategoryController;
-import com.EntertainmentViet.backend.features.booking.api.OrganizerBookingController;
-import com.EntertainmentViet.backend.features.booking.api.TalentBookingController;
+import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
+import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
+import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.*;
+import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
 import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
 import com.EntertainmentViet.backend.features.security.roles.BookingRole;

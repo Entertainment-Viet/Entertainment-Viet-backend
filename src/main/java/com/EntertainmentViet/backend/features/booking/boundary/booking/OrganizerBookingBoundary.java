@@ -1,13 +1,13 @@
-package com.EntertainmentViet.backend.features.booking.boundary;
+package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
-import com.EntertainmentViet.backend.features.booking.dto.BookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface OrganizerBookingBoundary {
 
-    List<BookingDto> listBooking(UUID organizerId);
+    List<ReadBookingDto> listBooking(UUID organizerId);
 
     boolean acceptBooking(UUID organizerId, UUID bookingId);
 

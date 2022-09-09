@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.booking.dto;
+package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

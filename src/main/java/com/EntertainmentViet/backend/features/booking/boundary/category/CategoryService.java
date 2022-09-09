@@ -1,16 +1,14 @@
-package com.EntertainmentViet.backend.features.booking.boundary;
+package com.EntertainmentViet.backend.features.booking.boundary.category;
 
-import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.features.booking.dao.CategoryRepository;
-import com.EntertainmentViet.backend.features.booking.dto.CategoryDto;
-import com.EntertainmentViet.backend.features.booking.dto.CategoryMapper;
+import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

@@ -5,15 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
 public class CreatedTalentDto {
 
+  @NotNull
   private String username;
 
-  private String password; // TODO encryption this
+  @NotNull
+  private String password;
 
   private String displayName;
 
