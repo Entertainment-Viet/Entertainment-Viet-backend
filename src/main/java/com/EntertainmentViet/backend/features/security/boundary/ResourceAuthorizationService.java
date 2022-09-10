@@ -104,7 +104,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.VERIFY_ORGANIZER.name())
             .mvcMatchers(HttpMethod.GET , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
-            .hasAuthority(OrganizerRole.SELF_READ_ORGANIZER.name())
+            .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
             .mvcMatchers(HttpMethod.PUT , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
@@ -177,7 +177,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET , ofPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.BROWSE_TALENT.name())
             .mvcMatchers(HttpMethod.GET , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
-            .hasAuthority(TalentRole.SELF_READ_TALENT.name())
+            .hasAuthority(TalentRole.READ_TALENT.name())
             .mvcMatchers(HttpMethod.PUT , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 

@@ -17,6 +17,11 @@
     "TALENT_WRITE_ACCESS",
     "TALENT_PAYMENT_ACCESS"
   ],
+  "clientRoles": {
+    "backend": [
+        "ROOT"
+    ]
+  },
   "credentials": [
     {
       "type": "password",

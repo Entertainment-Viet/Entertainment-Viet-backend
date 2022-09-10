@@ -6,16 +6,20 @@
       "client": {
         "backend": [
             "VERIFY_ORGANIZER",
-            "SELF_READ_ORGANIZER",
+            "READ_ORGANIZER",
+            "READ_ORGANIZER_DETAIL",
             "BROWSE_JOBOFFER",
             "READ_JOBOFFER",
             "BROWSE_EVENT",
             "READ_EVENT",
             "BROWSE_EVENT_APPLICANT",
             "BROWSE_BOOKING_ORGANIZER",
+            "BROWSE_BOOKING_ORGANIZER_DETAIL",
+            "BROWSE_BOOKING_TALENT",
             "READ_BOOKING",
             "READ_CATEGORY",
             "BROWSE_TALENT",
+            "READ_TALENT",
             "BROWSE_PACKAGE"
         ]
       }
@@ -74,15 +78,19 @@
       "client": {
         "backend": [
             "VERIFY_TALENT",
-            "SELF_READ_TALENT",
+            "READ_TALENT",
+            "READ_TALENT_DETAIL",
             "BROWSE_PACKAGE",
             "READ_PACKAGE",
             "BROWSE_PACKAGE_ORDER",
             "BROWSE_BOOKING_TALENT",
+            "BROWSE_BOOKING_TALENT_DETAIL",
+            "BROWSE_BOOKING_ORGANIZER",
             "READ_BOOKING",
             "BROWSE_ADVERTISEMENT",
             "READ_ADVERTISEMENT",
-            "READ_CATEGORY"
+            "READ_CATEGORY",
+            "READ_ORGANIZER"
         ]
       }
     }
@@ -141,6 +149,7 @@
       "realm": null,
       "client": {
         "backend": [
+            "READ_ORGANIZER_DETAIL",
             "ADMIN_BROWSE_ORGANIZER"
         ]
       }
@@ -175,6 +184,7 @@
       "realm": null,
       "client": {
         "backend": [
+            "READ_TALENT_DETAIL",
             "ADMIN_BROWSE_TALENT",
             "ADMIN_BROWSE_ADVERTISEMENT"
         ]
