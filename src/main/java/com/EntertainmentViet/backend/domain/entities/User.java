@@ -38,7 +38,7 @@ import java.time.Instant;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class})
-public abstract class User extends Account implements Auditable {
+public abstract class  User extends Account implements Auditable {
 
   private String phoneNumber;
 

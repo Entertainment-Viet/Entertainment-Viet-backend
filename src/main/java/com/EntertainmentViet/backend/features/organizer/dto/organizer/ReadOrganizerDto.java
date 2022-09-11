@@ -1,8 +1,10 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.common.dto.UserDto;
+import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
+import com.EntertainmentViet.backend.features.organizer.dto.event.EventDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,9 +17,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class OrganizerDto extends UserDto {
+public class ReadOrganizerDto extends ReadUserDto {
 
-  private List<JobOfferDto> jobOffers;
+  private List<ReadJobOfferDto> jobOffers;
 
   private List<EventDto> events;
 

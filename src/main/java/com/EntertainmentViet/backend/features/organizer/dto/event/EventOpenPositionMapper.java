@@ -1,8 +1,9 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

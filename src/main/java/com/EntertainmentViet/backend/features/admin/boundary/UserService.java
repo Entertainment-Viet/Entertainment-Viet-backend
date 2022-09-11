@@ -4,9 +4,9 @@ import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
 import com.EntertainmentViet.backend.features.admin.dto.CreatedTalentDto;
-import com.EntertainmentViet.backend.features.organizer.boundary.OrganizerBoundary;
-import com.EntertainmentViet.backend.features.admin.dto.CreatedOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.OrganizerDto;
+import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
 import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
@@ -44,12 +44,13 @@ public class UserService implements UserBoundary {
     var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var organizerDto = OrganizerDto.builder()
+      var organizerDto = UpdateOrganizerDto.builder()
           .displayName(createdOrganizerDto.getDisplayName())
           .email(createdOrganizerDto.getEmail())
           .phoneNumber(createdOrganizerDto.getPhoneNumber())
           .address(createdOrganizerDto.getAddress())
           .bio(createdOrganizerDto.getBio())
+          .extensions(createdOrganizerDto.getExtensions())
           .build();
 
       return organizerService.create(organizerDto, newUid.get());

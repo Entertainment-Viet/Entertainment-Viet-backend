@@ -1,6 +1,6 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.joboffer;
 
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailDto;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @SuperBuilder
 @Getter
 @Setter
-public class JobOfferDto extends IdentifiableDto {
+public class ReadJobOfferDto extends IdentifiableDto {
 
   private String name;
 
@@ -21,7 +21,7 @@ public class JobOfferDto extends IdentifiableDto {
 
   private Integer quantity;
 
-  private JobDetailDto jobDetail;
+  private ReadJobDetailDto jobDetail;
 
   private UUID organizerId;
 }

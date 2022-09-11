@@ -11,7 +11,9 @@ import java.time.Instant;
 @SuperBuilder
 @Getter
 @Setter
-public abstract class UserDto extends AccountDto {
+public abstract class ReadUserDto extends IdentifiableDto {
+
+  private String displayName;
 
   private String phoneNumber;
 

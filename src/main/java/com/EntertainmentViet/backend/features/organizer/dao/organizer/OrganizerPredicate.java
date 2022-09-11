@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.dao;
+package com.EntertainmentViet.backend.features.organizer.dao.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.admin.QOrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;

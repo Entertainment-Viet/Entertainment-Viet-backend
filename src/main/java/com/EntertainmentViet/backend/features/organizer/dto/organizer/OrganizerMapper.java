@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
@@ -8,6 +8,8 @@ import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -28,19 +30,25 @@ import java.util.*;
   config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id"}) // TODO: enable jobOffers source mapping
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "shoppingCart", source = "shoppingCart", qualifiedByName = "toShoppingCartUid")
-  public abstract OrganizerDto toDto(Organizer organizer);
+  public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
-  @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
+  @Mapping(target = "uid", ignore = true)
+  @Mapping(target = "jobOffers", ignore = true)
+  @Mapping(target = "events", ignore = true)
+  @Mapping(target = "bookings", ignore = true)
+  @Mapping(target = "feedbacks", ignore = true)
+  @Mapping(target = "shoppingCart", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  @Mapping(target = "userState", ignore = true)
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-  @Mapping(target = "shoppingCart", source = "shoppingCart", qualifiedByName = "toShoppingCart")
-  public abstract Organizer toModel(OrganizerDto organizerDto);
+  public abstract Organizer toModel(UpdateOrganizerDto updateOrganizerDto);
 
   @Named("toUserStateKey")
   public String toUserStateKey(UserState userState) {

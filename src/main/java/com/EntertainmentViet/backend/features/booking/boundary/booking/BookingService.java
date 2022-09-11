@@ -28,14 +28,6 @@ public class BookingService implements BookingBoundary {
 
     private final BookingMapper bookingMapper;
 
-    private final OrganizerRepository organizerRepository;
-
-    private final TalentRepository talentRepository;
-
-    private final JobDetailMapper jobDetailMapper;
-
-    private final CategoryRepository categoryRepository;
-
     @Override
     public Optional<ReadBookingDto> findByUid(UUID ownerUid, UUID uid) {
         return bookingRepository.findByUid(uid)

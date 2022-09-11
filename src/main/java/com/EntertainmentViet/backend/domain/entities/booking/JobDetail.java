@@ -94,7 +94,7 @@ public class JobDetail implements Serializable {
         .build();
   }
 
-  public void updateInfo(JobDetail newData) {
+  public JobDetail updateInfo(JobDetail newData) {
     if (newData.getCategory() != null) {
       setCategory(newData.getCategory());
     }
@@ -113,5 +113,6 @@ public class JobDetail implements Serializable {
     if (newData.getNote() != null) {
       setNote(newData.getNote());
     }
+    return this;
   }
 }

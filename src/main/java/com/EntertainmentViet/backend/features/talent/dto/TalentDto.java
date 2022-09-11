@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.talent.dto;
 
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.common.dto.UserDto;
+import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TalentDto extends UserDto {
+public class TalentDto extends ReadUserDto {
 
     private List<ReviewDto> reviews;
 

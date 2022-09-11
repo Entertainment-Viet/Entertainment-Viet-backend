@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.dao;
+package com.EntertainmentViet.backend.features.organizer.dao.joboffer;
 
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;

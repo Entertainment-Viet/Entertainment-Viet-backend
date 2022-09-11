@@ -166,4 +166,44 @@ public class Organizer extends User {
     talent.addBooking(newBooking);
   }
 
+  public Organizer updateInfo(Organizer newData) {
+    if (newData.getPhoneNumber() != null) {
+      setPhoneNumber(newData.getPhoneNumber());
+    }
+    if (newData.getEmail() != null) {
+      setEmail(newData.getEmail());
+    }
+    if (newData.getAddress() != null) {
+      setAddress(newData.getAddress());
+    }
+    if (newData.getBio() != null) {
+      setBio(newData.getBio());
+    }
+    if (newData.getExtensions() != null) {
+      setExtensions(newData.getExtensions());
+    }
+    if (newData.getDisplayName() != null) {
+      setDisplayName(newData.getDisplayName());
+    }
+    if (newData.getJobOffers() != null) {
+      setJobOffers(newData.getJobOffers());
+    }
+    if (newData.getBookings() != null) {
+      setBookings(newData.getBookings());
+    }
+    if (newData.getEvents() != null) {
+      setEvents(newData.getEvents());
+    }
+    if (newData.getFeedbacks() != null) {
+      setFeedbacks(newData.getFeedbacks());
+    }
+    if (newData.getFeedbacks() != null) {
+      setFeedbacks(newData.getFeedbacks());
+    }
+    if (newData.getShoppingCart() != null) {
+      setShoppingCart(newData.getShoppingCart());
+    }
+    return this;
+  }
+
 }

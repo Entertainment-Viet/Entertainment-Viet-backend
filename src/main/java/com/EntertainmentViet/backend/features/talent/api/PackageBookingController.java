@@ -31,7 +31,7 @@ public class PackageBookingController {
                                                                              @PathVariable("talent_uid") UUID talentUid,
                                                                              @PathVariable("package_uid") UUID packageUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -47,7 +47,7 @@ public class PackageBookingController {
                                                                           @PathVariable("talent_uid") UUID talentUid,
                                                                           @PathVariable("package_uid") UUID packageUid) {
 
-    if (!createPackageBookingDto.getOrganizerId().equals(RestUtils.getUidFromToken(token))) {
+    if (!createPackageBookingDto.getOrganizerId().equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to proceed with this api. Require update permission to organizer with id '%s'", createPackageBookingDto.getOrganizerId()));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -64,7 +64,7 @@ public class PackageBookingController {
                                                                @PathVariable("package_uid") UUID packageUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -81,7 +81,7 @@ public class PackageBookingController {
                                                                @PathVariable("package_uid") UUID packageUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

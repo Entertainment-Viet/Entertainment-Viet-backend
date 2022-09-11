@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
-import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
+import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.dao.PackageRepository;
 import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
 import lombok.RequiredArgsConstructor;

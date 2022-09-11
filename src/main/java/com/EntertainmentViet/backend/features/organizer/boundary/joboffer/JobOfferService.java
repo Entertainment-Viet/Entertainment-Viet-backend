@@ -1,16 +1,18 @@
-package com.EntertainmentViet.backend.features.organizer.boundary;
+package com.EntertainmentViet.backend.features.organizer.boundary.joboffer;
 
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.booking.dao.jobdetail.CategoryRepository;
+import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
-import com.EntertainmentViet.backend.features.organizer.dao.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.JobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.dto.JobOfferMapper;
-import com.EntertainmentViet.backend.features.organizer.dao.JobOfferRepository;
+import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
+import com.EntertainmentViet.backend.features.organizer.dao.joboffer.JobOfferRepository;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,20 +30,13 @@ public class JobOfferService implements JobOfferBoundary {
 
     private final JobOfferMapper jobOfferMapper;
 
-    private final JobDetailMapper jobDetailMapper;
-
-    private final CategoryRepository categoryRepository;
-
-    private final OrganizerRepository organizerRepository;
-
-
     @Override
-    public List<JobOfferDto> findByOrganizerUid(UUID uid) {
+    public List<ReadJobOfferDto> findByOrganizerUid(UUID uid) {
         return jobOfferRepository.findByOrganizerUid(uid).stream().map(jobOfferMapper::toDto).toList();
     }
 
     @Override
-    public Optional<JobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
+    public Optional<ReadJobOfferDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
         if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return Optional.empty();
@@ -55,29 +50,22 @@ public class JobOfferService implements JobOfferBoundary {
     }
 
     @Override
-    public Optional<UUID> create(JobOfferDto jobOfferDto, UUID organizerUid) {
-        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
-        JobDetail jobDetail = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
-        Category category = categoryRepository.findByUid(jobDetail.getCategory().getUid()).orElse(null);
+    public Optional<UUID> create(CreateJobOfferDto createJobOfferDto, UUID organizerUid) {
+        JobOffer jobOffer = jobOfferMapper.fromCreateDtoToModel(createJobOfferDto);
 
-        if (jobDetail == null || category == null || organizer == null) {
-            log.warn("Can not find required information to create new job-offer");
-            Optional.empty();
+        if (!isJobOfferBelongToOrganizerWithUid(jobOffer, organizerUid)) {
+            return Optional.empty();
         }
 
-        jobDetail.setCategory(category);
-        JobOffer jobOffer = jobOfferMapper.toModel(jobOfferDto);
-        jobOffer.setOrganizer(organizer);
-        jobOffer.setJobDetail(jobDetail);
-        jobOffer.setId(null);
-        jobOffer.setUid(null);
+        if (!isJobOfferValid(jobOffer, organizerUid)) {
+            return Optional.empty();
+        }
 
-        var newJobOffer = jobOfferRepository.save(jobOffer);
-        return Optional.ofNullable(newJobOffer.getUid());
+        return Optional.ofNullable(jobOfferRepository.save(jobOffer).getUid());
     }
 
     @Override
-    public Optional<UUID> update(JobOfferDto jobOfferDto, UUID organizerUid, UUID uid) {
+    public Optional<UUID> update(UpdateJobOfferDto updateJobOfferDto, UUID organizerUid, UUID uid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
         if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return Optional.empty();
@@ -87,25 +75,9 @@ public class JobOfferService implements JobOfferBoundary {
             return Optional.empty();
         }
 
-        JobDetail jobDetail = jobOffer.getJobDetail();
-        Category category = categoryRepository.findByUid(jobOfferDto.getJobDetail().getCategory().getUid()).orElse(null);
-        jobDetail.setCategory(category);
-
-        JobDetail jobDetailUpdate = jobDetailMapper.toModel(jobOfferDto.getJobDetail());
-        jobDetail.setPrice(jobDetailUpdate.getPrice());
-        jobDetail.setWorkType(jobDetailUpdate.getWorkType());
-        jobDetail.setPerformanceTime(jobDetailUpdate.getPerformanceTime());
-        jobDetail.setPerformanceDuration(jobDetailUpdate.getPerformanceDuration());
-        jobDetail.setNote(jobDetailUpdate.getNote());
-        jobDetail.setExtensions(jobDetailUpdate.getExtensions());
-        jobDetail.setLocation(jobDetailUpdate.getLocation());
-
-        jobOffer.setJobDetail(jobDetail);
-        jobOffer.setName(jobOfferDto.getName());
-        jobOffer.setIsActive(jobOfferDto.getIsActive());
-        jobOffer.setQuantity(jobOfferDto.getQuantity());
-        var newJobOffer = jobOfferRepository.save(jobOffer);
-        return Optional.ofNullable(newJobOffer.getUid());
+        JobOffer newJobOffer = jobOfferMapper.fromUpdateDtoToModel(updateJobOfferDto);
+        jobOffer.updateInfo(newJobOffer);
+        return Optional.ofNullable(jobOfferRepository.save(jobOffer).getUid());
     }
 
     @Override
@@ -135,6 +107,7 @@ public class JobOfferService implements JobOfferBoundary {
         }
         return true;
     }
+
     private boolean isJobOfferBelongToOrganizerWithUid(JobOffer jobOffer, UUID organizerUid) {
         if (jobOffer.getOrganizer() == null) {
             log.warn(String.format("Can not find organizer owning the joboffer with id '%s'", jobOffer.getUid()));
@@ -144,6 +117,18 @@ public class JobOfferService implements JobOfferBoundary {
         Organizer organizer = jobOffer.getOrganizer();
         if (!organizer.getUid().equals(organizerUid)) {
             log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", jobOffer.getUid(), organizerUid));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isJobOfferValid(JobOffer jobOffer, UUID organizerUid) {
+        if (jobOffer.getOrganizer() == null) {
+            log.warn(String.format("Can not find organizer with id '%s' to create joboffer", organizerUid));
+            return false;
+        }
+        if (jobOffer.getJobDetail() == null || jobOffer.getJobDetail().getCategory() == null) {
+            log.warn("Can not setup new jobdetail to create joboffer");
             return false;
         }
         return true;

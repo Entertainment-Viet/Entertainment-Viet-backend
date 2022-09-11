@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.api;
+package com.EntertainmentViet.backend.features.organizer.api.event;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

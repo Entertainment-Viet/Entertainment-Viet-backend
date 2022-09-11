@@ -55,7 +55,7 @@ public class PackageController {
                                                         @RequestBody @Valid PackageDto packageDto,
                                                         @PathVariable("talent_uid") UUID talentUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -76,7 +76,7 @@ public class PackageController {
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, @RequestBody @Valid PackageDto packageDto,
                                                         @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -94,7 +94,7 @@ public class PackageController {
   public CompletableFuture<ResponseEntity<HttpStatus>> delete(JwtAuthenticationToken token,
                                            @PathVariable("uid") UUID uid, @PathVariable("talent_uid") UUID talentUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

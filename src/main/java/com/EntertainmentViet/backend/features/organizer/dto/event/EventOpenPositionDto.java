@@ -1,7 +1,8 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class EventOpenPositionDto extends IdentifiableDto {
 
   private UUID eventId;
 
-  private JobOfferDto jobOffer;
+  private ReadJobOfferDto jobOffer;
 
   private List<ReadBookingDto> applicants;
 }

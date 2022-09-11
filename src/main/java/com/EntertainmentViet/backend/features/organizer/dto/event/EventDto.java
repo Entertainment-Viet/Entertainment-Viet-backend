@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.dto;
+package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;

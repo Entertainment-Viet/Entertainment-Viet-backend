@@ -1,9 +1,8 @@
-package com.EntertainmentViet.backend.features.organizer.dao;
+package com.EntertainmentViet.backend.features.organizer.dao.joboffer;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
-import com.EntertainmentViet.backend.features.common.utils.QueryUtils;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
 
