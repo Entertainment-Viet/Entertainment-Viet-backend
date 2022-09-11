@@ -34,7 +34,7 @@ public class TalentBookingController {
   public CompletableFuture<ResponseEntity<BookingDto>> findByUid(JwtAuthenticationToken token,
                                                                  @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
-    if (talentUid != RestUtils.getUidFromToken(token)) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -53,7 +53,7 @@ public class TalentBookingController {
                                                         @PathVariable("talent_uid") UUID talentUid,
                                                         @RequestBody @Valid BookingDto bookingDto) {
 
-    if (talentUid != RestUtils.getUidFromToken(token)) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -75,7 +75,7 @@ public class TalentBookingController {
                                                         @PathVariable("talent_uid") UUID talentUid,
                                                         @RequestBody @Valid BookingDto bookingDto) {
 
-    if (talentUid != RestUtils.getUidFromToken(token)) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token))) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
