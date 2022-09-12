@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.dto.booking;
 
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.UpdateJobDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,5 +16,5 @@ import javax.validation.constraints.NotNull;
 public class UpdateBookingDto {
 
     @NotNull
-    private CreateJobDetailDto jobDetail;
+    private UpdateJobDetailDto jobDetail;
 }

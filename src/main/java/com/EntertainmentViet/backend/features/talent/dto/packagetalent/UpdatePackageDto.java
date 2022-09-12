@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
+import com.EntertainmentViet.backend.features.booking.dto.jobdetail.UpdateJobDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,5 +16,5 @@ public class UpdatePackageDto {
 
   private Boolean isActive;
 
-  private CreateJobDetailDto jobDetail;
+  private UpdateJobDetailDto jobDetail;
 }

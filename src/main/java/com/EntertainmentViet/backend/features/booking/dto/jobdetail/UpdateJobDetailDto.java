@@ -13,21 +13,16 @@ import java.util.UUID;
 @SuperBuilder
 @Getter
 @Setter
-public class CreateJobDetailDto {
+public class UpdateJobDetailDto {
 
-  @NotNull
   private UUID categoryUid;
 
-  @NotNull
   private String workType;
 
-  @NotNull
   private PriceDto price;
 
-  @NotNull
   private Long performanceDuration;
 
-  @NotNull
   private Instant performanceTime;
 
   private String location;

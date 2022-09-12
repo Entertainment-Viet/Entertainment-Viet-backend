@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -15,9 +16,11 @@ import java.util.UUID;
 @Setter
 public class CreateJobOfferDto {
 
+  @NotNull
   private String name;
 
   private Integer quantity;
 
+  @NotNull
   private CreateJobDetailDto jobDetail;
 }
