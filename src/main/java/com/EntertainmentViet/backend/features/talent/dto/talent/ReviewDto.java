@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import lombok.Getter;

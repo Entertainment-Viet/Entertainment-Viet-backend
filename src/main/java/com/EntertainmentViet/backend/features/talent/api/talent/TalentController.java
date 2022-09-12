@@ -1,10 +1,11 @@
-package com.EntertainmentViet.backend.features.talent.api;
+package com.EntertainmentViet.backend.features.talent.api.talent;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
+import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class TalentController {
   private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<TalentDto>> findByUid(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(@PathVariable("uid") UUID uid) {
 
     return CompletableFuture.completedFuture(talentService.findByUid(uid)
             .map( talentDto -> ResponseEntity
@@ -69,14 +70,14 @@ public class TalentController {
           produces = MediaType.APPLICATION_JSON_VALUE,
           value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, HttpServletRequest request,
-                                                        @PathVariable("uid") UUID uid, @RequestBody @Valid TalentDto talentDto) {
+                                                        @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentDto updateTalentDto) {
 
     if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(talentService.update(talentDto, uid)
+    return  CompletableFuture.completedFuture(talentService.update(updateTalentDto, uid)
             .map(updatedTalentUid -> ResponseEntity
                     .ok()
                     .body(updatedTalentUid)

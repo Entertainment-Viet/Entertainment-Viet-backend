@@ -197,9 +197,6 @@ public class Organizer extends User {
     if (newData.getFeedbacks() != null) {
       setFeedbacks(newData.getFeedbacks());
     }
-    if (newData.getFeedbacks() != null) {
-      setFeedbacks(newData.getFeedbacks());
-    }
     if (newData.getShoppingCart() != null) {
       setShoppingCart(newData.getShoppingCart());
     }

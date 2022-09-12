@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.organizer.dto.joboffer;
+package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
 import lombok.Getter;
@@ -6,17 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
-@NoArgsConstructor
 @SuperBuilder
+@NoArgsConstructor
 @Getter
 @Setter
-public class UpdateJobOfferDto {
+public class UpdatePackageDto {
 
   private String name;
 
-  private Integer quantity;
+  private Boolean isActive;
 
   private CreateJobDetailDto jobDetail;
 }

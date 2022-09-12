@@ -20,6 +20,4 @@ public class CreateJobOfferDto {
   private Integer quantity;
 
   private CreateJobDetailDto jobDetail;
-
-  private UUID organizerId;
 }

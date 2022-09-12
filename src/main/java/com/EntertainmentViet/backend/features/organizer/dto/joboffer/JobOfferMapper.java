@@ -16,9 +16,6 @@ import java.util.UUID;
 @Mapper(uses = {JobDetailMapper.class}, config = MappingConfig.class)
 public abstract class JobOfferMapper {
 
-    @Autowired
-    private OrganizerRepository organizerRepository;
-
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "organizerId", source = "organizer", qualifiedByName = "toOrganizerUid")
     public abstract ReadJobOfferDto toDto(JobOffer jobOffer);
@@ -32,23 +29,18 @@ public abstract class JobOfferMapper {
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", constant = "true")
-    @Mapping(target = "organizer", source = "organizerId", qualifiedByName = "toOrganizerEntity")
+    @Mapping(target = "organizer", ignore = true)
     public abstract JobOffer fromCreateDtoToModel(CreateJobOfferDto createJobOfferDto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", ignore = true)
-    @Mapping(target = "organizer", source = "organizerId", qualifiedByName = "toOrganizerEntity")
+    @Mapping(target = "organizer", ignore = true)
     public abstract JobOffer fromUpdateDtoToModel(UpdateJobOfferDto updateJobOfferDto);
 
 
     @Named("toOrganizerUid")
     public UUID toOrganizerUid(Organizer organizer) {
         return organizer != null ? organizer.getUid() : null;
-    }
-
-    @Named("toOrganizerEntity")
-    public Organizer toOrganizerEntity(UUID organizerUid) {
-        return organizerRepository.findByUid(organizerUid).orElse(null);
     }
 }

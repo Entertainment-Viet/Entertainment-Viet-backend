@@ -28,6 +28,8 @@ public class JobOfferService implements JobOfferBoundary {
 
     private final JobOfferRepository jobOfferRepository;
 
+    private final OrganizerRepository organizerRepository;
+
     private final JobOfferMapper jobOfferMapper;
 
     @Override
@@ -51,13 +53,11 @@ public class JobOfferService implements JobOfferBoundary {
 
     @Override
     public Optional<UUID> create(CreateJobOfferDto createJobOfferDto, UUID organizerUid) {
+        Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferMapper.fromCreateDtoToModel(createJobOfferDto);
+        jobOffer.setOrganizer(organizer);
 
-        if (!isJobOfferBelongToOrganizerWithUid(jobOffer, organizerUid)) {
-            return Optional.empty();
-        }
-
-        if (!isJobOfferValid(jobOffer, organizerUid)) {
+        if (!isJobOfferValid(jobOffer)) {
             return Optional.empty();
         }
 
@@ -67,6 +67,7 @@ public class JobOfferService implements JobOfferBoundary {
     @Override
     public Optional<UUID> update(UpdateJobOfferDto updateJobOfferDto, UUID organizerUid, UUID uid) {
         JobOffer jobOffer = jobOfferRepository.findByUid(uid).orElse(null);
+
         if (!isJobOfferWithUidExist(jobOffer, uid)) {
             return Optional.empty();
         }
@@ -91,29 +92,19 @@ public class JobOfferService implements JobOfferBoundary {
             return false;
         }
 
-        try {
-            jobOfferRepository.deleteById(jobOffer.getId());
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        jobOfferRepository.deleteById(jobOffer.getId());
         return true;
     }
 
     private boolean isJobOfferWithUidExist(JobOffer jobOffer, UUID uid) {
         if (jobOffer == null) {
-            log.warn(String.format("Can not find job-offer with id '%s'", uid));
+            log.warn(String.format("Can not find jobOffer with id '%s'", uid));
             return false;
         }
         return true;
     }
 
     private boolean isJobOfferBelongToOrganizerWithUid(JobOffer jobOffer, UUID organizerUid) {
-        if (jobOffer.getOrganizer() == null) {
-            log.warn(String.format("Can not find organizer owning the joboffer with id '%s'", jobOffer.getUid()));
-            return false;
-        }
-
         Organizer organizer = jobOffer.getOrganizer();
         if (!organizer.getUid().equals(organizerUid)) {
             log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", jobOffer.getUid(), organizerUid));
@@ -122,13 +113,14 @@ public class JobOfferService implements JobOfferBoundary {
         return true;
     }
 
-    private boolean isJobOfferValid(JobOffer jobOffer, UUID organizerUid) {
+    private boolean isJobOfferValid(JobOffer jobOffer) {
         if (jobOffer.getOrganizer() == null) {
-            log.warn(String.format("Can not find organizer with id '%s' to create joboffer", organizerUid));
+            log.warn(String.format("Can not find organizer owning the jobOffer with id '%s'", jobOffer.getUid()));
             return false;
         }
+
         if (jobOffer.getJobDetail() == null || jobOffer.getJobDetail().getCategory() == null) {
-            log.warn("Can not setup new jobdetail to create joboffer");
+            log.warn(String.format("Can not populate jobDetail information for jobOffer with id '%s'", jobOffer.getUid()));
             return false;
         }
         return true;

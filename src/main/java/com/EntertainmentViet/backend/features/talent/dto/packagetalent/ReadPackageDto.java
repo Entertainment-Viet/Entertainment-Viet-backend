@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PackageDto extends IdentifiableDto {
+public class ReadPackageDto extends IdentifiableDto {
 
   private String name;
 

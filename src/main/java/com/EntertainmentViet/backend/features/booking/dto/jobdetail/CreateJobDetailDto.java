@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
-import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

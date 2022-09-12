@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

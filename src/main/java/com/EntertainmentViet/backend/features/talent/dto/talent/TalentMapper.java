@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
@@ -26,14 +26,18 @@ public abstract class TalentMapper {
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
-    public abstract TalentDto toDto(Talent talent);
+    public abstract ReadTalentDto toDto(Talent talent);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"bio", "reviews", "bookings", "feedbacks"})
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserState")
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
+    @Mapping(target = "feedbacks", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "userState", ignore = true)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-    public abstract Talent toModel(TalentDto talentDto);
+    public abstract Talent toModel(UpdateTalentDto updateTalentDto);
 
 
     @Named("toUserStateKey")

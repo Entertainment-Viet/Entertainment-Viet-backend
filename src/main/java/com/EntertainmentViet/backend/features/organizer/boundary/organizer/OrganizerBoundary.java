@@ -10,7 +10,7 @@ public interface OrganizerBoundary {
 
   Optional<ReadOrganizerDto> findByUid(UUID uid);
 
-  Optional<UUID> create(UpdateOrganizerDto updateOrganizerDto, UUID uid);
+  Optional<UUID> create(UpdateOrganizerDto createOrganizerDto, UUID uid);
 
   Optional<UUID> update(UpdateOrganizerDto updateOrganizerDto, UUID uid);
 

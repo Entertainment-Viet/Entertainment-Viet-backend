@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.features.admin.api;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
-import com.EntertainmentViet.backend.features.admin.dto.CreatedTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
 import lombok.RequiredArgsConstructor;

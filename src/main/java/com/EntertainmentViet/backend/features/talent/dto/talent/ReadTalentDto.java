@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TalentDto extends ReadUserDto {
+public class ReadTalentDto extends ReadUserDto {
 
     private List<ReviewDto> reviews;
 

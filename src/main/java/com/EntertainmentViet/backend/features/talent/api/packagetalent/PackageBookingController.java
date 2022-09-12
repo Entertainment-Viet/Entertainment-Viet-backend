@@ -1,9 +1,9 @@
-package com.EntertainmentViet.backend.features.talent.api;
+package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.talent.boundary.PackageBookingBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
+import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBookingBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageBookingDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

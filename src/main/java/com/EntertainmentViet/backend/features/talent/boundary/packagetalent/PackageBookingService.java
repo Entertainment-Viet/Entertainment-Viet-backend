@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.boundary;
+package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
@@ -7,8 +7,8 @@ import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.talent.dao.PackageRepository;
-import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
+import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageBookingDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

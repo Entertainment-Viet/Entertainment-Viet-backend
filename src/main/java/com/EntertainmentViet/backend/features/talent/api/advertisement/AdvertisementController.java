@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.api;
+package com.EntertainmentViet.backend.features.talent.api.advertisement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

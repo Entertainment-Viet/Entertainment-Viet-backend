@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dao;
+package com.EntertainmentViet.backend.features.talent.dao.talent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiableRepository;

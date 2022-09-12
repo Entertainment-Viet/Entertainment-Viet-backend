@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dao;
+package com.EntertainmentViet.backend.features.talent.dao.packagetalent;
 
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;

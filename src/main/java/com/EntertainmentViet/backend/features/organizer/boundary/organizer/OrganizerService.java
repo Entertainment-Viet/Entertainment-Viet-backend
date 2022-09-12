@@ -29,9 +29,8 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
-  public Optional<UUID> create(UpdateOrganizerDto updateOrganizerDto, UUID uid) {
-    // TODO add check not exist username
-    var newOrganizer = organizerMapper.toModel(updateOrganizerDto);
+  public Optional<UUID> create(UpdateOrganizerDto createOrganizerDto, UUID uid) {
+    var newOrganizer = organizerMapper.toModel(createOrganizerDto);
     newOrganizer.setUid(uid);
     newOrganizer.setUserState(UserState.GUEST);
 

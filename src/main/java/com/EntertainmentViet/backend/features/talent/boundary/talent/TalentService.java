@@ -1,11 +1,12 @@
-package com.EntertainmentViet.backend.features.talent.boundary;
+package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.features.talent.dao.TalentRepository;
-import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
-import com.EntertainmentViet.backend.features.talent.dto.TalentMapper;
+import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.TalentMapper;
+import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,28 +26,23 @@ public class TalentService implements TalentBoundary {
     private final TalentMapper talentMapper;
 
     @Override
-    public Optional<TalentDto> findByUid(UUID uid) {
+    public Optional<ReadTalentDto> findByUid(UUID uid) {
         return talentRepository.findByUid(uid).map(talentMapper::toDto);
     }
     @Override
-    public Optional<UUID> create(TalentDto talentDto, UUID uid) {
-        // TODO add check not exist username
+    public Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid) {
 
-        var newTalent = talentMapper.toModel(talentDto);
+        var newTalent = talentMapper.toModel(createTalentDto);
         newTalent.setUid(uid);
-        newTalent.setId(null);
-        newTalent.setReviews(Collections.emptyList());
-        newTalent.setBookings(Collections.emptyList());
-        newTalent.setFeedbacks(Collections.emptyList());
         newTalent.setUserState(UserState.GUEST);
 
         return Optional.ofNullable(talentRepository.save(newTalent).getUid());
     }
 
     @Override
-    public Optional<UUID> update(TalentDto talentDto, UUID uid){
+    public Optional<UUID> update(UpdateTalentDto updateTalentDto, UUID uid){
         return talentRepository.findByUid(uid)
-                .map(talent -> updateTalentInfo(talent, talentMapper.toModel(talentDto)))
+                .map(talent -> talent.updateInfo(talentMapper.toModel(updateTalentDto)))
                 .map(talentRepository::save)
                 .map(Identifiable::getUid);
     }
@@ -65,15 +61,5 @@ public class TalentService implements TalentBoundary {
         }
         talentRepository.save(talent);
         return true;
-    }
-
-    private Talent updateTalentInfo(Talent talent, Talent newInfo) {
-        talent.setPhoneNumber(newInfo.getPhoneNumber());
-        talent.setEmail(newInfo.getEmail());
-        talent.setAddress(newInfo.getAddress());
-        talent.setBio(newInfo.getBio());
-        talent.setExtensions(newInfo.getExtensions());
-        talent.setDisplayName(newInfo.getDisplayName());
-        return talent;
     }
 }

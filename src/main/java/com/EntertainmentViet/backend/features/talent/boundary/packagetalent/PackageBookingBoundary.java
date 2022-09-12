@@ -1,7 +1,7 @@
-package com.EntertainmentViet.backend.features.talent.boundary;
+package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.talent.dto.CreatePackageBookingDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageBookingDto;
 
 import java.util.List;
 import java.util.UUID;

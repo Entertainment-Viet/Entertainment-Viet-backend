@@ -3,14 +3,15 @@ package com.EntertainmentViet.backend.features.admin.boundary;
 import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
-import com.EntertainmentViet.backend.features.admin.dto.CreatedTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
-import com.EntertainmentViet.backend.features.talent.boundary.TalentBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.TalentDto;
+import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,12 +75,13 @@ public class UserService implements UserBoundary {
     var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var talentDto = TalentDto.builder()
+      var talentDto = UpdateTalentDto.builder()
           .displayName(createdTalentDto.getDisplayName())
           .email(createdTalentDto.getEmail())
           .phoneNumber(createdTalentDto.getPhoneNumber())
           .address(createdTalentDto.getAddress())
           .bio(createdTalentDto.getBio())
+          .extensions(createdTalentDto.getExtensions())
           .build();
 
       return talentService.create(talentDto, newUid.get());

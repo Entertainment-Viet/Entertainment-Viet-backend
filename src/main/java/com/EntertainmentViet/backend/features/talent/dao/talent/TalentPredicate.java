@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dao;
+package com.EntertainmentViet.backend.features.talent.dao.talent;
 
 import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;

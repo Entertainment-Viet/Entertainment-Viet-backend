@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto;
+package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
@@ -23,12 +23,20 @@ public abstract class PackageMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "talent"})
     @Mapping(target = "talentId", source = "talent", qualifiedByName = "toTalentId")
-    public abstract PackageDto toDto(Package talentPackage);
+    public abstract ReadPackageDto toDto(Package talentPackage);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"talentId"})
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isActive", constant = "true")
+    @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "orders", ignore = true)
+    public abstract Package fromCreateDtoToModel(CreatePackageDto createPackageDto);
+
+    @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "talent", ignore = true)
-    public abstract Package toModel(PackageDto packageDto);
+    @Mapping(target = "orders", ignore = true)
+    public abstract Package fromUpdateDtoToModel(UpdatePackageDto updatePackageDto);
 
     @Named("toTalentId")
     public UUID toTalentId(Talent talent) {

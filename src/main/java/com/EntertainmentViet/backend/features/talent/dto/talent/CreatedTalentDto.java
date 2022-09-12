@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.admin.dto;
+package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +28,6 @@ public class CreatedTalentDto {
   private String address;
 
   private String bio;
+
+  private String extensions;
 }
