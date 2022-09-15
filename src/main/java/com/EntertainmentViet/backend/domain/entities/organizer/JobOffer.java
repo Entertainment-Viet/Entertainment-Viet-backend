@@ -60,7 +60,7 @@ public class JobOffer extends Identifiable {
     return booking;
   }
 
-  public void updateInfo(JobOffer newData) {
+  public JobOffer updateInfo(JobOffer newData) {
     if (newData.getName() != null) {
       setName(newData.getName());
     }
@@ -73,5 +73,6 @@ public class JobOffer extends Identifiable {
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
     }
+    return this;
   }
 }

@@ -96,4 +96,17 @@ public class Package extends Identifiable {
             () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
         );
   }
+
+  public Package updateInfo(Package newData) {
+    if (newData.getName() != null) {
+      setName(newData.getName());
+    }
+    if (newData.getIsActive() != null) {
+      setIsActive(newData.getIsActive());
+    }
+    if (newData.getJobDetail() != null) {
+      jobDetail.updateInfo(newData.getJobDetail());
+    }
+    return this;
+  }
 }

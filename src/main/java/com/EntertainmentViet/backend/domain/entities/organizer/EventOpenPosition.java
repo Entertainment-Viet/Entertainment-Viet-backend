@@ -55,9 +55,10 @@ public class EventOpenPosition extends Identifiable {
     applicants.add(booking);
   }
 
-  public void updateInfo(EventOpenPosition newData) {
+  public EventOpenPosition updateInfo(EventOpenPosition newData) {
     if (newData.getJobOffer() != null) {
       jobOffer.updateInfo(newData.getJobOffer());
     }
+    return this;
   }
 }

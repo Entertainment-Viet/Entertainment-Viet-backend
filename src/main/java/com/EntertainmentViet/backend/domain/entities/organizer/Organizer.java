@@ -71,7 +71,7 @@ public class Organizer extends User {
 
   public void disableEvent(UUID eventUid) {
     events.stream()
-        .filter(event -> event.getUid() == eventUid)
+        .filter(event -> event.getUid().equals(eventUid))
         .findFirst()
         .ifPresent( event -> event.setIsActive(false));
   }
@@ -93,7 +93,7 @@ public class Organizer extends User {
 
   public void updateBookingInfo(UUID bookingUid, Booking newBookingInfo) {
     bookings.stream()
-        .filter(booking -> booking.getUid() == bookingUid)
+        .filter(booking -> booking.getUid().equals(bookingUid))
         .findAny()
         .ifPresentOrElse(
             booking -> {
@@ -108,6 +108,7 @@ public class Organizer extends User {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             booking -> booking.setStatus(BookingStatus.CONFIRMED),
@@ -164,6 +165,43 @@ public class Organizer extends User {
     Booking newBooking = jobOffer.sendOffer(talent);
     addBooking(newBooking);
     talent.addBooking(newBooking);
+  }
+
+  public Organizer updateInfo(Organizer newData) {
+    if (newData.getPhoneNumber() != null) {
+      setPhoneNumber(newData.getPhoneNumber());
+    }
+    if (newData.getEmail() != null) {
+      setEmail(newData.getEmail());
+    }
+    if (newData.getAddress() != null) {
+      setAddress(newData.getAddress());
+    }
+    if (newData.getBio() != null) {
+      setBio(newData.getBio());
+    }
+    if (newData.getExtensions() != null) {
+      setExtensions(newData.getExtensions());
+    }
+    if (newData.getDisplayName() != null) {
+      setDisplayName(newData.getDisplayName());
+    }
+    if (newData.getJobOffers() != null) {
+      setJobOffers(newData.getJobOffers());
+    }
+    if (newData.getBookings() != null) {
+      setBookings(newData.getBookings());
+    }
+    if (newData.getEvents() != null) {
+      setEvents(newData.getEvents());
+    }
+    if (newData.getFeedbacks() != null) {
+      setFeedbacks(newData.getFeedbacks());
+    }
+    if (newData.getShoppingCart() != null) {
+      setShoppingCart(newData.getShoppingCart());
+    }
+    return this;
   }
 
 }

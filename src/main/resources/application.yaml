@@ -21,6 +21,11 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:18080/auth/realms/ve-sso
+  jackson:
+    serialization:
+      WRITE_NULL_MAP_VALUES: false
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
 
 hibernate:
   hbm2ddl:
