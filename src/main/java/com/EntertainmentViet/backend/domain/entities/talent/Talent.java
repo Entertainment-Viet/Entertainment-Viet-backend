@@ -63,10 +63,24 @@ public class Talent extends User implements Advertisable {
     booking.setTalent(this);
   }
 
+  public void updateBookingInfo(UUID bookingUid, Booking newBookingInfo) {
+    bookings.stream()
+        .filter(booking -> booking.getUid().equals(bookingUid))
+        .findAny()
+        .ifPresentOrElse(
+            booking -> {
+              booking.updateInfo(newBookingInfo);
+              booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+            },
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
+  }
+
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.TALENT_PENDING))
+        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             booking -> booking.setStatus(BookingStatus.CONFIRMED),
@@ -77,7 +91,7 @@ public class Talent extends User implements Advertisable {
   public void rejectBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.TALENT_PENDING))
         .findAny()
         .ifPresentOrElse(
             booking -> booking.setStatus(BookingStatus.CANCELLED),

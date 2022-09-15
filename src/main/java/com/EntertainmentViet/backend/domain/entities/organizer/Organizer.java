@@ -71,7 +71,7 @@ public class Organizer extends User {
 
   public void disableEvent(UUID eventUid) {
     events.stream()
-        .filter(event -> event.getUid() == eventUid)
+        .filter(event -> event.getUid().equals(eventUid))
         .findFirst()
         .ifPresent( event -> event.setIsActive(false));
   }
@@ -93,7 +93,7 @@ public class Organizer extends User {
 
   public void updateBookingInfo(UUID bookingUid, Booking newBookingInfo) {
     bookings.stream()
-        .filter(booking -> booking.getUid() == bookingUid)
+        .filter(booking -> booking.getUid().equals(bookingUid))
         .findAny()
         .ifPresentOrElse(
             booking -> {
@@ -108,6 +108,7 @@ public class Organizer extends User {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             booking -> booking.setStatus(BookingStatus.CONFIRMED),

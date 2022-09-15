@@ -47,11 +47,6 @@ public class PackageBookingController {
                                                                           @PathVariable("talent_uid") UUID talentUid,
                                                                           @PathVariable("package_uid") UUID packageUid) {
 
-    if (!createPackageBookingDto.getOrganizerId().equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to proceed with this api. Require update permission to organizer with id '%s'", createPackageBookingDto.getOrganizerId()));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-    
     if (packageBookingService.addPackageToShoppingCart(talentUid, packageUid, createPackageBookingDto)) {
       return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }

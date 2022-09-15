@@ -26,6 +26,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
 
   private final QTalent talent = QTalent.talent;
   private final QCategory category = QCategory.category;
+  private final QCategory parentCategory = new QCategory("parent");
 
   private final QOrganizer organizer = QOrganizer.organizer;
 
@@ -33,14 +34,21 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   public Predicate joinAll(JPAQueryFactory queryFactory) {
 
     // join bookings
-    queryFactory.selectFrom(talentPackage).distinct()
-          .leftJoin(talentPackage.talent, talent).fetchJoin()
-          .leftJoin(talentPackage.orders, booking).fetchJoin()
-          .leftJoin(booking.organizer, organizer).fetchJoin()
-          .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
+    var packages = queryFactory.selectFrom(talentPackage).distinct()
           .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
           .leftJoin(jobDetail.category, category).fetchJoin()
+          .leftJoin(category.parent, parentCategory).on(category.uid.eq(parentCategory.uid))
+          .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();
+
+    queryFactory.selectFrom(talentPackage).distinct()
+        .leftJoin(talentPackage.orders, booking).fetchJoin()
+        .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(booking.organizer, organizer).fetchJoin()
+        .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .where(talentPackage.in(packages))
+        .fetch();
 
     return null;
   }

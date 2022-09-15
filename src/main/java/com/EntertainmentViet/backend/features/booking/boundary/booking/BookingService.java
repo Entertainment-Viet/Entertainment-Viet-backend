@@ -59,8 +59,8 @@ public class BookingService implements BookingBoundary {
             return Optional.empty();
         }
 
-        if (!talentUid.equals(booking.getOrganizer().getUid())) {
-            log.warn(String.format("Inconsistent input when creating a booking for organizer '%s'", talentUid));
+        if (!talentUid.equals(booking.getTalent().getUid())) {
+            log.warn(String.format("Inconsistent input when creating a booking for talent '%s'", talentUid));
             return Optional.empty();
         }
 
@@ -81,7 +81,7 @@ public class BookingService implements BookingBoundary {
         }
 
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
-        updatingBooking.updateInfo(newBookingData);
+        updatingBooking.getOrganizer().updateBookingInfo(uid, newBookingData);
 
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
