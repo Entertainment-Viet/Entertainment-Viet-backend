@@ -4,6 +4,11 @@ import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.PathBuilder;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -33,6 +38,20 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
         .fetch();
   }
 
+  // TODO: adding pageable for db level //
+//    @Override
+//    public List<JobOffer> findByOrganizerUid(UUID uid, Pageable, pageable) {
+//        return queryFactory.selectFrom(jobOffer)
+//                .where(ExpressionUtils.allOf(
+//                        jobOfferPredicate.joinAll(queryFactory),
+//                        jobOfferPredicate.belongToOrganizer(uid))
+//                )
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(getSortedColumn(pageable.getSort()))
+//                .fetch();
+//    }
+
   @Override
   public Optional<JobOffer> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
     return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
@@ -53,5 +72,12 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
             jobOfferPredicate.uidEqual(uid))
         )
         .fetchOne());
+  }
+
+  private OrderSpecifier<?>[] getSortedColumn(Sort sorts) {
+    PathBuilder<JobOffer> entityPath = new PathBuilder<>(JobOffer.class, "jobOffer");
+    return sorts.stream()
+            .map(order -> new OrderSpecifier(Order.valueOf(order.getDirection().name()), entityPath.get(order.getProperty())))
+            .toArray(OrderSpecifier[]::new);
   }
 }

@@ -8,6 +8,9 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingD
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -93,10 +96,12 @@ public class OrganizerBookingController {
     );
   }
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
-                                                                             @PathVariable("organizer_uid") UUID organizerUid) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(organizerBookingService.listBooking(organizerUid)));
-  }
+  public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                             @PathVariable("organizer_uid") UUID organizerUid,
+                                                                             @ParameterObject Pageable pageable) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+            RestUtils.getPageEntity(organizerBookingService.listBooking(organizerUid), pageable)
+    ));  }
 
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> acceptBooking(JwtAuthenticationToken token, 

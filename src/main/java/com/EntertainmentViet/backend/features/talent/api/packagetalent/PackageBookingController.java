@@ -6,6 +6,9 @@ import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.Pack
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageBookingDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +30,19 @@ public class PackageBookingController {
   private final PackageBookingBoundary packageBookingService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+  public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
                                                                              @PathVariable("talent_uid") UUID talentUid,
-                                                                             @PathVariable("package_uid") UUID packageUid) {
+                                                                             @PathVariable("package_uid") UUID packageUid,
+                                                                             @ParameterObject Pageable pageable) {
 
     if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(packageBookingService.listBooking(talentUid, packageUid)));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+            RestUtils.getPageEntity(packageBookingService.listBooking(talentUid, packageUid), pageable)
+    ));
   }
 
   @PostMapping(
