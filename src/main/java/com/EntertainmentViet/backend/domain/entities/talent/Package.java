@@ -71,7 +71,7 @@ public class Package extends Identifiable {
     booking.setJobDetail(getJobDetail().clone());
     booking.setTalent(talent);
     booking.setOrganizer(organizer);
-    booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+    booking.setStatus(BookingStatus.TALENT_PENDING);
     return booking;
   }
 

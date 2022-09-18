@@ -23,6 +23,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @SuperBuilder
@@ -149,6 +150,11 @@ public class Organizer extends User {
   }
 
   public void finishCartShopping() {
+    // validate cart item
+    var invalidPackage =  shoppingCart.stream().filter(Predicate.not(Package::getIsActive)).collect(Collectors.toList());
+    if (invalidPackage.size() != 0) {
+      throw new EntityNotFoundException("Organizer", invalidPackage.get(0).getUid());
+    }
     for (Package cartItem : shoppingCart) {
       addBooking(cartItem.orderPackage(this));
     }

@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
@@ -31,6 +32,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QEvent event = QEvent.event;
   private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
+
+  private final QPackage aPackage = QPackage.package$;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -70,7 +73,10 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
     // join shoppingCart
     queryFactory.selectFrom(organizer).distinct()
-        .leftJoin(organizer.shoppingCart).fetchJoin()
+        .leftJoin(organizer.shoppingCart, aPackage).fetchJoin()
+        .leftJoin(aPackage.talent, QTalent.talent).fetchJoin()
+        .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
         .where(organizer.in(organizers))
         .fetch();
 

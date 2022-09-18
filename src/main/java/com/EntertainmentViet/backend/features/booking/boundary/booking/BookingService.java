@@ -70,7 +70,7 @@ public class BookingService implements BookingBoundary {
     @Override
     public Optional<UUID> update(UUID ownerUid, UUID uid, UpdateBookingDto updateBookingDto) {
         var bookingOptional = bookingRepository.findByUid(uid);
-        if (!bookingOptional.isPresent()) {
+        if (bookingOptional.isEmpty()) {
             return Optional.empty();
         }
 
