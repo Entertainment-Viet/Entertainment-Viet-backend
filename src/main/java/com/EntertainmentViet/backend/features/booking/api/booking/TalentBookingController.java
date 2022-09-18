@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.api.booking;
 
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
+import com.EntertainmentViet.backend.features.booking.boundary.booking.TalentBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,6 +33,8 @@ public class TalentBookingController {
   public static final String REQUEST_MAPPING_PATH = "/talents/{talent_uid}/bookings";
 
   private final BookingBoundary bookingService;
+
+  private final TalentBookingBoundary talentBookingService;
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
@@ -89,5 +93,43 @@ public class TalentBookingController {
             )
             .orElse(ResponseEntity.badRequest().build())
     );
+  }
+
+  @GetMapping()
+  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                             @PathVariable("talent_uid") UUID talentUid) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentBookingService.listBooking(talentUid)));
+  }
+
+  @PostMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> acceptBooking(JwtAuthenticationToken token,
+                                                               @PathVariable("talent_uid") UUID talentUid,
+                                                               @PathVariable("uid") UUID bookingUid) {
+
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    if (talentBookingService.acceptBooking(talentUid, bookingUid)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @PutMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> rejectBooking(JwtAuthenticationToken token,
+                                                               @PathVariable("talent_uid") UUID talentUid,
+                                                               @PathVariable("uid") UUID bookingUid) {
+
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    if (talentBookingService.rejectBooking(talentUid, bookingUid)) {
+      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 }

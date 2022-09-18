@@ -93,13 +93,8 @@ public class OrganizerBookingController {
     );
   }
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid) {
-
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-
+  public CompletableFuture<ResponseEntity<List<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                             @PathVariable("organizer_uid") UUID organizerUid) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(organizerBookingService.listBooking(organizerUid)));
   }
 
