@@ -1,16 +1,19 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
-import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QReview;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -28,6 +31,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
 
+  private final QPackage aPackage = QPackage.package$;
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
 
@@ -38,6 +43,14 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
+
+    // join packages
+    talents = queryFactory.selectFrom(talent).distinct()
+            .leftJoin(talent.packages, aPackage).fetchJoin()
+            .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
+            .leftJoin(jobDetail.category, category).fetchJoin()
+            .leftJoin(aPackage.orders, booking).fetchJoin()
+            .fetch();
 
     // join review
     talents = queryFactory.selectFrom(talent).distinct()

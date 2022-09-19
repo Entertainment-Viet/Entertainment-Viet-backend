@@ -10,7 +10,6 @@ import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrga
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

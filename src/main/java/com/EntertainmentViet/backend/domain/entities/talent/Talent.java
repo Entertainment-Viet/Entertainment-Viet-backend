@@ -48,6 +48,9 @@ public class Talent extends User implements Advertisable {
   @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TalentFeedback> feedbacks;
 
+  @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Package> packages;
+
   public void addReview(Review review) {
     reviews.add(review);
     review.setTalent(this);
@@ -112,6 +115,16 @@ public class Talent extends User implements Advertisable {
   public void removeFeedback(TalentFeedback feedback) {
     feedbacks.remove(feedback);
     feedback.setTalent(null);
+  }
+
+  public void addPackage(Package aPackage) {
+    packages.add(aPackage);
+    aPackage.setTalent(this);
+  }
+
+  public void removePackage(Package aPackage) {
+    packages.remove(aPackage);
+    aPackage.setTalent(null);
   }
 
   public Booking applyToEventPosition(EventOpenPosition position) {
