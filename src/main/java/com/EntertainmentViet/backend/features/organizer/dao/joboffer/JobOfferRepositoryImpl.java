@@ -38,20 +38,6 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
         .fetch();
   }
 
-  // TODO: adding pageable for db level //
-//    @Override
-//    public List<JobOffer> findByOrganizerUid(UUID uid, Pageable, pageable) {
-//        return queryFactory.selectFrom(jobOffer)
-//                .where(ExpressionUtils.allOf(
-//                        jobOfferPredicate.joinAll(queryFactory),
-//                        jobOfferPredicate.belongToOrganizer(uid))
-//                )
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .orderBy(getSortedColumn(pageable.getSort()))
-//                .fetch();
-//    }
-
   @Override
   public Optional<JobOffer> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
     return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
@@ -65,19 +51,11 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
 
   @Override
   public Optional<JobOffer> findByUid(UUID uid) {
-
     return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
         .where(ExpressionUtils.allOf(
             jobOfferPredicate.joinAll(queryFactory),
             jobOfferPredicate.uidEqual(uid))
         )
         .fetchOne());
-  }
-
-  private OrderSpecifier<?>[] getSortedColumn(Sort sorts) {
-    PathBuilder<JobOffer> entityPath = new PathBuilder<>(JobOffer.class, "jobOffer");
-    return sorts.stream()
-            .map(order -> new OrderSpecifier(Order.valueOf(order.getDirection().name()), entityPath.get(order.getProperty())))
-            .toArray(OrderSpecifier[]::new);
   }
 }

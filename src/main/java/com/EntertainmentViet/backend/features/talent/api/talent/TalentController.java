@@ -8,6 +8,9 @@ import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +37,11 @@ public class TalentController {
   private final TalentBoundary talentService;
 
   private final UserBoundary userService;
+
+  @GetMapping()
+  public CompletableFuture<ResponseEntity<Page<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(pageable)));
+  }
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(@PathVariable("uid") UUID uid) {

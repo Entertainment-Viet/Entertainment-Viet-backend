@@ -9,10 +9,13 @@ import com.EntertainmentViet.backend.features.talent.dto.talent.TalentMapper;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +27,11 @@ public class TalentService implements TalentBoundary {
     private final TalentRepository talentRepository;
 
     private final TalentMapper talentMapper;
+
+    @Override
+    public Page<ReadTalentDto> findAll(Pageable pageable) {
+        return talentRepository.findAll(pageable).map(talentMapper::toDto);
+    }
 
     @Override
     public Optional<ReadTalentDto> findByUid(UUID uid) {

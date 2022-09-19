@@ -1,11 +1,16 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
+
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface TalentBoundary {
+
+    Page<ReadTalentDto> findAll(Pageable pageable);
+
     Optional<ReadTalentDto> findByUid(UUID uid);
 
     Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid);

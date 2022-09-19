@@ -19,7 +19,5 @@ public class ReadTalentDto extends ReadUserDto {
 
     private List<ReviewDto> reviews;
 
-    private List<ReadBookingDto> bookings;
-
     private List<TalentFeedBackDto> feedbacks;
 }

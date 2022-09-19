@@ -22,7 +22,7 @@ import org.mapstruct.Named;
         config = MappingConfig.class)
 public abstract class TalentMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "reviews", "bookings", "feedbacks"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
