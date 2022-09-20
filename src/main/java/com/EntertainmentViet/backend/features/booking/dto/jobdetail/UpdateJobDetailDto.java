@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -21,9 +20,9 @@ public class UpdateJobDetailDto {
 
   private PriceDto price;
 
-  private Instant performanceStartTime;
+  private OffsetDateTime performanceStartTime;
 
-  private Instant performanceEndTime;
+  private OffsetDateTime performanceEndTime;
 
   private Integer performanceCount;
 

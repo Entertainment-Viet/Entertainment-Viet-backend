@@ -29,8 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.Duration;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -63,10 +62,10 @@ public class JobDetail implements Serializable {
   private Price price;
 
   @NotNull
-  private Instant performanceStartTime;
+  private OffsetDateTime performanceStartTime;
 
   @NotNull
-  private Instant performanceEndTime;
+  private OffsetDateTime performanceEndTime;
 
   @NotNull
   private Integer performanceCount;

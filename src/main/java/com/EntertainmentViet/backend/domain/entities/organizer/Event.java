@@ -17,7 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +43,7 @@ public class Event extends Identifiable implements Advertisable {
   private String occurrenceAddress;
 
   @NotNull
-  private Instant occurrenceTime;
+  private OffsetDateTime occurrenceTime;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull

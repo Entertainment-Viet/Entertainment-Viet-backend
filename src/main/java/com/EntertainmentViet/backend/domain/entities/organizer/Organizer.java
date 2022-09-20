@@ -20,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -115,7 +115,7 @@ public class Organizer extends User {
         .ifPresentOrElse(
             booking -> {
               booking.setStatus(BookingStatus.CONFIRMED);
-              booking.setConfirmedAt(Instant.now());
+              booking.setConfirmedAt(OffsetDateTime.now());
             },
             () -> {throw new EntityNotFoundException("Booking", bookingUid);}
         );

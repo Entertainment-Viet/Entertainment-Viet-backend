@@ -28,7 +28,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -47,9 +47,9 @@ public class Booking extends Identifiable implements Auditable {
   @GeneratedValue
   private Long id;
 
-  private Instant createdAt;
+  private OffsetDateTime createdAt;
 
-  private Instant confirmedAt;
+  private OffsetDateTime confirmedAt;
 
   private boolean isPaid;
 

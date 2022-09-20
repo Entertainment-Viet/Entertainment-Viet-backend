@@ -1,8 +1,8 @@
 package com.EntertainmentViet.backend.domain.entities;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 public interface Auditable {
-  void setCreatedAt(Instant instant);
-  Instant getCreatedAt();
+  void setCreatedAt(OffsetDateTime instant);
+  OffsetDateTime getCreatedAt();
 }

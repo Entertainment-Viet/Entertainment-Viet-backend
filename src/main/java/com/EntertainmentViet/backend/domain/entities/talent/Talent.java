@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.UUID;
@@ -88,7 +88,7 @@ public class Talent extends User implements Advertisable {
         .ifPresentOrElse(
             booking -> {
               booking.setStatus(BookingStatus.CONFIRMED);
-              booking.setConfirmedAt(Instant.now());
+              booking.setConfirmedAt(OffsetDateTime.now());
             },
             () -> {throw new EntityNotFoundException("Booking", bookingUid);}
         );
@@ -136,7 +136,7 @@ public class Talent extends User implements Advertisable {
                                     .organizer(position.getEvent().getOrganizer())
                                     .jobDetail(position.getJobOffer().getJobDetail())
                                     .status(BookingStatus.ORGANIZER_PENDING)
-                                    .createdAt(Instant.now())
+                                    .createdAt(OffsetDateTime.now())
                                     .isPaid(false)
                                     .build();
 

@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @SuperBuilder
@@ -27,20 +27,20 @@ public abstract class Advertisement<T extends Advertisable> extends Identifiable
   private Long id;
 
   @NotNull
-  private Instant expiredTime;
+  private OffsetDateTime expiredTime;
 
   @NotNull
   private Integer priority;
 
-  public Price calculateFee(Instant newExpiredTime) {
+  public Price calculateFee(OffsetDateTime newExpiredTime) {
     return null;
   }
 
   public void cancel() {
-    setExpiredTime(Instant.now());
+    setExpiredTime(OffsetDateTime.now());
   }
 
-  public void extendTime(Instant newExpiredTime) {
+  public void extendTime(OffsetDateTime newExpiredTime) {
     var requiredFee = calculateFee(newExpiredTime);
     // TODO check if fee is paid yet
     setExpiredTime(newExpiredTime);

@@ -29,7 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @SuperBuilder
@@ -48,7 +48,7 @@ public abstract class Feedback<T extends User> extends Identifiable implements A
   @GeneratedValue
   private Long id;
 
-  private Instant createdAt;
+  private OffsetDateTime createdAt;
 
   @Embedded
   @AttributeOverrides({

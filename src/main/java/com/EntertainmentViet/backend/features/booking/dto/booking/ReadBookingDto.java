@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @SuperBuilder
@@ -16,9 +15,9 @@ import java.util.UUID;
 @Setter
 public class ReadBookingDto extends Identifiable {
 
-    private Instant createdAt;
+    private OffsetDateTime createdAt;
 
-    private Instant confirmedAt;
+    private OffsetDateTime confirmedAt;
 
     private boolean isPaid;
 
