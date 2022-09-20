@@ -25,10 +25,13 @@ public class CreateJobDetailDto {
   private PriceDto price;
 
   @NotNull
-  private Long performanceDuration;
+  private Instant performanceStartTime;
 
   @NotNull
-  private Instant performanceTime;
+  private Instant performanceEndTime;
+
+  @NotNull
+  private Integer performanceCount;
 
   private String location;
 

@@ -63,10 +63,13 @@ public class JobDetail implements Serializable {
   private Price price;
 
   @NotNull
-  private Duration performanceDuration;
+  private Instant performanceStartTime;
 
   @NotNull
-  private Instant performanceTime;
+  private Instant performanceEndTime;
+
+  @NotNull
+  private Integer performanceCount;
 
   private String location;
 
@@ -87,8 +90,9 @@ public class JobDetail implements Serializable {
         .category(getCategory())
         .workType(getWorkType())
         .price(getPrice())
-        .performanceDuration(getPerformanceDuration())
-        .performanceTime(getPerformanceTime())
+        .performanceStartTime(getPerformanceStartTime())
+        .performanceEndTime(getPerformanceEndTime())
+        .performanceCount(getPerformanceCount())
         .location(getLocation())
         .note(getNote())
         .build();
@@ -101,11 +105,14 @@ public class JobDetail implements Serializable {
     if (newData.getPrice() != null) {
       setPrice(newData.getPrice());
     }
-    if (newData.getPerformanceDuration() != null) {
-      setPerformanceDuration(newData.getPerformanceDuration());
+    if (newData.getPerformanceEndTime() != null) {
+      setPerformanceEndTime(newData.getPerformanceEndTime());
     }
-    if (newData.getPerformanceTime() != null) {
-      setPerformanceTime(newData.getPerformanceTime());
+    if (newData.getPerformanceStartTime() != null) {
+      setPerformanceStartTime(newData.getPerformanceStartTime());
+    }
+    if (newData.getPerformanceCount() != null) {
+      setPerformanceCount(newData.getPerformanceCount());
     }
     if (newData.getLocation() != null) {
       setLocation(newData.getLocation());

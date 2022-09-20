@@ -18,6 +18,8 @@ public class ReadBookingDto extends Identifiable {
 
     private Instant createdAt;
 
+    private Instant confirmedAt;
+
     private boolean isPaid;
 
     private String status;

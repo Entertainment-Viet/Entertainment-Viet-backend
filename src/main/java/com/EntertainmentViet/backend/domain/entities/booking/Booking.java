@@ -49,6 +49,8 @@ public class Booking extends Identifiable implements Auditable {
 
   private Instant createdAt;
 
+  private Instant confirmedAt;
+
   private boolean isPaid;
 
   @Enumerated(EnumType.STRING)

@@ -21,9 +21,11 @@ public class UpdateJobDetailDto {
 
   private PriceDto price;
 
-  private Long performanceDuration;
+  private Instant performanceStartTime;
 
-  private Instant performanceTime;
+  private Instant performanceEndTime;
+
+  private Integer performanceCount;
 
   private String location;
 

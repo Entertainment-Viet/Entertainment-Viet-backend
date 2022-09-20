@@ -86,7 +86,10 @@ public class Talent extends User implements Advertisable {
         .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
-            booking -> booking.setStatus(BookingStatus.CONFIRMED),
+            booking -> {
+              booking.setStatus(BookingStatus.CONFIRMED);
+              booking.setConfirmedAt(Instant.now());
+            },
             () -> {throw new EntityNotFoundException("Booking", bookingUid);}
         );
   }
