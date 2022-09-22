@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.dao.talent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiableRepository;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Transactional
 public interface TalentRepository extends IdentifiableRepository<Talent> {
 
-    Page<Talent> findAll(Pageable pageable);
+    Page<Talent> findAll(Pageable pageable, ListTalentParamDto paramDto);
 
     Optional<Talent> findByUid(UUID uid);
 }

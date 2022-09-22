@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.TalentMapper;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
@@ -29,8 +30,8 @@ public class TalentService implements TalentBoundary {
     private final TalentMapper talentMapper;
 
     @Override
-    public Page<ReadTalentDto> findAll(Pageable pageable) {
-        return talentRepository.findAll(pageable).map(talentMapper::toDto);
+    public Page<ReadTalentDto> findAll(Pageable pageable, ListTalentParamDto paramDto) {
+        return talentRepository.findAll(pageable, paramDto).map(talentMapper::toDto);
     }
 
     @Override

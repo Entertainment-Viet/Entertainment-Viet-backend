@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,9 @@ public class TalentController {
   private final UserBoundary userService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<Page<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(pageable)));
+  public CompletableFuture<ResponseEntity<Page<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
+                                                                        @ParameterObject ListTalentParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(pageable, paramDto)));
   }
 
   @GetMapping(value = "/{uid}")

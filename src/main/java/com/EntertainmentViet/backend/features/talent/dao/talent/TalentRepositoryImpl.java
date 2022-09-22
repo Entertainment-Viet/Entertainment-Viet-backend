@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.talent.dao.talent;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,10 +38,11 @@ public class TalentRepositoryImpl extends BaseRepositoryImpl<Talent, Long> imple
   }
 
   @Override
-  public Page<Talent> findAll(Pageable pageable) {
+  public Page<Talent> findAll(Pageable pageable, ListTalentParamDto paramDto) {
     var talentList = Optional.ofNullable(queryFactory.selectFrom(talent)
             .where(ExpressionUtils.allOf(
-                    talentPredicate.joinAll(queryFactory)
+                    talentPredicate.joinAll(queryFactory),
+                    talentPredicate.fromParams(paramDto)
             ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())

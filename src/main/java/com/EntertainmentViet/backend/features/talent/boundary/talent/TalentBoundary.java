@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 public interface TalentBoundary {
 
-    Page<ReadTalentDto> findAll(Pageable pageable);
+    Page<ReadTalentDto> findAll(Pageable pageable, ListTalentParamDto paramDto);
 
     Optional<ReadTalentDto> findByUid(UUID uid);
 

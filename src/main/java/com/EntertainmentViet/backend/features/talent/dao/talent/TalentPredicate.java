@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
+import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
@@ -13,6 +14,7 @@ import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamD
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -59,12 +61,75 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .fetch();
 
     // join talentFeedback
-    queryFactory.selectFrom(talent).distinct()
+    talents = queryFactory.selectFrom(talent).distinct()
         .leftJoin(talent.feedbacks, feedback).fetchJoin()
         .where(talent.in(talents))
         .fetch();
 
+    // join offerCategories
+    queryFactory.selectFrom(talent).distinct()
+            .leftJoin(talent.offerCategories, category).fetchJoin()
+            .leftJoin(category.parent).fetchJoin()
+            .where(talent.in(talents))
+            .fetch();
+
     return null;
+  }
+
+  public Predicate fromParams(ListTalentParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    if (paramDto.getDisplayName() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.displayName.eq(paramDto.getDisplayName())
+      );
+    }
+
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.offerCategories.any().in(JPAExpressions.selectFrom(category).where(category.name.eq(paramDto.getCategory())))
+      );
+    }
+
+    if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
+      // Get talent don't have any booking occur at startTime
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.bookings.any().in(
+                      JPAExpressions.selectFrom(booking).where(
+                              Expressions.asDateTime(paramDto.getStartTime())
+                                      .between(booking.jobDetail.performanceStartTime, booking.jobDetail.performanceEndTime)
+                                      .not()
+                      )
+              )
+      );
+    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
+      // Get talent don't have any booking occur at endTime
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.bookings.any().in(
+                      JPAExpressions.selectFrom(booking).where(
+                              Expressions.asDateTime(paramDto.getEndTime())
+                                      .between(booking.jobDetail.performanceStartTime, booking.jobDetail.performanceEndTime)
+                                      .not()
+                      )
+              )
+      );
+    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+      // Get talent that don't have any booking occur during period from startTime to endTime
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.bookings.any().in(
+                      JPAExpressions.selectFrom(booking).where(
+                              booking.jobDetail.performanceStartTime.after(paramDto.getStartTime())
+                              .or(booking.jobDetail.performanceEndTime.before(paramDto.getEndTime()))
+                      )
+              ).not()
+      );
+    }
+    return predicate;
   }
 
   @Override
