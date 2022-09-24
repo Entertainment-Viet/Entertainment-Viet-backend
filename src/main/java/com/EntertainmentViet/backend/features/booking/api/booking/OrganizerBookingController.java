@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.booking.api.booking;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.OrganizerBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -21,9 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = OrganizerBookingController.REQUEST_MAPPING_PATH)
@@ -98,10 +96,12 @@ public class OrganizerBookingController {
   @GetMapping()
   public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
                                                                              @PathVariable("organizer_uid") UUID organizerUid,
-                                                                             @ParameterObject Pageable pageable) {
+                                                                             @ParameterObject Pageable pageable,
+                                                                             @ParameterObject ListOrganizerBookingParamDto paramDto) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            RestUtils.getPageEntity(organizerBookingService.listBooking(organizerUid), pageable)
-    ));  }
+            organizerBookingService.listBooking(organizerUid, paramDto, pageable)
+    ));
+  }
 
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> acceptBooking(JwtAuthenticationToken token, 

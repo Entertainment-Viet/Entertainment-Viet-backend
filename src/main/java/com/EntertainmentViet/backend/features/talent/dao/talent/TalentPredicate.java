@@ -123,8 +123,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.bookings.any().in(
                       JPAExpressions.selectFrom(booking).where(
-                              booking.jobDetail.performanceStartTime.after(paramDto.getStartTime())
-                              .or(booking.jobDetail.performanceEndTime.before(paramDto.getEndTime()))
+                              booking.jobDetail.performanceStartTime.between(paramDto.getStartTime(), paramDto.getEndTime())
+                              .or(booking.jobDetail.performanceEndTime.between(paramDto.getStartTime(), paramDto.getEndTime()))
                       )
               ).not()
       );

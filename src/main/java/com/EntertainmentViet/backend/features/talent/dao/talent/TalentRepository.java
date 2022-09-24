@@ -16,6 +16,4 @@ import java.util.UUID;
 public interface TalentRepository extends IdentifiableRepository<Talent> {
 
     Page<Talent> findAll(ListTalentParamDto paramDto, Pageable pageable);
-
-    Optional<Talent> findByUid(UUID uid);
 }
