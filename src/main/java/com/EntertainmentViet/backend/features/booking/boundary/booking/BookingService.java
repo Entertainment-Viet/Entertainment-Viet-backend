@@ -28,7 +28,8 @@ public class BookingService implements BookingBoundary {
     public Optional<ReadBookingDto> findByUid(UUID ownerUid, UUID uid) {
         return bookingRepository.findByUid(uid)
             .filter(booking -> booking.getTalent().getUid().equals(ownerUid) || booking.getOrganizer().getUid().equals(ownerUid))
-            .map(bookingMapper::toReadDto);
+            .map(bookingMapper::toReadDto)
+            .map(bookingMapper::checkPermission);
     }
 
     @Override

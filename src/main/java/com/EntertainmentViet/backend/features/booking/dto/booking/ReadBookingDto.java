@@ -19,7 +19,7 @@ public class ReadBookingDto extends Identifiable {
 
     private OffsetDateTime confirmedAt;
 
-    private boolean isPaid;
+    private Boolean isPaid;
 
     private String status;
 

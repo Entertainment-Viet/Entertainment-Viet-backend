@@ -31,12 +31,14 @@ public class TalentService implements TalentBoundary {
 
     @Override
     public Page<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
-        return talentRepository.findAll(paramDto, pageable).map(talentMapper::toDto);
+        return talentRepository.findAll(paramDto, pageable)
+            .map(talentMapper::toDto)
+            .map(talentMapper::checkPermission);
     }
 
     @Override
     public Optional<ReadTalentDto> findByUid(UUID uid) {
-        return talentRepository.findByUid(uid).map(talentMapper::toDto);
+        return talentRepository.findByUid(uid).map(talentMapper::toDto).map(talentMapper::checkPermission);
     }
     @Override
     public Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid) {

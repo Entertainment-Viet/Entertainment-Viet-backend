@@ -8,8 +8,10 @@ import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
+import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -49,6 +51,23 @@ public abstract class OrganizerMapper {
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer toModel(UpdateOrganizerDto updateOrganizerDto);
+
+  // Only return non-confidential detail if token have enough permission
+  public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {
+    if (!SecurityUtils.hasRole(OrganizerRole.READ_ORGANIZER_DETAIL.name())) {
+      return ReadOrganizerDto.builder()
+          .events(readOrganizerDto.getEvents())
+          .displayName(readOrganizerDto.getDisplayName())
+          .phoneNumber(readOrganizerDto.getPhoneNumber())
+          .email(readOrganizerDto.getEmail())
+          .address(readOrganizerDto.getAddress())
+          .bio(readOrganizerDto.getBio())
+          .createdAt(readOrganizerDto.getCreatedAt())
+          .extensions(readOrganizerDto.getExtensions())
+          .build();
+    }
+    return readOrganizerDto;
+  }
 
   @Named("toUserStateKey")
   public String toUserStateKey(UserState userState) {
