@@ -7,14 +7,14 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageDto;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.UpdatePackageDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +38,12 @@ public class PackageService implements PackageBoundary {
     private final TalentRepository talentRepository;
 
     @Override
-    public List<ReadPackageDto> findByTalentUid(UUID talentId) {
-        return packageRepository.findByTalentUid(talentId).stream().map(packageMapper::toDto).collect(Collectors.toList());
+    public Page<ReadPackageDto> findByTalentUid(UUID talentId, ListPackageParamDto paramDto, Pageable pageable) {
+        var dtoList = packageRepository.findByTalentUid(talentId, paramDto, pageable).stream()
+            .map(packageMapper::toDto)
+            .collect(Collectors.toList());
+
+        return RestUtils.getPageEntity(dtoList, pageable);
     }
 
     @Override

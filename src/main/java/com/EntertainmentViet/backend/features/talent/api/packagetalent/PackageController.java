@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.UpdatePackageDto;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,11 @@ public class PackageController {
 
   @GetMapping()
   public CompletableFuture<ResponseEntity<Page<ReadPackageDto>>> findAll(@PathVariable("talent_uid") UUID talentUid,
-                                                                         @ParameterObject Pageable pageable) {
+                                                                         @ParameterObject Pageable pageable,
+                                                                         @ParameterObject ListPackageParamDto paramDto) {
 
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            RestUtils.getPageEntity(packageService.findByTalentUid(talentUid), pageable)
+            packageService.findByTalentUid(talentUid, paramDto, pageable)
     ));
   }
 

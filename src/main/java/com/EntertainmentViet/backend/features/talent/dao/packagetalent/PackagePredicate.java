@@ -8,8 +8,12 @@ import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -55,6 +59,37 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
 
   public BooleanExpression belongToTalent(UUID uid) {
     return talentPackage.talent.uid.eq(uid);
+  }
+
+  public Predicate fromParams(ListPackageParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    if (paramDto.getName() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          talentPackage.name.eq(paramDto.getName())
+      );
+    }
+    if (paramDto.getIsActive() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          paramDto.getIsActive() ? talentPackage.isActive.isTrue() : talentPackage.isActive.isFalse()
+      );
+    }
+    if (paramDto.getTalent() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          talentPackage.talent.displayName.eq(paramDto.getTalent())
+      );
+    }
+    if (paramDto.getOrderCount() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          talentPackage.orders.size().eq(paramDto.getOrderCount())
+      );
+    }
+
+    return predicate;
   }
 
   @Override
