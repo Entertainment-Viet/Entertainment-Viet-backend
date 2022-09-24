@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.api.joboffer;
 
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.joboffer.JobOfferBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
@@ -38,7 +39,8 @@ public class JobOfferController {
 
   @GetMapping()
   public CompletableFuture<ResponseEntity<Page<ReadJobOfferDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
-                                                                                     @ParameterObject Pageable pageable) {
+                                                                                     @ParameterObject Pageable pageable,
+                                                                                     @ParameterObject ListJobOfferParamDto paramDto) {
 
     if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
@@ -46,7 +48,7 @@ public class JobOfferController {
     }
 
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            RestUtils.getPageEntity(jobOfferService.findByOrganizerUid(organizerUid), pageable)
+            jobOfferService.findByOrganizerUid(organizerUid, paramDto, pageable)
     ));
   }
 

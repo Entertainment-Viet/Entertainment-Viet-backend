@@ -30,8 +30,8 @@ public class TalentService implements TalentBoundary {
     private final TalentMapper talentMapper;
 
     @Override
-    public Page<ReadTalentDto> findAll(Pageable pageable, ListTalentParamDto paramDto) {
-        return talentRepository.findAll(pageable, paramDto).map(talentMapper::toDto);
+    public Page<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
+        return talentRepository.findAll(paramDto, pageable).map(talentMapper::toDto);
     }
 
     @Override

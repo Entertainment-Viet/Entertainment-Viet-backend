@@ -42,7 +42,7 @@ public class TalentController {
   @GetMapping()
   public CompletableFuture<ResponseEntity<Page<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
                                                                         @ParameterObject ListTalentParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(pageable, paramDto)));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(paramDto, pageable)));
   }
 
   @GetMapping(value = "/{uid}")

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface TalentBoundary {
 
-    Page<ReadTalentDto> findAll(Pageable pageable, ListTalentParamDto paramDto);
+    Page<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable);
 
     Optional<ReadTalentDto> findByUid(UUID uid);
 

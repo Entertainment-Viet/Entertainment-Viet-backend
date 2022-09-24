@@ -38,7 +38,7 @@ public class TalentRepositoryImpl extends BaseRepositoryImpl<Talent, Long> imple
   }
 
   @Override
-  public Page<Talent> findAll(Pageable pageable, ListTalentParamDto paramDto) {
+  public Page<Talent> findAll(ListTalentParamDto paramDto, Pageable pageable) {
     var talentList = Optional.ofNullable(queryFactory.selectFrom(talent)
             .where(ExpressionUtils.allOf(
                     talentPredicate.joinAll(queryFactory),

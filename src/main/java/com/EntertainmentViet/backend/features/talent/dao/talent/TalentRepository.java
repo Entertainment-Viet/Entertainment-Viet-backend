@@ -15,7 +15,7 @@ import java.util.UUID;
 @Transactional
 public interface TalentRepository extends IdentifiableRepository<Talent> {
 
-    Page<Talent> findAll(Pageable pageable, ListTalentParamDto paramDto);
+    Page<Talent> findAll(ListTalentParamDto paramDto, Pageable pageable);
 
     Optional<Talent> findByUid(UUID uid);
 }

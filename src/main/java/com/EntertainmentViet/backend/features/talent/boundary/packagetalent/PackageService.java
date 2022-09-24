@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class PackageService implements PackageBoundary {
 
     @Override
     public List<ReadPackageDto> findByTalentUid(UUID talentId) {
-        return packageRepository.findByTalentUid(talentId).stream().map(packageMapper::toDto).toList();
+        return packageRepository.findByTalentUid(talentId).stream().map(packageMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
