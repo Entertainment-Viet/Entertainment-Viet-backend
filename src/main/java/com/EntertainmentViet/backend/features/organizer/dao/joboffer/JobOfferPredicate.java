@@ -6,6 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,6 +35,36 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
         .fetch();
 
     return null;
+  }
+
+  public Predicate fromParams(ListJobOfferParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    if (paramDto.getName() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              jobOffer.name.eq(paramDto.getName())
+      );
+    }
+    if (paramDto.getIsActive() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              jobOffer.isActive.eq(paramDto.getIsActive())
+      );
+    }
+    if (paramDto.getOrganizer() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              jobOffer.organizer.displayName.eq(paramDto.getOrganizer())
+      );
+    }
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              jobOffer.jobDetail.category.name.eq(paramDto.getCategory())
+      );
+    }
+    return predicate;
   }
 
   public BooleanExpression belongToOrganizer(UUID uid) {

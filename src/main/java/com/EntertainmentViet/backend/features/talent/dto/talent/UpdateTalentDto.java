@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -22,6 +23,8 @@ public class UpdateTalentDto {
   private String address;
 
   private String bio;
+
+  private List<UUID> offerCategories;
 
   private String extensions;
 }

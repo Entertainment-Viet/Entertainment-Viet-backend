@@ -14,7 +14,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -28,7 +28,7 @@ public class Review implements Auditable, Serializable{
   @GeneratedValue
   private Long id;
 
-  private Instant createdAt;
+  private OffsetDateTime createdAt;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull

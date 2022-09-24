@@ -24,7 +24,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @Getter
@@ -54,7 +54,7 @@ public abstract class  User extends Account implements Auditable {
   })
   private UserInputText bio;
 
-  private Instant createdAt;
+  private OffsetDateTime createdAt;
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "user_state")

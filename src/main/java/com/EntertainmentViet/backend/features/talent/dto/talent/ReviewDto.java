@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 public class ReviewDto {
-  private Instant createdAt;
+  private OffsetDateTime createdAt;
 
   private Talent talent;
 

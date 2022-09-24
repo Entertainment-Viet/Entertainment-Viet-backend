@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class CategoryService implements CategoryBoundary {
 
   @Override
   public List<CategoryDto> findAll() {
-    return categoryRepository.findAll().stream().map(categoryMapper::toDto).toList();
+    return categoryRepository.findAll().stream().map(categoryMapper::toDto).collect(Collectors.toList());
   }
 
   @Override

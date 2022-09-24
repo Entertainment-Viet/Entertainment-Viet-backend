@@ -2,12 +2,17 @@ package com.EntertainmentViet.backend.features.booking.dao.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
+import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,5 +37,29 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
             bookingPredicate.uidEqual(uid))
         )
         .fetchOne());
+  }
+
+  @Override
+  public List<Booking> findByOrganizerUid(UUID organizerId, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
+    return queryFactory.selectFrom(booking)
+        .where(ExpressionUtils.allOf(
+            bookingPredicate.joinAll(queryFactory),
+            bookingPredicate.belongToOrganizer(organizerId),
+            bookingPredicate.fromOrganizerParams(paramDto)
+        ))
+        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .fetch();
+  }
+
+  @Override
+  public List<Booking> findByTalentUid(UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable) {
+    return queryFactory.selectFrom(booking)
+        .where(ExpressionUtils.allOf(
+            bookingPredicate.joinAll(queryFactory),
+            bookingPredicate.belongToTalent(talentId),
+            bookingPredicate.fromTalentParams(paramDto)
+        ))
+        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .fetch();
   }
 }

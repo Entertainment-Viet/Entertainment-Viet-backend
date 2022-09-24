@@ -1,25 +1,24 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.joboffer;
 
-import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.joboffer.JobOfferRepository;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +32,11 @@ public class JobOfferService implements JobOfferBoundary {
     private final JobOfferMapper jobOfferMapper;
 
     @Override
-    public List<ReadJobOfferDto> findByOrganizerUid(UUID uid) {
-        return jobOfferRepository.findByOrganizerUid(uid).stream().map(jobOfferMapper::toDto).toList();
+    public Page<ReadJobOfferDto> findByOrganizerUid(UUID uid, ListJobOfferParamDto paramDto, Pageable pageable) {
+        var dtoList = jobOfferRepository.findByOrganizerUid(uid, paramDto, pageable).stream()
+                .map(jobOfferMapper::toDto)
+                .collect(Collectors.toList());
+        return RestUtils.getPageEntity(dtoList, pageable);
     }
 
     @Override

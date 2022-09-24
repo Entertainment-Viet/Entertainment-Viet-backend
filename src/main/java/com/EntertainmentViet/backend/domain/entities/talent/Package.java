@@ -79,6 +79,7 @@ public class Package extends Identifiable {
     orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
+        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             order -> order.setStatus(BookingStatus.CONFIRMED),
@@ -90,6 +91,7 @@ public class Package extends Identifiable {
     orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
+        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             order -> order.setStatus(BookingStatus.CANCELLED),

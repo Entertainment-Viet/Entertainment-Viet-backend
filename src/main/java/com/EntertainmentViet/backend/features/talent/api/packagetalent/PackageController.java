@@ -3,10 +3,14 @@ package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.UpdatePackageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +38,13 @@ public class PackageController {
   private final PackageBoundary packageService;
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<List<ReadPackageDto>>> findAll(@PathVariable("talent_uid") UUID talentUid) {
+  public CompletableFuture<ResponseEntity<Page<ReadPackageDto>>> findAll(@PathVariable("talent_uid") UUID talentUid,
+                                                                         @ParameterObject Pageable pageable,
+                                                                         @ParameterObject ListPackageParamDto paramDto) {
 
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(packageService.findByTalentUid(talentUid)));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+            packageService.findByTalentUid(talentUid, paramDto, pageable)
+    ));
   }
 
   @GetMapping(value = "/{uid}")

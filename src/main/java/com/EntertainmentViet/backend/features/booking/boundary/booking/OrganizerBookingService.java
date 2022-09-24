@@ -5,14 +5,17 @@ import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,10 +32,12 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
 
     @Override
-    public List<ReadBookingDto> listBooking(UUID organizerId) {
-        return organizerRepository.findByUid(organizerId)
-            .map(organizer -> organizer.getBookings().stream().map(bookingMapper::toReadDto).collect(Collectors.toList()))
-            .orElse(Collections.emptyList());
+    public Page<ReadBookingDto> listBooking(UUID organizerId, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
+        var dtoList = bookingRepository.findByOrganizerUid(organizerId, paramDto, pageable).stream()
+            .map(bookingMapper::toReadDto)
+            .collect(Collectors.toList());
+
+        return RestUtils.getPageEntity(dtoList, pageable);
     }
 
     @Override
