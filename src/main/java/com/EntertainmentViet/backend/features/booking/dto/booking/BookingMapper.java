@@ -60,16 +60,6 @@ public abstract class BookingMapper {
     @Mapping(target = "talent", ignore = true)
     public abstract Booking fromUpdateDtoToModel(UpdateBookingDto updateBookingDto);
 
-    //TODO REMOVE THIS
-    @BeanMapping(ignoreUnmappedSourceProperties = {"jobDetail", "createdAt", "organizerUid", "talentUid"})
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "isPaid", source = "paid")
-    @Mapping(target = "jobDetail", ignore = true)
-    @Mapping(target = "status", source = "status", qualifiedByName = "toBookingStatus")
-    @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "talent", ignore = true)
-    public abstract Booking toModel(ReadBookingDto bookingDto);
-
     // Only return non-confidential detail if token have enough permission
     public ReadBookingDto checkPermission(ReadBookingDto readBookingDto) {
         if (!SecurityUtils.hasRole(BookingRole.BROWSE_BOOKING_ORGANIZER_DETAIL.name())

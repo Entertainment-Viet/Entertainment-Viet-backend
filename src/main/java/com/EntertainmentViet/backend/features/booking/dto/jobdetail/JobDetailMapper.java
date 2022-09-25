@@ -42,14 +42,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "category", source = "categoryUid", qualifiedBy = CategoryMapper.ToCategory.class)
     public abstract JobDetail fromUpdateDtoToModel(UpdateJobDetailDto jobDetailDto);
 
-
-    //TODO REMOVE THIS
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "workType", source = "workType", qualifiedByName = "toWorkType")
-    @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-    public abstract JobDetail toModel(ReadJobDetailDto jobDetailDto);
-
     @Named("toWorkType")
     public WorkType toWorkType(String i18nKey) {
         return WorkType.ofI18nKey(i18nKey);

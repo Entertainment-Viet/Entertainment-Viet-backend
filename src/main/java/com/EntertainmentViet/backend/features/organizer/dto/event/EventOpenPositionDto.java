@@ -17,7 +17,7 @@ import java.util.UUID;
 @Setter
 public class EventOpenPositionDto extends IdentifiableDto {
 
-  private UUID eventId;
+  private UUID event;
 
   private ReadJobOfferDto jobOffer;
 

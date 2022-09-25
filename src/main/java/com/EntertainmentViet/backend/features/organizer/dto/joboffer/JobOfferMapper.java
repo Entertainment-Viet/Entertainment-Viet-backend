@@ -20,12 +20,6 @@ public abstract class JobOfferMapper {
     @Mapping(target = "organizerId", source = "organizer", qualifiedByName = "toOrganizerUid")
     public abstract ReadJobOfferDto toDto(JobOffer jobOffer);
 
-    // TODO REMOVE THIS
-    @BeanMapping(ignoreUnmappedSourceProperties = {"organizerId"})
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "organizer", ignore = true)
-    public abstract JobOffer toModel(ReadJobOfferDto jobDetailDto);
-
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", constant = "true")
