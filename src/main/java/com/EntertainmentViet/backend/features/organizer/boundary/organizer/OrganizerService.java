@@ -2,10 +2,12 @@ package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.OrganizerMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
+import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,9 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public Optional<ReadOrganizerDto> findByUid(UUID id) {
-    return organizerRepository.findByUid(id).map(organizerMapper::toDto);
+    return organizerRepository.findByUid(id)
+        .map(organizerMapper::toDto)
+        .map(organizerMapper::checkPermission);
   }
 
   @Override

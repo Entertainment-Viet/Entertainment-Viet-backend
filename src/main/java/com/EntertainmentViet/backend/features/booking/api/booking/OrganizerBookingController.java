@@ -38,11 +38,6 @@ public class OrganizerBookingController {
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-    
     return CompletableFuture.completedFuture(bookingService.findByUid(organizerUid, uid)
         .map(bookingDto -> ResponseEntity
             .ok()

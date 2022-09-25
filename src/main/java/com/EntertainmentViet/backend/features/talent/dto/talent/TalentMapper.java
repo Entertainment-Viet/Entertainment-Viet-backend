@@ -9,6 +9,9 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
+import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -55,6 +58,24 @@ public abstract class TalentMapper {
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent toModel(UpdateTalentDto updateTalentDto);
 
+    // Only return non-confidential detail if token have enough permission
+    public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {
+        if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
+            return ReadTalentDto.builder()
+                .reviews(readTalentDto.getReviews())
+                .packages(readTalentDto.getPackages())
+                .offerCategories(readTalentDto.getOfferCategories())
+                .displayName(readTalentDto.getDisplayName())
+                .phoneNumber(readTalentDto.getPhoneNumber())
+                .email(readTalentDto.getEmail())
+                .address(readTalentDto.getAddress())
+                .bio(readTalentDto.getBio())
+                .createdAt(readTalentDto.getCreatedAt())
+                .extensions(readTalentDto.getExtensions())
+                .build();
+        }
+        return readTalentDto;
+    }
 
     @Named("toUserStateKey")
     public String toUserStateKey(UserState userState) {

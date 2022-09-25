@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.time.OffsetDateTime;
 public class ReviewDto {
   private OffsetDateTime createdAt;
 
-  private Talent talent;
+  private UUID talent;
 
   private String comment;
 

@@ -44,11 +44,6 @@ public class TalentBookingController {
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
                                                                      @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-
     return CompletableFuture.completedFuture(bookingService.findByUid(talentUid, uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
