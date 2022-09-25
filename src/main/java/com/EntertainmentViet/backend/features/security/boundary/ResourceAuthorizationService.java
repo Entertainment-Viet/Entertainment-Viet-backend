@@ -10,22 +10,13 @@ import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingC
 import com.EntertainmentViet.backend.features.organizer.api.event.EventBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.OrganizerEventController;
+import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFeedbackController;
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
 import com.EntertainmentViet.backend.features.organizer.api.organizer.OrganizerController;
 import com.EntertainmentViet.backend.features.organizer.api.shoppingcart.ShoppingCartController;
-import com.EntertainmentViet.backend.features.security.roles.AdminRole;
-import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
-import com.EntertainmentViet.backend.features.security.roles.BookingRole;
-import com.EntertainmentViet.backend.features.security.roles.CategoryRole;
-import com.EntertainmentViet.backend.features.security.roles.EventApplicantRole;
-import com.EntertainmentViet.backend.features.security.roles.EventRole;
-import com.EntertainmentViet.backend.features.security.roles.JobOfferRole;
-import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageOrderRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageRole;
-import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
-import com.EntertainmentViet.backend.features.security.roles.TalentRole;
+import com.EntertainmentViet.backend.features.security.roles.*;
 import com.EntertainmentViet.backend.features.talent.api.advertisement.AdvertisementController;
+import com.EntertainmentViet.backend.features.talent.api.feedback.TalentFeedbackController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageBookingController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageController;
 import com.EntertainmentViet.backend.features.talent.api.talent.TalentController;
@@ -111,6 +102,14 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.POST, ofPaymentPath(ShoppingCartController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
 
+            // Organizer feedback mapping
+            .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.BROWSE_ORGANIZER_FEEDBACK.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.READ_ORGANIZER_FEEDBACK.name())
+            .mvcMatchers(HttpMethod.POST, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.ADD_ORGANIZER_FEEDBACK.name())
+
             // Organizer manage mapping
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.VERIFY_ORGANIZER.name())
@@ -181,6 +180,15 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(PaymentRole.RECEIVE_TALENT_CASH.name())
             .mvcMatchers(HttpMethod.POST , ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.PAY_TALENT_CASH.name())
+
+            // Talent feedback mapping
+            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.BROWSE_TALENT_FEEDBACK.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.READ_TALENT_FEEDBACK.name())
+            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .hasAuthority(FeedbackRole.ADD_TALENT_FEEDBACK.name())
+
 
             // Talent manage mapping
             .mvcMatchers(HttpMethod.POST , ofPath(TalentController.REQUEST_MAPPING_PATH))

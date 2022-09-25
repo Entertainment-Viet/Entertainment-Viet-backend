@@ -162,6 +162,24 @@
         "name": "PAY_ADVERTISEMENT_CASH"
     },
     {
+        "name": "BROWSE_TALENT_FEEDBACK"
+    },
+    {
+        "name": "READ_TALENT_FEEDBACK"
+    },
+    {
+        "name": "ADD_TALENT_FEEDBACK"
+    },
+    {
+        "name": "BROWSE_ORGANIZER_FEEDBACK"
+    },
+    {
+        "name": "READ_ORGANIZER_FEEDBACK"
+    },
+    {
+        "name": "ADD_ORGANIZER_FEEDBACK"
+    },
+    {
         "name": "ADMIN_BROWSE_ORGANIZER"
     },
     {

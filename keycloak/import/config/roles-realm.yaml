@@ -20,7 +20,9 @@
             "READ_CATEGORY",
             "BROWSE_TALENT",
             "READ_TALENT",
-            "BROWSE_PACKAGE"
+            "BROWSE_PACKAGE",
+            "BROWSE_ORGANIZER_FEEDBACK",
+            "READ_ORGANIZER_FEEDBACK"
         ]
       }
     }
@@ -36,7 +38,8 @@
             "ADD_EVENT",
             "DELETE_EVENT",
             "ORDER_TALENT_PACKAGE",
-            "ADD_BOOKING"
+            "ADD_BOOKING",
+            "ADD_ORGANIZER_FEEDBACK"
         ]
       }
     }
@@ -90,7 +93,9 @@
             "BROWSE_ADVERTISEMENT",
             "READ_ADVERTISEMENT",
             "READ_CATEGORY",
-            "READ_ORGANIZER"
+            "READ_ORGANIZER",
+            "BROWSE_TALENT_FEEDBACK",
+            "READ_TALENT_FEEDBACK"
         ]
       }
     }
@@ -106,7 +111,8 @@
             "DELETE_PACKAGE",
             "ADD_BOOKING",
             "ADD_ADVERTISEMENT",
-            "DELETE_ADVERTISEMENT"
+            "DELETE_ADVERTISEMENT",
+            "ADD_TALENT_FEEDBACK"
         ]
       }
     }
