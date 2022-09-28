@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
-import com.EntertainmentViet.backend.features.organizer.dto.event.EventDto;
+import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class ReadOrganizerDto extends ReadUserDto {
 
   private List<ReadJobOfferDto> jobOffers;
 
-  private List<EventDto> events;
+  private List<ReadEventDto> events;
 
   private List<ReadBookingDto> bookings;
 

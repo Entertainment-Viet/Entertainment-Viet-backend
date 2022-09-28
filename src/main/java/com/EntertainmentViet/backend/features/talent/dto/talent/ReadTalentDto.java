@@ -27,4 +27,6 @@ public class ReadTalentDto extends ReadUserDto {
     private List<ReadPackageDto> packages;
 
     private Set<CategoryDto> offerCategories;
+
+    private Double finalScore;
 }

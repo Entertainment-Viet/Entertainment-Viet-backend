@@ -39,7 +39,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
@@ -53,7 +53,9 @@ public abstract class TalentMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "packages", ignore = true)
+    @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent toModel(UpdateTalentDto updateTalentDto);

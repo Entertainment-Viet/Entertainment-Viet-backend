@@ -13,10 +13,10 @@ public abstract class EventMapper {
     //TODO Fix mapping
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "organizer"})
     @Mapping(target = "organizerId", ignore = true)
-    public abstract EventDto toDto(Event event);
+    public abstract ReadEventDto toDto(Event event);
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"organizerId"})
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "organizer", ignore = true) // TODO fix
-    public abstract Event toModel(EventDto dto);
+    public abstract Event toModel(ReadEventDto dto);
 }

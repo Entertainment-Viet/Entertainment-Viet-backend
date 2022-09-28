@@ -14,7 +14,7 @@ import java.util.UUID;
 @SuperBuilder
 @Getter
 @Setter
-public class EventDto extends IdentifiableDto {
+public class ReadEventDto extends IdentifiableDto {
 
   private String name;
 
