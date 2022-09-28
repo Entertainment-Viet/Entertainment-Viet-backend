@@ -15,12 +15,16 @@ import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -36,9 +40,8 @@ import java.util.UUID;
 @Entity
 @Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Talent extends User implements Advertisable {
-
-  private static final String SCORE_METRIC_PATH = "scoreMetrics";
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
@@ -51,6 +54,12 @@ public class Talent extends User implements Advertisable {
 
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Package> packages;
+
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private JsonNode scoreSystem;
+
+  private Double finalScore;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
@@ -167,7 +176,12 @@ public class Talent extends User implements Advertisable {
   }
 
   public OptionalDouble obtainScore() {
-    return TalentScoreCalculator.calculateScore(getExtensions().get(SCORE_METRIC_PATH));
+    return TalentScoreCalculator.calculateScore(scoreSystem);
+  }
+
+  public void updateScore(JsonNode scoreData) {
+    scoreSystem = scoreData;
+    finalScore = obtainScore().orElse(0.0);
   }
 
   public void withdrawCash() {
