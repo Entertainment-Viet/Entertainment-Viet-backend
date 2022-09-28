@@ -20,6 +20,8 @@ public class ListTalentBookingParamDto {
 
   private String status;
 
+  private String paymentType;
+
   // organizer name
   private String organizer;
 }

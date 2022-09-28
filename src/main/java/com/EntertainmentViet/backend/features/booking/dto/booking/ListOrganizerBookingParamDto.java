@@ -18,7 +18,9 @@ public class ListOrganizerBookingParamDto {
 
   private Boolean paid;
 
-  private String status;;
+  private String status;
+
+  private String paymentType;
 
   // talent name
   private String talent;

@@ -13,8 +13,8 @@ public enum FeedbackStatus {
   private static final Map<String, FeedbackStatus> BY_I18N_KEY = new HashMap<>();
 
   static {
-    for (FeedbackStatus bookingStatus : values()) {
-      BY_I18N_KEY.put(bookingStatus.i18nKey, bookingStatus);
+    for (FeedbackStatus feedbackStatus : values()) {
+      BY_I18N_KEY.put(feedbackStatus.i18nKey, feedbackStatus);
     }
   }
 

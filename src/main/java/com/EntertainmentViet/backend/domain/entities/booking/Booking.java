@@ -6,6 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -72,9 +73,19 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private JobDetail jobDetail;
 
+
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "payment_type")
+  @Type( type = "pgsql_enum" )
+  @NotNull
+  private PaymentType paymentType;
+
   public void updateInfo(Booking newData) {
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
+    }
+    if (newData.getPaymentType() != null) {
+      setPaymentType(newData.getPaymentType());
     }
   }
 

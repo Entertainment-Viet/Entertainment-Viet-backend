@@ -14,8 +14,8 @@ public enum SupportLanguage {
   private static final Map<String, SupportLanguage> BY_I18N_KEY = new HashMap<>();
 
   static {
-    for (SupportLanguage workType : values()) {
-      BY_I18N_KEY.put(workType.i18nKey, workType);
+    for (SupportLanguage supportLanguage : values()) {
+      BY_I18N_KEY.put(supportLanguage.i18nKey, supportLanguage);
     }
   }
 
