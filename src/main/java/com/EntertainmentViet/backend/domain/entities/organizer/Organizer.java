@@ -9,6 +9,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Package_;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
@@ -153,14 +154,14 @@ public class Organizer extends User {
     shoppingCart.add(talentPackage);
   }
 
-  public void finishCartShopping() {
+  public void finishCartShopping(PaymentType paymentType) {
     // validate cart item
     var invalidPackage =  shoppingCart.stream().filter(Predicate.not(Package::getIsActive)).collect(Collectors.toList());
     if (invalidPackage.size() != 0) {
       throw new EntityNotFoundException("Organizer", invalidPackage.get(0).getUid());
     }
     for (Package cartItem : shoppingCart) {
-      addBooking(cartItem.orderPackage(this));
+      addBooking(cartItem.orderPackage(this, paymentType));
     }
     shoppingCart.clear();
   }

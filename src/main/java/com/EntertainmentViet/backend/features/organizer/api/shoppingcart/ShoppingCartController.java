@@ -6,6 +6,7 @@ import com.EntertainmentViet.backend.features.organizer.boundary.shoppingcart.Sh
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.ChargeCartItemDto;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.ReadCartItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,14 +50,15 @@ public class ShoppingCartController {
 
   @PostMapping()
   public CompletableFuture<ResponseEntity<Void>> charge(JwtAuthenticationToken token, HttpServletRequest request,
-                                                        @PathVariable("organizer_uid") UUID organizerUid) {
+                                                        @PathVariable("organizer_uid") UUID organizerUid,
+                                                        @RequestBody @Valid ChargeCartItemDto chargeCartItemDto) {
 
     if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    if (shoppingCartService.charge(organizerUid)) {
+    if (shoppingCartService.charge(organizerUid, chargeCartItemDto)) {
       return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());

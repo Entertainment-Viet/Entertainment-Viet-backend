@@ -119,6 +119,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Talent package order mapping
+            .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH) + "shoppingcart")
+            .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
             .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
             .mvcMatchers(HttpMethod.GET , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))

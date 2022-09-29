@@ -1,9 +1,11 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.shoppingcart;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.CartItemMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.ChargeCartItemDto;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.ReadCartItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +36,7 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     }
 
     @Override
-    public boolean charge(UUID organizerUid) {
+    public boolean charge(UUID organizerUid, ChargeCartItemDto chargeCartItemDto) {
         var organizerOptional = organizerRepository.findByUid(organizerUid);
 
         if (organizerOptional.isEmpty()) {
@@ -44,7 +46,7 @@ public class ShoppingCartService implements ShoppingCartBoundary {
 
         try {
             Organizer organizer = organizerOptional.get();
-            organizer.finishCartShopping();
+            organizer.finishCartShopping(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
             organizerRepository.save(organizer);
         } catch (EntityNotFoundException ex) {
             log.warn(ex.getMessage());
