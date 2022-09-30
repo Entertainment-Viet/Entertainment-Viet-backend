@@ -48,16 +48,31 @@
         "name": "DELETE_EVENT"
     },
     {
-        "name": "APPLY_ORGANIZER_EVENT"
+        "name": "APPLY_ORGANIZER_POSITION"
     },
     {
-        "name": "BROWSE_EVENT_APPLICANT"
+        "name": "BROWSE_POSITION_APPLICANT"
     },
     {
-        "name": "ACCEPT_EVENT_APPLICANT"
+        "name": "ACCEPT_POSITION_APPLICANT"
     },
     {
-        "name": "REJECT_EVENT_APPLICANT"
+        "name": "REJECT_POSITION_APPLICANT"
+    },
+    {
+        "name": "BROWSE_EVENT_POSITION"
+    },
+    {
+        "name": "ADD_EVENT_POSITION"
+    },
+    {
+        "name": "READ_EVENT_POSITION"
+    },
+    {
+        "name": "UPDATE_EVENT_POSITION"
+    },
+    {
+        "name": "DELETE_EVENT_POSITION"
     },
     {
         "name": "BROWSE_TALENT"

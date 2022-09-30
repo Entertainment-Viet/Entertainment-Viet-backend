@@ -7,8 +7,9 @@ import com.EntertainmentViet.backend.features.admin.api.UserController;
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
-import com.EntertainmentViet.backend.features.organizer.api.event.EventBookingController;
+import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
+import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
 import com.EntertainmentViet.backend.features.organizer.api.event.OrganizerEventController;
 import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFeedbackController;
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
@@ -49,15 +50,29 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(JobOfferController.REQUEST_MAPPING_PATH))
             .hasAuthority(JobOfferRole.DELETE_JOBOFFER.name())
 
-            // Event applicant mapping
-            .mvcMatchers(HttpMethod.POST, ofPath(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.APPLY_ORGANIZER_EVENT.name())
-            .mvcMatchers(HttpMethod.GET, ofPath(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.BROWSE_EVENT_APPLICANT.name())
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.ACCEPT_EVENT_APPLICANT.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.REJECT_EVENT_APPLICANT.name())
+            // Event Position applicant mapping
+            .mvcMatchers(HttpMethod.POST, ofPath(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.APPLY_ORGANIZER_POSITION.name())
+            .mvcMatchers(HttpMethod.GET, ofPath(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.BROWSE_POSITION_APPLICANT.name())
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.ACCEPT_POSITION_APPLICANT.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.REJECT_POSITION_APPLICANT.name())
+
+            // Event position mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.BROWSE_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.ADD_EVENT_POSITION.name())
+
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.READ_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.UPDATE_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.DELETE_EVENT_POSITION.name())
+
 
             // Event mapping
             .mvcMatchers(HttpMethod.GET, ofPath(OrganizerEventController.REQUEST_MAPPING_PATH))

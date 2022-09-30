@@ -12,7 +12,9 @@
             "READ_JOBOFFER",
             "BROWSE_EVENT",
             "READ_EVENT",
-            "BROWSE_EVENT_APPLICANT",
+            "BROWSE_POSITION_APPLICANT",
+            "BROWSE_EVENT_POSITION",
+            "READ_EVENT_POSITION",
             "BROWSE_BOOKING_ORGANIZER",
             "BROWSE_BOOKING_ORGANIZER_DETAIL",
             "BROWSE_BOOKING_TALENT",
@@ -22,7 +24,8 @@
             "READ_TALENT",
             "BROWSE_PACKAGE",
             "BROWSE_ORGANIZER_FEEDBACK",
-            "READ_ORGANIZER_FEEDBACK"
+            "READ_ORGANIZER_FEEDBACK",
+            "READ_PACKAGE"
         ]
       }
     }
@@ -39,7 +42,9 @@
             "DELETE_EVENT",
             "ORDER_TALENT_PACKAGE",
             "ADD_BOOKING",
-            "ADD_ORGANIZER_FEEDBACK"
+            "ADD_ORGANIZER_FEEDBACK",
+            "ADD_EVENT_POSITION",
+            "DELETE_EVENT_POSITION"
         ]
       }
     }
@@ -53,8 +58,9 @@
             "SELF_UPDATE_ORGANIZER",
             "UPDATE_JOBOFFER",
             "UPDATE_EVENT",
-            "ACCEPT_EVENT_APPLICANT",
-            "REJECT_EVENT_APPLICANT",
+            "ACCEPT_POSITION_APPLICANT",
+            "REJECT_POSITION_APPLICANT",
+            "UPDATE_EVENT_POSITION",
             "ACCEPT_BOOKING_ORGANIZER",
             "CANCEL_BOOKING_ORGANIZER",
             "UPDATE_BOOKING"
@@ -95,7 +101,9 @@
             "READ_CATEGORY",
             "READ_ORGANIZER",
             "BROWSE_TALENT_FEEDBACK",
-            "READ_TALENT_FEEDBACK"
+            "READ_TALENT_FEEDBACK",
+            "BROWSE_EVENT_POSITION",
+            "READ_EVENT_POSITION"
         ]
       }
     }
@@ -106,7 +114,7 @@
       "realm": null,
       "client": {
         "backend": [
-            "APPLY_ORGANIZER_EVENT",
+            "APPLY_ORGANIZER_POSITION",
             "ADD_PACKAGE",
             "DELETE_PACKAGE",
             "ADD_BOOKING",
