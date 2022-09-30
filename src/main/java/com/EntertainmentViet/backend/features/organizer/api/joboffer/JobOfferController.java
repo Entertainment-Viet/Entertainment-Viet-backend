@@ -67,7 +67,7 @@ public class JobOfferController {
                     .ok()
                     .body(talentDto)
             )
-            .orElse( ResponseEntity.notFound().build()));
+            .orElse(ResponseEntity.notFound().build()));
   }
 
   @PostMapping(
@@ -82,19 +82,18 @@ public class JobOfferController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(jobOfferService.create(createJobOfferDto, organizerUid)
-            .map(newJobOfferDto -> ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newJobOfferDto))
-                    .body(newJobOfferDto)
+    return CompletableFuture.completedFuture(jobOfferService.create(createJobOfferDto, organizerUid)
+            .map(newJobOfferUid -> ResponseEntity
+                    .created(RestUtils.getCreatedLocationUri(request, newJobOfferUid))
+                    .body(newJobOfferUid)
             )
             .orElse(ResponseEntity.badRequest().build())
     );
   }
 
-  @PutMapping(
+  @PutMapping(value = "/{uid}",
           consumes = MediaType.APPLICATION_JSON_VALUE,
-          produces = MediaType.APPLICATION_JSON_VALUE,
-          value = "/{uid}")
+          produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, @RequestBody @Valid UpdateJobOfferDto updateJobOfferDto,
                                                         @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
@@ -104,9 +103,9 @@ public class JobOfferController {
     }
 
     return CompletableFuture.completedFuture(jobOfferService.update(updateJobOfferDto, organizerUid, uid)
-            .map(newJobOfferDto -> ResponseEntity
+            .map(newJobOfferUid -> ResponseEntity
                     .ok()
-                    .body(newJobOfferDto)
+                    .body(newJobOfferUid)
             )
             .orElse(ResponseEntity.badRequest().build())
     );

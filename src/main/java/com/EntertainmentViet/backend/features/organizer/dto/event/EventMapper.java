@@ -2,21 +2,31 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.util.UUID;
 
 @Mapper(uses = {EventOpenPositionMapper.class, JobOfferMapper.class}, config = MappingConfig.class)
 public abstract class EventMapper {
 
-    //TODO Fix mapping
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "organizer"})
-    @Mapping(target = "organizerId", ignore = true)
-    public abstract ReadEventDto toDto(Event event);
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @Mapping(target = "organizerId", source = "organizer", qualifiedByName = "toOrganizerUid")
+    public abstract ReadEventDto toReadDto(Event event);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"organizerId"})
+    @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "organizer", ignore = true) // TODO fix
-    public abstract Event toModel(ReadEventDto dto);
+    @Mapping(target = "openPositions", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    public abstract Event fromCreateDtoToModel(CreateEventDto dto);
+
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "openPositions", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 }

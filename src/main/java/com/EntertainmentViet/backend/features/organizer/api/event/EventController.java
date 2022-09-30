@@ -26,12 +26,4 @@ public class EventController {
 
   private final EventBoundary eventService;
 
-  @GetMapping()
-  public CompletableFuture<ResponseEntity<Page<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
-                                                                                  @ParameterObject Pageable pageable,
-                                                                                  @ParameterObject ListEventParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-        eventService.findByOrganizerUid(organizerUid, paramDto, pageable)
-    ));
-  }
 }
