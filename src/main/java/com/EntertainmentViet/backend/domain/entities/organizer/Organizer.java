@@ -5,7 +5,6 @@ import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
-import com.EntertainmentViet.backend.domain.entities.talent.Package_;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -20,10 +19,11 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -49,20 +49,15 @@ public class Organizer extends User {
   @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrganizerFeedback> feedbacks;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinTable(
-      name = "organizer_shopping_cart",
-      joinColumns = @JoinColumn( name = "organizer_id", referencedColumnName = Organizer_.ID),
-      inverseJoinColumns = @JoinColumn( name = "package_id", referencedColumnName = Package_.ID)
-  )
-  private Set<Package> shoppingCart;
+  @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<OrganizerShoppingCart> shoppingCart;
 
   public void addJobOffer(JobOffer jobOffer) {
     jobOffers.add(jobOffer);
     jobOffer.setOrganizer(this);
   }
 
-  public void removeJobOffer(JobOffer jobOffer){
+  public void removeJobOffer(JobOffer jobOffer) {
     jobOffers.remove(jobOffer);
     jobOffer.setOrganizer(null);
   }
@@ -150,18 +145,22 @@ public class Organizer extends User {
     }
   }
 
-  public void addPackageToCart(Package talentPackage) {
-    shoppingCart.add(talentPackage);
+  public void addPackageToCart(Package talentPackage, Double price) {
+    OrganizerShoppingCart cartItem = new OrganizerShoppingCart(this, talentPackage, price);
+    shoppingCart.add(cartItem);
   }
 
   public void finishCartShopping(PaymentType paymentType) {
     // validate cart item
-    var invalidPackage =  shoppingCart.stream().filter(Predicate.not(Package::getIsActive)).collect(Collectors.toList());
+    var invalidPackage = shoppingCart.stream()
+        .filter(Predicate.not(OrganizerShoppingCart::checkValidCartItem))
+        .collect(Collectors.toList());
     if (invalidPackage.size() != 0) {
-      throw new EntityNotFoundException("Organizer", invalidPackage.get(0).getUid());
+      log.warn("Exist invalid cart item in shopping cart");
+      throw new EntityNotFoundException("Package", invalidPackage.get(0).getTalentPackage().getUid());
     }
-    for (Package cartItem : shoppingCart) {
-      addBooking(cartItem.orderPackage(this, paymentType));
+    for (OrganizerShoppingCart cartItem : shoppingCart) {
+      addBooking(cartItem.charge(paymentType));
     }
     shoppingCart.clear();
   }

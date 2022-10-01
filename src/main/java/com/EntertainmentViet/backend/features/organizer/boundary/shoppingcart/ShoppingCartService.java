@@ -28,8 +28,8 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     @Override
     public List<ReadCartItemDto> findByOrganizerUid(UUID organizerUid) {
         return organizerRepository.findByUid(organizerUid)
-                .map(Organizer::getShoppingCart)
-                .orElse(Collections.emptySet())
+            .map(Organizer::getShoppingCart)
+            .orElse(Collections.emptyList())
                 .stream()
                 .map(cartItemMapper::toDto)
                 .collect(Collectors.toList());

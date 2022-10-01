@@ -11,7 +11,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
-import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -26,6 +25,4 @@ public class ReadOrganizerDto extends ReadUserDto {
   private List<ReadBookingDto> bookings;
 
   private List<OrganizerFeedBackDto> feedbacks;
-
-  private List<UUID> shoppingCart;
 }

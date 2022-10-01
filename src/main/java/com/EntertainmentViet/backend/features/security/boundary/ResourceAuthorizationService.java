@@ -4,11 +4,11 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
-import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
-import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
+import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
+import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
 import com.EntertainmentViet.backend.features.organizer.api.event.OrganizerEventController;
 import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFeedbackController;
@@ -128,13 +128,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Organizer manage mapping
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.VERIFY_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.GET , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Talent package order mapping
-            .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH) + "shoppingcart")
+            .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH) + "/shoppingcart")
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
             .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())

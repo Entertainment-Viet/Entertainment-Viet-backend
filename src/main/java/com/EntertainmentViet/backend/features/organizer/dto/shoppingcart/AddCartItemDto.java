@@ -15,4 +15,7 @@ import java.util.UUID;
 public class AddCartItemDto {
     @NotNull
     private UUID organizerId;
+
+    @NotNull
+    private Double suggestedPrice;
 }

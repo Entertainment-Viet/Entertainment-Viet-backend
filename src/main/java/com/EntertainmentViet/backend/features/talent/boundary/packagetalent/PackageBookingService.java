@@ -7,13 +7,13 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
+import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageOrderDto;
-import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,7 @@ public class PackageBookingService implements PackageBookingBoundary {
         if (!isPackageBelongToTalentWithUid(packageTalent, talentId)) {
             return false;
         }
-        organizer.addPackageToCart(packageTalent);
+        organizer.addPackageToCart(packageTalent, addCartItemDto.getSuggestedPrice());
         organizerRepository.save(organizer);
         return true;
     }

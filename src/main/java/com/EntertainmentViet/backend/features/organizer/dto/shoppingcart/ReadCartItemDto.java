@@ -1,7 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.dto.shoppingcart;
 
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
-import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReadCartItemDto extends IdentifiableDto {
+public class ReadCartItemDto {
 
   private String name;
 
   private Boolean isActive;
+
+  private Double suggestedPrice;
 
   private UUID talentId;
 
