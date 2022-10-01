@@ -3,11 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.dao.organizer;
 import com.EntertainmentViet.backend.domain.entities.admin.QOrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
-import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.organizer.*;
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
@@ -32,6 +28,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QEvent event = QEvent.event;
   private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
+
+  private final QOrganizerShoppingCart organizerShoppingCart = QOrganizerShoppingCart.organizerShoppingCart;
 
   private final QPackage aPackage = QPackage.package$;
 
@@ -73,7 +71,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
     // join shoppingCart
     queryFactory.selectFrom(organizer).distinct()
-        .leftJoin(organizer.shoppingCart, aPackage).fetchJoin()
+        .leftJoin(organizer.shoppingCart, organizerShoppingCart).fetchJoin()
+        .leftJoin(organizerShoppingCart.talentPackage, aPackage).fetchJoin()
         .leftJoin(aPackage.talent, QTalent.talent).fetchJoin()
         .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()

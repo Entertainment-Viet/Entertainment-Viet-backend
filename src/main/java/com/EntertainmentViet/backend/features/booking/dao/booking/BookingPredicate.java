@@ -6,6 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
@@ -13,8 +14,6 @@ import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -78,6 +77,12 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
       );
     }
+    if (paramDto.getPaymentType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.paymentType.eq(PaymentType.ofI18nKey(paramDto.getPaymentType()))
+      );
+    }
     if (paramDto.getTalent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
@@ -120,6 +125,12 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
       predicate = ExpressionUtils.allOf(
           predicate,
           booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+      );
+    }
+    if (paramDto.getPaymentType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.paymentType.eq(PaymentType.ofI18nKey(paramDto.getPaymentType()))
       );
     }
     if (paramDto.getOrganizer() != null) {

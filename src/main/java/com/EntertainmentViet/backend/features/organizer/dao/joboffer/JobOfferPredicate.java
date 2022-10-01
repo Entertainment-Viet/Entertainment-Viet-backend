@@ -61,7 +61,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
     if (paramDto.getCategory() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              jobOffer.jobDetail.category.name.eq(paramDto.getCategory())
+              jobOffer.jobDetail.category.uid.eq(paramDto.getCategory())
       );
     }
     return predicate;

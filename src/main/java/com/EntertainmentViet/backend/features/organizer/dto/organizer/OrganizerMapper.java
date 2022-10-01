@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
@@ -18,8 +17,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.*;
-
 @Slf4j
 @Mapper(uses = {
     ExtensionsMapper.class,
@@ -32,11 +29,10 @@ import java.util.*;
   config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "shoppingCart"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-  @Mapping(target = "shoppingCart", source = "shoppingCart", qualifiedByName = "toShoppingCartUid")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
@@ -56,6 +52,7 @@ public abstract class OrganizerMapper {
   public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {
     if (!SecurityUtils.hasRole(OrganizerRole.READ_ORGANIZER_DETAIL.name())) {
       return ReadOrganizerDto.builder()
+          .uid(readOrganizerDto.getUid())
           .events(readOrganizerDto.getEvents())
           .displayName(readOrganizerDto.getDisplayName())
           .phoneNumber(readOrganizerDto.getPhoneNumber())
@@ -77,29 +74,5 @@ public abstract class OrganizerMapper {
   @Named("toUserState")
   public UserState toUserState(String i18nKey) {
     return UserState.ofI18nKey(i18nKey);
-  }
-
-  @Named("toShoppingCartUid")
-  public List<UUID> toShoppingCartUid(Set<Package> shoppingCart) {
-    if (shoppingCart == null) {
-      return Collections.emptyList();
-    }
-    List<UUID> resultList = new ArrayList<>();
-    for (Package cartItem : shoppingCart ){
-      resultList.add(cartItem.getUid());
-    }
-    return resultList;
-  }
-
-  @Named("toShoppingCart")
-  public Set<Package> toShoppingCart(List<UUID> uidList) {
-    if (uidList == null) {
-      return Collections.emptySet();
-    }
-    Set<Package> resultList = new HashSet<>();
-    for (UUID uid : uidList ){
-      resultList.add(Package.builder().build());
-    }
-    return resultList;
   }
 }

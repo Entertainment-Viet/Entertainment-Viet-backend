@@ -1,12 +1,13 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,17 +15,11 @@ import java.util.UUID;
 @SuperBuilder
 @Getter
 @Setter
-public class EventDto extends IdentifiableDto {
+public class ReadEventOpenPositionDto extends IdentifiableDto {
 
-  private String name;
+  private UUID event;
 
-  private Boolean isActive;
+  private ReadJobOfferDto jobOffer;
 
-  private String occurrenceAddress;
-
-  private OffsetDateTime occurrenceTime;
-
-  private UUID organizerId;
-
-  private List<EventOpenPositionDto> openPositions;
+  private List<ReadBookingDto> applicants;
 }

@@ -3,7 +3,8 @@ package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBookingBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageBookingDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageOrderDto;
+import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -15,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -45,21 +46,36 @@ public class PackageBookingController {
     ));
   }
 
-  @PostMapping(
+  @PostMapping(value = "/shoppingcart",
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<Void>> addPackageToShoppingCart(JwtAuthenticationToken token, 
-                                                                          @RequestBody @Valid CreatePackageBookingDto createPackageBookingDto,
+                                                                          @RequestBody @Valid AddCartItemDto addCartItemDto,
                                                                           @PathVariable("talent_uid") UUID talentUid,
                                                                           @PathVariable("package_uid") UUID packageUid) {
 
-    if (packageBookingService.addPackageToShoppingCart(talentUid, packageUid, createPackageBookingDto)) {
+    if (packageBookingService.addPackageToShoppingCart(talentUid, packageUid, addCartItemDto)) {
       return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PostMapping(value = "/{uid}")
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public CompletableFuture<ResponseEntity<UUID>> create(JwtAuthenticationToken token, HttpServletRequest request,
+                                                        @PathVariable("talent_uid") UUID talentUid,
+                                                        @PathVariable("package_uid") UUID packageUid,
+                                                        @RequestBody @Valid CreatePackageOrderDto createPackageOrderDto) {
+    return CompletableFuture.completedFuture(packageBookingService.create(talentUid, packageUid, createPackageOrderDto)
+        .map(newBookingUid -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newBookingUid))
+            .body(newBookingUid)
+        )
+        .orElse(ResponseEntity.badRequest().build())
+    );
+  }
+    @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> acceptBooking(JwtAuthenticationToken token,
                                                                @PathVariable("talent_uid") UUID talentUid, 
                                                                @PathVariable("package_uid") UUID packageUid,

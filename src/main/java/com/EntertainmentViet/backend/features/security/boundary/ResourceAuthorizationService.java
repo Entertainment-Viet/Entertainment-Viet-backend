@@ -4,11 +4,12 @@ import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementContro
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
 import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
-import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
-import com.EntertainmentViet.backend.features.organizer.api.event.EventBookingController;
+import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
+import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
+import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
 import com.EntertainmentViet.backend.features.organizer.api.event.OrganizerEventController;
 import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFeedbackController;
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
@@ -49,15 +50,29 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(JobOfferController.REQUEST_MAPPING_PATH))
             .hasAuthority(JobOfferRole.DELETE_JOBOFFER.name())
 
-            // Event applicant mapping
-            .mvcMatchers(HttpMethod.POST, ofPath(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.APPLY_ORGANIZER_EVENT.name())
-            .mvcMatchers(HttpMethod.GET, ofPath(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.BROWSE_EVENT_APPLICANT.name())
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.ACCEPT_EVENT_APPLICANT.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventBookingController.REQUEST_MAPPING_PATH))
-            .hasAuthority(EventApplicantRole.REJECT_EVENT_APPLICANT.name())
+            // Event Position applicant mapping
+            .mvcMatchers(HttpMethod.POST, ofPath(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.APPLY_ORGANIZER_POSITION.name())
+            .mvcMatchers(HttpMethod.GET, ofPath(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.BROWSE_POSITION_APPLICANT.name())
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.ACCEPT_POSITION_APPLICANT.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventPositionBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(PositionApplicantRole.REJECT_POSITION_APPLICANT.name())
+
+            // Event position mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.BROWSE_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.ADD_EVENT_POSITION.name())
+
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.READ_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.UPDATE_EVENT_POSITION.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(EventPositionController.REQUEST_MAPPING_PATH))
+            .hasAuthority(EventPositionRole.DELETE_EVENT_POSITION.name())
+
 
             // Event mapping
             .mvcMatchers(HttpMethod.GET, ofPath(OrganizerEventController.REQUEST_MAPPING_PATH))
@@ -97,28 +112,40 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(PaymentRole.PAY_ORGANIZER_CASH.name())
 
             // Organizer shopping chart
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(ShoppingCartController.REQUEST_MAPPING_PATH))
-            .hasAuthority(OrganizerRole.READ_ORGANIZER_DETAIL.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.READ_SHOPPING_CART.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
+            .mvcMatchers(HttpMethod.DELETE, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.CLEAR_SHOPPING_CART.name())
+
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.READ_CART_ITEM.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.UPDATE_CART_ITEM.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.DELETE_CART_ITEM.name())
 
             // Organizer feedback mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.BROWSE_ORGANIZER_FEEDBACK.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.READ_ORGANIZER_FEEDBACK.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.ADD_ORGANIZER_FEEDBACK.name())
 
             // Organizer manage mapping
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.VERIFY_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.GET , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Talent package order mapping
+            .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH) + "/shoppingcart")
+            .hasAuthority(ShoppingCartRole.ADD_CART_ITEM.name())
+
             .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
             .mvcMatchers(HttpMethod.GET , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
@@ -172,21 +199,21 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.UPDATE_BOOKING.name())
             .mvcMatchers(HttpMethod.POST , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ACCEPT_BOOKING_TALENT.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_TALENT.name())
 
             // Talent payment mapping
-            .mvcMatchers(HttpMethod.GET , ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.RECEIVE_TALENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST , ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.PAY_TALENT_CASH.name())
 
             // Talent feedback mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.BROWSE_TALENT_FEEDBACK.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.READ_TALENT_FEEDBACK.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.ADD_TALENT_FEEDBACK.name())
 
 

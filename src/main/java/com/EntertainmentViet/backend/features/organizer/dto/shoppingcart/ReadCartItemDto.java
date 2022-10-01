@@ -17,7 +17,9 @@ public class ReadCartItemDto extends IdentifiableDto {
 
   private String name;
 
-  private Boolean isActive;
+  private Boolean isValid;
+
+  private Double suggestedPrice;
 
   private UUID talentId;
 

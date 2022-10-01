@@ -10,7 +10,6 @@ import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMappe
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import org.mapstruct.BeanMapping;
@@ -39,7 +38,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
@@ -53,7 +52,9 @@ public abstract class TalentMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "packages", ignore = true)
+    @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent toModel(UpdateTalentDto updateTalentDto);
@@ -62,6 +63,7 @@ public abstract class TalentMapper {
     public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {
         if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
             return ReadTalentDto.builder()
+                .uid(readTalentDto.getUid())
                 .reviews(readTalentDto.getReviews())
                 .packages(readTalentDto.getPackages())
                 .offerCategories(readTalentDto.getOfferCategories())

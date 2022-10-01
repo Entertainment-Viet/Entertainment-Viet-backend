@@ -23,4 +23,7 @@ public class CreateBookingDto {
 
     @NotNull
     private CreateJobDetailDto jobDetail;
+
+    @NotNull
+    private String paymentType;
 }

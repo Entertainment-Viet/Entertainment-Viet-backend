@@ -234,6 +234,9 @@ public class Talent extends User implements Advertisable {
     if (newData.getOfferCategories() != null) {
       setOfferCategories(newData.getOfferCategories());
     }
+    if (newData.getScoreSystem() != null) {
+      setScoreSystem(newData.getScoreSystem());
+    }
     return this;
   }
 }

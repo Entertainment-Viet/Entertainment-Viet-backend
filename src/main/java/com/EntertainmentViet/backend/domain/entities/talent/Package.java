@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -66,12 +67,15 @@ public class Package extends Identifiable {
   )
   private Set<Booking> orders;
 
-  public Booking orderPackage(Organizer organizer) {
+  public Booking orderPackage(Organizer organizer, PaymentType paymentType) {
     Booking booking = new Booking();
     booking.setJobDetail(getJobDetail().clone());
     booking.setTalent(talent);
     booking.setOrganizer(organizer);
     booking.setStatus(BookingStatus.TALENT_PENDING);
+    booking.setPaymentType(paymentType);
+
+    orders.add(booking);
     return booking;
   }
 

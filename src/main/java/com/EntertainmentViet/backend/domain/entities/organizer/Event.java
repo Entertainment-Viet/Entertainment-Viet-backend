@@ -71,4 +71,21 @@ public class Event extends Identifiable implements Advertisable {
             () -> log.warn(String.format("Can not update information of openPosition with uid '%s'", positionUid))
         );
   }
+
+  public Event updateInfo(Event newData) {
+    if (newData.getName() != null) {
+      setName(newData.getName());
+    }
+    if (newData.getIsActive() != null) {
+      setIsActive(newData.getIsActive());
+    }
+    if (newData.getOccurrenceAddress() != null) {
+      setOccurrenceAddress(newData.getOccurrenceAddress());
+    }
+    if (newData.getOccurrenceTime() != null) {
+      setOccurrenceTime(newData.getOccurrenceTime());
+    }
+
+    return this;
+  }
 }
