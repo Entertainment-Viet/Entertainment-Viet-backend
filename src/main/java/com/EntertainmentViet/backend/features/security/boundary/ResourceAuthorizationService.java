@@ -112,17 +112,26 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(PaymentRole.PAY_ORGANIZER_CASH.name())
 
             // Organizer shopping chart
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(ShoppingCartController.REQUEST_MAPPING_PATH))
-            .hasAuthority(OrganizerRole.READ_ORGANIZER_DETAIL.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.READ_SHOPPING_CART.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
+            .mvcMatchers(HttpMethod.DELETE, ofPath(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.CLEAR_SHOPPING_CART.name())
+
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.READ_CART_ITEM.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.UPDATE_CART_ITEM.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(ShoppingCartController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ShoppingCartRole.DELETE_CART_ITEM.name())
 
             // Organizer feedback mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.BROWSE_ORGANIZER_FEEDBACK.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.READ_ORGANIZER_FEEDBACK.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.ADD_ORGANIZER_FEEDBACK.name())
 
             // Organizer manage mapping
@@ -135,7 +144,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             // Talent package order mapping
             .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH) + "/shoppingcart")
-            .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
+            .hasAuthority(ShoppingCartRole.ADD_CART_ITEM.name())
+
             .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(PackageOrderRole.ORDER_TALENT_PACKAGE.name())
             .mvcMatchers(HttpMethod.GET , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
@@ -189,21 +199,21 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.UPDATE_BOOKING.name())
             .mvcMatchers(HttpMethod.POST , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ACCEPT_BOOKING_TALENT.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_TALENT.name())
 
             // Talent payment mapping
-            .mvcMatchers(HttpMethod.GET , ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.RECEIVE_TALENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST , ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.PAY_TALENT_CASH.name())
 
             // Talent feedback mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.BROWSE_TALENT_FEEDBACK.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.READ_TALENT_FEEDBACK.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.ADD_TALENT_FEEDBACK.name())
 
 

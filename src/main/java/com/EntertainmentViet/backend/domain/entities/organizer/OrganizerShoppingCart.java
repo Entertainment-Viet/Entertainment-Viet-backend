@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class OrganizerShoppingCart {
+public class OrganizerShoppingCart extends Identifiable {
 
   @EmbeddedId
   private ShoppingCartKey id;
@@ -44,5 +45,12 @@ public class OrganizerShoppingCart {
 
   public Booking charge(PaymentType paymentType) {
     return talentPackage.orderPackage(organizer, paymentType);
+  }
+
+  public OrganizerShoppingCart updateInfo(OrganizerShoppingCart newData) {
+    if (newData.getPrice() != null) {
+      setPrice(newData.getPrice());
+    }
+    return this;
   }
 }

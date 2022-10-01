@@ -162,6 +162,11 @@ public class Organizer extends User {
     for (OrganizerShoppingCart cartItem : shoppingCart) {
       addBooking(cartItem.charge(paymentType));
     }
+
+    clearCart();
+  }
+
+  public void clearCart() {
     shoppingCart.clear();
   }
 

@@ -52,6 +52,7 @@ public abstract class OrganizerMapper {
   public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {
     if (!SecurityUtils.hasRole(OrganizerRole.READ_ORGANIZER_DETAIL.name())) {
       return ReadOrganizerDto.builder()
+          .uid(readOrganizerDto.getUid())
           .events(readOrganizerDto.getEvents())
           .displayName(readOrganizerDto.getDisplayName())
           .phoneNumber(readOrganizerDto.getPhoneNumber())

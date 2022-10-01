@@ -89,7 +89,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     if (paramDto.getCategory() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talent.offerCategories.any().in(JPAExpressions.selectFrom(category).where(category.name.eq(paramDto.getCategory())))
+              talent.offerCategories.any().in(JPAExpressions.selectFrom(category).where(category.uid.eq(paramDto.getCategory())))
       );
     }
 

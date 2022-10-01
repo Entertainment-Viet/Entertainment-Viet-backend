@@ -24,14 +24,25 @@ public abstract class CartItemMapper {
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "organizer"})
     @Mapping(target = "talentId", source = "talentPackage.talent", qualifiedByName = "toTalentId")
     @Mapping(target = "name", source = "talentPackage.name")
-    @Mapping(target = "isActive", source = "talentPackage.isActive")
+    @Mapping(target = "isValid", source = ".", qualifiedByName = "toValid")
     @Mapping(target = "suggestedPrice", source = "price")
     @Mapping(target = "jobDetail", source = "talentPackage.jobDetail")
     public abstract ReadCartItemDto toDto(OrganizerShoppingCart talentPackage);
+
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "talentPackage", ignore = true)
+    @Mapping(target = "price", source = "suggestedPrice")
+    public abstract OrganizerShoppingCart fromUpdateDtoToModel(UpdateCartItemDto dto);
 
     @Named("toTalentId")
     public UUID toTalentId(Talent talent) {
         return talent != null ? talent.getUid() : null;
     }
 
+    @Named("toValid")
+    public Boolean toValid(OrganizerShoppingCart cartItem) {
+        return cartItem.checkValidCartItem();
+    }
 }

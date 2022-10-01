@@ -12,8 +12,6 @@ import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPacka
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,9 +37,9 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
 
     // join bookings
     var packages = queryFactory.selectFrom(talentPackage).distinct()
-          .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
-          .leftJoin(jobDetail.category, category).fetchJoin()
-          .leftJoin(category.parent, parentCategory).on(category.uid.eq(parentCategory.uid))
+        .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
           .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();
 

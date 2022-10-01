@@ -10,7 +10,6 @@ import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMappe
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import org.mapstruct.BeanMapping;
@@ -64,6 +63,7 @@ public abstract class TalentMapper {
     public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {
         if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
             return ReadTalentDto.builder()
+                .uid(readTalentDto.getUid())
                 .reviews(readTalentDto.getReviews())
                 .packages(readTalentDto.getPackages())
                 .offerCategories(readTalentDto.getOfferCategories())

@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -12,8 +13,7 @@ public class ListTalentParamDto {
 
     private String displayName;
 
-    // category name
-    private String category;
+  private UUID category;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime startTime;

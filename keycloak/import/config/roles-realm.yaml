@@ -5,7 +5,7 @@
       "realm": null,
       "client": {
         "backend": [
-            "VERIFY_ORGANIZER",
+          "VERIFY_ORGANIZER",
             "READ_ORGANIZER",
             "READ_ORGANIZER_DETAIL",
             "BROWSE_JOBOFFER",
@@ -15,17 +15,19 @@
             "BROWSE_POSITION_APPLICANT",
             "BROWSE_EVENT_POSITION",
             "READ_EVENT_POSITION",
-            "BROWSE_BOOKING_ORGANIZER",
-            "BROWSE_BOOKING_ORGANIZER_DETAIL",
-            "BROWSE_BOOKING_TALENT",
-            "READ_BOOKING",
-            "READ_CATEGORY",
-            "BROWSE_TALENT",
-            "READ_TALENT",
-            "BROWSE_PACKAGE",
-            "BROWSE_ORGANIZER_FEEDBACK",
-            "READ_ORGANIZER_FEEDBACK",
-            "READ_PACKAGE"
+          "BROWSE_BOOKING_ORGANIZER",
+          "BROWSE_BOOKING_ORGANIZER_DETAIL",
+          "BROWSE_BOOKING_TALENT",
+          "READ_BOOKING",
+          "READ_CATEGORY",
+          "BROWSE_TALENT",
+          "READ_TALENT",
+          "BROWSE_PACKAGE",
+          "BROWSE_ORGANIZER_FEEDBACK",
+          "READ_ORGANIZER_FEEDBACK",
+          "READ_PACKAGE",
+          "READ_SHOPPING_CART",
+          "READ_CART_ITEM"
         ]
       }
     }
@@ -36,15 +38,18 @@
       "realm": null,
       "client": {
         "backend": [
-            "ADD_JOBOFFER",
-            "DELETE_JOBOFFER",
-            "ADD_EVENT",
-            "DELETE_EVENT",
-            "ORDER_TALENT_PACKAGE",
-            "ADD_BOOKING",
-            "ADD_ORGANIZER_FEEDBACK",
-            "ADD_EVENT_POSITION",
-            "DELETE_EVENT_POSITION"
+          "ADD_JOBOFFER",
+          "DELETE_JOBOFFER",
+          "ADD_EVENT",
+          "DELETE_EVENT",
+          "ORDER_TALENT_PACKAGE",
+          "ADD_BOOKING",
+          "ADD_ORGANIZER_FEEDBACK",
+          "ADD_EVENT_POSITION",
+          "DELETE_EVENT_POSITION",
+          "CLEAR_SHOPPING_CART",
+          "ADD_CART_ITEM",
+          "DELETE_CART_ITEM"
         ]
       }
     }
@@ -55,15 +60,16 @@
       "realm": null,
       "client": {
         "backend": [
-            "SELF_UPDATE_ORGANIZER",
-            "UPDATE_JOBOFFER",
-            "UPDATE_EVENT",
-            "ACCEPT_POSITION_APPLICANT",
-            "REJECT_POSITION_APPLICANT",
-            "UPDATE_EVENT_POSITION",
-            "ACCEPT_BOOKING_ORGANIZER",
-            "CANCEL_BOOKING_ORGANIZER",
-            "UPDATE_BOOKING"
+          "SELF_UPDATE_ORGANIZER",
+          "UPDATE_JOBOFFER",
+          "UPDATE_EVENT",
+          "ACCEPT_POSITION_APPLICANT",
+          "REJECT_POSITION_APPLICANT",
+          "UPDATE_EVENT_POSITION",
+          "ACCEPT_BOOKING_ORGANIZER",
+          "CANCEL_BOOKING_ORGANIZER",
+          "UPDATE_BOOKING",
+          "UPDATE_CART_ITEM"
         ]
       }
     }
