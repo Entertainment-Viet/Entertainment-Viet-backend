@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
@@ -89,6 +90,18 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.talent.displayName.eq(paramDto.getTalent())
       );
     }
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.category.uid.eq(paramDto.getCategory())
+      );
+    }
+    if (paramDto.getWorkType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
+      );
+    }
     return predicate;
   }
 
@@ -137,6 +150,18 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
       predicate = ExpressionUtils.allOf(
           predicate,
           booking.organizer.displayName.eq(paramDto.getOrganizer())
+      );
+    }
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.category.uid.eq(paramDto.getCategory())
+      );
+    }
+    if (paramDto.getWorkType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
     return predicate;

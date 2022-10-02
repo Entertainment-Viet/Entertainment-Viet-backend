@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EventBookingService implements EventBookingBoundary {
+public class EventPositionBookingService implements EventPositionBookingBoundary {
 }
