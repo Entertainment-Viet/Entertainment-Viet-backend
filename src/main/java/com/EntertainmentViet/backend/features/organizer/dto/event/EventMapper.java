@@ -2,19 +2,15 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.util.UUID;
 
 @Mapper(uses = {EventOpenPositionMapper.class, JobOfferMapper.class}, config = MappingConfig.class)
 public abstract class EventMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "openPositions"})
     @Mapping(target = "organizerId", source = "organizer", qualifiedByName = "toOrganizerUid")
     public abstract ReadEventDto toReadDto(Event event);
 

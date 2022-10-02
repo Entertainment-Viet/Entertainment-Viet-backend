@@ -76,6 +76,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(aPackage.talent, QTalent.talent).fetchJoin()
         .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(aPackage.orders, booking).fetchJoin()
         .where(organizer.in(organizers))
         .fetch();
 

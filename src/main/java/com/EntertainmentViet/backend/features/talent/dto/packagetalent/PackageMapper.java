@@ -21,7 +21,7 @@ import java.util.UUID;
     config = MappingConfig.class)
 public abstract class PackageMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "orders"})
     @Mapping(target = "talentId", source = "talent", qualifiedByName = "toTalentId")
     public abstract ReadPackageDto toDto(Package talentPackage);
 

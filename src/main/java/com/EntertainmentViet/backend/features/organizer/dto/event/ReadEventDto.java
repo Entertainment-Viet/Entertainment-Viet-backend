@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -25,6 +24,4 @@ public class ReadEventDto extends IdentifiableDto {
   private OffsetDateTime occurrenceTime;
 
   private UUID organizerId;
-
-  private List<ReadEventOpenPositionDto> openPositions;
 }

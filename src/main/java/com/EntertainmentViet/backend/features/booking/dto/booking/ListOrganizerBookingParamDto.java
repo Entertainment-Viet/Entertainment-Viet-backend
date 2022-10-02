@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -21,6 +22,10 @@ public class ListOrganizerBookingParamDto {
   private String status;
 
   private String paymentType;
+
+  private UUID category;
+
+  private String workType;
 
   // talent name
   private String talent;
