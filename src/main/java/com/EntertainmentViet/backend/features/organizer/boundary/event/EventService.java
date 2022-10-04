@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
@@ -39,11 +40,11 @@ public class EventService implements EventBoundary {
   @Override
   public Optional<ReadEventDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
     Event event = eventRepository.findByUid(uid).orElse(null);
-    if (!isEventWithUidExist(event, uid)) {
+    if (!EntityValidationUtils.isEventWithUidExist(event, uid)) {
       return Optional.empty();
     }
 
-    if (!isEventBelongToOrganizerWithUid(event, organizerUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(event, organizerUid)) {
       return Optional.empty();
     }
 
@@ -62,11 +63,11 @@ public class EventService implements EventBoundary {
   @Override
   public Optional<UUID> update(UpdateEventDto updateEventDto, UUID organizerUid, UUID uid) {
     Event event = eventRepository.findByUid(uid).orElse(null);
-    if (!isEventWithUidExist(event, uid)) {
+    if (!EntityValidationUtils.isEventWithUidExist(event, uid)) {
       return Optional.empty();
     }
 
-    if (!isEventBelongToOrganizerWithUid(event, organizerUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(event, organizerUid)) {
       return Optional.empty();
     }
 
@@ -78,32 +79,15 @@ public class EventService implements EventBoundary {
   @Override
   public boolean delete(UUID uid, UUID organizerUid) {
     Event event = eventRepository.findByUid(uid).orElse(null);
-    if (!isEventWithUidExist(event, uid)) {
+    if (!EntityValidationUtils.isEventWithUidExist(event, uid)) {
       return false;
     }
 
-    if (!isEventBelongToOrganizerWithUid(event, organizerUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(event, organizerUid)) {
       return false;
     }
 
     eventRepository.deleteById(event.getId());
-    return true;
-  }
-
-  private boolean isEventWithUidExist(Event event, UUID uid) {
-    if (event == null) {
-      log.warn(String.format("Can not find event with id '%s'", uid));
-      return false;
-    }
-    return true;
-  }
-
-  private boolean isEventBelongToOrganizerWithUid(Event event, UUID organizerUid) {
-    Organizer organizer = event.getOrganizer();
-    if (!organizer.getUid().equals(organizerUid)) {
-      log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", event.getUid(), organizerUid));
-      return false;
-    }
     return true;
   }
 }
