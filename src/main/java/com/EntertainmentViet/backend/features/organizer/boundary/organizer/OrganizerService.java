@@ -2,12 +2,11 @@ package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
+import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.OrganizerMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
-import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -54,10 +53,10 @@ public class OrganizerService implements OrganizerBoundary {
   public boolean verify(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
 
-    if (organizer == null) {
-      log.warn(String.format("Can not find organizer with id '%s'", uid));
+    if (!EntityValidationUtils.isOrganizerWithUid(organizer, uid)) {
       return false;
     }
+
     if (!organizer.verifyAccount()) {
       return false;
     }

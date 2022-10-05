@@ -66,6 +66,20 @@ public class EventPositionController {
     );
   }
 
+  @GetMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<ReadEventOpenPositionDto>> findByUid(JwtAuthenticationToken token,
+                                                                               @PathVariable("uid") UUID uid,
+                                                                               @PathVariable("organizer_uid") UUID organizerUid,
+                                                                               @PathVariable("event_uid") UUID eventUid) {
+    return CompletableFuture.completedFuture(eventPositionService.findByUid(organizerUid, eventUid, uid)
+        .map(positionUid -> ResponseEntity
+            .ok()
+            .body(positionUid)
+        )
+        .orElse(ResponseEntity.notFound().build())
+    );
+  }
+
   @PutMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE,
@@ -82,9 +96,9 @@ public class EventPositionController {
     }
 
     return CompletableFuture.completedFuture(eventPositionService.update(organizerUid, eventUid, uid, updateEventOpenPositionDto)
-        .map(newBookingUid -> ResponseEntity
+        .map(positionUid -> ResponseEntity
             .ok()
-            .body(newBookingUid)
+            .body(positionUid)
         )
         .orElse(ResponseEntity.badRequest().build())
     );

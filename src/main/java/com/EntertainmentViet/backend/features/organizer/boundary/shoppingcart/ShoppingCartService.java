@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.shoppingcart.ShoppingCartRepository;
@@ -81,10 +82,10 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     @Override
     public Optional<ReadCartItemDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
         OrganizerShoppingCart cartItem = shoppingCartRepository.findByUid(uid).orElse(null);
-        if (!isCartItemWithUidExist(cartItem, uid)) {
+        if (!EntityValidationUtils.isCartItemWithUidExist(cartItem, uid)) {
             return Optional.empty();
         }
-        if (!isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
+        if (!EntityValidationUtils.isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
             return Optional.empty();
         }
 
@@ -94,10 +95,10 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     @Override
     public Optional<UUID> update(UpdateCartItemDto updateCartItemDto, UUID organizerUid, UUID uid) {
         OrganizerShoppingCart cartItem = shoppingCartRepository.findByUid(uid).orElse(null);
-        if (!isCartItemWithUidExist(cartItem, uid)) {
+        if (!EntityValidationUtils.isCartItemWithUidExist(cartItem, uid)) {
             return Optional.empty();
         }
-        if (!isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
+        if (!EntityValidationUtils.isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
             return Optional.empty();
         }
 
@@ -109,31 +110,14 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     @Override
     public boolean delete(UUID uid, UUID organizerUid) {
         OrganizerShoppingCart cartItem = shoppingCartRepository.findByUid(uid).orElse(null);
-        if (!isCartItemWithUidExist(cartItem, uid)) {
+        if (!EntityValidationUtils.isCartItemWithUidExist(cartItem, uid)) {
             return false;
         }
-        if (!isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
+        if (!EntityValidationUtils.isCartItemBelongToOrganizerWithUid(cartItem, organizerUid)) {
             return false;
         }
 
         shoppingCartRepository.delete(cartItem);
-        return true;
-    }
-
-    private boolean isCartItemWithUidExist(OrganizerShoppingCart cartItem, UUID uid) {
-        if (cartItem == null) {
-            log.warn(String.format("Can not find jobOffer with id '%s'", uid));
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isCartItemBelongToOrganizerWithUid(OrganizerShoppingCart cartItem, UUID organizerUid) {
-        Organizer organizer = cartItem.getOrganizer();
-        if (!organizer.getUid().equals(organizerUid)) {
-            log.warn(String.format("Can not find any shopping cart item with id '%s' belong to organizer with id '%s'", cartItem.getUid(), organizerUid));
-            return false;
-        }
         return true;
     }
 }

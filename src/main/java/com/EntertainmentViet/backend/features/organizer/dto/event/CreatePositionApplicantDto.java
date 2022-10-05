@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
+package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
 import lombok.Getter;
@@ -13,12 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreatePackageOrderDto {
-    @NotNull
-    private UUID organizerId;
+public class CreatePositionApplicantDto {
+  @NotNull
+  private UUID talentId;
 
-    private CreateJobDetailDto jobDetail;
+  @NotNull
+  private String paymentType;
 
-    @NotNull
-    private String paymentType;
+  private CreateJobDetailDto jobDetail;
 }

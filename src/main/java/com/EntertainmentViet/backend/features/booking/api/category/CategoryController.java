@@ -26,7 +26,7 @@ public class CategoryController {
 
   private final CategoryBoundary categoryService;
 
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<List<CategoryDto>> findAll() {
     return CompletableFuture.completedFuture(categoryService.findAll());
   }

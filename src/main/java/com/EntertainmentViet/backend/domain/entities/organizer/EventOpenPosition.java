@@ -3,24 +3,18 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -60,5 +54,32 @@ public class EventOpenPosition extends Identifiable {
       jobOffer.updateInfo(newData.getJobOffer());
     }
     return this;
+  }
+
+  public void acceptApplicant(UUID applicantUid) {
+    applicants.stream()
+        .filter(applicant -> applicant.getUid().equals(applicantUid))
+        .filter(applicant -> applicant.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .filter(Booking::checkIfFixedPrice)
+        .findAny()
+        .ifPresentOrElse(
+            applicant -> applicant.setStatus(BookingStatus.CONFIRMED),
+            () -> {
+              throw new EntityNotFoundException("PositionApplicant", applicantUid);
+            }
+        );
+  }
+
+  public void rejectApplicant(UUID applicantUid) {
+    applicants.stream()
+        .filter(applicant -> applicant.getUid().equals(applicantUid))
+        .filter(applicant -> applicant.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
+        .findAny()
+        .ifPresentOrElse(
+            applicant -> applicant.setStatus(BookingStatus.CANCELLED),
+            () -> {
+              throw new EntityNotFoundException("PositionApplicant", applicantUid);
+            }
+        );
   }
 }

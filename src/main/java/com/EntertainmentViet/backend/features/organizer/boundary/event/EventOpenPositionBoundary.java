@@ -19,4 +19,6 @@ public interface EventOpenPositionBoundary {
   Optional<UUID> update(UUID organizerUid, UUID eventUid, UUID uid, UpdateEventOpenPositionDto updateEventOpenPositionDto);
 
   boolean delete(UUID organizerUid, UUID eventUid, UUID uid);
+
+  Optional<ReadEventOpenPositionDto> findByUid(UUID organizerUid, UUID eventUid, UUID uid);
 }

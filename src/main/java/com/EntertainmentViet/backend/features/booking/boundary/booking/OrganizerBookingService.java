@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,6 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
     private final BookingMapper bookingMapper;
 
-
     @Override
     public Page<ReadBookingDto> listBooking(UUID organizerId, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
         var dtoList = bookingRepository.findByOrganizerUid(organizerId, paramDto, pageable).stream()
@@ -43,11 +42,11 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     @Override
     public boolean acceptBooking(UUID organizerId, UUID bookingId) {
         Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
-        if (!isBookingWithUid(booking, bookingId)) {
+        if (!EntityValidationUtils.isBookingWithUid(booking, bookingId)) {
             return false;
         }
 
-        if (!isBookingBelongToOrganizerWithUid(booking, organizerId)) {
+        if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, organizerId)) {
             return false;
         }
 
@@ -65,11 +64,11 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     @Override
     public boolean rejectBooking(UUID organizerId, UUID bookingId) {
         Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
-        if (!isBookingWithUid(booking, bookingId)) {
+        if (!EntityValidationUtils.isBookingWithUid(booking, bookingId)) {
             return false;
         }
 
-        if (!isBookingBelongToOrganizerWithUid(booking, organizerId)) {
+        if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, organizerId)) {
             return false;
         }
 
@@ -79,28 +78,6 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             organizerRepository.save(organizer);
         } catch (EntityNotFoundException ex) {
             log.warn(ex.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isBookingWithUid(Booking booking, UUID uid) {
-        if (booking == null) {
-            log.warn(String.format("Can not find booking with id '%s' ", uid));
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isBookingBelongToOrganizerWithUid(Booking booking, UUID organizerUid) {
-        if (booking.getOrganizer() == null) {
-            log.warn(String.format("Can not find organizer owning the booking with id '%s'", booking.getUid()));
-            return false;
-        }
-
-        Organizer organizer = booking.getOrganizer();
-        if (!organizer.getUid().equals(organizerUid)) {
-            log.warn(String.format("Can not find any booking with id '%s' belong to organizer with id '%s'", booking.getUid(), organizerUid));
             return false;
         }
         return true;

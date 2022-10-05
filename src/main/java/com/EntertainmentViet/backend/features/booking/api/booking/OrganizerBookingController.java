@@ -88,7 +88,7 @@ public class OrganizerBookingController {
         .orElse(ResponseEntity.badRequest().build())
     );
   }
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
                                                                              @PathVariable("organizer_uid") UUID organizerUid,
                                                                              @ParameterObject Pageable pageable,

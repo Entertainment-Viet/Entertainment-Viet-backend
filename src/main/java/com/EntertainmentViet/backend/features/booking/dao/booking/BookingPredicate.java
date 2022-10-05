@@ -30,6 +30,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
   private final QCategory category = QCategory.category;
+  private final QCategory parentCategory = new QCategory("parent");
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -38,6 +39,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .leftJoin(booking.organizer, organizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .fetch();
 
     return null;
