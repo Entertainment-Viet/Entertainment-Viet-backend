@@ -13,6 +13,24 @@ import java.util.UUID;
 @Slf4j
 public class EntityValidationUtils {
 
+  // Organizer //
+  public boolean isOrganizerWithUid(Organizer organizer, UUID uid) {
+    if (organizer == null) {
+      log.warn(String.format("Can not find organizer with id '%s'", uid));
+      return false;
+    }
+    return true;
+  }
+
+  // Talent //
+  public boolean isTalentWithUid(Talent talent, UUID uid) {
+    if (talent == null) {
+      log.warn(String.format("Can not find talent with id '%s'", uid));
+      return false;
+    }
+    return true;
+  }
+
   // Booking //
   public boolean isBookingWithUid(Booking booking, UUID uid) {
     if (booking == null) {

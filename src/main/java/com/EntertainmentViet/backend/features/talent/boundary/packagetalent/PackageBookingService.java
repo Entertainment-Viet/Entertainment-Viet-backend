@@ -43,8 +43,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     public boolean addPackageToShoppingCart(UUID talentId, UUID packageId, AddCartItemDto addCartItemDto) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
         Organizer organizer = organizerRepository.findByUid(addCartItemDto.getOrganizerId()).orElse(null);
-        if (organizer == null) {
-            log.warn(String.format("Can not find organizer with id '%s'", addCartItemDto.getOrganizerId()));
+        if (!EntityValidationUtils.isOrganizerWithUid(organizer, addCartItemDto.getOrganizerId())) {
             return false;
         }
 
@@ -77,8 +76,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     public Optional<UUID> create(UUID talentId, UUID packageId, CreatePackageOrderDto createPackageOrderDto) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
         Organizer organizer = organizerRepository.findByUid(createPackageOrderDto.getOrganizerId()).orElse(null);
-        if (organizer == null) {
-            log.warn(String.format("Can not find organizer with id '%s'", createPackageOrderDto.getOrganizerId()));
+        if (!EntityValidationUtils.isOrganizerWithUid(organizer, createPackageOrderDto.getOrganizerId())) {
             return Optional.empty();
         }
 
@@ -90,9 +88,11 @@ public class PackageBookingService implements PackageBookingBoundary {
             return Optional.empty();
         }
 
-        Booking createdOrder = packageTalent.orderPackage(organizer, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
+        Booking createdOrder = packageTalent.orderBy(organizer, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
+        if (createPackageOrderDto.getJobDetail() != null) {
+            createdOrder.setJobDetail(jobDetailMapper.fromCreateDtoToModel(createPackageOrderDto.getJobDetail()));
+        }
         var newBooking = bookingRepository.save(createdOrder);
-        createdOrder.setJobDetail(jobDetailMapper.fromCreateDtoToModel(createPackageOrderDto.getJobDetail()));
 
         packageRepository.save(packageTalent);
         return Optional.of(newBooking.getUid());

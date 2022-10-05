@@ -44,7 +44,7 @@ public class OrganizerShoppingCart extends Identifiable {
   }
 
   public Booking charge(PaymentType paymentType) {
-    return talentPackage.orderPackage(organizer, paymentType);
+    return talentPackage.orderBy(organizer, paymentType);
   }
 
   public OrganizerShoppingCart updateInfo(OrganizerShoppingCart newData) {

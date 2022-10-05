@@ -1,8 +1,8 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,8 +61,7 @@ public class TalentService implements TalentBoundary {
     public boolean verify(UUID uid) {
         var talent = talentRepository.findByUid(uid).orElse(null);
 
-        if (talent == null) {
-            log.warn(String.format("Can not find organizer with id '%s'", uid));
+        if (!EntityValidationUtils.isTalentWithUid(talent, uid)) {
             return false;
         }
         if (!talent.verifyAccount()) {

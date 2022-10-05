@@ -36,7 +36,7 @@ public class ShoppingCartController {
 
   private final ShoppingCartBoundary shoppingCartService;
 
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<ResponseEntity<Page<ReadCartItemDto>>> findByOrganizerUid(JwtAuthenticationToken token,
                                                                                      @PathVariable("organizer_uid") UUID organizerUid,
                                                                                      @ParameterObject Pageable pageable,
@@ -50,7 +50,7 @@ public class ShoppingCartController {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(shoppingCartService.findByOrganizerUid(organizerUid, paramDto, pageable)));
   }
 
-  @PostMapping()
+  @PostMapping
   public CompletableFuture<ResponseEntity<Void>> charge(JwtAuthenticationToken token, HttpServletRequest request,
                                                         @PathVariable("organizer_uid") UUID organizerUid,
                                                         @RequestBody @Valid ChargeCartItemDto chargeCartItemDto) {
@@ -66,7 +66,7 @@ public class ShoppingCartController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @DeleteMapping()
+  @DeleteMapping
   public CompletableFuture<ResponseEntity<Void>> clear(JwtAuthenticationToken token, HttpServletRequest request,
                                                        @PathVariable("organizer_uid") UUID organizerUid) {
     if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {

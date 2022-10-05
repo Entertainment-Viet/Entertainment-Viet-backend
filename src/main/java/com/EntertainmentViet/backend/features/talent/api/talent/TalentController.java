@@ -39,7 +39,7 @@ public class TalentController {
 
   private final UserBoundary userService;
 
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<ResponseEntity<Page<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
                                                                         @ParameterObject ListTalentParamDto paramDto) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(paramDto, pageable)));

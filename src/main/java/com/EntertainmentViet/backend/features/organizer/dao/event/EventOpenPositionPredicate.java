@@ -1,10 +1,9 @@
 package com.EntertainmentViet.backend.features.organizer.dao.event;
 
+import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.Event;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
-import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
+import com.EntertainmentViet.backend.domain.entities.organizer.*;
+import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
@@ -23,6 +22,9 @@ import java.util.UUID;
 public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
 
   private final QEvent event = QEvent.event;
+  private final QOrganizer organizer = QOrganizer.organizer;
+  private final QTalent talent = QTalent.talent;
+  private final QBooking booking = QBooking.booking;
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
@@ -34,8 +36,15 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(eventOpenPosition).distinct()
         .leftJoin(eventOpenPosition.event, event).fetchJoin()
+        .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
+        .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
+        .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(booking.organizer, organizer).fetchJoin()
+        .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .fetch();

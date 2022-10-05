@@ -1,10 +1,10 @@
 package com.EntertainmentViet.backend.features.organizer.api.joboffer;
 
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.organizer.boundary.joboffer.JobOfferBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.boundary.joboffer.JobOfferBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,7 +36,7 @@ public class JobOfferController {
 
   private final JobOfferBoundary jobOfferService;
 
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<ResponseEntity<Page<ReadJobOfferDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
                                                                                      @ParameterObject Pageable pageable,
                                                                                      @ParameterObject ListJobOfferParamDto paramDto) {

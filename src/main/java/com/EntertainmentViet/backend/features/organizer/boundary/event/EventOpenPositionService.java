@@ -91,4 +91,22 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
     eventOpenPositionRepository.deleteById(eventOpenPosition.getId());
     return true;
   }
+
+  @Override
+  public Optional<ReadEventOpenPositionDto> findByUid(UUID organizerUid, UUID eventUid, UUID uid) {
+    EventOpenPosition eventOpenPosition = eventOpenPositionRepository.findByUid(uid).orElse(null);
+    if (!EntityValidationUtils.isOpenPositionWithUidExist(eventOpenPosition, uid)) {
+      return Optional.empty();
+    }
+
+    if (!EntityValidationUtils.isOpenPositionBelongToEventWithUid(eventOpenPosition, eventUid)) {
+      return Optional.empty();
+    }
+
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(eventOpenPosition.getEvent(), organizerUid)) {
+      return Optional.empty();
+    }
+
+    return Optional.ofNullable(eventOpenPositionMapper.toDto(eventOpenPosition));
+  }
 }

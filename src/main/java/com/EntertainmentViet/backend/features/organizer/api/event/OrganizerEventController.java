@@ -32,7 +32,7 @@ public class OrganizerEventController {
 
   private final EventBoundary eventService;
 
-  @GetMapping()
+  @GetMapping
   public CompletableFuture<ResponseEntity<Page<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
                                                                                   @ParameterObject Pageable pageable,
                                                                                   @ParameterObject ListEventParamDto paramDto) {
