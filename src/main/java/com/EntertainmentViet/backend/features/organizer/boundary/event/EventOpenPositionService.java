@@ -50,6 +50,7 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
 
     EventOpenPosition eventOpenPosition = eventOpenPositionMapper.fromCreateDtoToModel(createEventOpenPositionDto);
     eventOpenPosition.setEvent(event);
+    eventOpenPosition.getJobOffer().setOrganizer(eventOpenPosition.getEvent().getOrganizer());
     return Optional.ofNullable(eventOpenPositionRepository.save(eventOpenPosition).getUid());
   }
 

@@ -102,7 +102,7 @@ public class EntityValidationUtils {
   // Shopping cart item //
   public boolean isCartItemWithUidExist(OrganizerShoppingCart cartItem, UUID uid) {
     if (cartItem == null) {
-      log.warn(String.format("Can not find jobOffer with id '%s'", uid));
+      log.warn(String.format("Can not find cart item with id '%s'", uid));
       return false;
     }
     return true;
@@ -129,7 +129,7 @@ public class EntityValidationUtils {
   public boolean isOpenPositionBelongToEventWithUid(EventOpenPosition eventOpenPosition, UUID eventUid) {
     Event event = eventOpenPosition.getEvent();
     if (!event.getUid().equals(eventUid)) {
-      log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", eventOpenPosition.getUid(), eventUid));
+      log.warn(String.format("Can not find any event open position with id '%s' belong to event with id '%s'", eventOpenPosition.getUid(), eventUid));
       return false;
     }
     return true;
@@ -146,7 +146,7 @@ public class EntityValidationUtils {
   public boolean isEventBelongToOrganizerWithUid(Event event, UUID organizerUid) {
     Organizer organizer = event.getOrganizer();
     if (!organizer.getUid().equals(organizerUid)) {
-      log.warn(String.format("Can not find any job-offer with id '%s' belong to organizer with id '%s'", event.getUid(), organizerUid));
+      log.warn(String.format("Can not find any event with id '%s' belong to organizer with id '%s'", event.getUid(), organizerUid));
       return false;
     }
     return true;

@@ -50,7 +50,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     if (!EntityValidationUtils.isOpenPositionBelongToEventWithUid(openPosition, eventUid)) {
       return Page.empty();
     }
-    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), positionUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), organizerUid)) {
       return Page.empty();
     }
 
@@ -72,7 +72,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     if (!EntityValidationUtils.isOpenPositionBelongToEventWithUid(openPosition, eventUid)) {
       return Optional.empty();
     }
-    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), positionUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), organizerUid)) {
       return Optional.empty();
     }
     if (!EntityValidationUtils.isTalentWithUid(talent, createPositionApplicantDto.getTalentId())) {
@@ -99,7 +99,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     if (!EntityValidationUtils.isOpenPositionBelongToEventWithUid(openPosition, eventUid)) {
       return false;
     }
-    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), positionUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), organizerUid)) {
       return false;
     }
 
@@ -123,7 +123,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     if (!EntityValidationUtils.isOpenPositionBelongToEventWithUid(openPosition, eventUid)) {
       return false;
     }
-    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), positionUid)) {
+    if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), organizerUid)) {
       return false;
     }
 
