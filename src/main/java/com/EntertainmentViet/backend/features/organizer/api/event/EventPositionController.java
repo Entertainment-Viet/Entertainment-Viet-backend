@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventOpenPositionBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventOpenPositionDto;
@@ -9,7 +10,6 @@ import com.EntertainmentViet.backend.features.organizer.dto.event.UpdateEventOpe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,15 +33,15 @@ public class EventPositionController {
   private final EventOpenPositionBoundary eventPositionService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadEventOpenPositionDto>>> findByEventUid(JwtAuthenticationToken token,
-                                                                                          @PathVariable("organizer_uid") UUID organizerUid,
-                                                                                          @PathVariable("event_uid") UUID eventUid,
-                                                                                          @ParameterObject Pageable pageable,
-                                                                                          @ParameterObject ListEventPositionParamDto paramDto) {
+  public CompletableFuture<ResponseEntity<CustomPage<ReadEventOpenPositionDto>>> findByEventUid(JwtAuthenticationToken token,
+                                                                                                @PathVariable("organizer_uid") UUID organizerUid,
+                                                                                                @PathVariable("event_uid") UUID eventUid,
+                                                                                                @ParameterObject Pageable pageable,
+                                                                                                @ParameterObject ListEventPositionParamDto paramDto) {
 
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
         eventPositionService.findByOrganizerUidAndEventUid(organizerUid, eventUid, paramDto, pageable)
-    ));
+    )));
   }
 
   @PostMapping(

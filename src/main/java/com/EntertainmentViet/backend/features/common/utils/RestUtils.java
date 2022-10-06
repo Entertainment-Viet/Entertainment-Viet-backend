@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.common.utils;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,9 +20,21 @@ import java.util.stream.Collectors;
 public class RestUtils {
 
   public <T> Page<T> getPageEntity(List<T> list, Pageable pageable) {
-    int start = (int)pageable.getOffset();
+    int start = (int) pageable.getOffset();
     int end = Math.min((start + pageable.getPageSize()), list.size());
     return new PageImpl<>(list.subList(start, end), pageable, list.size());
+  }
+
+  public <T> CustomPage<T> toPageResponse(Page<T> page) {
+    return new CustomPage<>(page);
+  }
+
+  public <T> CustomPage<T> toLazyLoadPageResponse(Page<T> page) {
+    var lazyLoadCustomPage = new CustomPage<>(page);
+    lazyLoadCustomPage.getPaging().setTotalPages(null);
+    lazyLoadCustomPage.getPaging().setTotalElements(null);
+
+    return lazyLoadCustomPage;
   }
 
   public URI getCreatedLocationUri(HttpServletRequest request, UUID id) {

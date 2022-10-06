@@ -6,11 +6,11 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingD
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -80,7 +80,7 @@ public class OrganizerBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.update(organizerUid, uid, updateBookingDto)
+    return CompletableFuture.completedFuture(bookingService.update(organizerUid, uid, updateBookingDto)
         .map(newBookingUid -> ResponseEntity
             .ok()
             .body(newBookingUid)
@@ -88,14 +88,15 @@ public class OrganizerBookingController {
         .orElse(ResponseEntity.badRequest().build())
     );
   }
+
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
-                                                                             @PathVariable("organizer_uid") UUID organizerUid,
-                                                                             @ParameterObject Pageable pageable,
-                                                                             @ParameterObject ListOrganizerBookingParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            organizerBookingService.listBooking(organizerUid, paramDto, pageable)
-    ));
+  public CompletableFuture<ResponseEntity<CustomPage<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                                   @PathVariable("organizer_uid") UUID organizerUid,
+                                                                                   @ParameterObject Pageable pageable,
+                                                                                   @ParameterObject ListOrganizerBookingParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
+        organizerBookingService.listBooking(organizerUid, paramDto, pageable)
+    )));
   }
 
   @PostMapping(value = "/{uid}")

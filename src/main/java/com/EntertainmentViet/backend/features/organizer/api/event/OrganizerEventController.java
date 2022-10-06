@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
@@ -9,7 +10,6 @@ import com.EntertainmentViet.backend.features.organizer.dto.event.UpdateEventDto
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,12 +33,12 @@ public class OrganizerEventController {
   private final EventBoundary eventService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
-                                                                                  @ParameterObject Pageable pageable,
-                                                                                  @ParameterObject ListEventParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+  public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
+                                                                                        @ParameterObject Pageable pageable,
+                                                                                        @ParameterObject ListEventParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
         eventService.findByOrganizerUid(organizerUid, paramDto, pageable)
-    ));
+    )));
   }
 
   @PostMapping(
