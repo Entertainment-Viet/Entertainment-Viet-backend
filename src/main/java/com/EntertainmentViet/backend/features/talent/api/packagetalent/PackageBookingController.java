@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBookingBoundary;
@@ -8,7 +9,6 @@ import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePac
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,19 +31,19 @@ public class PackageBookingController {
   private final PackageBookingBoundary packageBookingService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
-                                                                             @PathVariable("talent_uid") UUID talentUid,
-                                                                             @PathVariable("package_uid") UUID packageUid,
-                                                                             @ParameterObject Pageable pageable) {
+  public CompletableFuture<ResponseEntity<CustomPage<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                                   @PathVariable("talent_uid") UUID talentUid,
+                                                                                   @PathVariable("package_uid") UUID packageUid,
+                                                                                   @ParameterObject Pageable pageable) {
 
     if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            RestUtils.getPageEntity(packageBookingService.listBooking(talentUid, packageUid), pageable)
-    ));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
+        RestUtils.getPageEntity(packageBookingService.listBooking(talentUid, packageUid), pageable)
+    )));
   }
 
   @PostMapping(value = "/shoppingcart",

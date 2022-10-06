@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.shoppingcart;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.shoppingcart.ShoppingCartBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.ChargeCartItemDto;
@@ -9,7 +10,6 @@ import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.UpdateC
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,17 +37,19 @@ public class ShoppingCartController {
   private final ShoppingCartBoundary shoppingCartService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadCartItemDto>>> findByOrganizerUid(JwtAuthenticationToken token,
-                                                                                     @PathVariable("organizer_uid") UUID organizerUid,
-                                                                                     @ParameterObject Pageable pageable,
-                                                                                     @ParameterObject ListCartItemParamDto paramDto) {
+  public CompletableFuture<ResponseEntity<CustomPage<ReadCartItemDto>>> findByOrganizerUid(JwtAuthenticationToken token,
+                                                                                           @PathVariable("organizer_uid") UUID organizerUid,
+                                                                                           @ParameterObject Pageable pageable,
+                                                                                           @ParameterObject ListCartItemParamDto paramDto) {
 
     if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(shoppingCartService.findByOrganizerUid(organizerUid, paramDto, pageable)));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
+        shoppingCartService.findByOrganizerUid(organizerUid, paramDto, pageable)
+    )));
   }
 
   @PostMapping

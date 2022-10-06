@@ -6,11 +6,11 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingD
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,13 +94,13 @@ public class TalentBookingController {
   }
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<Page<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
-                                                                             @PathVariable("talent_uid") UUID talentUid,
-                                                                             @ParameterObject Pageable pageable,
-                                                                             @ParameterObject ListTalentBookingParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            talentBookingService.listBooking(talentUid, paramDto ,pageable)
-    ));
+  public CompletableFuture<ResponseEntity<CustomPage<ReadBookingDto>>> listBooking(JwtAuthenticationToken token,
+                                                                                   @PathVariable("talent_uid") UUID talentUid,
+                                                                                   @ParameterObject Pageable pageable,
+                                                                                   @ParameterObject ListTalentBookingParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
+        talentBookingService.listBooking(talentUid, paramDto, pageable)
+    )));
   }
 
   @PostMapping(value = "/{uid}")
