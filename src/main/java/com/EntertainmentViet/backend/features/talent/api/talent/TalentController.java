@@ -42,9 +42,7 @@ public class TalentController {
   @GetMapping
   public CompletableFuture<ResponseEntity<CustomPage<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
                                                                               @ParameterObject ListTalentParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toLazyLoadPageResponse(
-        talentService.findAll(paramDto, pageable)
-    )));
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(paramDto, pageable)));
   }
 
   @GetMapping(value = "/{uid}")
