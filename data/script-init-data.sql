@@ -173,10 +173,10 @@ INSERT INTO package_order (order_id, package_id) VALUES
 (1200000, 300000);
 
 -- Add review
-INSERT INTO review (id, created_at, talent_id, score, comment_input_lang, comment_raw_input, comment_input_translation) VALUES
-(100000, '2022-08-18 19:42:44.843000 +00:00', 100000, 300000, 'VIETNAMESE', 'good', NULL),
-(200000, '2022-08-18 19:42:44.843000 +00:00', 100000, 400000, 'VIETNAMESE', 'well', NULL),
-(300000, '2022-08-18 19:42:44.843000 +00:00', 100000, 100000, 'VIETNAMESE', 'bad', NULL);
+INSERT INTO review (id, uid, created_at, talent_id, score, comment_input_lang, comment_raw_input, comment_input_translation, organizer_id) VALUES
+(100000, '59a658db-6e0b-4846-ba67-7781a008ec35', '2022-08-18 19:42:44.843000 +00:00', 100000, 1, 'VIETNAMESE', 'good', NULL, 100000),
+(200000, '59a658db-6e0b-4846-ba67-7781a008ec45', '2022-08-18 19:42:44.843000 +00:00', 100000, 2, 'VIETNAMESE', 'well', NULL, 100000),
+(300000, '59a658db-6e0b-4846-ba67-7781a008ec38', '2022-08-18 19:42:44.843000 +00:00', 100000, 3, 'VIETNAMESE', 'bad', NULL, 100000);
 
 -- Add organizer_shopping_cart
 INSERT INTO organizer_shopping_cart (organizer_id, package_id) VALUES
