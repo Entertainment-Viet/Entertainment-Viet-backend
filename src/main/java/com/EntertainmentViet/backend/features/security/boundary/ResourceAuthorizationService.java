@@ -21,6 +21,7 @@ import com.EntertainmentViet.backend.features.talent.api.feedback.TalentFeedback
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageBookingController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageController;
 import com.EntertainmentViet.backend.features.talent.api.talent.TalentController;
+import com.EntertainmentViet.backend.features.talent.api.talent.TalentReviewController;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -216,6 +217,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.POST, ofPath(TalentFeedbackController.REQUEST_MAPPING_PATH))
             .hasAuthority(FeedbackRole.ADD_TALENT_FEEDBACK.name())
 
+            // Talent review
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentReviewController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ReviewRole.READ_REVIEW.name())
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentReviewController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ReviewRole.ADD_REVIEW.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentReviewController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ReviewRole.READ_REVIEW.name())
 
             // Talent manage mapping
             .mvcMatchers(HttpMethod.POST , ofPath(TalentController.REQUEST_MAPPING_PATH))
