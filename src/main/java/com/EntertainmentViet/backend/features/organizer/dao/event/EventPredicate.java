@@ -46,7 +46,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.name.eq(paramDto.getName())
+          event.name.like("%"+paramDto.getName()+"%")
       );
     }
     if (paramDto.getIsActive() != null) {
@@ -58,7 +58,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getOrganizer() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.organizer.displayName.eq(paramDto.getOrganizer())
+          event.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
       );
     }
     if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {

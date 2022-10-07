@@ -65,7 +65,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          talentPackage.name.eq(paramDto.getName())
+          talentPackage.name.like("%"+paramDto.getName()+"%")
       );
     }
     if (paramDto.getIsActive() != null) {
@@ -77,7 +77,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getTalent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          talentPackage.talent.displayName.eq(paramDto.getTalent())
+          talentPackage.talent.displayName.like("%"+paramDto.getTalent()+"%")
       );
     }
     if (paramDto.getOrderCount() != null) {
