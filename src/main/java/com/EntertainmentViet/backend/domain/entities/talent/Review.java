@@ -2,6 +2,8 @@ package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import lombok.Getter;
@@ -22,7 +24,7 @@ import java.time.OffsetDateTime;
 @Setter
 @Entity
 @EntityListeners({AuditableListener.class})
-public class Review implements Auditable, Serializable{
+public class Review extends Identifiable implements Auditable, Serializable{
 
   @Id
   @GeneratedValue
@@ -34,6 +36,10 @@ public class Review implements Auditable, Serializable{
   @NotNull
   private Talent talent;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @NotNull
+  private Organizer organizer;
+
   @Embedded
   @AttributeOverrides({
       @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = Review_.COMMENT + "_" + UserInputText_.INPUT_LANG)),
@@ -43,7 +49,7 @@ public class Review implements Auditable, Serializable{
   private UserInputText comment;
 
   @Min(0)
-  @Max(10)
+  @Max(5)
   @NotNull
   private Integer score;
 }

@@ -203,25 +203,31 @@
     {
         "name": "ADD_TALENT_FEEDBACK"
     },
-    {
-        "name": "BROWSE_ORGANIZER_FEEDBACK"
-    },
-    {
-        "name": "READ_ORGANIZER_FEEDBACK"
-    },
-    {
-        "name": "ADD_ORGANIZER_FEEDBACK"
-    },
-    {
-        "name": "ADMIN_BROWSE_ORGANIZER"
-    },
-    {
-        "name": "ADMIN_APPROVE_ORGANIZER"
-    },
-    {
-        "name": "ADMIN_UPDATE_ORGANIZER"
-    },
-    {
+  {
+    "name": "BROWSE_ORGANIZER_FEEDBACK"
+  },
+  {
+    "name": "READ_ORGANIZER_FEEDBACK"
+  },
+  {
+    "name": "ADD_ORGANIZER_FEEDBACK"
+  },
+  {
+    "name": "READ_REVIEW"
+  },
+  {
+    "name": "ADD_REVIEW"
+  },
+  {
+    "name": "ADMIN_BROWSE_ORGANIZER"
+  },
+  {
+    "name": "ADMIN_APPROVE_ORGANIZER"
+  },
+  {
+    "name": "ADMIN_UPDATE_ORGANIZER"
+  },
+  {
         "name": "ADMIN_DEACTIVE_ORGANIZER"
     },
     {

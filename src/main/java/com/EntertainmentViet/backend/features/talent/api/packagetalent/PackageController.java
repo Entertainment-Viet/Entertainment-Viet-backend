@@ -70,9 +70,9 @@ public class PackageController {
     }
 
     return  CompletableFuture.completedFuture(packageService.create(createPackageDto, talentUid)
-            .map(newPackageDto -> ResponseEntity
-                    .created(RestUtils.getCreatedLocationUri(request, newPackageDto))
-                    .body(newPackageDto)
+            .map(newPackageUid -> ResponseEntity
+                    .created(RestUtils.getCreatedLocationUri(request, newPackageUid))
+                    .body(newPackageUid)
             )
             .orElse(ResponseEntity.badRequest().build())
     );

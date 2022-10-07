@@ -1,9 +1,11 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -22,15 +24,22 @@ public abstract class ReviewMapper {
     @Autowired
     private TalentRepository talentRepository;
 
+    @Autowired
+    private OrganizerRepository organizerRepository;
+
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentUid")
+    @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerUid")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-    public abstract ReviewDto toDto(Review review);
+    public abstract ReadReviewDto toDto(Review review);
 
+    @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentEntity")
+    @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerEntity")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-    public abstract Review toModel(ReviewDto dto);
+    public abstract Review fromCreateToModel(CreateReviewDto dto);
 
     @Named("toTalentUid")
     public UUID toTalentUid(Talent talent) {
@@ -40,5 +49,15 @@ public abstract class ReviewMapper {
     @Named("toTalentEntity")
     public Talent toTalentEntity(UUID talentUid) {
         return talentRepository.findByUid(talentUid).orElse(null);
+    }
+
+    @Named("toOrganizerUid")
+    public UUID toOrganizerUid(Organizer organizer) {
+        return organizer != null ? organizer.getUid() : null;
+    }
+
+    @Named("toOrganizerEntity")
+    public Organizer toOrganizerEntity(UUID organizerUid) {
+        return organizerRepository.findByUid(organizerUid).orElse(null);
     }
 }

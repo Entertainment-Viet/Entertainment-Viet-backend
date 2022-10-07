@@ -82,7 +82,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     if (paramDto.getDisplayName() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talent.displayName.eq(paramDto.getDisplayName())
+              talent.displayName.like("%"+paramDto.getDisplayName()+"%")
       );
     }
 

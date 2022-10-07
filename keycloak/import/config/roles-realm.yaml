@@ -6,15 +6,15 @@
       "client": {
         "backend": [
           "VERIFY_ORGANIZER",
-            "READ_ORGANIZER",
-            "READ_ORGANIZER_DETAIL",
-            "BROWSE_JOBOFFER",
-            "READ_JOBOFFER",
-            "BROWSE_EVENT",
-            "READ_EVENT",
-            "BROWSE_POSITION_APPLICANT",
-            "BROWSE_EVENT_POSITION",
-            "READ_EVENT_POSITION",
+          "READ_ORGANIZER",
+          "READ_ORGANIZER_DETAIL",
+          "BROWSE_JOBOFFER",
+          "READ_JOBOFFER",
+          "BROWSE_EVENT",
+          "READ_EVENT",
+          "BROWSE_POSITION_APPLICANT",
+          "BROWSE_EVENT_POSITION",
+          "READ_EVENT_POSITION",
           "BROWSE_BOOKING_ORGANIZER",
           "BROWSE_BOOKING_ORGANIZER_DETAIL",
           "BROWSE_BOOKING_TALENT",
@@ -25,6 +25,7 @@
           "BROWSE_PACKAGE",
           "BROWSE_ORGANIZER_FEEDBACK",
           "READ_ORGANIZER_FEEDBACK",
+          "READ_REVIEW",
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
           "READ_CART_ITEM"
@@ -49,6 +50,7 @@
           "DELETE_EVENT_POSITION",
           "CLEAR_SHOPPING_CART",
           "ADD_CART_ITEM",
+          "ADD_REVIEW",
           "DELETE_CART_ITEM"
         ]
       }
@@ -92,24 +94,25 @@
       "realm": null,
       "client": {
         "backend": [
-            "VERIFY_TALENT",
+          "VERIFY_TALENT",
             "READ_TALENT",
             "READ_TALENT_DETAIL",
             "BROWSE_PACKAGE",
             "READ_PACKAGE",
             "BROWSE_PACKAGE_ORDER",
-            "BROWSE_BOOKING_TALENT",
-            "BROWSE_BOOKING_TALENT_DETAIL",
-            "BROWSE_BOOKING_ORGANIZER",
-            "READ_BOOKING",
-            "BROWSE_ADVERTISEMENT",
-            "READ_ADVERTISEMENT",
-            "READ_CATEGORY",
-            "READ_ORGANIZER",
-            "BROWSE_TALENT_FEEDBACK",
-            "READ_TALENT_FEEDBACK",
-            "BROWSE_EVENT_POSITION",
-            "READ_EVENT_POSITION"
+          "BROWSE_BOOKING_TALENT",
+          "BROWSE_BOOKING_TALENT_DETAIL",
+          "BROWSE_BOOKING_ORGANIZER",
+          "READ_BOOKING",
+          "BROWSE_ADVERTISEMENT",
+          "READ_ADVERTISEMENT",
+          "READ_CATEGORY",
+          "READ_ORGANIZER",
+          "BROWSE_TALENT_FEEDBACK",
+          "READ_TALENT_FEEDBACK",
+          "READ_REVIEW",
+          "BROWSE_EVENT_POSITION",
+          "READ_EVENT_POSITION"
         ]
       }
     }

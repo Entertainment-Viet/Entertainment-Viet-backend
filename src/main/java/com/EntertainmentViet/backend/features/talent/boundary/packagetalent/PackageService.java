@@ -58,12 +58,11 @@ public class PackageService implements PackageBoundary {
         Package aPackage = packageMapper.fromCreateDtoToModel(createPackageDto);
         aPackage.setTalent(talent);
 
-        if (aPackage.getTalent() == null) {
-            log.warn(String.format("Can not find talent owning the package with id '%s'", aPackage.getUid()));
+        if (!EntityValidationUtils.isTalentWithUid(talent, talentId)) {
             return Optional.empty();
         }
         if (aPackage.getJobDetail() == null || aPackage.getJobDetail().getCategory() == null) {
-            log.warn(String.format("Can not populate jobDetail information for package with id '%s'", aPackage.getUid()));
+            log.warn(String.format("Can not create new package for talent with id '%s'", talentId));
             return Optional.empty();
         }
 

@@ -13,7 +13,7 @@ public class ListTalentParamDto {
 
     private String displayName;
 
-  private UUID category;
+    private UUID category;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime startTime;

@@ -43,7 +43,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              jobOffer.name.eq(paramDto.getName())
+              jobOffer.name.like("%"+paramDto.getName()+"%")
       );
     }
     if (paramDto.getIsActive() != null) {
@@ -55,7 +55,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
     if (paramDto.getOrganizer() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              jobOffer.organizer.displayName.eq(paramDto.getOrganizer())
+              jobOffer.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
       );
     }
     if (paramDto.getCategory() != null) {

@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,10 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReviewDto {
-  private OffsetDateTime createdAt;
+public class CreateReviewDto {
 
-  private UUID talent;
+  private UUID organizer;
 
   private String comment;
 

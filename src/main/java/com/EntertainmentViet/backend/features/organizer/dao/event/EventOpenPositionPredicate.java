@@ -57,7 +57,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getEvent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.name.eq(paramDto.getEvent())
+          event.name.like("%"+paramDto.getEvent()+"%")
       );
     }
     if (paramDto.getIsActive() != null) {

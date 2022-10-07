@@ -89,7 +89,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     if (paramDto.getTalent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.talent.displayName.eq(paramDto.getTalent())
+          booking.talent.displayName.like("%"+paramDto.getTalent()+"%")
       );
     }
     if (paramDto.getCategory() != null) {
@@ -151,7 +151,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     if (paramDto.getOrganizer() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.organizer.displayName.eq(paramDto.getOrganizer())
+          booking.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
       );
     }
     if (paramDto.getCategory() != null) {
