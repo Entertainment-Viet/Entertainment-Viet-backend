@@ -38,7 +38,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem", "reviews"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
@@ -64,7 +64,6 @@ public abstract class TalentMapper {
         if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
             return ReadTalentDto.builder()
                 .uid(readTalentDto.getUid())
-                .reviews(readTalentDto.getReviews())
                 .packages(readTalentDto.getPackages())
                 .offerCategories(readTalentDto.getOfferCategories())
                 .displayName(readTalentDto.getDisplayName())

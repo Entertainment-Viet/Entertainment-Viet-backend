@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.common.utils;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.*;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
+import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -170,6 +171,29 @@ public class EntityValidationUtils {
     Talent talent = packageTalent.getTalent();
     if (!talent.getUid().equals(talentId)) {
       log.warn(String.format("There is no talent with id '%s' have the package with id '%s'", talentId, packageTalent.getUid()));
+      return false;
+    }
+    return true;
+  }
+
+  // Review //
+  public boolean isReviewWithUidExist(Review review, UUID uid) {
+    if (review == null) {
+      log.warn(String.format("Can not find review with id '%s' ", uid));
+      return false;
+    }
+    return true;
+  }
+
+  public boolean isReviewBelongToTalentWithUid(Review review, UUID talentId) {
+    if (review.getTalent() == null) {
+      log.warn(String.format("Can not find talent have the review with id '%s'", review.getUid()));
+      return false;
+    }
+
+    Talent talent = review.getTalent();
+    if (!talent.getUid().equals(talentId)) {
+      log.warn(String.format("There is no talent with id '%s' have the review with id '%s'", talentId, review.getUid()));
       return false;
     }
     return true;

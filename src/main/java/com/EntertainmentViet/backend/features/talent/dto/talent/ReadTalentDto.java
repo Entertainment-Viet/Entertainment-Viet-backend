@@ -20,8 +20,6 @@ import java.util.Set;
 @Setter
 public class ReadTalentDto extends ReadUserDto {
 
-    private List<ReviewDto> reviews;
-
     private List<TalentFeedBackDto> feedbacks;
 
     private List<ReadPackageDto> packages;

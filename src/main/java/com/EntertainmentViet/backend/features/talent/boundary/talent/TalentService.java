@@ -30,16 +30,16 @@ public class TalentService implements TalentBoundary {
 
     @Override
     public CustomPage<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
-        var dataPage = talentRepository.findAll(paramDto, pageable)
+        var dataPage = RestUtils.toLazyLoadPageResponse(
+            talentRepository.findAll(paramDto, pageable)
             .map(talentMapper::toDto)
-            .map(talentMapper::checkPermission);
+            .map(talentMapper::checkPermission));
 
-        var customPage = RestUtils.toLazyLoadPageResponse(dataPage);
         if (talentRepository.findAll(paramDto, pageable.next()).hasContent()) {
-            customPage.getPaging().setLast(false);
+            dataPage.getPaging().setLast(false);
         }
 
-        return customPage;
+        return dataPage;
     }
 
     @Override
