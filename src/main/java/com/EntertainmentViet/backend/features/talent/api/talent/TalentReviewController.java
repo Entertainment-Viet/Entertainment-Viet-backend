@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadReviewDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -33,8 +34,8 @@ public class TalentReviewController {
   private final ReviewBoundary reviewService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<CustomPage<ReadReviewDto>>> findAll(@PathVariable("talent_uid") UUID talentUid,
-                                                                              @ParameterObject Pageable pageable) {
+  public CompletableFuture<ResponseEntity<ReviewResponseDto>> findAll(@PathVariable("talent_uid") UUID talentUid,
+                                                                      @ParameterObject Pageable pageable) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(reviewService.findAll(talentUid, pageable)));
   }
 

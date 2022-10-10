@@ -138,13 +138,6 @@ public class Organizer extends User {
     feedback.setOrganizer(null);
   }
 
-  public void review(Talent talent, Review review) {
-    var bookingTalents = bookings.stream().map(Booking::getTalent).collect(Collectors.toList());
-    if (bookingTalents.contains(talent)) {
-      talent.addReview(review);
-    }
-  }
-
   public void addPackageToCart(Package talentPackage, Double price) {
     OrganizerShoppingCart cartItem = new OrganizerShoppingCart(this, talentPackage, price);
     shoppingCart.add(cartItem);
