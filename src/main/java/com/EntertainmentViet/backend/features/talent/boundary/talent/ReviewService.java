@@ -10,11 +10,13 @@ import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadReviewDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewMapper;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,16 +32,25 @@ public class ReviewService implements ReviewBoundary {
   private final ReviewMapper reviewMapper;
 
   @Override
-  public CustomPage<ReadReviewDto> findAll(UUID talentUid, Pageable pageable) {
-    var dataPage = RestUtils.toLazyLoadPageResponse(
-        reviewRepository.findByTalentId(talentUid, pageable)
-        .map(reviewMapper::toDto));
+  public ReviewResponseDto findAll(UUID talentUid, Pageable pageable) {
+    var reviewList = reviewRepository.findByTalentId(talentUid, pageable);
+    var dataPage = RestUtils.toLazyLoadPageResponse(reviewList.map(reviewMapper::toDto));
 
     if (reviewRepository.findByTalentId(talentUid, pageable.next()).hasContent()) {
       dataPage.getPaging().setLast(false);
     }
 
-    return dataPage;
+    // Construct responseDto
+    var reviewSum = reviewList.stream().findAny().map(Review::getTalent).map(Talent::getReviewSum).orElse(Collections.emptyList());
+    var response = ReviewResponseDto.builder();
+    if (!reviewSum.isEmpty()) {
+      response.sumScore1(reviewSum.get(0))
+          .sumScore2(reviewSum.get(1))
+          .sumScore3(reviewSum.get(2))
+          .sumScore4(reviewSum.get(3))
+          .sumScore5(reviewSum.get(4));
+    }
+    return response.reviews(dataPage).build();
   }
 
   @Override
@@ -60,9 +71,8 @@ public class ReviewService implements ReviewBoundary {
   public Optional<UUID> create(CreateReviewDto reviewDto, UUID talentUid) {
     Review review = reviewMapper.fromCreateToModel(reviewDto);
     Talent talent = talentRepository.findByUid(talentUid).orElse(null);
-    review.setTalent(talent);
 
-    if (!EntityValidationUtils.isReviewBelongToTalentWithUid(review, talentUid)) {
+    if (!EntityValidationUtils.isTalentWithUid(talent, talentUid)) {
       return Optional.empty();
     }
     if (review.getOrganizer() == null) {
@@ -70,6 +80,8 @@ public class ReviewService implements ReviewBoundary {
       return Optional.empty();
     }
 
+    talent.addReview(review);
+    talentRepository.save(talent);
     return Optional.ofNullable(reviewRepository.save(review).getUid());
   }
 }

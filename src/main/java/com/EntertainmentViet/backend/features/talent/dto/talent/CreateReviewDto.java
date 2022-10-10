@@ -1,12 +1,13 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.OffsetDateTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @SuperBuilder
@@ -15,9 +16,12 @@ import java.util.UUID;
 @Setter
 public class CreateReviewDto {
 
+  @NotNull
   private UUID organizer;
 
   private String comment;
 
+  @Min(1)
+  @Max(5)
   private Integer score;
 }

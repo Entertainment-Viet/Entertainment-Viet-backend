@@ -17,6 +17,7 @@ import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -42,6 +43,7 @@ import java.util.UUID;
 @Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@TypeDef(name = "list-array",typeClass = ListArrayType.class)
 public class Talent extends User implements Advertisable {
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,7 +69,15 @@ public class Talent extends User implements Advertisable {
           name = "talent_category",
           joinColumns = @JoinColumn( name = "talent_id", referencedColumnName = Talent_.ID),
           inverseJoinColumns = @JoinColumn( name = "category_id", referencedColumnName = Category_.ID)
-  )  private Set<Category> offerCategories;
+  )
+  private Set<Category> offerCategories;
+
+  @Type(type = "list-array")
+  @Column(
+      name = "review_sum",
+      columnDefinition = "integer[]"
+  )
+  private List<Integer> reviewSum;
 
   public void addOfferCategory(Category category) {
     offerCategories.add(category);
@@ -80,9 +90,10 @@ public class Talent extends User implements Advertisable {
   public void addReview(Review review) {
     reviews.add(review);
     review.setTalent(this);
+    increaseReviewSum(review);
   }
 
-  public void removeReview(Review review) {
+  public void hideReview(Review review) {
     reviews.remove(review);
     review.setTalent(null);
   }
@@ -240,5 +251,11 @@ public class Talent extends User implements Advertisable {
       setScoreSystem(newData.getScoreSystem());
     }
     return this;
+  }
+
+  private void increaseReviewSum(Review review) {
+    var reviewPoint = review.getScore();
+    var curPointSum = getReviewSum().get(reviewPoint-1);
+    getReviewSum().set(reviewPoint-1, curPointSum+1);
   }
 }

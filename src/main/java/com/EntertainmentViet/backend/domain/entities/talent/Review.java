@@ -48,7 +48,7 @@ public class Review extends Identifiable implements Auditable, Serializable{
   })
   private UserInputText comment;
 
-  @Min(0)
+  @Min(1)
   @Max(5)
   @NotNull
   private Integer score;

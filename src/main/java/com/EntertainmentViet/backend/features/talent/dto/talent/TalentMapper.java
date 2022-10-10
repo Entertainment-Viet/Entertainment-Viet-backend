@@ -38,7 +38,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem", "reviews"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem", "reviews", "reviewSum"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
@@ -47,6 +47,7 @@ public abstract class TalentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
     @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
