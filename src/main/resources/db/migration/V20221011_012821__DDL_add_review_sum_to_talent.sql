@@ -1,0 +1,3 @@
+ALTER TABLE talent
+ADD COLUMN review_sum INTEGER[] NOT NULL DEFAULT '{0,0,0,0,0}';
+
