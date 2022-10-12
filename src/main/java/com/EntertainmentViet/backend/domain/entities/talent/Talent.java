@@ -17,7 +17,6 @@ import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
@@ -236,6 +235,16 @@ public class Talent extends User implements Advertisable {
         .map(Booking::getJobDetail)
         .map(JobDetail::getPrice)
         .mapToDouble(Price::getMin)
+        .sum();
+  }
+
+  public Double computeUnpaidSum() {
+    return bookings.stream()
+        .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED))
+        .map(Booking::getJobDetail)
+        .map(JobDetail::getPrice)
+        .map(Price::getMax)
+        .mapToDouble(Double::doubleValue)
         .sum();
   }
 

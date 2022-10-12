@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class ReviewResponseDto {
+public class ListReviewResponseDto {
   private Integer sumScore1;
   private Integer sumScore2;
   private Integer sumScore3;

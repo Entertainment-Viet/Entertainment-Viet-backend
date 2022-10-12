@@ -2,15 +2,14 @@ package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.ReviewRepository;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListReviewResponseDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadReviewDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewMapper;
-import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ public class ReviewService implements ReviewBoundary {
   private final ReviewMapper reviewMapper;
 
   @Override
-  public ReviewResponseDto findAll(UUID talentUid, Pageable pageable) {
+  public ListReviewResponseDto findAll(UUID talentUid, Pageable pageable) {
     var reviewList = reviewRepository.findByTalentId(talentUid, pageable);
     var dataPage = RestUtils.toLazyLoadPageResponse(reviewList.map(reviewMapper::toDto));
 
@@ -42,7 +41,7 @@ public class ReviewService implements ReviewBoundary {
 
     // Construct responseDto
     var reviewSum = reviewList.stream().findAny().map(Review::getTalent).map(Talent::getReviewSum).orElse(Collections.emptyList());
-    var response = ReviewResponseDto.builder();
+    var response = ListReviewResponseDto.builder();
     if (!reviewSum.isEmpty()) {
       response.sumScore1(reviewSum.get(0))
           .sumScore2(reviewSum.get(1))
