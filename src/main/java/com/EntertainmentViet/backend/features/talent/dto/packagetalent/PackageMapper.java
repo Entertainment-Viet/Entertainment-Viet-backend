@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
@@ -11,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Mapper(uses = {
@@ -21,8 +23,9 @@ import java.util.UUID;
     config = MappingConfig.class)
 public abstract class PackageMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "orders"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "talentId", source = "talent", qualifiedByName = "toTalentId")
+    @Mapping(target = "orderNum", source = "orders", qualifiedByName = "toOrderNum")
     public abstract ReadPackageDto toDto(Package talentPackage);
 
     @Mapping(target = "uid", ignore = true)
@@ -42,4 +45,10 @@ public abstract class PackageMapper {
     public UUID toTalentId(Talent talent) {
         return talent != null ? talent.getUid() : null;
     }
+
+    @Named("toOrderNum")
+    public Integer toOrderNum(Set<Booking> orders) {
+        return orders.size();
+    }
+
 }
