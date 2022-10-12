@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.security.boundary;
 
 import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementController;
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
-import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
+import com.EntertainmentViet.backend.features.admin.api.talent.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;

@@ -46,6 +46,7 @@ public class TalentService implements TalentBoundary {
     public Optional<ReadTalentDto> findByUid(UUID uid) {
         return talentRepository.findByUid(uid).map(talentMapper::toDto).map(talentMapper::checkPermission);
     }
+
     @Override
     public Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid) {
 

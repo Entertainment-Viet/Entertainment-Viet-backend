@@ -14,6 +14,7 @@ import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,10 +31,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.OptionalDouble;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -60,7 +58,7 @@ public class Talent extends User implements Advertisable {
 
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
-  private JsonNode scoreSystem;
+  private Map<String, ScoreOperandDto> scoreSystem;
 
   private Double finalScore;
 
@@ -188,13 +186,38 @@ public class Talent extends User implements Advertisable {
         .average();
   }
 
-  public OptionalDouble obtainScore() {
-    return TalentScoreCalculator.calculateScore(scoreSystem);
+  public Double obtainScore() {
+    return TalentScoreCalculator.calculateScore(getScoreSystem());
   }
 
-  public void updateScore(JsonNode scoreData) {
-    scoreSystem = scoreData;
-    finalScore = obtainScore().orElse(0.0);
+  public void updateScore(Map<String, ScoreOperandDto> scoreData) {
+    if (scoreSystem == null) {
+      setScoreSystem(new HashMap<>());
+    }
+
+    scoreData.forEach((key, value) -> {
+      if (scoreSystem.containsKey(key)) {
+        var currentScoreOperand = scoreSystem.get(key);
+        if (value.getName() != null) {
+          currentScoreOperand.setName(value.getName());
+        }
+        if (value.getRate() != null) {
+          currentScoreOperand.setRate(value.getRate());
+        }
+        if (value.getMultiply() != null) {
+          currentScoreOperand.setMultiply(value.getMultiply());
+        }
+        if (value.getActive() != null) {
+          currentScoreOperand.setActive(value.getActive());
+        }
+      }
+      // Only add when there is a rate
+      else if (value.getRate() != null) {
+        scoreSystem.put(key, value);
+      }
+    });
+
+    setFinalScore(obtainScore());
   }
 
   public void withdrawCash() {
@@ -248,7 +271,7 @@ public class Talent extends User implements Advertisable {
       setOfferCategories(newData.getOfferCategories());
     }
     if (newData.getScoreSystem() != null) {
-      setScoreSystem(newData.getScoreSystem());
+      updateScore(newData.getScoreSystem());
     }
     return this;
   }

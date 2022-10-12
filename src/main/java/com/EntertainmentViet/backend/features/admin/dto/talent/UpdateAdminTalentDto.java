@@ -1,6 +1,5 @@
-package com.EntertainmentViet.backend.features.talent.dto.talent;
+package com.EntertainmentViet.backend.features.admin.dto.talent;
 
-import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreToggleDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,7 @@ import java.util.UUID;
 @SuperBuilder
 @Getter
 @Setter
-public class UpdateTalentDto {
+public class UpdateAdminTalentDto {
 
   private String displayName;
 
@@ -29,5 +28,5 @@ public class UpdateTalentDto {
 
   private String extensions;
 
-  private List<ScoreToggleDto> scoreSystem;
+  private List<ScoreOperandDto> scoreSystem;
 }
