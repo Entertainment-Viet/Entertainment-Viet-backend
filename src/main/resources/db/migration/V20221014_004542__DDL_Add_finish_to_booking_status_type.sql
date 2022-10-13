@@ -1,0 +1,5 @@
+ALTER TYPE booking_status ADD VALUE 'HALF_FINISHED';
+
+ALTER TABLE booking
+ADD COLUMN is_review BOOLEAN NOT NULL,
+ADD COLUMN extensions JSONB;

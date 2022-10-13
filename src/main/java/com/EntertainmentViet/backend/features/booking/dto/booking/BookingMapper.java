@@ -51,6 +51,7 @@ public abstract class BookingMapper {
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
     @Mapping(target = "organizer", source = "organizerUid", qualifiedByName = "toOrganizerEntity")
     @Mapping(target = "talent", source = "talentUid", qualifiedByName = "toTalentEntity")
+    @Mapping(target = "isReview", constant = "false")
     public abstract Booking fromCreateDtoToModel(CreateBookingDto createBookingDto);
 
     @Mapping(target = "uid", ignore = true)
