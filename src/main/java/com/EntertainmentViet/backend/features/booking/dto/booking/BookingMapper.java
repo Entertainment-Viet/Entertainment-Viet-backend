@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
+import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.security.roles.BookingRole;
@@ -21,7 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.UUID;
 
 @Mapper(uses = {
-        JobDetailMapper.class,
+    JobDetailMapper.class,
+    ExtensionsMapper.class,
 }, config = MappingConfig.class)
 public abstract class BookingMapper {
 
@@ -34,12 +36,13 @@ public abstract class BookingMapper {
     @Autowired
     private TalentRepository talentRepository;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "isReview"})
     @Mapping(target = "isPaid", source = "paid")
     @Mapping(target = "status", source = "status.i18nKey")
     @Mapping(target = "paymentType", source = "paymentType.i18nKey")
     @Mapping(target = "organizerUid", source = "organizer", qualifiedByName = "toOrganizerUid")
     @Mapping(target = "talentUid", source = "talent", qualifiedByName = "toTalentUid")
+    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
 
     @Mapping(target = "uid", ignore = true)
@@ -52,6 +55,7 @@ public abstract class BookingMapper {
     @Mapping(target = "organizer", source = "organizerUid", qualifiedByName = "toOrganizerEntity")
     @Mapping(target = "talent", source = "talentUid", qualifiedByName = "toTalentEntity")
     @Mapping(target = "isReview", constant = "false")
+    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     public abstract Booking fromCreateDtoToModel(CreateBookingDto createBookingDto);
 
     @Mapping(target = "uid", ignore = true)
@@ -62,7 +66,9 @@ public abstract class BookingMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "isReview", ignore = true)
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
+    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     public abstract Booking fromUpdateDtoToModel(UpdateBookingDto updateBookingDto);
 
     // Only return non-confidential detail if token have enough permission

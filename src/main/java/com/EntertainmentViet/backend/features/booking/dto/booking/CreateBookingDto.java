@@ -26,4 +26,6 @@ public class CreateBookingDto {
 
     @NotNull
     private String paymentType;
+
+    private String extensions;
 }

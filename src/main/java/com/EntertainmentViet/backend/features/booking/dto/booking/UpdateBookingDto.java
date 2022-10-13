@@ -19,4 +19,6 @@ public class UpdateBookingDto {
     private UpdateJobDetailDto jobDetail;
 
     private String paymentType;
+
+    private String extensions;
 }

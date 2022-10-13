@@ -86,6 +86,9 @@ public class Booking extends Identifiable implements Auditable {
     if (newData.getPaymentType() != null) {
       setPaymentType(newData.getPaymentType());
     }
+    if (newData.getExtensions() != null) {
+      setExtensions(newData.getExtensions());
+    }
   }
 
   public boolean checkIfFixedPrice() {
