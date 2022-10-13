@@ -27,6 +27,7 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
       WRITE_NULL_MAP_VALUES: false
+      WRITE_BIGDECIMAL_AS_PLAIN: true
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: true
       ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false

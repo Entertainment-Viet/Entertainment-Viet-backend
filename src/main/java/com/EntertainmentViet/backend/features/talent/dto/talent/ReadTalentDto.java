@@ -1,6 +1,8 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackDto;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreToggleDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
@@ -27,4 +29,6 @@ public class ReadTalentDto extends ReadUserDto {
     private Set<CategoryDto> offerCategories;
 
     private Double finalScore;
+
+    private List<ScoreToggleDto> scoreSystem;
 }

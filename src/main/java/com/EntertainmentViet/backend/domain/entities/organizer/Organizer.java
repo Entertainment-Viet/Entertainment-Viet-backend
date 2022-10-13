@@ -4,11 +4,12 @@ import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
-import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
@@ -175,6 +176,17 @@ public class Organizer extends User {
     talent.addBooking(newBooking);
   }
 
+  public Double computeUnpaidSum() {
+    return bookings.stream()
+        .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED))
+        .filter(booking -> !booking.isPaid())
+        .map(Booking::getJobDetail)
+        .map(JobDetail::getPrice)
+        .map(Price::getMax)
+        .mapToDouble(Double::doubleValue)
+        .sum();
+  }
+
   public Organizer updateInfo(Organizer newData) {
     if (newData.getPhoneNumber() != null) {
       setPhoneNumber(newData.getPhoneNumber());
@@ -211,5 +223,4 @@ public class Organizer extends User {
     }
     return this;
   }
-
 }

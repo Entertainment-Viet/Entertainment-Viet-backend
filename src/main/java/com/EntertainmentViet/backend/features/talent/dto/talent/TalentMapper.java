@@ -5,6 +5,8 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
@@ -18,6 +20,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +33,8 @@ import java.util.stream.Collectors;
         BookingMapper.class,
         TalentFeedBackMapper.class,
         PackageMapper.class,
-        CategoryMapper.class
+        CategoryMapper.class,
+        ScoreMapper.class,
     },
         config = MappingConfig.class)
 public abstract class TalentMapper {
@@ -38,10 +42,11 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "scoreSystem", "reviews", "reviewSum"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
+    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
     public abstract ReadTalentDto toDto(Talent talent);
 
     @Mapping(target = "id", ignore = true)
@@ -55,7 +60,7 @@ public abstract class TalentMapper {
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
     @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent toModel(UpdateTalentDto updateTalentDto);
@@ -91,6 +96,10 @@ public abstract class TalentMapper {
 
     @Named("toOfferCategories")
     public Set<Category> toOfferCategories(List<UUID> offerCategoryUidList) {
+        if (offerCategoryUidList == null) {
+            return Collections.emptySet();
+        }
+
         return offerCategoryUidList.stream()
                 .map(uuid -> categoryMapper.toCategory(uuid))
                 .collect(Collectors.toSet());
