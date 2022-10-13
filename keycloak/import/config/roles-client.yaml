@@ -44,15 +44,15 @@
     {
         "name": "UPDATE_EVENT"
     },
-    {
-        "name": "DELETE_EVENT"
-    },
-    {
-        "name": "APPLY_ORGANIZER_POSITION"
-    },
-    {
-        "name": "BROWSE_POSITION_APPLICANT"
-    },
+  {
+    "name": "DELETE_EVENT"
+  },
+  {
+    "name": "APPLY_ORGANIZER_POSITION"
+  },
+  {
+    "name": "BROWSE_POSITION_APPLICANT"
+  },
   {
     "name": "ACCEPT_POSITION_APPLICANT"
   },
@@ -91,16 +91,16 @@
   },
   {
     "name": "DELETE_EVENT_POSITION"
-    },
-    {
-        "name": "BROWSE_TALENT"
-    },
-    {
-        "name": "VERIFY_TALENT"
-    },
-    {
-        "name": "READ_TALENT"
-    },
+  },
+  {
+    "name": "BROWSE_TALENT"
+  },
+  {
+    "name": "VERIFY_TALENT"
+  },
+  {
+    "name": "READ_TALENT"
+  },
     {
         "name": "READ_TALENT_DETAIL"
     },
@@ -143,38 +143,44 @@
     {
         "name": "BROWSE_BOOKING_ORGANIZER"
     },
-    {
-        "name": "BROWSE_BOOKING_ORGANIZER_DETAIL"
-    },
-    {
-        "name": "ACCEPT_BOOKING_ORGANIZER"
-    },
-    {
-        "name": "CANCEL_BOOKING_ORGANIZER"
-    },
-    {
-        "name": "BROWSE_BOOKING_TALENT"
-    },
-    {
-        "name": "BROWSE_BOOKING_TALENT_DETAIL"
-    },
-    {
-        "name": "ACCEPT_BOOKING_TALENT"
-    },
-    {
-        "name": "CANCEL_BOOKING_TALENT"
-    },
-    {
-        "name": "READ_BOOKING"
-    },
-    {
-        "name": "ADD_BOOKING"
-    },
-    {
-        "name": "UPDATE_BOOKING"
-    },
-    {
-        "name": "BROWSE_ADVERTISEMENT"
+  {
+    "name": "BROWSE_BOOKING_ORGANIZER_DETAIL"
+  },
+  {
+    "name": "ACCEPT_BOOKING_ORGANIZER"
+  },
+  {
+    "name": "CANCEL_BOOKING_ORGANIZER"
+  },
+  {
+    "name": "FINISH_BOOKING_ORGANIZER"
+  },
+  {
+    "name": "BROWSE_BOOKING_TALENT"
+  },
+  {
+    "name": "BROWSE_BOOKING_TALENT_DETAIL"
+  },
+  {
+    "name": "ACCEPT_BOOKING_TALENT"
+  },
+  {
+    "name": "CANCEL_BOOKING_TALENT"
+  },
+  {
+    "name": "FINISH_BOOKING_TALENT"
+  },
+  {
+    "name": "READ_BOOKING"
+  },
+  {
+    "name": "ADD_BOOKING"
+  },
+  {
+    "name": "UPDATE_BOOKING"
+  },
+  {
+    "name": "BROWSE_ADVERTISEMENT"
     },
     {
         "name": "ADD_ADVERTISEMENT"
@@ -194,15 +200,15 @@
     {
         "name": "PAY_ADVERTISEMENT_CASH"
     },
-    {
-        "name": "BROWSE_TALENT_FEEDBACK"
-    },
-    {
-        "name": "READ_TALENT_FEEDBACK"
-    },
-    {
-        "name": "ADD_TALENT_FEEDBACK"
-    },
+  {
+    "name": "BROWSE_TALENT_FEEDBACK"
+  },
+  {
+    "name": "READ_TALENT_FEEDBACK"
+  },
+  {
+    "name": "ADD_TALENT_FEEDBACK"
+  },
   {
     "name": "BROWSE_ORGANIZER_FEEDBACK"
   },
@@ -228,16 +234,16 @@
     "name": "ADMIN_UPDATE_ORGANIZER"
   },
   {
-        "name": "ADMIN_DEACTIVE_ORGANIZER"
-    },
-    {
-        "name": "ADMIN_BROWSE_TALENT"
-    },
-    {
-        "name": "ADMIN_APPROVE_TALENT"
-    },
-    {
-        "name": "ADMIN_UPDATE_TALENT"
+    "name": "ADMIN_DEACTIVE_ORGANIZER"
+  },
+  {
+    "name": "ADMIN_BROWSE_TALENT"
+  },
+  {
+    "name": "ADMIN_APPROVE_TALENT"
+  },
+  {
+    "name": "ADMIN_UPDATE_TALENT"
     },
     {
         "name": "ADMIN_DEACTIVE_TALENT"
@@ -245,19 +251,25 @@
     {
         "name": "ADMIN_BROWSE_ADVERTISEMENT"
     },
-    {
-        "name": "ADMIN_APPROVE_ADVERTISEMENT"
-    },
-    {
-        "name": "ADMIN_DELETE_ADVERTISEMENT"
-    },
-    {
-        "name": "ADMIN_UPDATE_ADVERTISEMENT"
-    },
-    {
-        "name": "READ_CATEGORY"
-    },
-    {
-        "name": "ROOT"
-    }
+  {
+    "name": "ADMIN_APPROVE_ADVERTISEMENT"
+  },
+  {
+    "name": "ADMIN_DELETE_ADVERTISEMENT"
+  },
+  {
+    "name": "ADMIN_UPDATE_ADVERTISEMENT"
+  },
+  {
+    "name": "ADMIN_BROWSE_BOOKING"
+  },
+  {
+    "name": "ADMIN_UPDATE_BOOKING"
+  },
+  {
+    "name": "READ_CATEGORY"
+  },
+  {
+    "name": "ROOT"
+  }
 ]

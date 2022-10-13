@@ -1,9 +1,10 @@
 package com.EntertainmentViet.backend.features.security.boundary;
 
 import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementController;
+import com.EntertainmentViet.backend.features.admin.api.AdminBookingController;
 import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
-import com.EntertainmentViet.backend.features.admin.api.talent.AdminTalentController;
 import com.EntertainmentViet.backend.features.admin.api.UserController;
+import com.EntertainmentViet.backend.features.admin.api.talent.AdminTalentController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
@@ -106,6 +107,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_ORGANIZER.name())
 
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH + "/{id}/done"))
+            .hasAuthority(BookingRole.CANCEL_BOOKING_ORGANIZER.name())
+
             // Organizer payment mapping
             .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(PaymentRole.RECEIVE_ORGANIZER_CASH.name())
@@ -185,23 +189,26 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdvertisementRole.READ_ADVERTISEMENT.name())
             .mvcMatchers(HttpMethod.PUT , anyPathAfter(AdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdvertisementRole.UPDATE_ADVERTISEMENT.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(AdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdvertisementRole.DELETE_ADVERTISEMENT.name())
 
             // Talent booking mapping
-            .mvcMatchers(HttpMethod.GET , ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.BROWSE_BOOKING_TALENT.name())
-            .mvcMatchers(HttpMethod.POST , ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ADD_BOOKING.name())
 
-            .mvcMatchers(HttpMethod.GET , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.READ_BOOKING.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.UPDATE_BOOKING.name())
-            .mvcMatchers(HttpMethod.POST , anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.ACCEPT_BOOKING_TALENT.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_TALENT.name())
+
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentBookingController.REQUEST_MAPPING_PATH + "/{id}/done"))
+            .hasAuthority(BookingRole.FINISH_BOOKING_TALENT.name())
 
             // Talent payment mapping
             .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
@@ -246,24 +253,30 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
 
             // Admin talent mapping
-            .mvcMatchers(HttpMethod.GET , ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_TALENT.name())
-            .mvcMatchers(HttpMethod.POST , anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_TALENT.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_TALENT.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
 
             // Admin advertisement mapping
-            .mvcMatchers(HttpMethod.GET , ofPath(AdminAdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(AdminAdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_ADVERTISEMENT.name())
-            .mvcMatchers(HttpMethod.POST , anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_ADVERTISEMENT.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_DELETE_ADVERTISEMENT.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminAdvertisementController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_ADVERTISEMENT.name())
+
+            // Admin booking mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(AdminBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminBookingController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_UPDATE_BOOKING.name())
 
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
