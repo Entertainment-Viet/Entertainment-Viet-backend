@@ -29,17 +29,25 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
+  private final QBooking bookingOfOrganizer = new QBooking("bookingOfBooking");
+  private final QBooking bookingOfTalent =  new QBooking("bookingOfTalent");
   private final QCategory category = QCategory.category;
   private final QCategory parentCategory = new QCategory("parent");
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
-    queryFactory.selectFrom(booking).distinct()
+    var bookingList = queryFactory.selectFrom(booking).distinct()
         .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(talent.bookings, bookingOfTalent).fetchJoin()
+        .fetch();
+
+    queryFactory.selectFrom(booking).distinct()
         .leftJoin(booking.organizer, organizer).fetchJoin()
+        .leftJoin(organizer.bookings, bookingOfOrganizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
+        .where(booking.in(bookingList))
         .fetch();
 
     return null;

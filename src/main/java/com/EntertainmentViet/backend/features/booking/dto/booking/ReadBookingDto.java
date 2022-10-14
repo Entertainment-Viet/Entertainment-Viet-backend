@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -30,4 +31,6 @@ public class ReadBookingDto extends Identifiable {
     private ReadJobDetailDto jobDetail;
 
     private String paymentType;
+
+    private String extensions;
 }

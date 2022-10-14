@@ -19,6 +19,9 @@ public class CreateReviewDto {
   @NotNull
   private UUID organizer;
 
+  @NotNull
+  private UUID talent;
+
   private String comment;
 
   @Min(1)

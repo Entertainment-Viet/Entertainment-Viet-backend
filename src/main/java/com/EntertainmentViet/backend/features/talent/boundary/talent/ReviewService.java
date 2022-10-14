@@ -1,7 +1,9 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.ReviewRepository;
@@ -27,6 +29,8 @@ public class ReviewService implements ReviewBoundary {
   private final ReviewRepository reviewRepository;
 
   private final TalentRepository talentRepository;
+
+  private final BookingRepository bookingRepository;
 
   private final ReviewMapper reviewMapper;
 
@@ -68,6 +72,11 @@ public class ReviewService implements ReviewBoundary {
 
   @Override
   public Optional<UUID> create(CreateReviewDto reviewDto, UUID talentUid) {
+    if (!reviewDto.getTalent().equals(talentUid)) {
+      log.warn(String.format("Inconsistent between url and request object '%s' != '%s'", reviewDto.getTalent(), talentUid));
+      return Optional.empty();
+    }
+
     Review review = reviewMapper.fromCreateToModel(reviewDto);
     Talent talent = talentRepository.findByUid(talentUid).orElse(null);
 
@@ -80,7 +89,31 @@ public class ReviewService implements ReviewBoundary {
     }
 
     talent.addReview(review);
+    var reviewUid = reviewRepository.save(review).getUid();
     talentRepository.save(talent);
-    return Optional.ofNullable(reviewRepository.save(review).getUid());
+    return Optional.ofNullable(reviewUid);
+  }
+
+  @Override
+  public Optional<UUID> addReviewToBooking(CreateReviewDto reviewDto, UUID bookingUid) {
+    Booking booking = bookingRepository.findByUid(bookingUid).orElse(null);
+    Review review = reviewMapper.fromCreateToModel(reviewDto);
+
+    if (!EntityValidationUtils.isBookingWithUid(booking, bookingUid)) {
+      return Optional.empty();
+    }
+    if (!EntityValidationUtils.isBookingBelongToTalentWithUid(booking, reviewDto.getTalent())) {
+      return Optional.empty();
+    }
+    if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, reviewDto.getOrganizer())) {
+      return Optional.empty();
+    }
+
+    booking.setIsReview(true);
+    bookingRepository.save(booking);
+    Talent talent = review.getTalent();
+    var reviewUid = reviewRepository.save(review).getUid();
+    talentRepository.save(talent);
+    return Optional.ofNullable(reviewUid);
   }
 }

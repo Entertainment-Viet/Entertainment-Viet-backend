@@ -29,21 +29,27 @@ public abstract class ReviewMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentUid")
+    @Mapping(target = "talentName", source = "talent", qualifiedByName = "toTalentName")
     @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerUid")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     public abstract ReadReviewDto toDto(Review review);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "talent", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerEntity")
+    @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentEntity")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Review fromCreateToModel(CreateReviewDto dto);
 
     @Named("toTalentUid")
     public UUID toTalentUid(Talent talent) {
         return talent != null ? talent.getUid() : null;
+    }
+
+    @Named("toTalentName")
+    public String toTalentName(Talent talent) {
+        return talent != null ? talent.getDisplayName() : null;
     }
 
     @Named("toTalentEntity")

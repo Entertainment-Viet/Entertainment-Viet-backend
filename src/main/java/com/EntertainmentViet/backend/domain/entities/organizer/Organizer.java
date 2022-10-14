@@ -129,6 +129,23 @@ public class Organizer extends User {
         );
   }
 
+  public void finishBooking(UUID bookingUid) {
+    bookings.stream()
+        .filter(booking -> booking.getUid().equals(bookingUid))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.CONFIRMED) || booking.getStatus().equals(BookingStatus.TALENT_FINISH))
+        .findAny()
+        .ifPresentOrElse(
+            booking -> {
+              if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
+                booking.setStatus(BookingStatus.ORGANIZER_FINISH);
+              } else if (booking.getStatus().equals(BookingStatus.TALENT_FINISH)) {
+                booking.setStatus(BookingStatus.FINISHED);
+              }
+            },
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
+  }
+
   public void addFeedback(OrganizerFeedback feedback) {
     feedbacks.add(feedback);
     feedback.setOrganizer(this);

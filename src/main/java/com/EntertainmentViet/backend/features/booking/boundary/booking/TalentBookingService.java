@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
@@ -82,6 +83,28 @@ public class TalentBookingService implements TalentBookingBoundary {
         try {
             Talent talent = booking.getTalent();
             talent.rejectBooking(bookingId);
+            talentRepository.save(talent);
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean finishBooking(UUID talentUid, UUID bookingId) {
+        Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
+
+        if (!EntityValidationUtils.isBookingWithUid(booking, bookingId)) {
+            return false;
+        }
+        if (!EntityValidationUtils.isBookingBelongToTalentWithUid(booking, talentUid)) {
+            return false;
+        }
+
+        try {
+            Talent talent = booking.getTalent();
+            talent.finishBooking(bookingId);
             talentRepository.save(talent);
         } catch (EntityNotFoundException ex) {
             log.warn(ex.getMessage());

@@ -7,7 +7,9 @@ import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,18 +18,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
@@ -40,6 +31,7 @@ import java.time.OffsetDateTime;
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
 )
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class})
 public class Booking extends Identifiable implements Auditable {
@@ -80,12 +72,22 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private PaymentType paymentType;
 
+  @NotNull
+  private Boolean isReview;
+
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private JsonNode extensions;
+
   public void updateInfo(Booking newData) {
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
     }
     if (newData.getPaymentType() != null) {
       setPaymentType(newData.getPaymentType());
+    }
+    if (newData.getExtensions() != null) {
+      setExtensions(newData.getExtensions());
     }
   }
 
