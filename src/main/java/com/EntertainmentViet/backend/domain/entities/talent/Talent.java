@@ -139,6 +139,23 @@ public class Talent extends User implements Advertisable {
         );
   }
 
+  public void finishBooking(UUID bookingUid) {
+    bookings.stream()
+        .filter(booking -> booking.getUid().equals(bookingUid))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.CONFIRMED) || booking.getStatus().equals(BookingStatus.ORGANIZER_FINISH))
+        .findAny()
+        .ifPresentOrElse(
+            booking -> {
+              if (booking.getStatus().equals(BookingStatus.CONFIRMED)) {
+                booking.setStatus(BookingStatus.TALENT_FINISH);
+              } else if (booking.getStatus().equals(BookingStatus.ORGANIZER_FINISH)) {
+                booking.setStatus(BookingStatus.FINISHED);
+              }
+            },
+            () -> {throw new EntityNotFoundException("Booking", bookingUid);}
+        );
+  }
+
   public void removeBooking(Booking booking) {
     bookings.remove(booking);
     booking.setTalent(null);

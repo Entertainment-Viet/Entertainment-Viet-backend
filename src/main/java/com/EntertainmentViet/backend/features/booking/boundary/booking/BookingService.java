@@ -69,20 +69,39 @@ public class BookingService implements BookingBoundary {
     }
 
     @Override
-    public Optional<UUID> update(UUID ownerUid, UUID uid, UpdateBookingDto updateBookingDto) {
+    public Optional<UUID> updateFromOrganizer(UUID organizerUid, UUID uid, UpdateBookingDto updateBookingDto) {
         var bookingOptional = bookingRepository.findByUid(uid);
         if (bookingOptional.isEmpty()) {
             return Optional.empty();
         }
 
         Booking updatingBooking = bookingOptional.get();
-        if (!ownerUid.equals(updatingBooking.getTalent().getUid()) && !ownerUid.equals(updatingBooking.getOrganizer().getUid())) {
-            log.warn(String.format("Can not find booking with id '%s' belong to organizer/talent with id '%s'", uid, ownerUid));
+        if (!organizerUid.equals(updatingBooking.getOrganizer().getUid())) {
+            log.warn(String.format("Can not find booking with id '%s' belong to organizer with id '%s'", uid, organizerUid));
             return Optional.empty();
         }
 
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
         updatingBooking.getOrganizer().updateBookingInfo(uid, newBookingData);
+
+        return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
+    }
+
+    @Override
+    public Optional<UUID> updateFromTalent(UUID talentUid, UUID uid, UpdateBookingDto updateBookingDto) {
+        var bookingOptional = bookingRepository.findByUid(uid);
+        if (bookingOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Booking updatingBooking = bookingOptional.get();
+        if (!talentUid.equals(updatingBooking.getTalent().getUid())) {
+            log.warn(String.format("Can not find booking with id '%s' belong to talent with id '%s'", uid, talentUid));
+            return Optional.empty();
+        }
+
+        var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
+        updatingBooking.getTalent().updateBookingInfo(uid, newBookingData);
 
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }

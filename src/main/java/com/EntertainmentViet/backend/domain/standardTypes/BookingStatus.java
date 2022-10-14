@@ -9,7 +9,8 @@ public enum BookingStatus {
   CONFIRMED("booking.status.confirmed"),
   CANCELLED("booking.status.cancelled"),
   FINISHED("booking.status.finished"),
-  HALF_FINISHED("booking.status.half-finished"),
+  ORGANIZER_FINISH("booking.status.organizer-finished"),
+  TALENT_FINISH("booking.status.talent-finished"),
   ARCHIVED("booking.status.archived"),
   ;
 

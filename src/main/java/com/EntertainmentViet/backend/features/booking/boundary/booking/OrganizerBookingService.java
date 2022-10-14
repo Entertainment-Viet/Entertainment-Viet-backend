@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.booking.boundary.booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.RollbackException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
@@ -10,13 +11,19 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerB
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
+import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +36,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     private final BookingRepository bookingRepository;
 
     private final BookingMapper bookingMapper;
+
+    private final ReviewBoundary reviewService;
 
     @Override
     public ListBookingResponseDto listBooking(UUID organizerId, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
@@ -81,6 +90,28 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         try {
             Organizer organizer = booking.getOrganizer();
             organizer.rejectBooking(bookingId);
+            organizerRepository.save(organizer);
+        } catch (EntityNotFoundException ex) {
+            log.warn(ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean finishBooking(UUID organizerId, UUID bookingId) {
+        Booking booking = bookingRepository.findByUid(bookingId).orElse(null);
+
+        if (!EntityValidationUtils.isBookingWithUid(booking, bookingId)) {
+            return false;
+        }
+        if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, organizerId)) {
+            return false;
+        }
+
+        try {
+            Organizer organizer = booking.getOrganizer();
+            organizer.finishBooking(bookingId);
             organizerRepository.save(organizer);
         } catch (EntityNotFoundException ex) {
             log.warn(ex.getMessage());

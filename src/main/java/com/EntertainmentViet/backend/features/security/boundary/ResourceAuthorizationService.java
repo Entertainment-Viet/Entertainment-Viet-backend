@@ -108,7 +108,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.CANCEL_BOOKING_ORGANIZER.name())
 
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH + "/{id}/done"))
-            .hasAuthority(BookingRole.CANCEL_BOOKING_ORGANIZER.name())
+            .hasAuthority(BookingRole.FINISH_BOOKING_ORGANIZER.name())
 
             // Organizer payment mapping
             .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerController.REQUEST_MAPPING_PATH))

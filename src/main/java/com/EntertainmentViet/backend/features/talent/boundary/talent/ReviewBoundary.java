@@ -14,4 +14,6 @@ public interface ReviewBoundary {
   Optional<ReadReviewDto> findByUidAndTalentUid(UUID uid, UUID talentUid);
 
   Optional<UUID> create(CreateReviewDto reviewDto, UUID talentUid);
+
+  Optional<UUID> addReviewToBooking(CreateReviewDto reviewDto, UUID bookingUid);
 }

@@ -4,6 +4,8 @@ import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBo
 import com.EntertainmentViet.backend.features.booking.boundary.booking.TalentBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -34,6 +36,8 @@ public class TalentBookingController {
   private final BookingBoundary bookingService;
 
   private final TalentBookingBoundary talentBookingService;
+
+  private final ReviewBoundary reviewService;
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
@@ -80,7 +84,7 @@ public class TalentBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.update(talentUid, uid, updateBookingDto)
+    return  CompletableFuture.completedFuture(bookingService.updateFromTalent(talentUid, uid, updateBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .ok()
                     .body(newBookingDto)
@@ -115,7 +119,7 @@ public class TalentBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PutMapping(value = "/{uid}")
+  @DeleteMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> rejectBooking(JwtAuthenticationToken token,
                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                @PathVariable("uid") UUID bookingUid) {
@@ -127,6 +131,22 @@ public class TalentBookingController {
 
     if (talentBookingService.rejectBooking(talentUid, bookingUid)) {
       return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @PostMapping(value = "/{uid}/done")
+  public CompletableFuture<ResponseEntity<Void>> finishBookingAndAddReview(JwtAuthenticationToken token, HttpServletRequest request,
+                                                                           @PathVariable("talent_uid") UUID talentUid,
+                                                                           @PathVariable("uid") UUID bookingUid,
+                                                                           @RequestBody @Valid CreateReviewDto reviewDto) {
+    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    if (talentBookingService.finishBooking(talentUid, bookingUid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }

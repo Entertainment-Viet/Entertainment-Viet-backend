@@ -8,9 +8,11 @@ import java.util.UUID;
 
 public interface TalentBookingBoundary {
 
-    ListBookingResponseDto listBooking(UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable);
+  ListBookingResponseDto listBooking(UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable);
 
-    boolean acceptBooking(UUID talentId, UUID bookingId);
+  boolean acceptBooking(UUID talentId, UUID bookingId);
 
-    boolean rejectBooking(UUID talentId, UUID bookingId);
+  boolean rejectBooking(UUID talentId, UUID bookingId);
+
+  boolean finishBooking(UUID talentUid, UUID bookingUid);
 }

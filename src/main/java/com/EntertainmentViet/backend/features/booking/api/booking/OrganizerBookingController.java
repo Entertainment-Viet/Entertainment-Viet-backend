@@ -1,9 +1,13 @@
 package com.EntertainmentViet.backend.features.booking.api.booking;
 
+import com.EntertainmentViet.backend.exception.RollbackException;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.OrganizerBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
+import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,6 +31,8 @@ import java.util.concurrent.CompletableFuture;
 public class OrganizerBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/organizers/{organizer_uid}/bookings";
+
+  private final OrganizerBookingControllerProxy proxy;
 
   private final OrganizerBookingBoundary organizerBookingService;
 
@@ -76,7 +83,7 @@ public class OrganizerBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(bookingService.update(organizerUid, uid, updateBookingDto)
+    return CompletableFuture.completedFuture(bookingService.updateFromOrganizer(organizerUid, uid, updateBookingDto)
         .map(newBookingUid -> ResponseEntity
             .ok()
             .body(newBookingUid)
@@ -111,7 +118,7 @@ public class OrganizerBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PutMapping(value = "/{uid}")
+  @DeleteMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> rejectBooking(JwtAuthenticationToken token, 
                                                                @PathVariable("organizer_uid") UUID organizerUid,
                                                                @PathVariable("uid") UUID bookingUid) {
@@ -122,8 +129,34 @@ public class OrganizerBookingController {
     }
 
     if (organizerBookingService.rejectBooking(organizerUid, bookingUid)) {
-      return  CompletableFuture.completedFuture(ResponseEntity.ok().build());
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @PostMapping(value = "/{uid}/done")
+  public CompletableFuture<ResponseEntity<UUID>> finishBookingAndAddReview(JwtAuthenticationToken token, HttpServletRequest request,
+                                                                           @PathVariable("organizer_uid") UUID organizerUid,
+                                                                           @PathVariable("uid") UUID bookingUid,
+                                                                           @RequestBody @Valid CreateReviewDto reviewDto) {
+    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    Optional<UUID> response;
+    try {
+       response = proxy.finishBooingAndReview(reviewDto, organizerUid, bookingUid);
+    } catch (RollbackException ex) {
+      log.error("Rollback database operation", ex);
+      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    }
+
+    return CompletableFuture.completedFuture(response
+        .map(newReviewUid -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newReviewUid))
+            .body(newReviewUid)
+        )
+        .orElse(ResponseEntity.badRequest().build()));
   }
 }

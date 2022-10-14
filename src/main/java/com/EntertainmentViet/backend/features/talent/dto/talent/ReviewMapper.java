@@ -35,9 +35,9 @@ public abstract class ReviewMapper {
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "talent", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerEntity")
+    @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentEntity")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Review fromCreateToModel(CreateReviewDto dto);
 

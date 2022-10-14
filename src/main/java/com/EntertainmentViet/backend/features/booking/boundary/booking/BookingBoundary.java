@@ -14,6 +14,8 @@ public interface BookingBoundary {
 
     Optional<UUID> createForTalent(UUID talentUid, CreateBookingDto createBookingDto);
 
-    Optional<UUID> update(UUID ownerUid, UUID uid, UpdateBookingDto updateBookingDto);
+    Optional<UUID> updateFromOrganizer(UUID organizerUid, UUID uid, UpdateBookingDto updateBookingDto);
+
+    Optional<UUID> updateFromTalent(UUID talentUid, UUID uid, UpdateBookingDto updateBookingDto);
 
 }
