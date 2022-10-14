@@ -29,6 +29,7 @@ public abstract class ReviewMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "talent", source = "talent", qualifiedByName = "toTalentUid")
+    @Mapping(target = "talentName", source = "talent", qualifiedByName = "toTalentName")
     @Mapping(target = "organizer", source = "organizer", qualifiedByName = "toOrganizerUid")
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     public abstract ReadReviewDto toDto(Review review);
@@ -44,6 +45,11 @@ public abstract class ReviewMapper {
     @Named("toTalentUid")
     public UUID toTalentUid(Talent talent) {
         return talent != null ? talent.getUid() : null;
+    }
+
+    @Named("toTalentName")
+    public String toTalentName(Talent talent) {
+        return talent != null ? talent.getDisplayName() : null;
     }
 
     @Named("toTalentEntity")
