@@ -80,6 +80,9 @@ public class Booking extends Identifiable implements Auditable {
   private JsonNode extensions;
 
   public void updateInfo(Booking newData) {
+    if (checkIfConfirmed()) {
+      return;
+    }
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
     }
@@ -93,5 +96,9 @@ public class Booking extends Identifiable implements Auditable {
 
   public boolean checkIfFixedPrice() {
     return getJobDetail().getPrice().checkIfFixedPrice();
+  }
+
+  public boolean checkIfConfirmed() {
+    return !status.equals(BookingStatus.TALENT_PENDING) && !status.equals(BookingStatus.ORGANIZER_PENDING);
   }
 }

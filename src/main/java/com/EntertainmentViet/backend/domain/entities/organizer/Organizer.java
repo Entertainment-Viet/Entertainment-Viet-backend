@@ -182,7 +182,7 @@ public class Organizer extends User {
   }
 
   public void pay(Booking booking) {
-    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfFixedPrice()) {
+    if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfConfirmed()) {
       booking.setPaid(true);
     }
   }
