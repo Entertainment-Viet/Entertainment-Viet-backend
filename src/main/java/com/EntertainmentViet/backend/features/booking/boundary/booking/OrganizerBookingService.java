@@ -119,4 +119,18 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
         return true;
     }
+
+    @Transactional(rollbackFor = {RollbackException.class})
+    public Optional<UUID> finishBooingAndReview(CreateReviewDto reviewDto, UUID organizerUid, UUID bookingUid) {
+        Optional<UUID> result;
+        if (!finishBooking(organizerUid, bookingUid)) {
+            result = Optional.empty();
+        } else {
+            result = reviewService.addReviewToBooking(reviewDto, bookingUid);
+        }
+        if (result.isEmpty()) {
+            throw new RollbackException();
+        }
+        return  result;
+    }
 }

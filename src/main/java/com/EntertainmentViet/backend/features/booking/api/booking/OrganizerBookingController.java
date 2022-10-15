@@ -32,8 +32,6 @@ public class OrganizerBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/organizers/{organizer_uid}/bookings";
 
-  private final OrganizerBookingControllerProxy proxy;
-
   private final OrganizerBookingBoundary organizerBookingService;
 
   private final BookingBoundary bookingService;
@@ -146,7 +144,7 @@ public class OrganizerBookingController {
 
     Optional<UUID> response;
     try {
-       response = proxy.finishBooingAndReview(reviewDto, organizerUid, bookingUid);
+       response = organizerBookingService.finishBooingAndReview(reviewDto, organizerUid, bookingUid);
     } catch (RollbackException ex) {
       log.error("Rollback database operation", ex);
       return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
