@@ -16,10 +16,10 @@ import java.util.UUID;
 public class CreateBookingDto {
 
     @NotNull
-    private UUID organizerUid;
+    private UUID organizerId;
 
     @NotNull
-    private UUID talentUid;
+    private UUID talentId;
 
     @NotNull
     private CreateJobDetailDto jobDetail;

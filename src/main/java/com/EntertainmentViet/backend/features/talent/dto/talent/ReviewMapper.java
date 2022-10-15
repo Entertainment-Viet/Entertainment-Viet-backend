@@ -25,17 +25,18 @@ public abstract class ReviewMapper {
 
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
-    @Mapping(target = "talent", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
+    @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
     @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
-    @Mapping(target = "organizer", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     public abstract ReadReviewDto toDto(Review review);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "organizer", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerEntity.class)
-    @Mapping(target = "talent", source = "talent", qualifiedBy = EntityMapper.ToTalentEntity.class)
+    @Mapping(target = "organizer", source = "organizerId", qualifiedBy = EntityMapper.ToOrganizerEntity.class)
+    @Mapping(target = "talent", source = "talentId", qualifiedBy = EntityMapper.ToTalentEntity.class)
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Review fromCreateToModel(CreateReviewDto dto);
 }

@@ -23,5 +23,7 @@ public class ReadCartItemDto extends IdentifiableDto {
 
   private UUID talentId;
 
+  private String talentName;
+
   private ReadJobDetailDto jobDetail;
 }

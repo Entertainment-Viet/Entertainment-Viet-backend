@@ -24,4 +24,6 @@ public class ReadEventDto extends IdentifiableDto {
   private OffsetDateTime occurrenceTime;
 
   private UUID organizerId;
+
+  private String organizerName;
 }

@@ -17,10 +17,10 @@ import java.util.UUID;
 public class CreateReviewDto {
 
   @NotNull
-  private UUID organizer;
+  private UUID organizerId;
 
   @NotNull
-  private UUID talent;
+  private UUID talentId;
 
   private String comment;
 

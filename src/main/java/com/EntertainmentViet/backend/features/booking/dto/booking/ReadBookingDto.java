@@ -24,11 +24,13 @@ public class ReadBookingDto extends Identifiable {
 
     private String status;
 
-    private UUID organizerUid;
+    private UUID organizerId;
 
-//    private UUID organizerName;
+    private String organizerName;
 
-    private UUID talentUid;
+    private UUID talentId;
+
+    private String talentName;
 
     private UUID packageUid;
 

@@ -17,6 +17,7 @@ public abstract class EventMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "openPositions"})
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadEventDto toReadDto(Event event);
 
     @Mapping(target = "uid", ignore = true)

@@ -22,6 +22,7 @@ public abstract class JobOfferMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadJobOfferDto toDto(JobOffer jobOffer);
 
     @Mapping(target = "uid", ignore = true)

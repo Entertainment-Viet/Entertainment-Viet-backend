@@ -26,7 +26,6 @@ public class EntityMapper {
   @Autowired
   private OrganizerRepository organizerRepository;
 
-
   @ToTalentUid
   public UUID toTalentUid(Talent talent) {
     return talent != null ? talent.getUid() : null;

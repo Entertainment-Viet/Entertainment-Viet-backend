@@ -24,4 +24,6 @@ public class ReadJobOfferDto extends IdentifiableDto {
   private ReadJobDetailDto jobDetail;
 
   private UUID organizerId;
+
+  private String organizerName;
 }

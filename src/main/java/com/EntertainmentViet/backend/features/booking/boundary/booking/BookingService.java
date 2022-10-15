@@ -38,7 +38,7 @@ public class BookingService implements BookingBoundary {
         Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
         booking.setStatus(BookingStatus.TALENT_PENDING);
 
-        if (!isBookingValid(booking, createBookingDto.getOrganizerUid(), createBookingDto.getTalentUid())) {
+        if (!isBookingValid(booking, createBookingDto.getOrganizerId(), createBookingDto.getTalentId())) {
             return Optional.empty();
         }
 
@@ -56,7 +56,7 @@ public class BookingService implements BookingBoundary {
         Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
         booking.setStatus(BookingStatus.ORGANIZER_PENDING);
 
-        if (!isBookingValid(booking, createBookingDto.getOrganizerUid(), createBookingDto.getTalentUid())) {
+        if (!isBookingValid(booking, createBookingDto.getOrganizerId(), createBookingDto.getTalentId())) {
             return Optional.empty();
         }
 

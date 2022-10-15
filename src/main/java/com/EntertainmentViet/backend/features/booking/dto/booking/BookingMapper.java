@@ -34,8 +34,10 @@ public abstract class BookingMapper {
     @Mapping(target = "isPaid", source = "paid")
     @Mapping(target = "status", source = "status.i18nKey")
     @Mapping(target = "paymentType", source = "paymentType.i18nKey")
-    @Mapping(target = "organizerUid", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
-    @Mapping(target = "talentUid", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
+    @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
+    @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
+    @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
     @Mapping(target = "packageUid", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageUid.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
@@ -48,8 +50,8 @@ public abstract class BookingMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "talentPackage", ignore = true)
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
-    @Mapping(target = "organizer", source = "organizerUid", qualifiedBy = EntityMapper.ToOrganizerEntity.class)
-    @Mapping(target = "talent", source = "talentUid", qualifiedBy = EntityMapper.ToTalentEntity.class)
+    @Mapping(target = "organizer", source = "organizerId", qualifiedBy = EntityMapper.ToOrganizerEntity.class)
+    @Mapping(target = "talent", source = "talentId", qualifiedBy = EntityMapper.ToTalentEntity.class)
     @Mapping(target = "isReview", constant = "false")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     public abstract Booking fromCreateDtoToModel(CreateBookingDto createBookingDto);
