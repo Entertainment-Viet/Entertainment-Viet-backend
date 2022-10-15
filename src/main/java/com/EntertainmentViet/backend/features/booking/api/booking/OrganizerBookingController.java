@@ -1,13 +1,11 @@
 package com.EntertainmentViet.backend.features.booking.api.booking;
 
-import com.EntertainmentViet.backend.exception.RollbackException;
+import com.EntertainmentViet.backend.exception.InconsistentDataException;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.OrganizerBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
-import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -145,7 +143,7 @@ public class OrganizerBookingController {
     Optional<UUID> response;
     try {
        response = organizerBookingService.finishBooingAndReview(reviewDto, organizerUid, bookingUid);
-    } catch (RollbackException ex) {
+    } catch (InconsistentDataException ex) {
       log.error("Rollback database operation", ex);
       return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
     }
