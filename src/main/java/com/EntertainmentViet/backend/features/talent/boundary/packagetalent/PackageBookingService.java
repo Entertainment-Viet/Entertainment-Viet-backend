@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -54,7 +55,10 @@ public class PackageBookingService implements PackageBookingBoundary {
         if (!EntityValidationUtils.isPackageBelongToTalentWithUid(packageTalent, talentId)) {
             return false;
         }
-        organizer.addPackageToCart(packageTalent, addCartItemDto.getSuggestedPrice());
+        // check if the package is already in shopping cart
+        if (!organizer.addPackageToCart(packageTalent, addCartItemDto.getSuggestedPrice())) {
+            return false;
+        }
         organizerRepository.save(organizer);
         return true;
     }
@@ -88,10 +92,8 @@ public class PackageBookingService implements PackageBookingBoundary {
             return Optional.empty();
         }
 
-        Booking createdOrder = packageTalent.orderBy(organizer, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
-        if (createPackageOrderDto.getJobDetail() != null) {
-            createdOrder.setJobDetail(jobDetailMapper.fromCreateDtoToModel(createPackageOrderDto.getJobDetail()));
-        }
+        JobDetail jobDetail = jobDetailMapper.fromCreateDtoToModel(createPackageOrderDto.getJobDetail());
+        Booking createdOrder = packageTalent.generateOrder(organizer, jobDetail, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
         var newBooking = bookingRepository.save(createdOrder);
 
         packageRepository.save(packageTalent);

@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -65,6 +66,8 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private JobDetail jobDetail;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Package talentPackage;
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "payment_type")

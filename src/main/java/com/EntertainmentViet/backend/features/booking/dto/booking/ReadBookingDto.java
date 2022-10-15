@@ -28,6 +28,8 @@ public class ReadBookingDto extends Identifiable {
 
     private UUID talentUid;
 
+    private UUID packageUid;
+
     private ReadJobDetailDto jobDetail;
 
     private String paymentType;

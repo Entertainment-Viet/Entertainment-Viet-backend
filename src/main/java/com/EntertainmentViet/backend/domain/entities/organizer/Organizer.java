@@ -156,25 +156,25 @@ public class Organizer extends User {
     feedback.setOrganizer(null);
   }
 
-  public void addPackageToCart(Package talentPackage, Double price) {
+  public boolean addPackageToCart(Package talentPackage, Double price) {
     OrganizerShoppingCart cartItem = new OrganizerShoppingCart(this, talentPackage, price);
+    var overlapCartItem = shoppingCart.stream().filter(item -> item.getId().equals(cartItem.getId())).toList();
+    if (!overlapCartItem.isEmpty()) {
+      return false;
+    }
     shoppingCart.add(cartItem);
+    return true;
   }
 
-  public void finishCartShopping(PaymentType paymentType) {
-    // validate cart item
+  public boolean checkValidShoppingCart() {
     var invalidPackage = shoppingCart.stream()
         .filter(Predicate.not(OrganizerShoppingCart::checkValidCartItem))
         .collect(Collectors.toList());
     if (invalidPackage.size() != 0) {
       log.warn("Exist invalid cart item in shopping cart");
-      throw new EntityNotFoundException("Package", invalidPackage.get(0).getTalentPackage().getUid());
+      return false;
     }
-    for (OrganizerShoppingCart cartItem : shoppingCart) {
-      addBooking(cartItem.charge(paymentType));
-    }
-
-    clearCart();
+    return true;
   }
 
   public void clearCart() {

@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.booking.dto.booking;
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -42,6 +43,7 @@ public abstract class BookingMapper {
     @Mapping(target = "paymentType", source = "paymentType.i18nKey")
     @Mapping(target = "organizerUid", source = "organizer", qualifiedByName = "toOrganizerUid")
     @Mapping(target = "talentUid", source = "talent", qualifiedByName = "toTalentUid")
+    @Mapping(target = "packageUid", source = "talentPackage", qualifiedByName = "toPackageUid")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
 
@@ -51,6 +53,7 @@ public abstract class BookingMapper {
     @Mapping(target = "confirmedAt", ignore = true)
     @Mapping(target = "isPaid", constant = "false")
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "talentPackage", ignore = true)
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
     @Mapping(target = "organizer", source = "organizerUid", qualifiedByName = "toOrganizerEntity")
     @Mapping(target = "talent", source = "talentUid", qualifiedByName = "toTalentEntity")
@@ -66,6 +69,7 @@ public abstract class BookingMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "talentPackage", ignore = true)
     @Mapping(target = "isReview", ignore = true)
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
@@ -106,6 +110,11 @@ public abstract class BookingMapper {
     @Named("toOrganizerEntity")
     public Organizer toOrganizerEntity(UUID organizerUid) {
         return organizerRepository.findByUid(organizerUid).orElse(null);
+    }
+
+    @Named("toPackageUid")
+    public UUID toPackageUid(Package talentPackage) {
+        return talentPackage != null ? talentPackage.getUid() : null;
     }
 
     @Named("toBookingStatus")
