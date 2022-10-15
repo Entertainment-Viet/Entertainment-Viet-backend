@@ -26,6 +26,8 @@ public class ReadBookingDto extends Identifiable {
 
     private UUID organizerUid;
 
+//    private UUID organizerName;
+
     private UUID talentUid;
 
     private UUID packageUid;

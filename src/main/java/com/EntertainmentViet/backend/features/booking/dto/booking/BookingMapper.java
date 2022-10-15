@@ -9,6 +9,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
+import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
@@ -25,25 +26,17 @@ import java.util.UUID;
 @Mapper(uses = {
     JobDetailMapper.class,
     ExtensionsMapper.class,
+    EntityMapper.class,
 }, config = MappingConfig.class)
 public abstract class BookingMapper {
-
-    @Autowired
-    private JobDetailMapper jobDetailMapper;
-
-    @Autowired
-    private OrganizerRepository organizerRepository;
-
-    @Autowired
-    private TalentRepository talentRepository;
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "isReview"})
     @Mapping(target = "isPaid", source = "paid")
     @Mapping(target = "status", source = "status.i18nKey")
     @Mapping(target = "paymentType", source = "paymentType.i18nKey")
-    @Mapping(target = "organizerUid", source = "organizer", qualifiedByName = "toOrganizerUid")
-    @Mapping(target = "talentUid", source = "talent", qualifiedByName = "toTalentUid")
-    @Mapping(target = "packageUid", source = "talentPackage", qualifiedByName = "toPackageUid")
+    @Mapping(target = "organizerUid", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "talentUid", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
+    @Mapping(target = "packageUid", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageUid.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
 
@@ -55,8 +48,8 @@ public abstract class BookingMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "talentPackage", ignore = true)
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
-    @Mapping(target = "organizer", source = "organizerUid", qualifiedByName = "toOrganizerEntity")
-    @Mapping(target = "talent", source = "talentUid", qualifiedByName = "toTalentEntity")
+    @Mapping(target = "organizer", source = "organizerUid", qualifiedBy = EntityMapper.ToOrganizerEntity.class)
+    @Mapping(target = "talent", source = "talentUid", qualifiedBy = EntityMapper.ToTalentEntity.class)
     @Mapping(target = "isReview", constant = "false")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     public abstract Booking fromCreateDtoToModel(CreateBookingDto createBookingDto);
@@ -89,32 +82,6 @@ public abstract class BookingMapper {
                 .build();
         }
         return readBookingDto;
-
-    }
-
-    @Named("toTalentUid")
-    public UUID toTalentUid(Talent talent) {
-        return talent != null ? talent.getUid() : null;
-    }
-
-    @Named("toTalentEntity")
-    public Talent toTalentEntity(UUID talentUid) {
-        return talentRepository.findByUid(talentUid).orElse(null);
-    }
-
-    @Named("toOrganizerUid")
-    public UUID toOrganizerUid(Organizer organizer) {
-        return organizer != null ? organizer.getUid() : null;
-    }
-
-    @Named("toOrganizerEntity")
-    public Organizer toOrganizerEntity(UUID organizerUid) {
-        return organizerRepository.findByUid(organizerUid).orElse(null);
-    }
-
-    @Named("toPackageUid")
-    public UUID toPackageUid(Package talentPackage) {
-        return talentPackage != null ? talentPackage.getUid() : null;
     }
 
     @Named("toBookingStatus")
