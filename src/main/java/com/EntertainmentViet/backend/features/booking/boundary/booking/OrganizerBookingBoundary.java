@@ -18,4 +18,6 @@ public interface OrganizerBookingBoundary {
   boolean rejectBooking(UUID organizerId, UUID bookingId);
 
   boolean finishBooking(UUID organizerUid, UUID bookingUid);
+
+  Optional<UUID> finishBooingAndReview(CreateReviewDto reviewDto, UUID organizerUid, UUID bookingUid);
 }

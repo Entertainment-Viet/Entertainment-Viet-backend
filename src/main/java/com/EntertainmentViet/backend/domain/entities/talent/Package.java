@@ -6,8 +6,10 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -59,19 +61,14 @@ public class Package extends Identifiable {
   )
   private Set<Booking> orders;
 
-  public Booking orderBy(Organizer organizer, PaymentType paymentType) {
-    Booking booking = Booking.builder()
-        .jobDetail(getJobDetail().clone())
-        .talent(talent)
-        .organizer(organizer)
-        .status(BookingStatus.TALENT_PENDING)
-        .createdAt(OffsetDateTime.now())
-        .paymentType(paymentType)
-        .isPaid(false)
-        .build();
+  public void addOrder(Booking order) {
+    orders.add(order);
+    order.setTalentPackage(this);
+  }
 
-    orders.add(booking);
-    return booking;
+  public void removeOrder(Booking order) {
+    orders.remove(order);
+    order.setTalentPackage(null);
   }
 
   public void acceptOrder(UUID orderUid) {
@@ -95,6 +92,21 @@ public class Package extends Identifiable {
             order -> order.setStatus(BookingStatus.CANCELLED),
             () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
         );
+  }
+
+  public Booking generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
+    setIsActive(false);
+
+    return Booking.builder()
+        .jobDetail(jobDetail != null ? jobDetail : getJobDetail().clone())
+        .talent(talent)
+        .organizer(organizer)
+        .status(BookingStatus.TALENT_PENDING)
+        .createdAt(OffsetDateTime.now())
+        .paymentType(paymentType)
+        .isPaid(false)
+        .isReview(false)
+        .build();
   }
 
   public Package updateInfo(Package newData) {

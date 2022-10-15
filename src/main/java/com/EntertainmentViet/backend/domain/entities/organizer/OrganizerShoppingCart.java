@@ -3,13 +3,16 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.values.Price;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -43,8 +46,19 @@ public class OrganizerShoppingCart extends Identifiable {
     return talentPackage.getIsActive();
   }
 
-  public Booking charge(PaymentType paymentType) {
-    return talentPackage.orderBy(organizer, paymentType);
+  public Booking generateBooking(PaymentType paymentType) {
+    talentPackage.setIsActive(false);
+
+    return Booking.builder()
+        .jobDetail(talentPackage.getJobDetail().clone())
+        .talent(talentPackage.getTalent())
+        .organizer(organizer)
+        .status(BookingStatus.TALENT_PENDING)
+        .createdAt(OffsetDateTime.now())
+        .paymentType(paymentType)
+        .isPaid(false)
+        .isReview(false)
+        .build();
   }
 
   public OrganizerShoppingCart updateInfo(OrganizerShoppingCart newData) {

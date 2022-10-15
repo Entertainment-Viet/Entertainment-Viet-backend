@@ -37,6 +37,19 @@ public class Price implements Serializable {
   @NotNull
   private Currency currency;
 
+  public Price updateInfo(Price newData) {
+    if (newData.getMax() != null) {
+      setMax(newData.getMax());
+    }
+    if (newData.getMin() != null) {
+      setMin(newData.getMin());
+    }
+    if (newData.getCurrency() != null) {
+      setCurrency(newData.getCurrency());
+    }
+    return this;
+  }
+
   public boolean checkIfFixedPrice() {
     return min.equals(max);
   }

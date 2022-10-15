@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
+import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,13 +19,15 @@ import java.util.UUID;
 @Mapper(uses = {
         JobDetailMapper.class,
         BookingMapper.class,
-        CategoryMapper.class
+        CategoryMapper.class,
+        EntityMapper.class
     },
     config = MappingConfig.class)
 public abstract class PackageMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
-    @Mapping(target = "talentId", source = "talent", qualifiedByName = "toTalentId")
+    @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
+    @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
     @Mapping(target = "orderNum", source = "orders", qualifiedByName = "toOrderNum")
     public abstract ReadPackageDto toDto(Package talentPackage);
 
@@ -41,14 +44,8 @@ public abstract class PackageMapper {
     @Mapping(target = "orders", ignore = true)
     public abstract Package fromUpdateDtoToModel(UpdatePackageDto updatePackageDto);
 
-    @Named("toTalentId")
-    public UUID toTalentId(Talent talent) {
-        return talent != null ? talent.getUid() : null;
-    }
-
     @Named("toOrderNum")
     public Integer toOrderNum(Set<Booking> orders) {
         return orders.size();
     }
-
 }

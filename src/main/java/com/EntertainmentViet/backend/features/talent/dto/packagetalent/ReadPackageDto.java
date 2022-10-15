@@ -21,6 +21,8 @@ public class ReadPackageDto extends IdentifiableDto {
 
   private UUID talentId;
 
+  private String talentName;
+
   private ReadJobDetailDto jobDetail;
 
   private Integer orderNum;

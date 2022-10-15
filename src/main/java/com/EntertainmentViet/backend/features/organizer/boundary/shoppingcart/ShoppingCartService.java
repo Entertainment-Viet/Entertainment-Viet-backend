@@ -1,14 +1,17 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.shoppingcart;
 
+import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.shoppingcart.ShoppingCartRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.*;
+import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,10 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     private final OrganizerRepository organizerRepository;
 
     private final ShoppingCartRepository shoppingCartRepository;
+
+    private final PackageRepository packageRepository;
+
+    private final BookingRepository bookingRepository;
 
     private final CartItemMapper cartItemMapper;
 
@@ -48,14 +55,21 @@ public class ShoppingCartService implements ShoppingCartBoundary {
             return false;
         }
 
-        try {
-            Organizer organizer = organizerOptional.get();
-            organizer.finishCartShopping(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
-            organizerRepository.save(organizer);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
+        Organizer organizer = organizerOptional.get();
+        if (!organizer.checkValidShoppingCart()) {
             return false;
         }
+
+        for (OrganizerShoppingCart cartItem : organizer.getShoppingCart()) {
+            Booking booking = cartItem.generateBooking(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
+            bookingRepository.save(booking);
+            organizer.addBooking(booking);
+            var talentPackage = packageRepository.findByUid(cartItem.getTalentPackage().getUid()).orElse(null);
+            talentPackage.addOrder(booking);
+            packageRepository.save(talentPackage);
+        }
+        organizer.clearCart();
+        organizerRepository.save(organizer);
         return true;
     }
 

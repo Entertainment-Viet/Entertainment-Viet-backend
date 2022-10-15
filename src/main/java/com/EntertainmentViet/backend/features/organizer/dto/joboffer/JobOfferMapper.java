@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
+import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -13,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-@Mapper(uses = {JobDetailMapper.class}, config = MappingConfig.class)
+@Mapper(uses = {
+    JobDetailMapper.class,
+    EntityMapper.class
+}, config = MappingConfig.class)
 public abstract class JobOfferMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
-    @Mapping(target = "organizerId", source = "organizer", qualifiedByName = "toOrganizerUid")
+    @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
+    @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadJobOfferDto toDto(JobOffer jobOffer);
 
     @Mapping(target = "uid", ignore = true)
@@ -31,10 +36,4 @@ public abstract class JobOfferMapper {
     @Mapping(target = "isActive", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     public abstract JobOffer fromUpdateDtoToModel(UpdateJobOfferDto updateJobOfferDto);
-
-
-    @Named("toOrganizerUid")
-    public UUID toOrganizerUid(Organizer organizer) {
-        return organizer != null ? organizer.getUid() : null;
-    }
 }

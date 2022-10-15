@@ -72,8 +72,8 @@ public class ReviewService implements ReviewBoundary {
 
   @Override
   public Optional<UUID> create(CreateReviewDto reviewDto, UUID talentUid) {
-    if (!reviewDto.getTalent().equals(talentUid)) {
-      log.warn(String.format("Inconsistent between url and request object '%s' != '%s'", reviewDto.getTalent(), talentUid));
+    if (!reviewDto.getTalentId().equals(talentUid)) {
+      log.warn(String.format("Inconsistent between url and request object '%s' != '%s'", reviewDto.getTalentId(), talentUid));
       return Optional.empty();
     }
 
@@ -84,7 +84,7 @@ public class ReviewService implements ReviewBoundary {
       return Optional.empty();
     }
     if (review.getOrganizer() == null) {
-      log.warn(String.format("Can not find organizer with id '%s' that making the review for talent at id '%s'", reviewDto.getOrganizer(), talentUid));
+      log.warn(String.format("Can not find organizer with id '%s' that making the review for talent at id '%s'", reviewDto.getOrganizerId(), talentUid));
       return Optional.empty();
     }
 
@@ -102,10 +102,10 @@ public class ReviewService implements ReviewBoundary {
     if (!EntityValidationUtils.isBookingWithUid(booking, bookingUid)) {
       return Optional.empty();
     }
-    if (!EntityValidationUtils.isBookingBelongToTalentWithUid(booking, reviewDto.getTalent())) {
+    if (!EntityValidationUtils.isBookingBelongToTalentWithUid(booking, reviewDto.getTalentId())) {
       return Optional.empty();
     }
-    if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, reviewDto.getOrganizer())) {
+    if (!EntityValidationUtils.isBookingBelongToOrganizerWithUid(booking, reviewDto.getOrganizerId())) {
       return Optional.empty();
     }
 

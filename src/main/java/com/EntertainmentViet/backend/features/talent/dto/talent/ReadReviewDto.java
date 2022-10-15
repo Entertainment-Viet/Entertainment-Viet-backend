@@ -16,11 +16,13 @@ import java.util.UUID;
 public class ReadReviewDto extends IdentifiableDto {
   private OffsetDateTime createdAt;
 
-  private UUID talent;
+  private UUID talentId;
 
   private String talentName;
 
-  private UUID organizer;
+  private UUID organizerId;
+
+  private String organizerName;
 
   private String comment;
 

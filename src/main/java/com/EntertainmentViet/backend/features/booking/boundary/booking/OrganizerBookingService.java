@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.features.booking.boundary.booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.exception.RollbackException;
+import com.EntertainmentViet.backend.exception.InconsistentDataException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
@@ -16,14 +16,12 @@ import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,5 +116,19 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return false;
         }
         return true;
+    }
+
+    @Transactional(rollbackFor = {InconsistentDataException.class})
+    public Optional<UUID> finishBooingAndReview(CreateReviewDto reviewDto, UUID organizerUid, UUID bookingUid) {
+        Optional<UUID> result;
+        if (!finishBooking(organizerUid, bookingUid)) {
+            result = Optional.empty();
+        } else {
+            result = reviewService.addReviewToBooking(reviewDto, bookingUid);
+        }
+        if (result.isEmpty()) {
+            throw new InconsistentDataException();
+        }
+        return  result;
     }
 }
