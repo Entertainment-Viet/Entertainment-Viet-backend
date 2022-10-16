@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 public class UpdateJobDetailDto {
 
-  private UUID categoryUid;
+  private UUID categoryId;
 
   private String workType;
 

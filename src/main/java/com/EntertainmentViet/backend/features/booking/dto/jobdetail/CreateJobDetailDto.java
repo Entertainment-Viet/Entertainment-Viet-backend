@@ -16,7 +16,7 @@ import java.util.UUID;
 public class CreateJobDetailDto {
 
   @NotNull
-  private UUID categoryUid;
+  private UUID categoryId;
 
   @NotNull
   private String workType;
