@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -29,6 +30,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
+  private final QPackage aPackage = QPackage.package$;
   private final QBooking bookingOfOrganizer = new QBooking("bookingOfBooking");
   private final QBooking bookingOfTalent =  new QBooking("bookingOfTalent");
   private final QCategory category = QCategory.category;
@@ -38,6 +40,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     var bookingList = queryFactory.selectFrom(booking).distinct()
         .leftJoin(booking.talent, talent).fetchJoin()
+        .leftJoin(booking.talentPackage, aPackage).fetchJoin()
         .leftJoin(talent.bookings, bookingOfTalent).fetchJoin()
         .fetch();
 
