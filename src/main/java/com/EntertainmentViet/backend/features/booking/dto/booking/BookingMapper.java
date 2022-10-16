@@ -38,7 +38,8 @@ public abstract class BookingMapper {
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
     @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
-    @Mapping(target = "packageUid", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageUid.class)
+    @Mapping(target = "packageId", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageUid.class)
+    @Mapping(target = "packageName", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageName.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
 

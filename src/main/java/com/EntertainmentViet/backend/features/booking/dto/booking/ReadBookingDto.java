@@ -32,7 +32,9 @@ public class ReadBookingDto extends Identifiable {
 
     private String talentName;
 
-    private UUID packageUid;
+    private UUID packageId;
+
+    private String packageName;
 
     private ReadJobDetailDto jobDetail;
 

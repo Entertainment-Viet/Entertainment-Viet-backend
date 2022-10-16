@@ -61,6 +61,10 @@ public class EntityMapper {
     return talentPackage != null ? talentPackage.getUid() : null;
   }
 
+  @ToPackageName
+  public String toPackageName(Package talentPackage) {
+    return talentPackage != null ? talentPackage.getName() : null;
+  }
 
   @Qualifier
   @Target(ElementType.METHOD)
@@ -96,4 +100,9 @@ public class EntityMapper {
   @Target(ElementType.METHOD)
   @Retention(RetentionPolicy.CLASS)
   public @interface ToPackageUid { }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.CLASS)
+  public @interface ToPackageName { }
 }
