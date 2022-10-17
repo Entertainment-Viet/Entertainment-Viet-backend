@@ -98,6 +98,7 @@ public class ReviewService implements ReviewBoundary {
   public Optional<UUID> addReviewToBooking(CreateReviewDto reviewDto, UUID bookingUid) {
     Booking booking = bookingRepository.findByUid(bookingUid).orElse(null);
     Review review = reviewMapper.fromCreateToModel(reviewDto);
+    Talent talent = booking.getTalent();
 
     if (!EntityValidationUtils.isBookingWithUid(booking, bookingUid)) {
       return Optional.empty();
@@ -109,9 +110,9 @@ public class ReviewService implements ReviewBoundary {
       return Optional.empty();
     }
 
+    talent.addReview(review);
     booking.setIsReview(true);
     bookingRepository.save(booking);
-    Talent talent = review.getTalent();
     var reviewUid = reviewRepository.save(review).getUid();
     talentRepository.save(talent);
     return Optional.ofNullable(reviewUid);
