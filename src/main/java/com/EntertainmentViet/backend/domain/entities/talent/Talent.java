@@ -119,7 +119,7 @@ public class Talent extends User implements Advertisable {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(Predicate.not(Booking::checkIfConfirmed))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.TALENT_PENDING))
         .findAny()
         .ifPresentOrElse(
             booking -> {
@@ -185,11 +185,11 @@ public class Talent extends User implements Advertisable {
     aPackage.setTalent(null);
   }
 
-  public Booking applyToEventPosition(EventOpenPosition position, PaymentType paymentType) {
+  public Booking applyToEventPosition(EventOpenPosition position, JobDetail jobDetail, PaymentType paymentType) {
     Booking newApplication = Booking.builder()
         .talent(this)
         .organizer(position.getEvent().getOrganizer())
-        .jobDetail(position.getJobOffer().getJobDetail().clone())
+        .jobDetail(jobDetail != null ? jobDetail : position.getJobOffer().getJobDetail().clone())
         .status(BookingStatus.ORGANIZER_PENDING)
         .createdAt(OffsetDateTime.now())
         .isPaid(false)

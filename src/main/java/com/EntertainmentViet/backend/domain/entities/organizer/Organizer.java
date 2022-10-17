@@ -108,7 +108,7 @@ public class Organizer extends User {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(Predicate.not(Booking::checkIfConfirmed))
+        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
         .findAny()
         .ifPresentOrElse(
             booking -> {
