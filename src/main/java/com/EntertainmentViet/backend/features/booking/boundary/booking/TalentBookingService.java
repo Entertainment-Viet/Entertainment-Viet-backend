@@ -3,11 +3,10 @@ package com.EntertainmentViet.backend.features.booking.boundary.booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
-import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,6 +45,41 @@ public class TalentBookingService implements TalentBookingBoundary {
             .unpaidSum(BigDecimal.valueOf(unpaidSum))
             .bookings(RestUtils.toPageResponse(dataPage))
             .build();
+    }
+
+    @Override
+    public Optional<UUID> create(UUID talentUid, CreateBookingDto createBookingDto) {
+        Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
+        booking.setStatus(BookingStatus.ORGANIZER_PENDING);
+
+        if (!EntityValidationUtils.isBookingValid(booking, createBookingDto.getOrganizerId(), createBookingDto.getTalentId())) {
+            return Optional.empty();
+        }
+        if (!talentUid.equals(booking.getTalent().getUid())) {
+            log.warn(String.format("Inconsistent input when creating a booking for talent '%s'", talentUid));
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(bookingRepository.save(booking).getUid());
+    }
+
+    @Override
+    public Optional<UUID> update(UUID talentUid, UUID uid, UpdateBookingDto updateBookingDto) {
+        var bookingOptional = bookingRepository.findByUid(uid);
+        if (bookingOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Booking updatingBooking = bookingOptional.get();
+        if (!talentUid.equals(updatingBooking.getTalent().getUid())) {
+            log.warn(String.format("Can not find booking with id '%s' belong to talent with id '%s'", uid, talentUid));
+            return Optional.empty();
+        }
+
+        var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
+        updatingBooking.getTalent().updateBookingInfo(uid, newBookingData);
+
+        return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 
     @Override

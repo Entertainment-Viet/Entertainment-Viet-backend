@@ -96,6 +96,8 @@ public class Organizer extends User {
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              // organizer only allow to update price.max
+              newBookingInfo.getJobDetail().getPrice().setMin(null);
               booking.updateInfo(newBookingInfo);
               booking.setStatus(BookingStatus.TALENT_PENDING);
             },
@@ -106,11 +108,12 @@ public class Organizer extends User {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(booking -> booking.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .filter(Booking::checkIfFixedPrice)
+        .filter(Predicate.not(Booking::checkIfConfirmed))
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              var currentPrice = booking.getJobDetail().getPrice();
+              currentPrice.setMax(currentPrice.getMin());
               booking.setStatus(BookingStatus.CONFIRMED);
               booking.setConfirmedAt(OffsetDateTime.now());
             },

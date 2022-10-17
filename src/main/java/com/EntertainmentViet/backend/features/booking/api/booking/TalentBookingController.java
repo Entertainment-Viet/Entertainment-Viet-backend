@@ -62,7 +62,7 @@ public class TalentBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.createForTalent(talentUid, createBookingDto)
+    return  CompletableFuture.completedFuture(talentBookingService.create(talentUid, createBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .created(RestUtils.getCreatedLocationUri(request, newBookingDto))
                     .body(newBookingDto)
@@ -84,7 +84,7 @@ public class TalentBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.updateFromTalent(talentUid, uid, updateBookingDto)
+    return  CompletableFuture.completedFuture(talentBookingService.update(talentUid, uid, updateBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .ok()
                     .body(newBookingDto)

@@ -56,7 +56,7 @@ public class OrganizerBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(bookingService.createForOrganizer(organizerUid, createBookingDto)
+    return CompletableFuture.completedFuture(organizerBookingService.create(organizerUid, createBookingDto)
         .map(newBookingUid -> ResponseEntity
             .created(RestUtils.getCreatedLocationUri(request, newBookingUid))
             .body(newBookingUid)
@@ -79,7 +79,7 @@ public class OrganizerBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return CompletableFuture.completedFuture(bookingService.updateFromOrganizer(organizerUid, uid, updateBookingDto)
+    return CompletableFuture.completedFuture(organizerBookingService.update(organizerUid, uid, updateBookingDto)
         .map(newBookingUid -> ResponseEntity
             .ok()
             .body(newBookingUid)

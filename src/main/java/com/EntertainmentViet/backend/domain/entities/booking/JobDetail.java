@@ -102,7 +102,7 @@ public class JobDetail implements Serializable {
       setCategory(newData.getCategory());
     }
     if (newData.getPrice() != null) {
-      setPrice(newData.getPrice());
+      price.updateInfo(newData.getPrice());
     }
     if (newData.getPerformanceEndTime() != null) {
       setPerformanceEndTime(newData.getPerformanceEndTime());

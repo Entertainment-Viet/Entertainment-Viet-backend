@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.values;
 
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
+import com.EntertainmentViet.backend.domain.validator.PriceConstraint;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ import java.io.Serializable;
     name = "pgsql_enum",
     typeClass = PostgreSQLEnumType.class
 )
+@PriceConstraint
 public class Price implements Serializable {
 
   private Double min;
@@ -38,13 +40,22 @@ public class Price implements Serializable {
   private Currency currency;
 
   public Price updateInfo(Price newData) {
+    if (!checkIfNewValueValid(newData)) {
+      return this;
+    }
+
     if (newData.getMax() != null) {
-      setMax(newData.getMax());
+      if (currency.equals(newData.getCurrency())) {
+        setMax(newData.getMax());
+      }
     }
     if (newData.getMin() != null) {
-      setMin(newData.getMin());
+      if (currency.equals(newData.getCurrency())) {
+        setMin(newData.getMin());
+      }
     }
     if (newData.getCurrency() != null) {
+      // TODO: convert currency
       setCurrency(newData.getCurrency());
     }
     return this;
@@ -52,5 +63,25 @@ public class Price implements Serializable {
 
   public boolean checkIfFixedPrice() {
     return min.equals(max);
+  }
+
+  public boolean checkIfValid() {
+    return min <= max;
+  }
+
+  private boolean checkIfNewValueValid(Price data) {
+    if (data.getMin() == null && data.getMax() == null) {
+      return true;
+    }
+    if (data.getMin() == null && min > data.getMax()) {
+      return false;
+    }
+    if (data.getMax() == null && max < data.getMin()) {
+      return false;
+    }
+    if (data.getMin() > data.getMax()) {
+      return false;
+    }
+    return true;
   }
 }

@@ -2,12 +2,11 @@ package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.exception.InconsistentDataException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
-import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
@@ -50,6 +49,41 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             .unpaidSum(BigDecimal.valueOf(unpaidSum))
             .bookings(RestUtils.toPageResponse(dataPage))
             .build();
+    }
+
+    @Override
+    public Optional<UUID> create(UUID organizerUid, CreateBookingDto createBookingDto) {
+        Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
+        booking.setStatus(BookingStatus.TALENT_PENDING);
+
+        if (!EntityValidationUtils.isBookingValid(booking, createBookingDto.getOrganizerId(), createBookingDto.getTalentId())) {
+            return Optional.empty();
+        }
+        if (!organizerUid.equals(booking.getOrganizer().getUid())) {
+            log.warn(String.format("Inconsistent input when creating a booking for organizer '%s'", organizerUid));
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(bookingRepository.save(booking).getUid());
+    }
+
+    @Override
+    public Optional<UUID> update(UUID organizerUid, UUID uid, UpdateBookingDto updateBookingDto) {
+        var bookingOptional = bookingRepository.findByUid(uid);
+        if (bookingOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Booking updatingBooking = bookingOptional.get();
+        if (!organizerUid.equals(updatingBooking.getOrganizer().getUid())) {
+            log.warn(String.format("Can not find booking with id '%s' belong to organizer with id '%s'", uid, organizerUid));
+            return Optional.empty();
+        }
+
+        var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
+        updatingBooking.getOrganizer().updateBookingInfo(uid, newBookingData);
+
+        return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 
     @Override

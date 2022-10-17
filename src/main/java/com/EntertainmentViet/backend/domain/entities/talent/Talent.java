@@ -31,6 +31,7 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -106,6 +107,8 @@ public class Talent extends User implements Advertisable {
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              // talent only allow to update price.min
+              newBookingInfo.getJobDetail().getPrice().setMax(null);
               booking.updateInfo(newBookingInfo);
               booking.setStatus(BookingStatus.ORGANIZER_PENDING);
             },
@@ -116,11 +119,12 @@ public class Talent extends User implements Advertisable {
   public void acceptBooking(UUID bookingUid) {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
-        .filter(booking -> booking.getStatus().equals(BookingStatus.TALENT_PENDING))
-        .filter(Booking::checkIfFixedPrice)
+        .filter(Predicate.not(Booking::checkIfConfirmed))
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              var currentPrice = booking.getJobDetail().getPrice();
+              currentPrice.setMin(currentPrice.getMax());
               booking.setStatus(BookingStatus.CONFIRMED);
               booking.setConfirmedAt(OffsetDateTime.now());
             },
