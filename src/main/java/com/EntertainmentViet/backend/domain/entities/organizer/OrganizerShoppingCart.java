@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -47,18 +48,11 @@ public class OrganizerShoppingCart extends Identifiable {
   }
 
   public Booking generateBooking(PaymentType paymentType) {
-    talentPackage.setIsActive(false);
+    JobDetail jobDetail = talentPackage.getJobDetail().clone();
+    jobDetail.getPrice().setMax(price);
+    jobDetail.setLocation(organizer.getAddress());
 
-    return Booking.builder()
-        .jobDetail(talentPackage.getJobDetail().clone())
-        .talent(talentPackage.getTalent())
-        .organizer(organizer)
-        .status(BookingStatus.TALENT_PENDING)
-        .createdAt(OffsetDateTime.now())
-        .paymentType(paymentType)
-        .isPaid(false)
-        .isReview(false)
-        .build();
+    return talentPackage.generateOrder(organizer, jobDetail, paymentType);
   }
 
   public OrganizerShoppingCart updateInfo(OrganizerShoppingCart newData) {
