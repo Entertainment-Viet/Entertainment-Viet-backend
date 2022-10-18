@@ -69,6 +69,24 @@ public class EntityValidationUtils {
     return true;
   }
 
+  public boolean isBookingValid(Booking booking, UUID organizerUid, UUID talentUid) {
+    if (booking.getOrganizer() == null) {
+      log.warn(String.format("Can not find organizer with id '%s' to creating a booking", organizerUid));
+      return false;
+    }
+
+    if (booking.getTalent() == null) {
+      log.warn(String.format("Can not find talent with id '%s' to creating a booking", talentUid));
+      return false;
+    }
+
+    if (booking.getJobDetail() == null) {
+      log.warn("Provided jobDetail for creating booking is invalid");
+      return false;
+    }
+    return true;
+  }
+
   // Job Offer //
   public boolean isJobOfferWithUidExist(JobOffer jobOffer, UUID uid) {
     if (jobOffer == null) {

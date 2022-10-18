@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
@@ -79,10 +80,8 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
       return Optional.empty();
     }
 
-    Booking createdApplicant = talent.applyToEventPosition(openPosition, PaymentType.ofI18nKey(createPositionApplicantDto.getPaymentType()));
-    if (createPositionApplicantDto.getJobDetail() != null) {
-      createdApplicant.setJobDetail(jobDetailMapper.fromCreateDtoToModel(createPositionApplicantDto.getJobDetail()));
-    }
+    JobDetail jobDetail = jobDetailMapper.fromCreateDtoToModel(createPositionApplicantDto.getJobDetail());
+    Booking createdApplicant = talent.applyToEventPosition(openPosition, jobDetail, PaymentType.ofI18nKey(createPositionApplicantDto.getPaymentType()));
     var newBooking = bookingRepository.save(createdApplicant);
 
     talentRepository.save(talent);

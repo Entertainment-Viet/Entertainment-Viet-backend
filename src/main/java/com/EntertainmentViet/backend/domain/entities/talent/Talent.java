@@ -31,6 +31,7 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -106,6 +107,8 @@ public class Talent extends User implements Advertisable {
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              // talent only allow to update price.min
+              newBookingInfo.getJobDetail().getPrice().setMax(null);
               booking.updateInfo(newBookingInfo);
               booking.setStatus(BookingStatus.ORGANIZER_PENDING);
             },
@@ -117,10 +120,11 @@ public class Talent extends User implements Advertisable {
     bookings.stream()
         .filter(booking -> booking.getUid().equals(bookingUid))
         .filter(booking -> booking.getStatus().equals(BookingStatus.TALENT_PENDING))
-        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             booking -> {
+              var currentPrice = booking.getJobDetail().getPrice();
+              currentPrice.setMin(currentPrice.getMax());
               booking.setStatus(BookingStatus.CONFIRMED);
               booking.setConfirmedAt(OffsetDateTime.now());
             },
@@ -181,14 +185,15 @@ public class Talent extends User implements Advertisable {
     aPackage.setTalent(null);
   }
 
-  public Booking applyToEventPosition(EventOpenPosition position, PaymentType paymentType) {
+  public Booking applyToEventPosition(EventOpenPosition position, JobDetail jobDetail, PaymentType paymentType) {
     Booking newApplication = Booking.builder()
         .talent(this)
         .organizer(position.getEvent().getOrganizer())
-        .jobDetail(position.getJobOffer().getJobDetail().clone())
+        .jobDetail(jobDetail != null ? jobDetail : position.getJobOffer().getJobDetail().clone())
         .status(BookingStatus.ORGANIZER_PENDING)
         .createdAt(OffsetDateTime.now())
         .isPaid(false)
+        .isReview(false)
         .paymentType(paymentType)
         .build();
 

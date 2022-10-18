@@ -53,7 +53,7 @@ public class Package extends Identifiable {
   @NotNull
   private JobDetail jobDetail;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
       name = "package_order",
       joinColumns = @JoinColumn(name = "package_id", referencedColumnName = Package_.ID),
@@ -75,10 +75,14 @@ public class Package extends Identifiable {
     orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
-        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
-            order -> order.setStatus(BookingStatus.CONFIRMED),
+            order -> {
+              var currentPrice = order.getJobDetail().getPrice();
+              currentPrice.setMin(currentPrice.getMax());
+              order.setStatus(BookingStatus.CONFIRMED);
+              order.setConfirmedAt(OffsetDateTime.now());
+            },
             () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
         );
   }
