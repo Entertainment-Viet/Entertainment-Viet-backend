@@ -81,7 +81,7 @@ public class EventPositionBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PutMapping(value = "/{uid}")
+  @DeleteMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> rejectBooking(JwtAuthenticationToken token,
                                                                @PathVariable("organizer_uid") UUID organizerUid,
                                                                @PathVariable("event_uid") UUID eventUid,

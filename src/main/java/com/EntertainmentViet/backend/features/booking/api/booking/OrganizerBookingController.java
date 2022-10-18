@@ -149,10 +149,7 @@ public class OrganizerBookingController {
     }
 
     return CompletableFuture.completedFuture(response
-        .map(newReviewUid -> ResponseEntity
-            .created(RestUtils.getCreatedLocationUri(request, newReviewUid))
-            .body(newReviewUid)
-        )
+        .map(ResponseEntity::ok)
         .orElse(ResponseEntity.badRequest().build()));
   }
 }

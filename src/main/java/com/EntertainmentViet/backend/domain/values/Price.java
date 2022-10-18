@@ -79,9 +79,6 @@ public class Price implements Serializable {
     if (data.getMax() == null && max < data.getMin()) {
       return false;
     }
-    if (data.getMin() > data.getMax()) {
-      return false;
-    }
     return true;
   }
 }

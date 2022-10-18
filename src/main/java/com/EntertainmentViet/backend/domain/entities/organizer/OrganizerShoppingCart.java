@@ -44,7 +44,15 @@ public class OrganizerShoppingCart extends Identifiable {
   }
 
   public Boolean checkValidCartItem() {
-    return talentPackage.getIsActive();
+    if (!talentPackage.getIsActive()) {
+      return false;
+    }
+
+    if (price < talentPackage.getJobDetail().getPrice().getMin()) {
+      return false;
+    }
+
+    return true;
   }
 
   public Booking generateBooking(PaymentType paymentType) {

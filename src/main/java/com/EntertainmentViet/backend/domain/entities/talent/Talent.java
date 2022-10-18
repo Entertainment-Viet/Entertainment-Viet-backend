@@ -193,6 +193,7 @@ public class Talent extends User implements Advertisable {
         .status(BookingStatus.ORGANIZER_PENDING)
         .createdAt(OffsetDateTime.now())
         .isPaid(false)
+        .isReview(false)
         .paymentType(paymentType)
         .build();
 

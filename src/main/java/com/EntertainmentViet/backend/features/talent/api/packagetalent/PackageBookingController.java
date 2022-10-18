@@ -93,7 +93,7 @@ public class PackageBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PutMapping(value = "/{uid}")
+  @DeleteMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> rejectBooking(JwtAuthenticationToken token,
                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                @PathVariable("package_uid") UUID packageUid,
