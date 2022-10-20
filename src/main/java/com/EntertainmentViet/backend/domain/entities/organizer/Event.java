@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
+import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail_;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +10,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -39,15 +34,14 @@ public class Event extends Identifiable implements Advertisable {
   @NotNull
   private Boolean isActive;
 
-  @NotNull
-  private String occurrenceAddress;
-
-  @NotNull
-  private OffsetDateTime occurrenceTime;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   private Organizer organizer;
+
+  @OneToOne(mappedBy = EventDetail_.EVENT, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+  @PrimaryKeyJoinColumn
+  private EventDetail eventDetail;
+
 
   @OneToMany(mappedBy = EventOpenPosition_.EVENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<EventOpenPosition> openPositions;
@@ -79,11 +73,8 @@ public class Event extends Identifiable implements Advertisable {
     if (newData.getIsActive() != null) {
       setIsActive(newData.getIsActive());
     }
-    if (newData.getOccurrenceAddress() != null) {
-      setOccurrenceAddress(newData.getOccurrenceAddress());
-    }
-    if (newData.getOccurrenceTime() != null) {
-      setOccurrenceTime(newData.getOccurrenceTime());
+    if (newData.getEventDetail() != null) {
+      getEventDetail().updateInfo(newData.getEventDetail());
     }
 
     return this;

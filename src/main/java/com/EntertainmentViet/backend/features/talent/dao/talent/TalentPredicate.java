@@ -4,10 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
-import com.EntertainmentViet.backend.domain.entities.talent.QReview;
-import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.entities.talent.*;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
@@ -27,6 +24,7 @@ import java.util.UUID;
 public class TalentPredicate extends IdentifiablePredicate<Talent> {
 
   private final QTalent talent = QTalent.talent;
+  private final QTalentDetail talentDetail = QTalentDetail.talentDetail;
   private final QReview review = QReview.review;
   private final QTalentFeedback feedback = QTalentFeedback.talentFeedback;
   private final QBooking booking = QBooking.booking;
@@ -40,6 +38,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
 
     // join bookings
     var talents = queryFactory.selectFrom(talent).distinct()
+        .leftJoin(talent.talentDetail, talentDetail).fetchJoin()
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()

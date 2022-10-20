@@ -16,6 +16,8 @@ import org.mapstruct.Mapping;
 public abstract class EventMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "openPositions"})
+    @Mapping(target = "occurrenceAddress", source = "eventDetail.occurrenceAddress")
+    @Mapping(target = "occurrenceTime", source = "eventDetail.occurrenceTime")
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadEventDto toReadDto(Event event);
@@ -24,11 +26,15 @@ public abstract class EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
+    @Mapping(target = "eventDetail.occurrenceTime", source = "occurrenceTime")
     public abstract Event fromCreateDtoToModel(CreateEventDto dto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
+    @Mapping(target = "eventDetail.occurrenceTime", source = "occurrenceTime")
     public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 }

@@ -60,7 +60,12 @@ public class Talent extends User implements Advertisable {
   @Column(columnDefinition = "jsonb")
   private Map<String, ScoreOperandDto> scoreSystem;
 
+  // priority score for display in browsing page
   private Double finalScore;
+
+  @OneToOne(mappedBy = TalentDetail_.TALENT, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+  @PrimaryKeyJoinColumn
+  private TalentDetail talentDetail;
 
   @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinTable(
@@ -271,29 +276,11 @@ public class Talent extends User implements Advertisable {
   }
 
   public Talent updateInfo(Talent newData) {
-    if (newData.getPhoneNumber() != null) {
-      setPhoneNumber(newData.getPhoneNumber());
-    }
-    if (newData.getEmail() != null) {
-      setEmail(newData.getEmail());
-    }
-    if (newData.getAddress() != null) {
-      setAddress(newData.getAddress());
-    }
-    if (newData.getBio() != null) {
-      setBio(newData.getBio());
-    }
-    if (newData.getExtensions() != null) {
-      setExtensions(newData.getExtensions());
+    if (newData.getTalentDetail() != null) {
+      getTalentDetail().updateBasicInfo(newData.getTalentDetail());
     }
     if (newData.getDisplayName() != null) {
       setDisplayName(newData.getDisplayName());
-    }
-    if (newData.getReviews() != null) {
-      setReviews(newData.getReviews());
-    }
-    if (newData.getBookings() != null) {
-      setBookings(newData.getBookings());
     }
     if (newData.getFeedbacks() != null) {
       setFeedbacks(newData.getFeedbacks());

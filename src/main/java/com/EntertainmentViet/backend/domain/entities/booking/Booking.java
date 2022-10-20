@@ -61,7 +61,7 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private Talent talent;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @JoinColumn(name = "job_detail_id", referencedColumnName = JobDetail_.ID)
   @NotNull
   private JobDetail jobDetail;

@@ -20,6 +20,7 @@ import java.util.UUID;
 public class EventPredicate extends IdentifiablePredicate<Event> {
 
   private final QEvent event = QEvent.event;
+  private final QEventDetail eventDetail = QEventDetail.eventDetail;
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
@@ -30,6 +31,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(event).distinct()
+        .leftJoin(event.eventDetail, eventDetail).fetchJoin()
         .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
@@ -65,19 +67,19 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
       // Get event occurrenceTime is equal or after start time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.occurrenceTime.before(paramDto.getStartTime()).not()
+          event.eventDetail.occurrenceTime.before(paramDto.getStartTime()).not()
       );
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is equal or before end  time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.occurrenceTime.after(paramDto.getEndTime()).not()
+          event.eventDetail.occurrenceTime.after(paramDto.getEndTime()).not()
       );
     } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is between start time and end time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.occurrenceTime.between(paramDto.getStartTime(), paramDto.getEndTime())
+          event.eventDetail.occurrenceTime.between(paramDto.getStartTime(), paramDto.getEndTime())
       );
     }
 

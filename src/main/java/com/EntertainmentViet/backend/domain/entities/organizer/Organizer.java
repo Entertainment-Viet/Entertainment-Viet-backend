@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.values.Price;
@@ -20,9 +21,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -52,6 +51,10 @@ public class Organizer extends User {
 
   @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrganizerShoppingCart> shoppingCart;
+
+  @OneToOne(mappedBy = OrganizerDetail_.ORGANIZER, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+  @PrimaryKeyJoinColumn
+  private OrganizerDetail organizerDetail;
 
   public void addJobOffer(JobOffer jobOffer) {
     jobOffers.add(jobOffer);
@@ -208,29 +211,14 @@ public class Organizer extends User {
   }
 
   public Organizer updateInfo(Organizer newData) {
-    if (newData.getPhoneNumber() != null) {
-      setPhoneNumber(newData.getPhoneNumber());
-    }
-    if (newData.getEmail() != null) {
-      setEmail(newData.getEmail());
-    }
-    if (newData.getAddress() != null) {
-      setAddress(newData.getAddress());
-    }
-    if (newData.getBio() != null) {
-      setBio(newData.getBio());
-    }
-    if (newData.getExtensions() != null) {
-      setExtensions(newData.getExtensions());
+    if (newData.getOrganizerDetail() != null) {
+      getOrganizerDetail().updateBasicInfo(newData.getOrganizerDetail());
     }
     if (newData.getDisplayName() != null) {
       setDisplayName(newData.getDisplayName());
     }
     if (newData.getJobOffers() != null) {
       setJobOffers(newData.getJobOffers());
-    }
-    if (newData.getBookings() != null) {
-      setBookings(newData.getBookings());
     }
     if (newData.getEvents() != null) {
       setEvents(newData.getEvents());
