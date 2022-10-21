@@ -67,19 +67,20 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
       // Get event occurrenceTime is equal or after start time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceTime.before(paramDto.getStartTime()).not()
+          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not()
       );
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is equal or before end  time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceTime.after(paramDto.getEndTime()).not()
+          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not()
       );
     } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is between start time and end time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceTime.between(paramDto.getStartTime(), paramDto.getEndTime())
+          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not(),
+          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not()
       );
     }
 

@@ -17,7 +17,8 @@ public abstract class EventMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "openPositions"})
     @Mapping(target = "occurrenceAddress", source = "eventDetail.occurrenceAddress")
-    @Mapping(target = "occurrenceTime", source = "eventDetail.occurrenceTime")
+    @Mapping(target = "occurrenceStartTime", source = "eventDetail.occurrenceStartTime")
+    @Mapping(target = "occurrenceEndTime", source = "eventDetail.occurrenceEndTime")
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadEventDto toReadDto(Event event);
@@ -27,7 +28,8 @@ public abstract class EventMapper {
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
-    @Mapping(target = "eventDetail.occurrenceTime", source = "occurrenceTime")
+    @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
+    @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
     public abstract Event fromCreateDtoToModel(CreateEventDto dto);
 
     @Mapping(target = "uid", ignore = true)
@@ -35,6 +37,7 @@ public abstract class EventMapper {
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
-    @Mapping(target = "eventDetail.occurrenceTime", source = "occurrenceTime")
+    @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
+    @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
     public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 }

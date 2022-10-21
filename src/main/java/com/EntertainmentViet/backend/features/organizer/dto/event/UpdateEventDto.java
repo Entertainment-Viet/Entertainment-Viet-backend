@@ -19,5 +19,7 @@ public class UpdateEventDto {
 
   private String occurrenceAddress;
 
-  private OffsetDateTime occurrenceTime;
+  private OffsetDateTime occurrenceStartTime;
+
+  private OffsetDateTime occurrenceEndTime;
 }

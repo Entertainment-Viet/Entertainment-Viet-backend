@@ -24,5 +24,8 @@ public class CreateEventDto {
   private String occurrenceAddress;
 
   @NonNull
-  private OffsetDateTime occurrenceTime;
+  private OffsetDateTime occurrenceStartTime;
+
+  @NonNull
+  private OffsetDateTime occurrenceEndTime;
 }
