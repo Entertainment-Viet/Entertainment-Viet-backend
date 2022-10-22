@@ -51,11 +51,12 @@ public class TalentService implements TalentBoundary {
     @Override
     public Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid) {
 
-        var newTalent = talentMapper.toModel(createTalentDto);
-        newTalent.setUid(uid);
-        newTalent.setUserState(UserState.GUEST);
+        var createdTalent = talentMapper.toModel(createTalentDto);
+        createdTalent.setUid(uid);
+        createdTalent.setUserState(UserState.GUEST);
+        createdTalent.getTalentDetail().setTalent(createdTalent);
 
-        return Optional.ofNullable(talentRepository.save(newTalent).getUid());
+        return Optional.ofNullable(talentRepository.save(createdTalent).getUid());
     }
 
     @Override

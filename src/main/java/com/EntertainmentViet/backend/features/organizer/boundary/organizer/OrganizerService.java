@@ -33,11 +33,12 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public Optional<UUID> create(UpdateOrganizerDto createOrganizerDto, UUID uid) {
-    var newOrganizer = organizerMapper.toModel(createOrganizerDto);
-    newOrganizer.setUid(uid);
-    newOrganizer.setUserState(UserState.GUEST);
+    var createdOrganizer = organizerMapper.toModel(createOrganizerDto);
+    createdOrganizer.setUid(uid);
+    createdOrganizer.setUserState(UserState.GUEST);
+    createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
 
-    return Optional.ofNullable(organizerRepository.save(newOrganizer).getUid());
+    return Optional.ofNullable(organizerRepository.save(createdOrganizer).getUid());
   }
 
   @Override

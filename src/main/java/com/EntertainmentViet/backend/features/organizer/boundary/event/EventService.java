@@ -71,6 +71,7 @@ public class EventService implements EventBoundary {
     Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
     Event createEvent = eventMapper.fromCreateDtoToModel(createEventDto);
     createEvent.setOrganizer(organizer);
+    createEvent.getEventDetail().setEvent(createEvent);
 
     return Optional.ofNullable(eventRepository.save(createEvent).getUid());
   }
