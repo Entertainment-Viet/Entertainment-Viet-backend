@@ -20,7 +20,7 @@ import java.util.UUID;
 public abstract class EventOpenPositionMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "applicants"})
-    @Mapping(target = "event", source = "event", qualifiedBy = EntityMapper.ToEventUid.class)
+    @Mapping(target = "eventId", source = "event", qualifiedBy = EntityMapper.ToEventUid.class)
     @Mapping(target = "applicantCount", source = ".", qualifiedByName = "toApplicantCount")
     public abstract ReadEventOpenPositionDto toDto(EventOpenPosition eventOpenPosition);
 
