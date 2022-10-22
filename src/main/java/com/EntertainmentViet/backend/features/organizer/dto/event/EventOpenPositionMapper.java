@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
+import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -13,12 +14,14 @@ import java.util.UUID;
 
 @Mapper(uses = {
     JobOfferMapper.class,
+    EntityMapper.class,
 },
     config = MappingConfig.class)
 public abstract class EventOpenPositionMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "applicants"})
-    @Mapping(target = "event", source = "event", qualifiedByName = "toEventUid")
+    @Mapping(target = "eventId", source = "event", qualifiedBy = EntityMapper.ToEventUid.class)
+    @Mapping(target = "applicantCount", source = ".", qualifiedByName = "toApplicantCount")
     public abstract ReadEventOpenPositionDto toDto(EventOpenPosition eventOpenPosition);
 
     @Mapping(target = "uid", ignore = true)
@@ -33,8 +36,8 @@ public abstract class EventOpenPositionMapper {
     @Mapping(target = "event", ignore = true)
     public abstract EventOpenPosition fromUpdateDtoToModel(UpdateEventOpenPositionDto dto);
 
-    @Named("toEventUid")
-    public UUID toEventUid(Event event) {
-        return event != null ? event.getUid() : null;
+    @Named("toApplicantCount")
+    public Integer toApplicantCount(EventOpenPosition eventOpenPosition) {
+        return eventOpenPosition.getApplicants().size();
     }
 }

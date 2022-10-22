@@ -48,17 +48,13 @@ public class OrganizerShoppingCart extends Identifiable {
       return false;
     }
 
-    if (price < talentPackage.getJobDetail().getPrice().getMin()) {
-      return false;
-    }
-
     return true;
   }
 
   public Booking generateBooking(PaymentType paymentType) {
     JobDetail jobDetail = talentPackage.getJobDetail().clone();
     jobDetail.getPrice().setMax(price);
-    jobDetail.setLocation(organizer.getAddress());
+    jobDetail.setLocation(organizer.getOrganizerDetail().getAddress());
 
     return talentPackage.generateOrder(organizer, jobDetail, paymentType);
   }

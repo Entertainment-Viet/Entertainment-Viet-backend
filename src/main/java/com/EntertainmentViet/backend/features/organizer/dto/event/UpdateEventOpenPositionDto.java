@@ -13,4 +13,6 @@ import lombok.experimental.SuperBuilder;
 public class UpdateEventOpenPositionDto {
 
   private UpdateJobOfferDto jobOffer;
+
+  private Integer quantity;
 }

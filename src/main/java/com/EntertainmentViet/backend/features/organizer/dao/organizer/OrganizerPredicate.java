@@ -21,6 +21,7 @@ import java.util.UUID;
 public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
   private final QOrganizer organizer = QOrganizer.organizer;
+  private final QOrganizerDetail organizerDetail = QOrganizerDetail.organizerDetail;
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
@@ -37,6 +38,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     // join jobOffers
     var organizers = queryFactory.selectFrom(organizer).distinct()
+        .leftJoin(organizer.organizerDetail, organizerDetail).fetchJoin()
         .leftJoin(organizer.jobOffers, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()

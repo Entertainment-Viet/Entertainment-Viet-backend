@@ -39,10 +39,8 @@ public class JobOffer extends Identifiable {
   @NotNull
   private Boolean isActive;
 
-  @NotNull
-  private Integer quantity;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @JoinColumn(name = "job_detail_id", referencedColumnName = JobDetail_.ID)
   @NotNull
   private JobDetail jobDetail;
@@ -66,9 +64,6 @@ public class JobOffer extends Identifiable {
     }
     if (newData.getIsActive() != null) {
       setIsActive(newData.getIsActive());
-    }
-    if (newData.getQuantity() != null) {
-      setQuantity(newData.getQuantity());
     }
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());

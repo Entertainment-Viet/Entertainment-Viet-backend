@@ -19,8 +19,6 @@ public class CreateJobOfferDto {
   @NotNull
   private String name;
 
-  private Integer quantity;
-
   @NotNull
   private CreateJobDetailDto jobDetail;
 }

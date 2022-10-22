@@ -44,8 +44,11 @@ public abstract class TalentMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
-    @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
+    @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
+    @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
+    @Mapping(target = "email", source = "talentDetail.email")
+    @Mapping(target = "address", source = "talentDetail.address")
+    @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
     public abstract ReadTalentDto toDto(Talent talent);
 
@@ -59,9 +62,12 @@ public abstract class TalentMapper {
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
-    @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
+    @Mapping(target = "talentDetail.email", source = "email")
+    @Mapping(target = "talentDetail.address", source = "address")
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
-    @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+    @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent toModel(UpdateTalentDto updateTalentDto);
 

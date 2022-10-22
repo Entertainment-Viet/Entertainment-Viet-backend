@@ -40,20 +40,6 @@ import java.time.OffsetDateTime;
 @EntityListeners({AuditableListener.class})
 public abstract class  User extends Account implements Auditable {
 
-  private String phoneNumber;
-
-  private String email;
-
-  private String address;
-
-  @Embedded
-  @AttributeOverrides({
-      @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = User_.BIO + "_" + UserInputText_.INPUT_LANG)),
-      @AttributeOverride( name = UserInputText_.RAW_INPUT, column = @Column(name = User_.BIO + "_" + UserInputText_.RAW_INPUT)),
-      @AttributeOverride( name = UserInputText_.INPUT_TRANSLATION, column = @Column(name = User_.BIO + "_" + UserInputText_.INPUT_TRANSLATION))
-  })
-  private UserInputText bio;
-
   private OffsetDateTime createdAt;
 
   @Enumerated(EnumType.STRING)
@@ -61,10 +47,6 @@ public abstract class  User extends Account implements Auditable {
   @Type( type = "pgsql_enum" )
   @NotNull
   private UserState userState;
-
-  @Type(type = "jsonb")
-  @Column(columnDefinition = "jsonb")
-  private JsonNode extensions;
 
   public boolean verifyAccount() {
     if (userState.equals(UserState.GUEST)) {

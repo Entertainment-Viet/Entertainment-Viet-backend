@@ -6,6 +6,7 @@ import java.util.Map;
 
 public enum UserState {
   GUEST("user.state.guest"),
+  PENDING("user.state.pending"),
   VERIFIED("user.state.verified"),
   CHARGEABLE("user.state.chargeable"),
   ARCHIVED("user.state.archived"),

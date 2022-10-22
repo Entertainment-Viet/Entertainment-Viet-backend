@@ -19,8 +19,6 @@ public class ReadJobOfferDto extends IdentifiableDto {
 
   private Boolean isActive;
 
-  private Integer quantity;
-
   private ReadJobDetailDto jobDetail;
 
   private UUID organizerId;

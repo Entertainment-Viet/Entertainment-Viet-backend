@@ -63,20 +63,20 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceStartTime.before(paramDto.getStartTime()).not()
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not()
       );
     // List all booking have performanceEndTime equal or before the paramDto.startTime
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceEndTime.after(paramDto.getEndTime()).not()
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
       );
     // List all booking have performance duration within paramDto.startTime and paramDto.endTime
     } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceStartTime.before(paramDto.getStartTime()).not()
-              .and(booking.jobDetail.performanceEndTime.after(paramDto.getEndTime()).not())
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not(),
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
       );
     }
     if (paramDto.getPaid() != null) {
@@ -121,24 +121,24 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   public Predicate fromTalentParams(ListTalentBookingParamDto paramDto) {
     var predicate = defaultPredicate();
 
-    // List all booking have performanceStartTime equal or after the paramDto.startTime
+    // List all booking have performanceEndTime equal or after the paramDto.startTime
     if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceStartTime.before(paramDto.getStartTime()).not()
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not()
       );
       // List all booking have performanceEndTime equal or before the paramDto.startTime
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceEndTime.after(paramDto.getEndTime()).not()
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
       );
       // List all booking have performance duration within paramDto.startTime and paramDto.endTime
     } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.jobDetail.performanceStartTime.before(paramDto.getStartTime()).not()
-              .and(booking.jobDetail.performanceEndTime.after(paramDto.getEndTime()).not())
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not(),
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
       );
     }
     if (paramDto.getPaid() != null) {

@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
@@ -12,6 +13,8 @@ import java.util.UUID;
 import java.util.stream.DoubleStream;
 
 public interface EventBoundary {
+
+  CustomPage<ReadEventDto> findAll(ListEventParamDto paramDto, Pageable pageable);
 
   Page<ReadEventDto> findByOrganizerUid(UUID uid, ListEventParamDto paramDto, Pageable pageable);
 

@@ -31,8 +31,11 @@ public abstract class OrganizerMapper {
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"id", "shoppingCart"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
-  @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
-  @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
+  @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
+  @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
+  @Mapping(target = "email", source = "organizerDetail.email")
+  @Mapping(target = "address", source = "organizerDetail.address")
+  @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
@@ -44,8 +47,11 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
-  @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-  @Mapping(target = "bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+  @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
+  @Mapping(target = "organizerDetail.email", source = "email")
+  @Mapping(target = "organizerDetail.address", source = "address")
+  @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+  @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer toModel(UpdateOrganizerDto updateOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission

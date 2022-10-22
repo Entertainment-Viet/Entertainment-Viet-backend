@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -19,5 +20,11 @@ public class UpdateEventDto {
 
   private String occurrenceAddress;
 
-  private OffsetDateTime occurrenceTime;
+  private OffsetDateTime occurrenceStartTime;
+
+  private OffsetDateTime occurrenceEndTime;
+
+  private String description;
+
+  private List<String> legalPaper;
 }

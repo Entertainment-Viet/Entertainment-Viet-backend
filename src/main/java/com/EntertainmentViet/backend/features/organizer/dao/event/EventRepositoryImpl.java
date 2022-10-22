@@ -3,14 +3,18 @@ package com.EntertainmentViet.backend.features.organizer.dao.event;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.*;
+import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +39,24 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
             eventPredicate.joinAll(queryFactory),
             eventPredicate.uidEqual(uid))
         )
-        .fetchOne());  }
+        .fetchOne());
+  }
+
+  @Override
+  public Page<Event> findAll(ListEventParamDto paramDto, Pageable pageable) {
+    var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
+            .where(ExpressionUtils.allOf(
+                eventPredicate.joinAll(queryFactory),
+                eventPredicate.fromParams(paramDto)
+            ))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
+            .fetch())
+        .orElse(Collections.emptyList());
+
+    return new PageImpl<>(eventList, pageable, eventList.size());
+  }
 
   @Override
   public List<Event> findByOrganizerUid(UUID uid, ListEventParamDto paramDto, Pageable pageable) {
