@@ -14,7 +14,5 @@ public class UpdateJobOfferDto {
 
   private String name;
 
-  private Integer quantity;
-
   private UpdateJobDetailDto jobDetail;
 }

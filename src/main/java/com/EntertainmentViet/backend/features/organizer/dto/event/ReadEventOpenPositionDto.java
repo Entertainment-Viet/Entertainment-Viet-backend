@@ -19,5 +19,7 @@ public class ReadEventOpenPositionDto extends IdentifiableDto {
 
   private ReadJobOfferDto jobOffer;
 
+  private Integer quantity;
+
   private Integer applicantCount;
 }

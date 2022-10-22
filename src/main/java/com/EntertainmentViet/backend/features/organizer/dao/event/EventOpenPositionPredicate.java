@@ -69,7 +69,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getQuantity() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          eventOpenPosition.jobOffer.quantity.eq(paramDto.getQuantity())
+          eventOpenPosition.quantity.eq(paramDto.getQuantity())
       );
     }
     if (paramDto.getCategory() != null) {

@@ -16,4 +16,7 @@ public class CreateEventOpenPositionDto {
 
   @NotNull
   private CreateJobOfferDto jobOffer;
+
+  @NotNull
+  private Integer quantity;
 }

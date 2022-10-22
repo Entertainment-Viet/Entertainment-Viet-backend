@@ -5,11 +5,13 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.InconsistentDataException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,6 +24,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Slf4j
 public class EventOpenPosition extends Identifiable {
 
   @Id
@@ -31,6 +34,9 @@ public class EventOpenPosition extends Identifiable {
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
   private Event event;
+
+  @NotNull
+  private Integer quantity;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "job_offer_id", referencedColumnName = JobOffer_.ID)
@@ -53,6 +59,10 @@ public class EventOpenPosition extends Identifiable {
     if (newData.getJobOffer() != null) {
       jobOffer.updateInfo(newData.getJobOffer());
     }
+    if (newData.getQuantity() != null) {
+      setQuantity(newData.getQuantity());
+    }
+
     return this;
   }
 
@@ -63,7 +73,14 @@ public class EventOpenPosition extends Identifiable {
         .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
-            applicant -> applicant.setStatus(BookingStatus.CONFIRMED),
+            applicant -> {
+              if (tryDecreaseQuantity()) {
+                applicant.setStatus(BookingStatus.CONFIRMED);
+              } else {
+                log.warn(String.format("Can not accept applicant with uid '%s' due to out of slot", applicantUid));
+                throw new InconsistentDataException();
+              }
+            },
             () -> {
               throw new EntityNotFoundException("PositionApplicant", applicantUid);
             }
@@ -81,5 +98,13 @@ public class EventOpenPosition extends Identifiable {
               throw new EntityNotFoundException("PositionApplicant", applicantUid);
             }
         );
+  }
+
+  public boolean tryDecreaseQuantity() {
+    if (quantity <= 0) {
+      return false;
+    }
+    quantity -= 1;
+    return true;
   }
 }
