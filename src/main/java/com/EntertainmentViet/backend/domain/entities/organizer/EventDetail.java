@@ -65,7 +65,12 @@ public class EventDetail {
     if (newData.getOccurrenceEndTime() != null) {
       setOccurrenceEndTime(newData.getOccurrenceEndTime());
     }
-
+    if (newData.getDescription() != null) {
+      setDescription(newData.getDescription());
+    }
+    if (newData.getLegalPaper() != null) {
+      getLegalPaper().addAll(newData.getLegalPaper());
+    }
     return this;
   }
 }

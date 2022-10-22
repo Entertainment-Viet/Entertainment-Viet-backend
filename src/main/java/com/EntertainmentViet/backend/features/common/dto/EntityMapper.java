@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
@@ -66,6 +67,11 @@ public class EntityMapper {
     return talentPackage != null ? talentPackage.getName() : null;
   }
 
+  @ToEventUid
+  public UUID toEventUid(Event event) {
+    return event != null ? event.getUid() : null;
+  }
+
   @Qualifier
   @Target(ElementType.METHOD)
   @Retention(RetentionPolicy.CLASS)
@@ -105,4 +111,10 @@ public class EntityMapper {
   @Target(ElementType.METHOD)
   @Retention(RetentionPolicy.CLASS)
   public @interface ToPackageName { }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.CLASS)
+  public @interface ToEventUid { }
+
 }

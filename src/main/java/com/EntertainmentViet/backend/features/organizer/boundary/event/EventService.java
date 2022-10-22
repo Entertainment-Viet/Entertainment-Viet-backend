@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
@@ -27,6 +28,20 @@ public class EventService implements EventBoundary {
   private final OrganizerRepository organizerRepository;
 
   private final EventMapper eventMapper;
+
+  @Override
+  public CustomPage<ReadEventDto> findAll(ListEventParamDto paramDto, Pageable pageable) {
+    var dataPage = RestUtils.toLazyLoadPageResponse(
+        eventRepository.findAll(paramDto, pageable)
+            .map(eventMapper::toReadDto)
+    );
+
+    if (eventRepository.findAll(paramDto, pageable.next()).hasContent()) {
+      dataPage.getPaging().setLast(false);
+    }
+
+    return dataPage;
+  }
 
   @Override
   public Page<ReadEventDto> findByOrganizerUid(UUID uid, ListEventParamDto paramDto, Pageable pageable) {

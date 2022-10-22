@@ -18,4 +18,6 @@ public class ReadEventOpenPositionDto extends IdentifiableDto {
   private UUID event;
 
   private ReadJobOfferDto jobOffer;
+
+  private Integer applicantCount;
 }

@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
+import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -12,6 +13,7 @@ import org.mapstruct.Mapping;
     EventOpenPositionMapper.class,
     JobOfferMapper.class,
     EntityMapper.class,
+    UserInputTextMapper.class,
 }, config = MappingConfig.class)
 public abstract class EventMapper {
 
@@ -19,6 +21,8 @@ public abstract class EventMapper {
     @Mapping(target = "occurrenceAddress", source = "eventDetail.occurrenceAddress")
     @Mapping(target = "occurrenceStartTime", source = "eventDetail.occurrenceStartTime")
     @Mapping(target = "occurrenceEndTime", source = "eventDetail.occurrenceEndTime")
+    @Mapping(target = "legalPaper", source = "eventDetail.legalPaper")
+    @Mapping(target = "description", source = "eventDetail.description", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     public abstract ReadEventDto toReadDto(Event event);
@@ -30,6 +34,8 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
+    @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
+    @Mapping(target = "eventDetail.description", source = "description", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Event fromCreateDtoToModel(CreateEventDto dto);
 
     @Mapping(target = "uid", ignore = true)
@@ -39,5 +45,7 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
+    @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
+    @Mapping(target = "eventDetail.description", source = "description", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 }

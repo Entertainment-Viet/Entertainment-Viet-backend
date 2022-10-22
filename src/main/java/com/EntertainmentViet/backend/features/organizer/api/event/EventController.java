@@ -1,8 +1,10 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -26,4 +28,9 @@ public class EventController {
 
   private final EventBoundary eventService;
 
+  @GetMapping
+  public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findAll(@ParameterObject Pageable pageable,
+                                                                             @ParameterObject ListEventParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(eventService.findAll(paramDto, pageable)));
+  }
 }

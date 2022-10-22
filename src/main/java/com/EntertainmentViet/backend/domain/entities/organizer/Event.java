@@ -42,7 +42,6 @@ public class Event extends Identifiable implements Advertisable {
   @PrimaryKeyJoinColumn
   private EventDetail eventDetail;
 
-
   @OneToMany(mappedBy = EventOpenPosition_.EVENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<EventOpenPosition> openPositions;
 
