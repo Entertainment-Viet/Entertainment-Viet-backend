@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.entities.UserDetail;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,8 @@ public class TalentDetail extends UserDetail {
   }
 
   public TalentDetail updateKycInfo(TalentDetail newData) {
+    getTalent().setUserState(UserState.PENDING);
+
     super.updateKycInfo(newData);
     if (newData.getLastName() != null) {
       setLastName(newData.getLastName());

@@ -11,6 +11,6 @@ public class AdvertisementController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents/{talent_uid}/advertisements";
 
-
+  public static final String CASH_PATH = "/cash";
 
 }

@@ -8,6 +8,7 @@ public enum UserState {
   GUEST("user.state.guest"),
   PENDING("user.state.pending"),
   VERIFIED("user.state.verified"),
+  UNVERIFIED("user.state.unverified"),
   CHARGEABLE("user.state.chargeable"),
   ARCHIVED("user.state.archived"),
   ;

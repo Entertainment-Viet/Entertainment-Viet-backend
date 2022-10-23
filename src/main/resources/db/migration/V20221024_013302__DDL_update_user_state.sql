@@ -1,0 +1,1 @@
+ALTER TYPE user_state ADD VALUE 'UNVERIFIED';

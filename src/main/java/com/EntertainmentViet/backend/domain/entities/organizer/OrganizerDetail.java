@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.UserDetail;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,8 +47,18 @@ public class OrganizerDetail extends UserDetail {
   }
 
   public OrganizerDetail updateKycInfo(OrganizerDetail newData) {
-    super.updateKycInfo(newData);
+    getOrganizer().setUserState(UserState.PENDING);
 
+    super.updateKycInfo(newData);
+    if (newData.getCompanyName() != null) {
+      setCompanyName(newData.getCompanyName());
+    }
+    if (newData.getRepresentative() != null) {
+      setRepresentative(newData.getRepresentative());
+    }
+    if (newData.getPosition() != null) {
+      setPosition(newData.getPosition());
+    }
     if (newData.getBusinessPaper() != null) {
       getBusinessPaper().addAll(newData.getBusinessPaper());
     }

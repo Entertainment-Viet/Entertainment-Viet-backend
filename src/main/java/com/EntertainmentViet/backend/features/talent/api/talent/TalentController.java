@@ -35,6 +35,10 @@ public class TalentController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents";
 
+  public static final String CONFIDENTIAL_PATH = "/confidential";
+
+  public static final String CASH_PATH = "/cash";
+
   private final TalentBoundary talentService;
 
   private final UserBoundary userService;

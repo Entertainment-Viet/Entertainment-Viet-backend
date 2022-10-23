@@ -35,6 +35,10 @@ public class OrganizerController {
 
   public static final String REQUEST_MAPPING_PATH = "/organizers";
 
+  public static final String CONFIDENTIAL_PATH = "/confidential";
+
+  public static final String CASH_PATH = "/cash";
+
   private final OrganizerBoundary organizerService;
 
   private final UserBoundary userService;
@@ -87,13 +91,13 @@ public class OrganizerController {
     );
   }
 
-  @GetMapping(value = "/{uid}/cash")
+  @GetMapping(value = "/{uid}" + CASH_PATH)
   public Long receivePayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {
     // TODO
     return null;
   }
 
-  @PostMapping(value = "/{uid}/cash")
+  @PostMapping(value = "/{uid}" + CASH_PATH)
   public Long proceedPayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {
     // TODO
     return null;
