@@ -6,6 +6,7 @@ import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerKycInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,25 @@ public class OrganizerController {
         ).orElse(ResponseEntity.badRequest().build())
     );
   }
+
+  @PutMapping(value = "/{uid}" + CONFIDENTIAL_PATH)
+  public CompletableFuture<ResponseEntity<UUID>> updateKycInfo(JwtAuthenticationToken token,
+                                                               @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateOrganizerKycInfoDto kycInfoDto) {
+
+    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    return  CompletableFuture.completedFuture(organizerService.updateKyc(kycInfoDto, uid)
+        .map(updatedOrganizerUid -> ResponseEntity
+            .ok()
+            .body(updatedOrganizerUid)
+        ).orElse(ResponseEntity.badRequest().build())
+    );
+  }
+
+
 
   @GetMapping(value = "/{uid}" + CASH_PATH)
   public Long receivePayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {

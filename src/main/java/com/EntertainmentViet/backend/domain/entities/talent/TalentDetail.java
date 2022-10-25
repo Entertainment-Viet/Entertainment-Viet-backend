@@ -47,8 +47,6 @@ public class TalentDetail extends UserDetail {
   }
 
   public TalentDetail updateKycInfo(TalentDetail newData) {
-    getTalent().setUserState(UserState.PENDING);
-
     super.updateKycInfo(newData);
     if (newData.getLastName() != null) {
       setLastName(newData.getLastName());

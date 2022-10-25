@@ -13,12 +13,6 @@ public class UpdateOrganizerDto {
 
   private String displayName;
 
-  private String phoneNumber;
-
-  private String email;
-
-  private String address;
-
   private String bio;
 
   private String extensions;

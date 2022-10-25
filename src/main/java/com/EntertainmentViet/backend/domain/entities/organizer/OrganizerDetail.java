@@ -47,8 +47,6 @@ public class OrganizerDetail extends UserDetail {
   }
 
   public OrganizerDetail updateKycInfo(OrganizerDetail newData) {
-    getOrganizer().setUserState(UserState.PENDING);
-
     super.updateKycInfo(newData);
     if (newData.getCompanyName() != null) {
       setCompanyName(newData.getCompanyName());

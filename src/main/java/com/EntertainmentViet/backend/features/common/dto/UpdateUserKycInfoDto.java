@@ -1,26 +1,16 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-
-import java.time.OffsetDateTime;
-
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
-public abstract class ReadUserDto extends IdentifiableDto {
-
-  private String displayName;
-
-  private String bio;
-
-  private OffsetDateTime createdAt;
-
-  private String userState;
+public class UpdateUserKycInfoDto {
 
   private String phoneNumber;
 

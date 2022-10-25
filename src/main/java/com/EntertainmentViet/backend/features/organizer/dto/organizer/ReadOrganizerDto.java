@@ -25,4 +25,12 @@ public class ReadOrganizerDto extends ReadUserDto {
   private List<ReadBookingDto> bookings;
 
   private List<OrganizerFeedBackDto> feedbacks;
+
+  private String companyName;
+
+  private String representative;
+
+  private String position;
+
+  private List<String> businessPaper;
 }

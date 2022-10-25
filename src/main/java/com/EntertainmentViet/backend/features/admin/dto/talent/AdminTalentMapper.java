@@ -41,12 +41,21 @@ public abstract class AdminTalentMapper {
   private CategoryMapper categoryMapper;
 
   // TODO
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum"})
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum", "finalScore"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "email", source = "talentDetail.email")
   @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
   @Mapping(target = "address", source = "talentDetail.address")
+  @Mapping(target = "taxId", source = "talentDetail.taxId")
+  @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
+  @Mapping(target = "bankAccountOwner", source = "talentDetail.bankAccountOwner")
+  @Mapping(target = "bankName", source = "talentDetail.bankName")
+  @Mapping(target = "bankBranchName", source = "talentDetail.bankBranchName")
+  @Mapping(target = "lastName", source = "talentDetail.lastName")
+  @Mapping(target = "firstName", source = "talentDetail.firstName")
+  @Mapping(target = "citizenId", source = "talentDetail.citizenId")
+  @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
   @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToAdminDto.class)
   public abstract ReadAdminTalentDto toAdminDto(Talent talent);

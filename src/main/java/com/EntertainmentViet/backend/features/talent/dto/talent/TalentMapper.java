@@ -5,7 +5,6 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
-import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
@@ -14,10 +13,7 @@ import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
@@ -42,12 +38,21 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
     @Mapping(target = "email", source = "talentDetail.email")
     @Mapping(target = "address", source = "talentDetail.address")
+    @Mapping(target = "taxId", source = "talentDetail.taxId")
+    @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
+    @Mapping(target = "bankAccountOwner", source = "talentDetail.bankAccountOwner")
+    @Mapping(target = "bankName", source = "talentDetail.bankName")
+    @Mapping(target = "bankBranchName", source = "talentDetail.bankBranchName")
+    @Mapping(target = "lastName", source = "talentDetail.lastName")
+    @Mapping(target = "firstName", source = "talentDetail.firstName")
+    @Mapping(target = "citizenId", source = "talentDetail.citizenId")
+    @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
     @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
     public abstract ReadTalentDto toDto(Talent talent);
@@ -63,13 +68,57 @@ public abstract class TalentMapper {
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-    @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
-    @Mapping(target = "talentDetail.email", source = "email")
-    @Mapping(target = "talentDetail.address", source = "address")
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
-    public abstract Talent toModel(UpdateTalentDto updateTalentDto);
+    public abstract Talent fromUpdateDtoToModel(UpdateTalentDto updateTalentDto);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "reviewSum", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
+    @Mapping(target = "feedbacks", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "userState", ignore = true)
+    @Mapping(target = "packages", ignore = true)
+    @Mapping(target = "finalScore", ignore = true)
+    @Mapping(target = "offerCategories", ignore = true)
+    @Mapping(target = "displayName", ignore = true)
+    @Mapping(target = "scoreSystem", ignore = true)
+    @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
+    @Mapping(target = "talentDetail.email", source = "email")
+    @Mapping(target = "talentDetail.address", source = "address")
+    @Mapping(target = "talentDetail.taxId", source = "taxId")
+    @Mapping(target = "talentDetail.bankAccountNumber", source = "bankAccountNumber")
+    @Mapping(target = "talentDetail.bankAccountOwner", source = "bankAccountOwner")
+    @Mapping(target = "talentDetail.bankName", source = "bankName")
+    @Mapping(target = "talentDetail.bankBranchName", source = "bankBranchName")
+    @Mapping(target = "talentDetail.lastName", source = "lastName")
+    @Mapping(target = "talentDetail.firstName", source = "firstName")
+    @Mapping(target = "talentDetail.citizenId", source = "citizenId")
+    @Mapping(target = "talentDetail.citizenPaper", source = "citizenPaper")
+    @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    public abstract Talent fromKycDtoToModel(UpdateTalentKycInfoDto kycInfoDto);
+
+    @BeanMapping(ignoreUnmappedSourceProperties = {"username", "password"})
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "reviewSum", ignore = true)
+    @Mapping(target = "bookings", ignore = true)
+    @Mapping(target = "feedbacks", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "userState", ignore = true)
+    @Mapping(target = "packages", ignore = true)
+    @Mapping(target = "finalScore", ignore = true)
+    @Mapping(target = "offerCategories", ignore = true)
+    @Mapping(target = "scoreSystem", ignore = true)
+    @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "talentDetail.email", source = "email")
+    @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+    public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
+
 
     // Only return non-confidential detail if token have enough permission
     public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {

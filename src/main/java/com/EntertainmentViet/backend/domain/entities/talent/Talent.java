@@ -10,6 +10,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
@@ -291,6 +292,12 @@ public class Talent extends User implements Advertisable {
     if (newData.getScoreSystem() != null) {
       updateScore(newData.getScoreSystem());
     }
+    return this;
+  }
+
+  public Talent requestKycInfoChange(Talent newData) {
+    getTalentDetail().updateKycInfo(newData.getTalentDetail());
+    setUserState(UserState.PENDING);
     return this;
   }
 
