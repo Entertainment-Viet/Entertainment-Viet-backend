@@ -14,6 +14,7 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuperBuilder
@@ -69,6 +70,9 @@ public class EventDetail {
       setDescription(newData.getDescription());
     }
     if (newData.getLegalPaper() != null) {
+      if (getLegalPaper() == null) {
+        setLegalPaper(new ArrayList<>());
+      }
       getLegalPaper().addAll(newData.getLegalPaper());
     }
     return this;

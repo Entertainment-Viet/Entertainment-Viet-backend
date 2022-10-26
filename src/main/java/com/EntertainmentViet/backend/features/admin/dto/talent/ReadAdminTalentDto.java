@@ -21,7 +21,13 @@ public class ReadAdminTalentDto extends ReadUserDto {
 
   private Set<CategoryDto> offerCategories;
 
-  private Double finalScore;
-
   private List<ScoreOperandDto> scoreSystem;
+
+  private String lastName;
+
+  private String firstName;
+
+  private String citizenId;
+
+  private List<String> citizenPaper;
 }

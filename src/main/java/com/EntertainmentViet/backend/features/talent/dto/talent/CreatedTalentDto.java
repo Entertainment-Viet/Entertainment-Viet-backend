@@ -22,12 +22,8 @@ public class CreatedTalentDto {
   @NotNull
   private String displayName;
 
-  private String phoneNumber;
-
   @NotNull
   private String email;
-
-  private String address;
 
   private String bio;
 

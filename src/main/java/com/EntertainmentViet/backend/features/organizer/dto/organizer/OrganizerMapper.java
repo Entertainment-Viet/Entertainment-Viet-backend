@@ -35,6 +35,15 @@ public abstract class OrganizerMapper {
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
   @Mapping(target = "email", source = "organizerDetail.email")
   @Mapping(target = "address", source = "organizerDetail.address")
+  @Mapping(target = "taxId", source = "organizerDetail.taxId")
+  @Mapping(target = "bankAccountNumber", source = "organizerDetail.bankAccountNumber")
+  @Mapping(target = "bankAccountOwner", source = "organizerDetail.bankAccountOwner")
+  @Mapping(target = "bankName", source = "organizerDetail.bankName")
+  @Mapping(target = "bankBranchName", source = "organizerDetail.bankBranchName")
+  @Mapping(target = "companyName", source = "organizerDetail.companyName")
+  @Mapping(target = "representative", source = "organizerDetail.representative")
+  @Mapping(target = "position", source = "organizerDetail.position")
+  @Mapping(target = "businessPaper", source = "organizerDetail.businessPaper")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
@@ -47,12 +56,49 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+  @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+  public abstract Organizer fromUpdateDtoToModel(UpdateOrganizerDto updateOrganizerDto);
+
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "uid", ignore = true)
+  @Mapping(target = "jobOffers", ignore = true)
+  @Mapping(target = "events", ignore = true)
+  @Mapping(target = "bookings", ignore = true)
+  @Mapping(target = "feedbacks", ignore = true)
+  @Mapping(target = "shoppingCart", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.address", source = "address")
+  @Mapping(target = "organizerDetail.taxId", source = "taxId")
+  @Mapping(target = "organizerDetail.bankAccountNumber", source = "bankAccountNumber")
+  @Mapping(target = "organizerDetail.bankAccountOwner", source = "bankAccountOwner")
+  @Mapping(target = "organizerDetail.bankName", source = "bankName")
+  @Mapping(target = "organizerDetail.bankBranchName", source = "bankBranchName")
+  @Mapping(target = "organizerDetail.companyName", source = "companyName")
+  @Mapping(target = "organizerDetail.representative", source = "representative")
+  @Mapping(target = "organizerDetail.position", source = "position")
+  @Mapping(target = "organizerDetail.businessPaper", source = "businessPaper")
+  @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+  public abstract Organizer fromKycDtoToModel(UpdateOrganizerKycInfoDto kycInfoDto);
+
+  @BeanMapping(ignoreUnmappedSourceProperties = {"username", "password"})
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "uid", ignore = true)
+  @Mapping(target = "jobOffers", ignore = true)
+  @Mapping(target = "events", ignore = true)
+  @Mapping(target = "bookings", ignore = true)
+  @Mapping(target = "feedbacks", ignore = true)
+  @Mapping(target = "shoppingCart", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
+  @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-  public abstract Organizer toModel(UpdateOrganizerDto updateOrganizerDto);
+  public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission
   public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {

@@ -57,6 +57,9 @@ public abstract class UserDetail {
     if (newData.getBio() != null) {
       setBio(newData.getBio());
     }
+    if (newData.getExtensions() != null) {
+      setExtensions(newData.getExtensions());
+    }
     return this;
   }
 

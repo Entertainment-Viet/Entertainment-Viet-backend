@@ -10,6 +10,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
@@ -229,6 +230,12 @@ public class Organizer extends User {
     if (newData.getShoppingCart() != null) {
       setShoppingCart(newData.getShoppingCart());
     }
+    return this;
+  }
+
+  public Organizer requestKycInfoChange(Organizer newData) {
+    getOrganizerDetail().updateKycInfo(newData.getOrganizerDetail());
+    setUserState(UserState.PENDING);
     return this;
   }
 }

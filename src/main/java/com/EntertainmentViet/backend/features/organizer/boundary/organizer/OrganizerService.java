@@ -4,9 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.OrganizerMapper;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,8 +30,8 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
-  public Optional<UUID> create(UpdateOrganizerDto createOrganizerDto, UUID uid) {
-    var createdOrganizer = organizerMapper.toModel(createOrganizerDto);
+  public Optional<UUID> create(CreatedOrganizerDto createOrganizerDto, UUID uid) {
+    var createdOrganizer = organizerMapper.fromCreateDtoToModel(createOrganizerDto);
     createdOrganizer.setUid(uid);
     createdOrganizer.setUserState(UserState.GUEST);
     createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
@@ -44,7 +42,15 @@ public class OrganizerService implements OrganizerBoundary {
   @Override
   public Optional<UUID> update(UpdateOrganizerDto updateOrganizerDto, UUID uid) {
     return organizerRepository.findByUid(uid)
-        .map(organizer -> organizer.updateInfo(organizerMapper.toModel(updateOrganizerDto)))
+        .map(organizer -> organizer.updateInfo(organizerMapper.fromUpdateDtoToModel(updateOrganizerDto)))
+        .map(organizerRepository::save)
+        .map(Identifiable::getUid);
+  }
+
+  @Override
+  public Optional<UUID> updateKyc(UpdateOrganizerKycInfoDto kycInfoDto, UUID uid) {
+    return organizerRepository.findByUid(uid)
+        .map(organizer -> organizer.requestKycInfoChange(organizerMapper.fromKycDtoToModel(kycInfoDto)))
         .map(organizerRepository::save)
         .map(Identifiable::getUid);
   }

@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.entities.UserDetail;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuperBuilder
@@ -57,6 +59,9 @@ public class TalentDetail extends UserDetail {
       setCitizenId(newData.getCitizenId());
     }
     if (newData.getCitizenPaper() != null) {
+      if (getCitizenPaper() == null) {
+        setCitizenPaper(new ArrayList<>());
+      }
       getCitizenPaper().addAll(newData.getCitizenPaper());
     }
 

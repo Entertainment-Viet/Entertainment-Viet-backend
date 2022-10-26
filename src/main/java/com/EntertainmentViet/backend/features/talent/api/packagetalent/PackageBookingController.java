@@ -28,6 +28,9 @@ import java.util.concurrent.CompletableFuture;
 public class PackageBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents/{talent_uid}/packages/{package_uid}/bookings";
+
+  public static final String CART_PATH = "/shoppingcart";
+
   private final PackageBookingBoundary packageBookingService;
 
   @GetMapping
@@ -46,7 +49,7 @@ public class PackageBookingController {
     )));
   }
 
-  @PostMapping(value = "/shoppingcart",
+  @PostMapping(value = PackageBookingController.CART_PATH,
           consumes = MediaType.APPLICATION_JSON_VALUE,
           produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<Void>> addPackageToShoppingCart(JwtAuthenticationToken token, 

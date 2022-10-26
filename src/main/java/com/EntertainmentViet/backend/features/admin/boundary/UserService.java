@@ -44,16 +44,7 @@ public class UserService implements UserBoundary {
     var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var organizerDto = UpdateOrganizerDto.builder()
-          .displayName(createdOrganizerDto.getDisplayName())
-          .email(createdOrganizerDto.getEmail())
-          .phoneNumber(createdOrganizerDto.getPhoneNumber())
-          .address(createdOrganizerDto.getAddress())
-          .bio(createdOrganizerDto.getBio())
-          .extensions(createdOrganizerDto.getExtensions())
-          .build();
-
-      return organizerService.create(organizerDto, newUid.get());
+      return organizerService.create(createdOrganizerDto, newUid.get());
     }
     return Optional.empty();
   }
@@ -74,16 +65,7 @@ public class UserService implements UserBoundary {
     var newUid = keycloakService.createUser(keycloakUserDto);
 
     if (newUid.isPresent()) {
-      var talentDto = UpdateTalentDto.builder()
-          .displayName(createdTalentDto.getDisplayName())
-          .email(createdTalentDto.getEmail())
-          .phoneNumber(createdTalentDto.getPhoneNumber())
-          .address(createdTalentDto.getAddress())
-          .bio(createdTalentDto.getBio())
-          .extensions(createdTalentDto.getExtensions())
-          .build();
-
-      return talentService.create(talentDto, newUid.get());
+      return talentService.create(createdTalentDto, newUid.get());
     }
     return Optional.empty();
   }

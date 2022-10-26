@@ -17,12 +17,6 @@ public class UpdateTalentDto {
 
   private String displayName;
 
-  private String phoneNumber;
-
-  private String email;
-
-  private String address;
-
   private String bio;
 
   private List<UUID> offerCategories;

@@ -111,9 +111,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.FINISH_BOOKING_ORGANIZER.name())
 
             // Organizer payment mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CASH_PATH))
             .hasAuthority(PaymentRole.RECEIVE_ORGANIZER_CASH.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(OrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_ORGANIZER_CASH.name())
 
             // Organizer shopping chart
@@ -140,9 +140,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(FeedbackRole.ADD_ORGANIZER_FEEDBACK.name())
 
             // Organizer confidential mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerController.REQUEST_MAPPING_PATH + "/confidential"))
+            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CONFIDENTIAL_PATH))
             .hasAuthority(OrganizerRole.READ_ORGANIZER_DETAIL.name())
-            .mvcMatchers(HttpMethod.PUT, ofPath(OrganizerController.REQUEST_MAPPING_PATH + "/confidential"))
+            .mvcMatchers(HttpMethod.PUT, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CONFIDENTIAL_PATH))
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Organizer manage mapping
@@ -154,7 +154,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Talent package order mapping
-            .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH + "/shoppingcart"))
+            .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH + PackageBookingController.CART_PATH))
             .hasAuthority(ShoppingCartRole.ADD_CART_ITEM.name())
 
             .mvcMatchers(HttpMethod.POST , ofPath(PackageBookingController.REQUEST_MAPPING_PATH))
@@ -180,9 +180,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(PackageRole.DELETE_PACKAGE.name())
 
             // Talent advertisement payment mapping
-            .mvcMatchers(HttpMethod.GET , ofPaymentPath(AdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET , ofPath(AdvertisementController.REQUEST_MAPPING_PATH + AdvertisementController.CASH_PATH))
             .hasAuthority(PaymentRole.GET_ADVERTISEMENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST , ofPaymentPath(AdvertisementController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST , ofPath(AdvertisementController.REQUEST_MAPPING_PATH + AdvertisementController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_ADVERTISEMENT_CASH.name())
 
             // Talent advertisement mapping
@@ -217,9 +217,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(BookingRole.FINISH_BOOKING_TALENT.name())
 
             // Talent payment mapping
-            .mvcMatchers(HttpMethod.GET, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CASH_PATH))
             .hasAuthority(PaymentRole.RECEIVE_TALENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST, ofPaymentPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_TALENT_CASH.name())
 
             // Talent feedback mapping
@@ -239,9 +239,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(ReviewRole.READ_REVIEW.name())
 
             // Talent confidential mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + "/confidential"))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
             .hasAuthority(TalentRole.READ_TALENT_DETAIL.name())
-            .mvcMatchers(HttpMethod.PUT, ofPath(TalentController.REQUEST_MAPPING_PATH + "/confidential"))
+            .mvcMatchers(HttpMethod.PUT, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
             // Talent manage mapping
@@ -320,9 +320,5 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
   private String anyPathAfter(String pattern) {
     return ofPath(pattern) + "/*";
-  }
-
-  private String ofPaymentPath(String pattern) {
-    return ofPath(pattern+"/cash");
   }
 }

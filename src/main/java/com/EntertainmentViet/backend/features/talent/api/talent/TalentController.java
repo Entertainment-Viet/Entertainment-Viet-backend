@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBound
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentKycInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -34,6 +35,10 @@ import java.util.concurrent.CompletableFuture;
 public class TalentController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents";
+
+  public static final String CONFIDENTIAL_PATH = "/confidential";
+
+  public static final String CASH_PATH = "/cash";
 
   private final TalentBoundary talentService;
 
@@ -92,6 +97,23 @@ public class TalentController {
                     .ok()
                     .body(updatedTalentUid)
             ).orElse(ResponseEntity.badRequest().build())
+    );
+  }
+
+  @PutMapping(value = "/{uid}" + CONFIDENTIAL_PATH)
+  public CompletableFuture<ResponseEntity<UUID>> updateKyc(JwtAuthenticationToken token, HttpServletRequest request,
+                                                        @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentKycInfoDto kycInfoDto) {
+
+    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    return  CompletableFuture.completedFuture(talentService.updateKyc(kycInfoDto, uid)
+        .map(updatedTalentUid -> ResponseEntity
+            .ok()
+            .body(updatedTalentUid)
+        ).orElse(ResponseEntity.badRequest().build())
     );
   }
 }

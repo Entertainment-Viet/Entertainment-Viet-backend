@@ -113,7 +113,9 @@
           "READ_TALENT_FEEDBACK",
           "READ_REVIEW",
           "BROWSE_EVENT_POSITION",
-          "READ_EVENT_POSITION"
+          "READ_EVENT_POSITION",
+          "READ_EVENT",
+          "BROWSE_EVENT"
         ]
       }
     }

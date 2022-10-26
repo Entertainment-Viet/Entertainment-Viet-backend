@@ -6,10 +6,7 @@ import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
-import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
-import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
-import com.EntertainmentViet.backend.features.talent.dto.talent.TalentMapper;
-import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -49,9 +46,9 @@ public class TalentService implements TalentBoundary {
     }
 
     @Override
-    public Optional<UUID> create(UpdateTalentDto createTalentDto, UUID uid) {
+    public Optional<UUID> create(CreatedTalentDto createTalentDto, UUID uid) {
 
-        var createdTalent = talentMapper.toModel(createTalentDto);
+        var createdTalent = talentMapper.fromCreateDtoToModel(createTalentDto);
         createdTalent.setUid(uid);
         createdTalent.setUserState(UserState.GUEST);
         createdTalent.getTalentDetail().setTalent(createdTalent);
@@ -62,9 +59,17 @@ public class TalentService implements TalentBoundary {
     @Override
     public Optional<UUID> update(UpdateTalentDto updateTalentDto, UUID uid){
         return talentRepository.findByUid(uid)
-                .map(talent -> talent.updateInfo(talentMapper.toModel(updateTalentDto)))
+                .map(talent -> talent.updateInfo(talentMapper.fromUpdateDtoToModel(updateTalentDto)))
                 .map(talentRepository::save)
                 .map(Identifiable::getUid);
+    }
+
+    @Override
+    public Optional<UUID> updateKyc(UpdateTalentKycInfoDto kycInfoDto, UUID uid) {
+        return talentRepository.findByUid(uid)
+            .map(talent -> talent.requestKycInfoChange(talentMapper.fromKycDtoToModel(kycInfoDto)))
+            .map(talentRepository::save)
+            .map(Identifiable::getUid);
     }
 
     @Override
