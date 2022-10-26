@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuperBuilder
@@ -58,6 +59,9 @@ public class OrganizerDetail extends UserDetail {
       setPosition(newData.getPosition());
     }
     if (newData.getBusinessPaper() != null) {
+      if (getBusinessPaper() == null) {
+        setBusinessPaper(new ArrayList<>());
+      }
       getBusinessPaper().addAll(newData.getBusinessPaper());
     }
     return this;

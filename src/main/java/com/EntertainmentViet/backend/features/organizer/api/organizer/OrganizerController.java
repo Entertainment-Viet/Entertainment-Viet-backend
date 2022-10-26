@@ -109,8 +109,6 @@ public class OrganizerController {
     );
   }
 
-
-
   @GetMapping(value = "/{uid}" + CASH_PATH)
   public Long receivePayment(JwtAuthenticationToken token, @PathVariable("uid") Long uid) {
     // TODO

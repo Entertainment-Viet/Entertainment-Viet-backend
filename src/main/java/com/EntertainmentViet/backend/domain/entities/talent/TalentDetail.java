@@ -11,6 +11,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @SuperBuilder
@@ -58,6 +59,9 @@ public class TalentDetail extends UserDetail {
       setCitizenId(newData.getCitizenId());
     }
     if (newData.getCitizenPaper() != null) {
+      if (getCitizenPaper() == null) {
+        setCitizenPaper(new ArrayList<>());
+      }
       getCitizenPaper().addAll(newData.getCitizenPaper());
     }
 
