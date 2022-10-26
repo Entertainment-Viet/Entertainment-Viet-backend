@@ -53,6 +53,16 @@ public class EventService implements EventBoundary {
   }
 
   @Override
+  public Optional<ReadEventDto> findByUid(UUID uid) {
+    Event event = eventRepository.findByUid(uid).orElse(null);
+    if (!EntityValidationUtils.isEventWithUidExist(event, uid)) {
+      return Optional.empty();
+    }
+    return Optional.ofNullable(eventMapper.toReadDto(event));
+
+  }
+
+  @Override
   public Optional<ReadEventDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid) {
     Event event = eventRepository.findByUid(uid).orElse(null);
     if (!EntityValidationUtils.isEventWithUidExist(event, uid)) {

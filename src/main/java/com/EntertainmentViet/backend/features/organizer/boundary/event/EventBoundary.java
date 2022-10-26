@@ -18,6 +18,8 @@ public interface EventBoundary {
 
   Page<ReadEventDto> findByOrganizerUid(UUID uid, ListEventParamDto paramDto, Pageable pageable);
 
+  Optional<ReadEventDto> findByUid(UUID uid);
+
   Optional<ReadEventDto> findByOrganizerUidAndUid(UUID organizerUid, UUID uid);
 
   Optional<UUID> create(CreateEventDto createEventDto, UUID organizerUid);
