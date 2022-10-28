@@ -70,6 +70,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "packages", ignore = true)
   @Mapping(target = "finalScore", ignore = true)
+  @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
   @Mapping(target = "talentDetail.address", source = "address")

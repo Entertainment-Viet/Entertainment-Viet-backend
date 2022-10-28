@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
@@ -57,6 +58,7 @@ public abstract class TalentMapper {
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
     @Mapping(target = "avgReviewRate", source = ".", qualifiedByName = "toAvgReviewRate")
     @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
+    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
     public abstract ReadTalentDto toDto(Talent talent);
 
     @Mapping(target = "id", ignore = true)
@@ -67,6 +69,7 @@ public abstract class TalentMapper {
     @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
+    @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
@@ -83,6 +86,7 @@ public abstract class TalentMapper {
     @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
+    @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "offerCategories", ignore = true)
@@ -112,6 +116,7 @@ public abstract class TalentMapper {
     @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
+    @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "offerCategories", ignore = true)
@@ -146,6 +151,11 @@ public abstract class TalentMapper {
     @Named("toUserStateKey")
     public String toUserStateKey(UserState userState) {
         return userState != null ? userState.i18nKey : null;
+    }
+
+    @Named("toAccountType")
+    public String toAccountType(AccountType accountType) {
+        return accountType != null ? accountType.i18nKey : null;
     }
 
     @Named("toUserState")

@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities;
 
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
+import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
@@ -47,6 +48,12 @@ public abstract class  User extends Account implements Auditable {
   @Type( type = "pgsql_enum" )
   @NotNull
   private UserState userState;
+
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "account_type")
+  @Type( type = "pgsql_enum" )
+  @NotNull
+  private AccountType accountType;
 
   public boolean verifyAccount() {
     if (userState.equals(UserState.GUEST)) {
