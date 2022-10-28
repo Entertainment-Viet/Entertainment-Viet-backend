@@ -55,6 +55,8 @@ public abstract class TalentMapper {
     @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
     @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
+    @Mapping(target = "avgReviewRate", source = ".", qualifiedByName = "toAvgReviewRate")
+    @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
     public abstract ReadTalentDto toDto(Talent talent);
 
     @Mapping(target = "id", ignore = true)
@@ -134,6 +136,8 @@ public abstract class TalentMapper {
                 .bio(readTalentDto.getBio())
                 .createdAt(readTalentDto.getCreatedAt())
                 .extensions(readTalentDto.getExtensions())
+                .avgReviewRate(readTalentDto.getAvgReviewRate())
+                .reviewCount(readTalentDto.getReviewCount())
                 .build();
         }
         return readTalentDto;
@@ -159,4 +163,15 @@ public abstract class TalentMapper {
                 .map(uuid -> categoryMapper.toCategory(uuid))
                 .collect(Collectors.toSet());
     }
+
+    @Named("toAvgReviewRate")
+    public Double toAvgReviewRate(Talent talent) {
+        return talent != null ? talent.computeAvgReviewRate() : null;
+    }
+
+    @Named("toReviewCount")
+    public Integer toReviewCount(Talent talent) {
+        return talent != null ? talent.computeTotalReviewCount() : null;
+    }
+
 }

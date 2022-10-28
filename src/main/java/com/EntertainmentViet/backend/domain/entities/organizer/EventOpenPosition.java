@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -70,12 +71,14 @@ public class EventOpenPosition extends Identifiable {
     applicants.stream()
         .filter(applicant -> applicant.getUid().equals(applicantUid))
         .filter(applicant -> applicant.getStatus().equals(BookingStatus.ORGANIZER_PENDING))
-        .filter(Booking::checkIfFixedPrice)
         .findAny()
         .ifPresentOrElse(
             applicant -> {
               if (tryDecreaseQuantity()) {
+                var currentPrice = applicant.getJobDetail().getPrice();
+                currentPrice.setMax(currentPrice.getMin());
                 applicant.setStatus(BookingStatus.CONFIRMED);
+                applicant.setConfirmedAt(OffsetDateTime.now());
               } else {
                 log.warn(String.format("Can not accept applicant with uid '%s' due to out of slot", applicantUid));
                 throw new InconsistentDataException();

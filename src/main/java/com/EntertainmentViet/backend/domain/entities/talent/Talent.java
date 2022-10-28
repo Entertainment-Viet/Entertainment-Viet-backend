@@ -276,6 +276,19 @@ public class Talent extends User implements Advertisable {
         .sum();
   }
 
+  public Double computeAvgReviewRate() {
+    var totalReviewScore = 0.0;
+    for (int i = 0; i < reviewSum.size(); i++) {
+      totalReviewScore = totalReviewScore + (reviewSum.get(i) * (i+1));
+    }
+
+    return totalReviewScore / computeTotalReviewCount();
+  }
+
+  public Integer computeTotalReviewCount() {
+    return reviewSum.stream().mapToInt(Integer::intValue).sum();
+  }
+
   public Talent updateInfo(Talent newData) {
     if (newData.getTalentDetail() != null) {
       getTalentDetail().updateBasicInfo(newData.getTalentDetail());
