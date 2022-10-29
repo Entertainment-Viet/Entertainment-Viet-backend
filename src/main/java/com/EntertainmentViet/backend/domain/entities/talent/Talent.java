@@ -14,6 +14,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.domain.values.ScoreInfo;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
@@ -59,7 +60,7 @@ public class Talent extends User implements Advertisable {
 
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
-  private Map<String, ScoreOperandDto> scoreSystem;
+  private Map<String, ScoreInfo> scoreSystem;
 
   // priority score for display in browsing page
   private Double finalScore;
@@ -217,7 +218,7 @@ public class Talent extends User implements Advertisable {
     return TalentScoreCalculator.calculateScore(getScoreSystem());
   }
 
-  public void updateScore(Map<String, ScoreOperandDto> scoreData) {
+  public void updateScore(Map<String, ScoreInfo> scoreData) {
     if (scoreSystem == null) {
       setScoreSystem(new HashMap<>());
     }

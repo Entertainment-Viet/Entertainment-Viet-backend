@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.admin.dto.talent;
+package com.EntertainmentViet.backend.domain.values;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ScoreOperandDto {
-  private String id;
+public class ScoreInfo {
   private String name;
   private Double rate;
   private Integer multiply;

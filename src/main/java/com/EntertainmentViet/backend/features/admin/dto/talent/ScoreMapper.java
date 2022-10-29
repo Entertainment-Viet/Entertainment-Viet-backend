@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.values.ScoreInfo;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,7 @@ public class ScoreMapper {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @FromJsonToAdminDto
-  public List<ScoreOperandDto> fromJsonToAdminDto(Map<String, ScoreOperandDto> scoreSystem) {
+  public List<ScoreOperandDto> fromJsonToAdminDto(Map<String, ScoreInfo> scoreSystem) {
     if (scoreSystem == null) {
       return Collections.emptyList();
     }
@@ -41,7 +42,7 @@ public class ScoreMapper {
   }
 
   @FromJsonToTalentDto
-  public List<ScoreToggleDto> fromJsonToTalentDto(Map<String, ScoreOperandDto> scoreSystem) {
+  public List<ScoreToggleDto> fromJsonToTalentDto(Map<String, ScoreInfo> scoreSystem) {
     if (scoreSystem == null) {
       return Collections.emptyList();
     }
@@ -56,18 +57,18 @@ public class ScoreMapper {
   }
 
   @FromTalentDtoToJson
-  public Map<String, ScoreOperandDto> fromTalentDtoToJson(List<ScoreToggleDto> dtoList) {
+  public Map<String, ScoreInfo> fromTalentDtoToJson(List<ScoreToggleDto> dtoList) {
     return dtoList.stream()
         .collect(Collectors.toMap(ScoreToggleDto::getId,
-            dto -> ScoreOperandDto.builder()
+            dto -> ScoreInfo.builder()
                 .active(dto.getActive())
                 .proof(dto.getProof())
                 .build()));
   }
 
   @FromAdminDtoToJson
-  public Map<String, ScoreOperandDto> fromAdminDtoToJson(List<ScoreOperandDto> dtoList) {
-    return dtoList.stream().collect(Collectors.toMap(ScoreOperandDto::getId, dto -> ScoreOperandDto.builder()
+  public Map<String, ScoreInfo> fromAdminDtoToJson(List<ScoreOperandDto> dtoList) {
+    return dtoList.stream().collect(Collectors.toMap(ScoreOperandDto::getId, dto -> ScoreInfo.builder()
         .name(dto.getName())
         .rate(dto.getRate())
         .multiply(dto.getMultiply() == null ? 1 : dto.getMultiply())
