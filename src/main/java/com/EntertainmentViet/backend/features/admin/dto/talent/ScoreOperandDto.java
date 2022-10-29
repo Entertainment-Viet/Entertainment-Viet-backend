@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -17,4 +19,5 @@ public class ScoreOperandDto {
   private Double rate;
   private Integer multiply;
   private Boolean active;
+  private List<String> proof;
 }

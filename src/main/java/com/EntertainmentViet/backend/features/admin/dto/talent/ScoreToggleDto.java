@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -13,4 +15,5 @@ public class ScoreToggleDto {
   private String id;
   private String name;
   private Boolean active;
+  private List<String> proof;
 }

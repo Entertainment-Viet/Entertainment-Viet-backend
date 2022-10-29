@@ -58,7 +58,7 @@ public abstract class TalentMapper {
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
     @Mapping(target = "avgReviewRate", source = ".", qualifiedByName = "toAvgReviewRate")
     @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
-    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
+    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
     public abstract ReadTalentDto toDto(Talent talent);
 
     @Mapping(target = "id", ignore = true)
@@ -72,8 +72,8 @@ public abstract class TalentMapper {
     @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
+    @Mapping(target = "scoreSystem", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent fromUpdateDtoToModel(UpdateTalentDto updateTalentDto);
@@ -86,12 +86,11 @@ public abstract class TalentMapper {
     @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
-    @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "displayName", ignore = true)
-    @Mapping(target = "scoreSystem", ignore = true)
+    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.email", source = "email")
     @Mapping(target = "talentDetail.address", source = "address")
@@ -105,6 +104,7 @@ public abstract class TalentMapper {
     @Mapping(target = "talentDetail.citizenId", source = "citizenId")
     @Mapping(target = "talentDetail.citizenPaper", source = "citizenPaper")
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
     public abstract Talent fromKycDtoToModel(UpdateTalentKycInfoDto kycInfoDto);
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"username", "password"})
@@ -153,9 +153,14 @@ public abstract class TalentMapper {
         return userState != null ? userState.i18nKey : null;
     }
 
-    @Named("toAccountType")
-    public String toAccountType(AccountType accountType) {
+    @Named("toAccountTypeKey")
+    public String toAccountTypeKey(AccountType accountType) {
         return accountType != null ? accountType.i18nKey : null;
+    }
+
+    @Named("toAccountType")
+    public AccountType toAccountType(String i18nKey) {
+        return AccountType.ofI18nKey(i18nKey);
     }
 
     @Named("toUserState")

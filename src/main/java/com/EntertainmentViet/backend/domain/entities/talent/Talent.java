@@ -237,8 +237,11 @@ public class Talent extends User implements Advertisable {
         if (value.getActive() != null) {
           currentScoreOperand.setActive(value.getActive());
         }
+        if (value.getProof() != null) {
+          currentScoreOperand.getProof().addAll(value.getProof());
+        }
       }
-      // Only add when there is a rate
+      // Only add new category when there is a rate predefine for that category
       else if (value.getRate() != null) {
         scoreSystem.put(key, value);
       }

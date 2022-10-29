@@ -34,6 +34,7 @@ public class ScoreMapper {
             .rate(entry.getValue().getRate())
             .multiply(entry.getValue().getMultiply())
             .active(entry.getValue().getActive())
+            .proof(entry.getValue().getProof())
             .build()
         )
         .collect(Collectors.toList());
@@ -49,6 +50,7 @@ public class ScoreMapper {
             .id(entry.getKey())
             .name(entry.getValue().getName())
             .active(entry.getValue().getActive())
+            .proof(entry.getValue().getProof())
             .build())
         .collect(Collectors.toList());
   }
@@ -56,7 +58,11 @@ public class ScoreMapper {
   @FromTalentDtoToJson
   public Map<String, ScoreOperandDto> fromTalentDtoToJson(List<ScoreToggleDto> dtoList) {
     return dtoList.stream()
-        .collect(Collectors.toMap(ScoreToggleDto::getId, dto -> ScoreOperandDto.builder().active(dto.getActive()).build()));
+        .collect(Collectors.toMap(ScoreToggleDto::getId,
+            dto -> ScoreOperandDto.builder()
+                .active(dto.getActive())
+                .proof(dto.getProof())
+                .build()));
   }
 
   @FromAdminDtoToJson

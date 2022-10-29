@@ -46,7 +46,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "position", source = "organizerDetail.position")
   @Mapping(target = "businessPaper", source = "organizerDetail.businessPaper")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
+  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
@@ -72,8 +72,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
-  @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "displayName", ignore = true)
+  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.address", source = "address")
@@ -133,8 +133,13 @@ public abstract class OrganizerMapper {
     return UserState.ofI18nKey(i18nKey);
   }
 
-  @Named("toAccountType")
-  public String toAccountType(AccountType accountType) {
+  @Named("toAccountTypeKey")
+  public String toAccountTypeKey(AccountType accountType) {
     return accountType != null ? accountType.i18nKey : null;
+  }
+
+  @Named("toAccountType")
+  public AccountType toAccountType(String i18nKey) {
+    return AccountType.ofI18nKey(i18nKey);
   }
 }
