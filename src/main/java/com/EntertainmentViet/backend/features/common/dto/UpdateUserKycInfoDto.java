@@ -12,6 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class UpdateUserKycInfoDto {
 
+  private String accountType;
+
   private String phoneNumber;
 
   private String email;

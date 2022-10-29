@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreToggleDto;
 import com.EntertainmentViet.backend.features.common.dto.UpdateUserKycInfoDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,6 @@ public class UpdateTalentKycInfoDto extends UpdateUserKycInfoDto {
   private String citizenId;
 
   private List<String> citizenPaper;
+
+  private List<ScoreToggleDto> scoreSystem;
 }

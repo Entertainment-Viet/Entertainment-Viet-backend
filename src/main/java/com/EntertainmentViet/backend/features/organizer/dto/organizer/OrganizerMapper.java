@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
@@ -45,6 +46,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "position", source = "organizerDetail.position")
   @Mapping(target = "businessPaper", source = "organizerDetail.businessPaper")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
+  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
@@ -56,6 +58,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer fromUpdateDtoToModel(UpdateOrganizerDto updateOrganizerDto);
@@ -70,6 +73,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "displayName", ignore = true)
+  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.address", source = "address")
@@ -95,6 +99,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
@@ -126,5 +131,15 @@ public abstract class OrganizerMapper {
   @Named("toUserState")
   public UserState toUserState(String i18nKey) {
     return UserState.ofI18nKey(i18nKey);
+  }
+
+  @Named("toAccountTypeKey")
+  public String toAccountTypeKey(AccountType accountType) {
+    return accountType != null ? accountType.i18nKey : null;
+  }
+
+  @Named("toAccountType")
+  public AccountType toAccountType(String i18nKey) {
+    return AccountType.ofI18nKey(i18nKey);
   }
 }

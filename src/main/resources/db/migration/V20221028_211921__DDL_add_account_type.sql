@@ -1,0 +1,11 @@
+DROP TYPE IF EXISTS account_type CASCADE;
+CREATE TYPE account_type AS ENUM (
+    'INDIVIDUAL',
+    'CORPORATION'
+);
+
+ALTER TABLE organizer
+ADD COLUMN account_type ACCOUNT_TYPE;
+
+ALTER TABLE talent
+ADD COLUMN account_type ACCOUNT_TYPE;

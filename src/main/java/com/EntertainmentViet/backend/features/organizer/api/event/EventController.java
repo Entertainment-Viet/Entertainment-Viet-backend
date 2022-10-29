@@ -33,4 +33,16 @@ public class EventController {
                                                                              @ParameterObject ListEventParamDto paramDto) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(eventService.findAll(paramDto, pageable)));
   }
+
+  @GetMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<ReadEventDto>> findByUid(JwtAuthenticationToken token,
+                                                                   @PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(eventService.findByUid(uid)
+        .map( eventDto -> ResponseEntity
+            .ok()
+            .body(eventDto)
+        )
+        .orElse(ResponseEntity.notFound().build())
+    );
+  }
 }

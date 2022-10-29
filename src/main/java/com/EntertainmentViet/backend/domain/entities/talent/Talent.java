@@ -237,8 +237,11 @@ public class Talent extends User implements Advertisable {
         if (value.getActive() != null) {
           currentScoreOperand.setActive(value.getActive());
         }
+        if (value.getProof() != null) {
+          currentScoreOperand.getProof().addAll(value.getProof());
+        }
       }
-      // Only add when there is a rate
+      // Only add new category when there is a rate predefine for that category
       else if (value.getRate() != null) {
         scoreSystem.put(key, value);
       }
@@ -274,6 +277,19 @@ public class Talent extends User implements Advertisable {
         .map(Price::getMax)
         .mapToDouble(Double::doubleValue)
         .sum();
+  }
+
+  public Double computeAvgReviewRate() {
+    var totalReviewScore = 0.0;
+    for (int i = 0; i < reviewSum.size(); i++) {
+      totalReviewScore = totalReviewScore + (reviewSum.get(i) * (i+1));
+    }
+
+    return totalReviewScore / computeTotalReviewCount();
+  }
+
+  public Integer computeTotalReviewCount() {
+    return reviewSum.stream().mapToInt(Integer::intValue).sum();
   }
 
   public Talent updateInfo(Talent newData) {

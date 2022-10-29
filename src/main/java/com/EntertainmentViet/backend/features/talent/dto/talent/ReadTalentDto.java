@@ -37,4 +37,8 @@ public class ReadTalentDto extends ReadUserDto {
     private String citizenId;
 
     private List<String> citizenPaper;
+
+    private Double avgReviewRate;
+
+    private Integer reviewCount;
 }

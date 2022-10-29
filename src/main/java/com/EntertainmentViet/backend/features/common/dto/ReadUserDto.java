@@ -14,6 +14,8 @@ import java.time.OffsetDateTime;
 @Setter
 public abstract class ReadUserDto extends IdentifiableDto {
 
+  private String accountType;
+
   private String displayName;
 
   private String bio;

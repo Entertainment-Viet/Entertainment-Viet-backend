@@ -66,9 +66,9 @@ public class OrganizerEventController {
                                                                          @PathVariable("organizer_uid") UUID organizerUid,
                                                                          @PathVariable("uid") UUID uid) {
     return CompletableFuture.completedFuture(eventService.findByOrganizerUidAndUid(organizerUid, uid)
-        .map( talentDto -> ResponseEntity
+        .map( eventDto -> ResponseEntity
             .ok()
-            .body(talentDto)
+            .body(eventDto)
         )
         .orElse(ResponseEntity.notFound().build())
     );
@@ -86,9 +86,9 @@ public class OrganizerEventController {
     }
 
     return CompletableFuture.completedFuture(eventService.update(updateEventDto, organizerUid, uid)
-        .map(newJobOfferUid -> ResponseEntity
+        .map(newEventUid -> ResponseEntity
             .ok()
-            .body(newJobOfferUid)
+            .body(newEventUid)
         )
         .orElse(ResponseEntity.badRequest().build())
     );
