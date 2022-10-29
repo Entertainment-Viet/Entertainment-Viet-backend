@@ -218,7 +218,7 @@ public class Talent extends User implements Advertisable {
     return TalentScoreCalculator.calculateScore(getScoreSystem());
   }
 
-  public void updateScore(Map<String, ScoreInfo> scoreData) {
+  public void updateScore(Map<String, ScoreInfo> scoreData, boolean isAdmin) {
     if (scoreSystem == null) {
       setScoreSystem(new HashMap<>());
     }
@@ -226,13 +226,13 @@ public class Talent extends User implements Advertisable {
     scoreData.forEach((key, value) -> {
       if (scoreSystem.containsKey(key)) {
         var currentScoreOperand = scoreSystem.get(key);
-        if (value.getName() != null) {
+        if (value.getName() != null && isAdmin) {
           currentScoreOperand.setName(value.getName());
         }
-        if (value.getRate() != null) {
+        if (value.getRate() != null && isAdmin) {
           currentScoreOperand.setRate(value.getRate());
         }
-        if (value.getMultiply() != null) {
+        if (value.getMultiply() != null && isAdmin) {
           currentScoreOperand.setMultiply(value.getMultiply());
         }
         if (value.getActive() != null) {
@@ -242,13 +242,30 @@ public class Talent extends User implements Advertisable {
           currentScoreOperand.getProof().addAll(value.getProof());
         }
       }
-      // Only add new category when there is a rate predefine for that category
-      else if (value.getRate() != null) {
-        scoreSystem.put(key, value);
+      // If the score option not exist yet, only add new option when it is admin
+      else if (isAdmin) {
+        createNewScore(key, value);
       }
     });
 
     setFinalScore(obtainScore());
+  }
+
+  public void createNewScore(String id, ScoreInfo scoreInfo) {
+    if (scoreInfo.getActive() == null) {
+      scoreInfo.setActive(false);
+    }
+    if (scoreInfo.getMultiply() == null) {
+      scoreInfo.setMultiply(1);
+    }
+    if (scoreInfo.getRate() == null) {
+      scoreInfo.setRate(1.0);
+    }
+    if (scoreInfo.getProof() == null) {
+      scoreInfo.setProof(new ArrayList<>());
+    }
+
+    scoreSystem.put(id, scoreInfo);
   }
 
   public void withdrawCash() {
@@ -306,14 +323,22 @@ public class Talent extends User implements Advertisable {
     if (newData.getOfferCategories() != null) {
       setOfferCategories(newData.getOfferCategories());
     }
+    return this;
+  }
+
+  public Talent updateInfoByAdmin(Talent newData) {
+    updateInfo(newData);
     if (newData.getScoreSystem() != null) {
-      updateScore(newData.getScoreSystem());
+      updateScore (newData.getScoreSystem(), true);
     }
     return this;
   }
 
   public Talent requestKycInfoChange(Talent newData) {
     getTalentDetail().updateKycInfo(newData.getTalentDetail());
+    if (newData.getScoreSystem() != null) {
+      updateScore(newData.getScoreSystem(), false);
+    }
     setUserState(UserState.PENDING);
     return this;
   }
