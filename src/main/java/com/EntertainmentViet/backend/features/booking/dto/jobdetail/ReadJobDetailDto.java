@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class ReadJobDetailDto {
 
   private Integer performanceCount;
 
-  private String location;
+  private LocationAddress location;
 
   private String note;
 

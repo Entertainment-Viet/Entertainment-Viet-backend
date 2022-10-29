@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class UpdateAdminTalentDto {
 
   private String email;
 
-  private String address;
+  private LocationAddress address;
 
   private String bio;
 

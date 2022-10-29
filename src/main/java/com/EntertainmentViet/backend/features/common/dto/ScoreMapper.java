@@ -1,7 +1,9 @@
-package com.EntertainmentViet.backend.features.admin.dto.talent;
+package com.EntertainmentViet.backend.features.common.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.values.ScoreInfo;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
+import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreToggleDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +21,6 @@ import java.util.stream.Collectors;
 
 @Mapper(config = MappingConfig.class)
 public class ScoreMapper {
-
-  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @FromJsonToAdminDto
   public List<ScoreOperandDto> fromJsonToAdminDto(Map<String, ScoreInfo> scoreSystem) {

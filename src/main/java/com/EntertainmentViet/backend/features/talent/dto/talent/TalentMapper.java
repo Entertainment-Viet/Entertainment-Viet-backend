@@ -6,7 +6,8 @@ import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
-import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreMapper;
+import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.common.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
         PackageMapper.class,
         CategoryMapper.class,
         ScoreMapper.class,
+        LocationAddressMapper.class
     },
         config = MappingConfig.class)
 public abstract class TalentMapper {
@@ -44,7 +46,7 @@ public abstract class TalentMapper {
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
     @Mapping(target = "email", source = "talentDetail.email")
-    @Mapping(target = "address", source = "talentDetail.address")
+    @Mapping(target = "address", source = "talentDetail.address", qualifiedBy = LocationAddressMapper.ToReadDto.class)
     @Mapping(target = "taxId", source = "talentDetail.taxId")
     @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
     @Mapping(target = "bankAccountOwner", source = "talentDetail.bankAccountOwner")

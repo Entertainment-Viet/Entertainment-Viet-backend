@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
+import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
@@ -25,7 +26,8 @@ import org.mapstruct.Named;
     UserInputTextMapper.class,
     EventMapper.class,
     BookingMapper.class,
-    OrganizerFeedBackMapper.class
+    OrganizerFeedBackMapper.class,
+    LocationAddressMapper.class
   },
   config = MappingConfig.class)
 public abstract class OrganizerMapper {
@@ -35,7 +37,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
   @Mapping(target = "email", source = "organizerDetail.email")
-  @Mapping(target = "address", source = "organizerDetail.address")
+  @Mapping(target = "address", source = "organizerDetail.address", qualifiedBy = LocationAddressMapper.ToReadDto.class)
   @Mapping(target = "taxId", source = "organizerDetail.taxId")
   @Mapping(target = "bankAccountNumber", source = "organizerDetail.bankAccountNumber")
   @Mapping(target = "bankAccountOwner", source = "organizerDetail.bankAccountOwner")
