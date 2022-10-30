@@ -109,7 +109,7 @@ public abstract class TalentMapper {
     @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
     public abstract Talent fromKycDtoToModel(UpdateTalentKycInfoDto kycInfoDto);
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"username", "password"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"password"})
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "reviews", ignore = true)
@@ -123,9 +123,8 @@ public abstract class TalentMapper {
     @Mapping(target = "finalScore", constant = "0")
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "scoreSystem", ignore = true)
-    @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
+    @Mapping(target = "displayName", source = "username")
     @Mapping(target = "talentDetail.email", source = "email")
-    @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
 
 

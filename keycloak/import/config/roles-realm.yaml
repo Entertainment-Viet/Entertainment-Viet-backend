@@ -28,7 +28,8 @@
           "READ_REVIEW",
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
-          "READ_CART_ITEM"
+          "READ_CART_ITEM",
+          "SELF_UPDATE_ORGANIZER"
         ]
       }
     }
@@ -115,7 +116,8 @@
           "BROWSE_EVENT_POSITION",
           "READ_EVENT_POSITION",
           "READ_EVENT",
-          "BROWSE_EVENT"
+          "BROWSE_EVENT",
+          "SELF_UPDATE_TALENT"
         ]
       }
     }

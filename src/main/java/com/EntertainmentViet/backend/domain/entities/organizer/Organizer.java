@@ -235,21 +235,22 @@ public class Organizer extends User {
 
   public Organizer requestKycInfoChange(Organizer newData) {
     getOrganizerDetail().updateKycInfo(newData.getOrganizerDetail());
-    setUserState(UserState.PENDING);
+
+    // If the user already verified, change the state back to pending waiting for admin approval
+    if (!getUserState().equals(UserState.GUEST)) {
+      setUserState(UserState.PENDING);
+    }
     return this;
   }
 
   @Override
   protected boolean checkIfUserVerifiable() {
-    if (!getUserState().equals(UserState.PENDING) || !getUserState().equals(UserState.UNVERIFIED)) {
-      return false;
-    }
-
     if (getAccountType() == null) {
+      log.warn(String.format("The organizer with uid '%s' do not have accountType yet", getUid()));
       return false;
     }
-
     if (!organizerDetail.isAllKycFilled()) {
+      log.warn(String.format("The organizer with uid '%s' have not filled all kyc information yet", getUid()));
       return false;
     }
 

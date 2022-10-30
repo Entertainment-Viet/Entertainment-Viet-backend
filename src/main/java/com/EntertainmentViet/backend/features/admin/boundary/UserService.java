@@ -36,7 +36,6 @@ public class UserService implements UserBoundary {
     var keycloakUserDto = CreatedKeycloakUserDto.builder()
         .username(createdOrganizerDto.getUsername())
         .email(createdOrganizerDto.getEmail())
-        .firstName(createdOrganizerDto.getDisplayName())
         .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdOrganizerDto.getPassword()).build()))
         .groups(List.of("GUEST_ORGANIZER"))
         .build();
@@ -57,7 +56,6 @@ public class UserService implements UserBoundary {
     var keycloakUserDto = CreatedKeycloakUserDto.builder()
         .username(createdTalentDto.getUsername())
         .email(createdTalentDto.getEmail())
-        .firstName(createdTalentDto.getDisplayName())
         .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdTalentDto.getPassword()).build()))
         .groups(List.of("GUEST_TALENT"))
         .build();

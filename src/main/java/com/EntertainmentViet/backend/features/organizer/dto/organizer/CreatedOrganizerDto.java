@@ -20,12 +20,5 @@ public class CreatedOrganizerDto {
   private String password;
 
   @NotNull
-  private String displayName;
-
-  @NotNull
   private String email;
-
-  private String bio;
-
-  private String extensions;
 }

@@ -339,21 +339,21 @@ public class Talent extends User implements Advertisable {
     if (newData.getScoreSystem() != null) {
       updateScore(newData.getScoreSystem(), false);
     }
-    setUserState(UserState.PENDING);
+    // If the user already verified, change the state back to pending waiting for admin approval
+    if (!getUserState().equals(UserState.GUEST)) {
+      setUserState(UserState.PENDING);
+    }
     return this;
   }
 
   @Override
   protected boolean checkIfUserVerifiable() {
-    if (!getUserState().equals(UserState.PENDING) || !getUserState().equals(UserState.UNVERIFIED)) {
-      return false;
-    }
-
     if (getAccountType() == null) {
+      log.warn(String.format("The talent with uid '%s' do not have accountType yet", getUid()));
       return false;
     }
-
     if (!talentDetail.isAllKycFilled()) {
+      log.warn(String.format("The talent with uid '%s' have not filled all kyc information yet", getUid()));
       return false;
     }
 
