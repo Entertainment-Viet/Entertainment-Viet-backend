@@ -68,7 +68,7 @@ public class AdminTalentController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE,
       value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadAdminTalentDto>> update(JwtAuthenticationToken token,
+  public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token,
                                                                       @PathVariable("admin_uid") UUID adminUid,
                                                                       @PathVariable("uid") UUID uid,
                                                                       @RequestBody @Valid UpdateAdminTalentDto updateAdminTalentDto) {

@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
+import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
@@ -32,7 +33,8 @@ import java.util.stream.Collectors;
     TalentFeedBackMapper.class,
     PackageMapper.class,
     CategoryMapper.class,
-    ScoreMapper.class
+    ScoreMapper.class,
+    LocationAddressMapper.class
 },
     config = MappingConfig.class)
 public abstract class AdminTalentMapper {
@@ -46,7 +48,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "email", source = "talentDetail.email")
   @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
-  @Mapping(target = "address", source = "talentDetail.address")
+  @Mapping(target = "address", source = "talentDetail.address", qualifiedBy = LocationAddressMapper.ToReadDto.class)
   @Mapping(target = "taxId", source = "talentDetail.taxId")
   @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
   @Mapping(target = "bankAccountOwner", source = "talentDetail.bankAccountOwner")

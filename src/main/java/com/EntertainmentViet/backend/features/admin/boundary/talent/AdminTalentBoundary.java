@@ -11,5 +11,5 @@ import java.util.stream.DoubleStream;
 public interface AdminTalentBoundary {
   Optional<ReadAdminTalentDto> findByUid(UUID adminUid, UUID uid);
 
-  Optional<ReadAdminTalentDto> update(UpdateAdminTalentDto updateAdminTalentDto, UUID uid);
+  Optional<UUID> update(UpdateAdminTalentDto updateAdminTalentDto, UUID uid);
 }
