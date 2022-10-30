@@ -19,5 +19,7 @@ public interface TalentBoundary {
 
     Optional<UUID> updateKyc(UpdateTalentKycInfoDto kycInfoDto, UUID uid);
 
+    boolean sendVerifyRequest(UUID uid);
+
     boolean verify(UUID uid);
 }

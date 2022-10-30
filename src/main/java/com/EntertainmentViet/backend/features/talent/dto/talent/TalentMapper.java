@@ -120,7 +120,7 @@ public abstract class TalentMapper {
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
-    @Mapping(target = "finalScore", ignore = true)
+    @Mapping(target = "finalScore", constant = "0")
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "scoreSystem", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)

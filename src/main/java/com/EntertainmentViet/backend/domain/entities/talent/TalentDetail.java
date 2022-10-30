@@ -67,4 +67,25 @@ public class TalentDetail extends UserDetail {
 
     return this;
   }
+
+  @Override
+  public boolean isAllKycFilled() {
+    if (!super.isAllKycFilled()) {
+      return false;
+    }
+
+    if (lastName == null) {
+      return false;
+    }
+    if (firstName == null) {
+      return false;
+    }
+    if (citizenId == null) {
+      return false;
+    }
+    if (citizenPaper == null || citizenPaper.isEmpty()) {
+      return false;
+    }
+    return true;
+  }
 }

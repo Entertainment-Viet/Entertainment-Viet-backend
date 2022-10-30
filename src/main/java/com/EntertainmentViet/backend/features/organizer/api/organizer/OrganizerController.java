@@ -42,8 +42,6 @@ public class OrganizerController {
 
   private final OrganizerBoundary organizerService;
 
-  private final UserBoundary userService;
-
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadOrganizerDto>> findByUid(@PathVariable("uid") UUID uid) {
 
@@ -57,20 +55,17 @@ public class OrganizerController {
   }
 
   @PostMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<UUID>> verify(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<UUID>> sendVerifyRequest(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
 
     if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    try {
-      if (userService.verifyOrganizer(uid)) {
-        return CompletableFuture.completedFuture(ResponseEntity.ok().build());
-      }
-    } catch (KeycloakUnauthorizedException ex) {
-      log.error("Can not verify organizer account in keycloak server", ex);
+    if (organizerService.sendVerifyRequest(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
+
     log.warn(String.format("Can not verify organizer account with id '%s'", uid));
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }

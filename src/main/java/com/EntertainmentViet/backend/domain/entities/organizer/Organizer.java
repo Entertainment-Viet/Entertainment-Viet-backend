@@ -238,4 +238,21 @@ public class Organizer extends User {
     setUserState(UserState.PENDING);
     return this;
   }
+
+  @Override
+  protected boolean checkIfUserVerifiable() {
+    if (!getUserState().equals(UserState.PENDING) || !getUserState().equals(UserState.UNVERIFIED)) {
+      return false;
+    }
+
+    if (getAccountType() == null) {
+      return false;
+    }
+
+    if (!organizerDetail.isAllKycFilled()) {
+      return false;
+    }
+
+    return true;
+  }
 }

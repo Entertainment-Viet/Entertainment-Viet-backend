@@ -52,11 +52,19 @@ public abstract class  User extends Account implements Auditable {
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "account_type")
   @Type( type = "pgsql_enum" )
-  @NotNull
   private AccountType accountType;
 
-  public boolean verifyAccount() {
+  public boolean sendVerifyRequest() {
     if (userState.equals(UserState.GUEST)) {
+      setUserState(UserState.PENDING);
+      return true;
+    }
+    return false;
+
+  }
+
+  public boolean verifyAccount() {
+    if (checkIfUserVerifiable()) {
       setUserState(UserState.VERIFIED);
       return true;
     }
@@ -75,4 +83,6 @@ public abstract class  User extends Account implements Auditable {
     userState = UserState.ARCHIVED;
     return true;
   }
+
+  protected abstract boolean checkIfUserVerifiable();
 }

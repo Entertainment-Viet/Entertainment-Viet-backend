@@ -343,6 +343,23 @@ public class Talent extends User implements Advertisable {
     return this;
   }
 
+  @Override
+  protected boolean checkIfUserVerifiable() {
+    if (!getUserState().equals(UserState.PENDING) || !getUserState().equals(UserState.UNVERIFIED)) {
+      return false;
+    }
+
+    if (getAccountType() == null) {
+      return false;
+    }
+
+    if (!talentDetail.isAllKycFilled()) {
+      return false;
+    }
+
+    return true;
+  }
+
   private void increaseReviewSum(Review review) {
     var reviewPoint = review.getScore();
     var curPointSum = getReviewSum().get(reviewPoint-1);

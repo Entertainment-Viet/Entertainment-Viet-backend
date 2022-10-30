@@ -94,4 +94,32 @@ public abstract class UserDetail {
 
     return this;
   }
+
+  public boolean isAllKycFilled() {
+    if (phoneNumber == null) {
+      return false;
+    }
+    if (email == null) {
+      return false;
+    }
+    if (address == null) {
+      return false;
+    }
+    if (taxId == null) {
+      return false;
+    }
+    if (bankAccountNumber == null) {
+      return false;
+    }
+    if (bankAccountOwner == null) {
+      return false;
+    }
+    if (bankName == null) {
+      return false;
+    }
+    if (bankBranchName == null) {
+      return false;
+    }
+    return true;
+  }
 }

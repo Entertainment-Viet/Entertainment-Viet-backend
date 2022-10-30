@@ -66,4 +66,25 @@ public class OrganizerDetail extends UserDetail {
     }
     return this;
   }
+
+  @Override
+  public boolean isAllKycFilled() {
+    if (!super.isAllKycFilled()) {
+      return false;
+    }
+
+    if (companyName == null) {
+      return false;
+    }
+    if (representative == null) {
+      return false;
+    }
+    if (position == null) {
+      return false;
+    }
+    if (businessPaper == null || businessPaper.isEmpty()) {
+      return false;
+    }
+    return true;
+  }
 }
