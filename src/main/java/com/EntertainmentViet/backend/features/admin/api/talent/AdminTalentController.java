@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.admin.api.talent;
 
+import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
+import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentBoundary;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
@@ -28,6 +30,7 @@ public class AdminTalentController {
 
   private final AdminTalentBoundary adminTalentService;
 
+  private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadAdminTalentDto>> findByUid(JwtAuthenticationToken token,
@@ -47,11 +50,25 @@ public class AdminTalentController {
         .orElse( ResponseEntity.notFound().build()));
   }
 
+  @PostMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<UUID>> verify(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+
+    try {
+      if (userService.verifyTalent(uid)) {
+        return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+      }
+    } catch (KeycloakUnauthorizedException ex) {
+      log.error("Can not verify talent account in keycloak server", ex);
+    }
+    log.warn(String.format("Can not verify talent account with id '%s'", uid));
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
   @PutMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE,
       value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadAdminTalentDto>> update(JwtAuthenticationToken token,
+  public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token,
                                                                       @PathVariable("admin_uid") UUID adminUid,
                                                                       @PathVariable("uid") UUID uid,
                                                                       @RequestBody @Valid UpdateAdminTalentDto updateAdminTalentDto) {

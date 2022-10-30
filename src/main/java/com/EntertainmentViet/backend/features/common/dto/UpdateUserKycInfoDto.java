@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +18,7 @@ public class UpdateUserKycInfoDto {
 
   private String email;
 
-  private String address;
+  private LocationAddress address;
 
   private String taxId;
 

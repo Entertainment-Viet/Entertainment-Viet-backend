@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
+import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
@@ -25,7 +26,8 @@ import org.mapstruct.Named;
     UserInputTextMapper.class,
     EventMapper.class,
     BookingMapper.class,
-    OrganizerFeedBackMapper.class
+    OrganizerFeedBackMapper.class,
+    LocationAddressMapper.class
   },
   config = MappingConfig.class)
 public abstract class OrganizerMapper {
@@ -35,7 +37,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
   @Mapping(target = "email", source = "organizerDetail.email")
-  @Mapping(target = "address", source = "organizerDetail.address")
+  @Mapping(target = "address", source = "organizerDetail.address", qualifiedBy = LocationAddressMapper.ToReadDto.class)
   @Mapping(target = "taxId", source = "organizerDetail.taxId")
   @Mapping(target = "bankAccountNumber", source = "organizerDetail.bankAccountNumber")
   @Mapping(target = "bankAccountOwner", source = "organizerDetail.bankAccountOwner")
@@ -89,7 +91,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   public abstract Organizer fromKycDtoToModel(UpdateOrganizerKycInfoDto kycInfoDto);
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"username", "password"})
+  @BeanMapping(ignoreUnmappedSourceProperties = {"password"})
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "uid", ignore = true)
   @Mapping(target = "jobOffers", ignore = true)
@@ -100,9 +102,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "displayName", source = "username")
   @Mapping(target = "organizerDetail.email", source = "email")
-  @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-  @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission

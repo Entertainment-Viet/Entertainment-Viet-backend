@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -39,6 +40,7 @@ import java.time.OffsetDateTime;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class})
+@Slf4j
 public abstract class  User extends Account implements Auditable {
 
   private OffsetDateTime createdAt;
@@ -52,15 +54,28 @@ public abstract class  User extends Account implements Auditable {
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "account_type")
   @Type( type = "pgsql_enum" )
-  @NotNull
   private AccountType accountType;
 
-  public boolean verifyAccount() {
-    if (userState.equals(UserState.GUEST)) {
-      setUserState(UserState.VERIFIED);
-      return true;
+  public boolean sendVerifyRequest() {
+    if (!userState.equals(UserState.GUEST)) {
+      return false;
     }
-    return false;
+    if (!checkIfUserVerifiable()) {
+      return false;
+    }
+    setUserState(UserState.PENDING);
+    return true;
+  }
+
+  public boolean verifyAccount() {
+    if (!getUserState().equals(UserState.PENDING) && !getUserState().equals(UserState.UNVERIFIED)) {
+      return false;
+    }
+    if (!checkIfUserVerifiable()) {
+      return false;
+    }
+    setUserState(UserState.VERIFIED);
+    return true;
   }
 
   public boolean verifyPayment() {
@@ -75,4 +90,6 @@ public abstract class  User extends Account implements Auditable {
     userState = UserState.ARCHIVED;
     return true;
   }
+
+  protected abstract boolean checkIfUserVerifiable();
 }

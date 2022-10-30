@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities;
 
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,7 +42,9 @@ public abstract class UserDetail {
 
   private String email;
 
-  private String address;
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private LocationAddress address;
 
   private String taxId;
 
@@ -90,5 +93,33 @@ public abstract class UserDetail {
     }
 
     return this;
+  }
+
+  public boolean isAllKycFilled() {
+    if (phoneNumber == null) {
+      return false;
+    }
+    if (email == null) {
+      return false;
+    }
+    if (address == null) {
+      return false;
+    }
+    if (taxId == null) {
+      return false;
+    }
+    if (bankAccountNumber == null) {
+      return false;
+    }
+    if (bankAccountOwner == null) {
+      return false;
+    }
+    if (bankName == null) {
+      return false;
+    }
+    if (bankBranchName == null) {
+      return false;
+    }
+    return true;
   }
 }

@@ -27,10 +27,10 @@ public class AdminTalentService implements AdminTalentBoundary {
   }
 
   @Override
-  public Optional<ReadAdminTalentDto> update(UpdateAdminTalentDto updateAdminTalentDto, UUID uid) {
+  public Optional<UUID> update(UpdateAdminTalentDto updateAdminTalentDto, UUID uid) {
     return talentRepository.findByUid(uid)
-        .map(talent -> talent.updateInfo(adminTalentMapper.toModel(updateAdminTalentDto)))
+        .map(talent -> talent.updateInfoByAdmin(adminTalentMapper.toModel(updateAdminTalentDto)))
         .map(talentRepository::save)
-        .map(adminTalentMapper::toAdminDto);
+        .map(Identifiable::getUid);
   }
 }

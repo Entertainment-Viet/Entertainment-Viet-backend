@@ -73,6 +73,20 @@ public class TalentService implements TalentBoundary {
     }
 
     @Override
+    public boolean sendVerifyRequest(UUID uid) {
+        var talent = talentRepository.findByUid(uid).orElse(null);
+
+        if (!EntityValidationUtils.isTalentWithUid(talent, uid)) {
+            return false;
+        }
+        if (!talent.sendVerifyRequest()) {
+            return false;
+        }
+        talentRepository.save(talent);
+        return true;
+    }
+
+    @Override
     @Transactional
     public boolean verify(UUID uid) {
         var talent = talentRepository.findByUid(uid).orElse(null);

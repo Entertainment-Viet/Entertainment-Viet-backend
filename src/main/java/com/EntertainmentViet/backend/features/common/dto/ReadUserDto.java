@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public abstract class ReadUserDto extends IdentifiableDto {
 
   private String email;
 
-  private String address;
+  private LocationAddress address;
 
   private String taxId;
 

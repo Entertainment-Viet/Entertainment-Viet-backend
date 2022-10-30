@@ -1,10 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
-import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.domain.values.UserInputText;
-import com.EntertainmentViet.backend.domain.values.UserInputText_;
+import com.EntertainmentViet.backend.domain.values.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -70,7 +67,9 @@ public class JobDetail implements Serializable {
   @NotNull
   private Integer performanceCount;
 
-  private String location;
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private LocationAddress location;
 
   @Embedded
   @AttributeOverrides({

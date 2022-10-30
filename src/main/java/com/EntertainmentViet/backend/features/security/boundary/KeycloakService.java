@@ -48,10 +48,10 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<CreatedKeycloakUserDto> request = new HttpEntity<>(userDto, headers);
 
     try {
-//      HttpEntity<Void> response = keycloakRestTemplate.exchange(createdUserUrl, HttpMethod.POST, request, Void.class);
-//      String path = response.getHeaders().getLocation().getPath();
-//      String uuidStr = path.substring(path.lastIndexOf('/') +1);
-//      return Optional.of(UUID.fromString(uuidStr));
+      HttpEntity<Void> response = keycloakRestTemplate.exchange(createdUserUrl, HttpMethod.POST, request, Void.class);
+      String path = response.getHeaders().getLocation().getPath();
+      String uuidStr = path.substring(path.lastIndexOf('/') +1);
+      return Optional.of(UUID.fromString(uuidStr));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         throw new KeycloakUnauthorizedException();
@@ -98,12 +98,12 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<CreatedKeycloakUserDto> request = new HttpEntity<>(null, headers);
 
     try {
-//      List<GroupInfoDto> groupsResponse = keycloakRestTemplate.exchange(
-//          groupsUrl, HttpMethod.GET, request, new ParameterizedTypeReference<List<GroupInfoDto>>(){}).getBody();
-//
-//      for (GroupInfoDto group : groupsResponse) {
-//        KeycloakConstant.groupToId.put(group.getName(), UUID.fromString(group.getId()));
-//      }
+      List<GroupInfoDto> groupsResponse = keycloakRestTemplate.exchange(
+          groupsUrl, HttpMethod.GET, request, new ParameterizedTypeReference<List<GroupInfoDto>>(){}).getBody();
+
+      for (GroupInfoDto group : groupsResponse) {
+        KeycloakConstant.groupToId.put(group.getName(), UUID.fromString(group.getId()));
+      }
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         log.error("Can not setup KeycloakConstant due to unauthorized", new KeycloakUnauthorizedException());
@@ -138,7 +138,7 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
     try {
-//      return Optional.ofNullable(keycloakRestTemplate.postForObject(loginUrl, request, TokenDto.class));
+      return Optional.ofNullable(keycloakRestTemplate.postForObject(loginUrl, request, TokenDto.class));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         log.error("Can not authorized to keycloak server. " +

@@ -56,6 +56,22 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
+  public boolean sendVerifyRequest(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+
+    if (!EntityValidationUtils.isOrganizerWithUid(organizer, uid)) {
+      return false;
+    }
+
+    if (!organizer.sendVerifyRequest()) {
+      return false;
+    }
+    organizerRepository.save(organizer);
+    return true;
+  }
+
+
+  @Override
   @Transactional
   public boolean verify(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
