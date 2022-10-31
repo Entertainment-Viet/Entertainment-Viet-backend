@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/auth/realms/ve-sso
+
+security:
+  allowed_origins:
+    - http://host.internal.docker:3000
+
+authentication:
+  keycloak:
+    serverUrl: http://keycloak:8080/auth

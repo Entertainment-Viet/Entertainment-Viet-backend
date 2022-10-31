@@ -10,10 +10,17 @@ The `keycloak` folder store the automation configuration for keycloak. Refer its
 
 ### Run locally
 1. ./gradlew clean bootJar 
-2. docker-compose up -d
-3. The server will be launch in localhost:8080
-4. The backend will be exposed at localhost:5432 with account (postgres/postgres)
-5. The keycloak server will be at localhost:18080/auth
+2. Add `127.0.0.1 keycloak` to /etc/hosts (or equivalent file in Windows)
+3. docker-compose up -d
+4. The server will be launch in localhost:8888
+5. The backend will be exposed at localhost:5432 with account (postgres/postgres)
+6. The keycloak server will be at keycloak:8080/auth
+
+### Build docker image
+1. docker login
+2. /gradlew clean bootJar
+3. docker build -t duckhai1/ve-backend:0.1.0 .
+4. docker push duckhai1/ve-backend:0.1.0
 
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
@@ -72,4 +79,4 @@ logging:
 ```
 
 ### REST docs ###
-All the endpoint is documented in the link: `http://localhost:8080/api/swagger-ui/index.html#/`
+All the endpoint is documented in the link: `http://localhost:8888/api/swagger-ui/index.html#/`
