@@ -30,9 +30,7 @@ public class ReadTalentDto extends ReadUserDto {
 
     private List<ScoreToggleDto> scoreSystem;
 
-    private String lastName;
-
-    private String firstName;
+    private String fullName;
 
     private String citizenId;
 

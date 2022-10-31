@@ -27,9 +27,7 @@ public class TalentDetail extends UserDetail {
   private Talent talent;
 
   // KYC data
-  private String lastName;
-
-  private String firstName;
+  private String fullName;
 
   private String citizenId;
 
@@ -49,11 +47,8 @@ public class TalentDetail extends UserDetail {
 
   public TalentDetail updateKycInfo(TalentDetail newData) {
     super.updateKycInfo(newData);
-    if (newData.getLastName() != null) {
-      setLastName(newData.getLastName());
-    }
-    if (newData.getFirstName() != null) {
-      setFirstName(newData.getFirstName());
+    if (newData.getFullName() != null) {
+      setFullName(newData.getFullName());
     }
     if (newData.getCitizenId() != null) {
       setCitizenId(newData.getCitizenId());
@@ -74,10 +69,7 @@ public class TalentDetail extends UserDetail {
       return false;
     }
 
-    if (lastName == null) {
-      return false;
-    }
-    if (firstName == null) {
+    if (fullName == null) {
       return false;
     }
     if (citizenId == null) {

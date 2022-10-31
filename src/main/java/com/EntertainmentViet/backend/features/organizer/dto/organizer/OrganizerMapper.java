@@ -77,7 +77,6 @@ public abstract class OrganizerMapper {
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
-  @Mapping(target = "organizerDetail.email", source = "email")
   @Mapping(target = "organizerDetail.address", source = "address")
   @Mapping(target = "organizerDetail.taxId", source = "taxId")
   @Mapping(target = "organizerDetail.bankAccountNumber", source = "bankAccountNumber")
@@ -88,7 +87,6 @@ public abstract class OrganizerMapper {
   @Mapping(target = "organizerDetail.representative", source = "representative")
   @Mapping(target = "organizerDetail.position", source = "position")
   @Mapping(target = "organizerDetail.businessPaper", source = "businessPaper")
-  @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   public abstract Organizer fromKycDtoToModel(UpdateOrganizerKycInfoDto kycInfoDto);
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"password"})

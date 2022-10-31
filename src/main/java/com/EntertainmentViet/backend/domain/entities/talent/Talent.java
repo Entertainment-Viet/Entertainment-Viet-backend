@@ -31,6 +31,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.function.Predicate;
@@ -82,6 +83,7 @@ public class Talent extends User implements Advertisable {
       name = "review_sum",
       columnDefinition = "integer[]"
   )
+  @NotNull
   private List<Integer> reviewSum;
 
   public void addOfferCategory(Category category) {

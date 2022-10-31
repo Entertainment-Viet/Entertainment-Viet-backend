@@ -16,8 +16,6 @@ public class UpdateUserKycInfoDto {
 
   private String phoneNumber;
 
-  private String email;
-
   private LocationAddress address;
 
   private String taxId;
@@ -29,6 +27,4 @@ public class UpdateUserKycInfoDto {
   private String bankName;
 
   private String bankBranchName;
-
-  private String extensions;
 }

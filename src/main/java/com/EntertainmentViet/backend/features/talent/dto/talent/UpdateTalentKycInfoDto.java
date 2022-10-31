@@ -15,9 +15,7 @@ import java.util.List;
 @Setter
 public class UpdateTalentKycInfoDto extends UpdateUserKycInfoDto {
 
-  private String lastName;
-
-  private String firstName;
+  private String fullName;
 
   private String citizenId;
 

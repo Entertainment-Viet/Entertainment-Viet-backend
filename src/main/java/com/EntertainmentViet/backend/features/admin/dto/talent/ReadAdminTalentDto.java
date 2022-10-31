@@ -23,9 +23,7 @@ public class ReadAdminTalentDto extends ReadUserDto {
 
   private List<ScoreOperandDto> scoreSystem;
 
-  private String lastName;
-
-  private String firstName;
+  private String fullName;
 
   private String citizenId;
 
