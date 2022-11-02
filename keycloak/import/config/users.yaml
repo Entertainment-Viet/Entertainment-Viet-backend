@@ -2,6 +2,8 @@
   "username": "root",
   "enabled": true,
   "realmRoles": [
+    "ADMIN_READ_BOOKING_ACCESS",
+    "ADMIN_RESOLVE_BOOKING_ACCESS",
     "ADMIN_ARCHIVE_ORGANIZER_ACCESS",
     "ADMIN_ARCHIVE_TALENT_ACCESS",
     "ADMIN_READ_ORGANIZER_ACCESS",
@@ -30,16 +32,47 @@
   ]
 },
 {
-  "username": "readonly_admin",
+  "username": "office_admin",
   "enabled": true,
   "realmRoles": [
+    "ADMIN_ARCHIVE_ORGANIZER_ACCESS",
+    "ADMIN_ARCHIVE_TALENT_ACCESS",
     "ADMIN_READ_ORGANIZER_ACCESS",
-    "ADMIN_READ_TALENT_ACCESS"
+    "ADMIN_RESOLVE_TALENT_ACCESS",
+    "ADMIN_READ_TALENT_ACCESS",
+    "ADMIN_RESOLVE_ORGANIZER_ACCESS"
   ],
   "credentials": [
     {
       "type": "password",
-      "value": "readonly_admin"
+      "value": "office_admin"
+    }
+  ]
+},
+{
+  "username": "bd_admin",
+  "enabled": true,
+  "realmRoles": [
+    "ADMIN_READ_BOOKING_ACCESS",
+    "ADMIN_RESOLVE_BOOKING_ACCESS"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "bd_admin"
+    }
+  ]
+},
+{
+  "username": "finance_admin",
+  "enabled": true,
+  "realmRoles": [
+    "ADMIN_READ_BOOKING_ACCESS"
+  ],
+  "credentials": [
+    {
+      "type": "password",
+      "value": "finance_admin"
     }
   ]
 },

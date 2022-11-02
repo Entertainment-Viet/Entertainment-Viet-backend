@@ -264,6 +264,9 @@
     "name": "ADMIN_BROWSE_BOOKING"
   },
   {
+    "name": "ADMIN_READ_BOOKING"
+  },
+  {
     "name": "ADMIN_UPDATE_BOOKING"
   },
   {
