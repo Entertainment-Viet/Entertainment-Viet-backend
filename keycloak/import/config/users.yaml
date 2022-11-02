@@ -40,7 +40,8 @@
     "ADMIN_READ_ORGANIZER_ACCESS",
     "ADMIN_RESOLVE_TALENT_ACCESS",
     "ADMIN_READ_TALENT_ACCESS",
-    "ADMIN_RESOLVE_ORGANIZER_ACCESS"
+    "ADMIN_RESOLVE_ORGANIZER_ACCESS",
+    "ADMIN_READ_BOOKING_ACCESS"
   ],
   "credentials": [
     {
@@ -54,7 +55,9 @@
   "enabled": true,
   "realmRoles": [
     "ADMIN_READ_BOOKING_ACCESS",
-    "ADMIN_RESOLVE_BOOKING_ACCESS"
+    "ADMIN_RESOLVE_BOOKING_ACCESS",
+    "ADMIN_READ_ORGANIZER_ACCESS",
+    "ADMIN_READ_TALENT_ACCESS"
   ],
   "credentials": [
     {
@@ -67,7 +70,9 @@
   "username": "finance_admin",
   "enabled": true,
   "realmRoles": [
-    "ADMIN_READ_BOOKING_ACCESS"
+    "ADMIN_READ_BOOKING_ACCESS",
+    "ADMIN_READ_ORGANIZER_ACCESS",
+    "ADMIN_READ_TALENT_ACCESS"
   ],
   "credentials": [
     {
