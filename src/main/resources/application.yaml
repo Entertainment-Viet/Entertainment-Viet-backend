@@ -15,8 +15,8 @@ spring:
 #      ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+#        show_sql: true
+#        format_sql: true
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
   flyway:
     enabled: true
@@ -58,12 +58,12 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
-
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
+#
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
