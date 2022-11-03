@@ -1,14 +1,15 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -20,7 +21,7 @@ public class ReadEventDto extends IdentifiableDto {
 
   private Boolean isActive;
 
-  private String occurrenceAddress;
+  private LocationAddress occurrenceAddress;
 
   private OffsetDateTime occurrenceStartTime;
 

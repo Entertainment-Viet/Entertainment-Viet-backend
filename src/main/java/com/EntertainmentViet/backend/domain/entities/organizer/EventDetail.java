@@ -1,6 +1,20 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import com.EntertainmentViet.backend.domain.entities.UserDetail_;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
@@ -11,18 +25,12 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@TypeDef(name = "list-array",typeClass = ListArrayType.class)
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class EventDetail {
 
   @Id
@@ -32,8 +40,9 @@ public class EventDetail {
   @MapsId
   private Event event;
 
-  @NotNull
-  private String occurrenceAddress;
+  @Type(type = "jsonb")
+  @Column(columnDefinition = "jsonb")
+  private LocationAddress occurrenceAddress;
 
   @NotNull
   private OffsetDateTime occurrenceStartTime;
@@ -43,7 +52,8 @@ public class EventDetail {
 
   @Embedded
   @AttributeOverrides({
-      @AttributeOverride( name = UserInputText_.INPUT_LANG, column = @Column(name = EventDetail_.DESCRIPTION + "_" + UserInputText_.INPUT_LANG)),
+          @AttributeOverride(name = UserInputText_.INPUT_LANG,
+                  column = @Column(name = EventDetail_.DESCRIPTION + "_" + UserInputText_.INPUT_LANG)),
       @AttributeOverride( name = UserInputText_.RAW_INPUT, column = @Column(name = EventDetail_.DESCRIPTION + "_" + UserInputText_.RAW_INPUT)),
       @AttributeOverride( name = UserInputText_.INPUT_TRANSLATION, column = @Column(name = EventDetail_.DESCRIPTION + "_" + UserInputText_.INPUT_TRANSLATION))
   })
