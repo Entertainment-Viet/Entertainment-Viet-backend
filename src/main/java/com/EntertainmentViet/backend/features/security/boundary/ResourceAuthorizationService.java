@@ -249,15 +249,15 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET, ofPath(TalentReviewController.REQUEST_MAPPING_PATH))
             .hasAuthority(ReviewRole.READ_REVIEW.name())
             .mvcMatchers(HttpMethod.POST, ofPath(TalentReviewController.REQUEST_MAPPING_PATH))
-            .hasAuthority(ReviewRole.ADD_REVIEW.name())
-            .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentReviewController.REQUEST_MAPPING_PATH))
-            .hasAuthority(ReviewRole.READ_REVIEW.name())
+                .hasAuthority(ReviewRole.ADD_REVIEW.name())
+                .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentReviewController.REQUEST_MAPPING_PATH))
+                .hasAuthority(ReviewRole.READ_REVIEW.name())
 
-            // Talent confidential mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
-            .hasAuthority(TalentRole.READ_TALENT_DETAIL.name())
-            .mvcMatchers(HttpMethod.PUT, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
-            .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
+                // Talent confidential mapping
+                .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
+                .hasAuthority(TalentRole.READ_TALENT_DETAIL.name())
+                .mvcMatchers(HttpMethod.PUT, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
+                .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
                 // Talent manage mapping
                 .mvcMatchers(HttpMethod.POST, ofPath(TalentController.REQUEST_MAPPING_PATH))
@@ -276,7 +276,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
                 .hasAuthority(AdminRole.ADMIN_APPROVE_ORGANIZER.name())
                 .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
                 .hasAuthority(AdminRole.ADMIN_UPDATE_ORGANIZER.name())
-                .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + "{id}/deactive")
+                .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
                 .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
                 .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
                 .hasAuthority(AdminRole.ADMIN_REJECT_ORGANIZER.name())
@@ -288,7 +288,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
                 .hasAuthority(AdminRole.ADMIN_APPROVE_TALENT.name())
                 .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
                 .hasAuthority(AdminRole.ADMIN_UPDATE_TALENT.name())
-                .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + "{id}/deactive")
+                .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
                 .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
                 .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
                 .hasAuthority(AdminRole.ADMIN_REJECT_TALENT.name())
