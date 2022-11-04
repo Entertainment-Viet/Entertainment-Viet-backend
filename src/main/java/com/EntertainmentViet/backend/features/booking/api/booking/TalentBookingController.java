@@ -33,6 +33,8 @@ public class TalentBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents/{talent_uid}/bookings";
 
+  public static final String DONE_PATH = "/done";
+
   private final BookingBoundary bookingService;
 
   private final TalentBookingBoundary talentBookingService;
@@ -135,7 +137,7 @@ public class TalentBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PostMapping(value = "/{uid}/done")
+  @PostMapping(value = "/{uid}" + DONE_PATH)
   public CompletableFuture<ResponseEntity<Void>> finishBookingAndAddReview(JwtAuthenticationToken token, HttpServletRequest request,
                                                                            @PathVariable("talent_uid") UUID talentUid,
                                                                            @PathVariable("uid") UUID bookingUid,

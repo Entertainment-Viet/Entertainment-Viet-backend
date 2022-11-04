@@ -237,6 +237,9 @@
     "name": "ADMIN_DEACTIVE_ORGANIZER"
   },
   {
+    "name": "ADMIN_REJECT_ORGANIZER"
+  },
+  {
     "name": "ADMIN_BROWSE_TALENT"
   },
   {
@@ -244,13 +247,16 @@
   },
   {
     "name": "ADMIN_UPDATE_TALENT"
-    },
-    {
-        "name": "ADMIN_DEACTIVE_TALENT"
-    },
-    {
-        "name": "ADMIN_BROWSE_ADVERTISEMENT"
-    },
+  },
+  {
+    "name": "ADMIN_DEACTIVE_TALENT"
+  },
+  {
+    "name": "ADMIN_REJECT_TALENT"
+  },
+  {
+    "name": "ADMIN_BROWSE_ADVERTISEMENT"
+  },
   {
     "name": "ADMIN_APPROVE_ADVERTISEMENT"
   },
@@ -262,6 +268,9 @@
   },
   {
     "name": "ADMIN_BROWSE_BOOKING"
+  },
+  {
+    "name": "ADMIN_READ_BOOKING"
   },
   {
     "name": "ADMIN_UPDATE_BOOKING"

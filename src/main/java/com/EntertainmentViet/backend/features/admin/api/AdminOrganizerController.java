@@ -24,6 +24,8 @@ public class AdminOrganizerController {
 
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/organizers";
 
+  public static final String DEACTIVE_PATH = "/deactive";
+
   private final UserBoundary userService;
 
 

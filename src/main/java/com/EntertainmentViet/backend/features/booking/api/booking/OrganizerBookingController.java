@@ -30,6 +30,8 @@ public class OrganizerBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/organizers/{organizer_uid}/bookings";
 
+  public static final String DONE_PATH = "/done";
+
   private final OrganizerBookingBoundary organizerBookingService;
 
   private final BookingBoundary bookingService;
@@ -130,7 +132,7 @@ public class OrganizerBookingController {
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
-  @PostMapping(value = "/{uid}/done")
+  @PostMapping(value = "/{uid}" + DONE_PATH)
   public CompletableFuture<ResponseEntity<UUID>> finishBookingAndAddReview(JwtAuthenticationToken token, HttpServletRequest request,
                                                                            @PathVariable("organizer_uid") UUID organizerUid,
                                                                            @PathVariable("uid") UUID bookingUid,

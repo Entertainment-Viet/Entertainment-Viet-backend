@@ -1,13 +1,14 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.OffsetDateTime;
-import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -22,7 +23,7 @@ public class CreateEventDto {
   private Boolean isActive;
 
   @NonNull
-  private String occurrenceAddress;
+  private LocationAddress occurrenceAddress;
 
   @NonNull
   private OffsetDateTime occurrenceStartTime;
