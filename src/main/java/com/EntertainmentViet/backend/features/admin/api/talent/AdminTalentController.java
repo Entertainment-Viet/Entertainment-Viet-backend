@@ -28,6 +28,8 @@ public class AdminTalentController {
 
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/talents";
 
+  public static final String DEACTIVE_PATH = "/deactive";
+
   private final AdminTalentBoundary adminTalentService;
 
   private final UserBoundary userService;

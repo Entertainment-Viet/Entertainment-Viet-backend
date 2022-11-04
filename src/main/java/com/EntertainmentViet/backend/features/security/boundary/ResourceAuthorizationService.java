@@ -122,13 +122,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_ORGANIZER.name())
 
-            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerBookingController.REQUEST_MAPPING_PATH + "/{id}/done"))
+            .mvcMatchers(HttpMethod.POST, ofPath(anyPathAfter(OrganizerBookingController.REQUEST_MAPPING_PATH) + OrganizerBookingController.DONE_PATH))
             .hasAuthority(BookingRole.FINISH_BOOKING_ORGANIZER.name())
 
             // Organizer payment mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CASH_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CASH_PATH))
             .hasAuthority(PaymentRole.RECEIVE_ORGANIZER_CASH.name())
-            .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CASH_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_ORGANIZER_CASH.name())
 
             // Organizer shopping chart
@@ -155,9 +155,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(FeedbackRole.ADD_ORGANIZER_FEEDBACK.name())
 
             // Organizer confidential mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CONFIDENTIAL_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CONFIDENTIAL_PATH))
             .hasAuthority(OrganizerRole.READ_ORGANIZER_DETAIL.name())
-            .mvcMatchers(HttpMethod.PUT, ofPath(OrganizerController.REQUEST_MAPPING_PATH + OrganizerController.CONFIDENTIAL_PATH))
+            .mvcMatchers(HttpMethod.PUT, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CONFIDENTIAL_PATH))
             .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
 
             // Organizer manage mapping
@@ -195,9 +195,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(PackageRole.DELETE_PACKAGE.name())
 
             // Talent advertisement payment mapping
-            .mvcMatchers(HttpMethod.GET , ofPath(AdvertisementController.REQUEST_MAPPING_PATH + AdvertisementController.CASH_PATH))
+            .mvcMatchers(HttpMethod.GET , ofPath(anyPathAfter(AdvertisementController.REQUEST_MAPPING_PATH) + AdvertisementController.CASH_PATH))
             .hasAuthority(PaymentRole.GET_ADVERTISEMENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST , ofPath(AdvertisementController.REQUEST_MAPPING_PATH + AdvertisementController.CASH_PATH))
+            .mvcMatchers(HttpMethod.POST , ofPath(anyPathAfter(AdvertisementController.REQUEST_MAPPING_PATH) + AdvertisementController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_ADVERTISEMENT_CASH.name())
 
             // Talent advertisement mapping
@@ -228,13 +228,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(BookingRole.CANCEL_BOOKING_TALENT.name())
 
-            .mvcMatchers(HttpMethod.POST, ofPath(TalentBookingController.REQUEST_MAPPING_PATH + "/{id}/done"))
+            .mvcMatchers(HttpMethod.POST, ofPath(anyPathAfter(TalentBookingController.REQUEST_MAPPING_PATH) + TalentBookingController.DONE_PATH))
             .hasAuthority(BookingRole.FINISH_BOOKING_TALENT.name())
 
             // Talent payment mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CASH_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CASH_PATH))
             .hasAuthority(PaymentRole.RECEIVE_TALENT_CASH.name())
-            .mvcMatchers(HttpMethod.POST, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CASH_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CASH_PATH))
             .hasAuthority(PaymentRole.PAY_TALENT_CASH.name())
 
             // Talent feedback mapping
@@ -254,9 +254,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(ReviewRole.READ_REVIEW.name())
 
             // Talent confidential mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CONFIDENTIAL_PATH))
             .hasAuthority(TalentRole.READ_TALENT_DETAIL.name())
-            .mvcMatchers(HttpMethod.PUT, ofPath(TalentController.REQUEST_MAPPING_PATH + TalentController.CONFIDENTIAL_PATH))
+            .mvcMatchers(HttpMethod.PUT, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CONFIDENTIAL_PATH))
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
             // Talent manage mapping
@@ -270,26 +270,28 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
             // Admin organizer mapping
+            .mvcMatchers(HttpMethod.DELETE, ofPath(anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + AdminOrganizerController.DEACTIVE_PATH))
+            .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
+
             .mvcMatchers(HttpMethod.GET, ofPath(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_ORGANIZER.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_ORGANIZER.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
-            .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_REJECT_ORGANIZER.name())
 
             // Admin talent mapping
+            .mvcMatchers(HttpMethod.DELETE, ofPath(anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + AdminTalentController.DEACTIVE_PATH))
+            .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
+
             .mvcMatchers(HttpMethod.GET, ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_TALENT.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_TALENT.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_TALENT.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
-            .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_REJECT_TALENT.name())
 
