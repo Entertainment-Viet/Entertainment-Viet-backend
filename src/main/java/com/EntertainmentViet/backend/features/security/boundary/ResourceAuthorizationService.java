@@ -16,7 +16,22 @@ import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFe
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
 import com.EntertainmentViet.backend.features.organizer.api.organizer.OrganizerController;
 import com.EntertainmentViet.backend.features.organizer.api.shoppingcart.ShoppingCartController;
-import com.EntertainmentViet.backend.features.security.roles.*;
+import com.EntertainmentViet.backend.features.security.roles.AdminRole;
+import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
+import com.EntertainmentViet.backend.features.security.roles.BookingRole;
+import com.EntertainmentViet.backend.features.security.roles.CategoryRole;
+import com.EntertainmentViet.backend.features.security.roles.EventPositionRole;
+import com.EntertainmentViet.backend.features.security.roles.EventRole;
+import com.EntertainmentViet.backend.features.security.roles.FeedbackRole;
+import com.EntertainmentViet.backend.features.security.roles.JobOfferRole;
+import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
+import com.EntertainmentViet.backend.features.security.roles.PackageOrderRole;
+import com.EntertainmentViet.backend.features.security.roles.PackageRole;
+import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
+import com.EntertainmentViet.backend.features.security.roles.PositionApplicantRole;
+import com.EntertainmentViet.backend.features.security.roles.ReviewRole;
+import com.EntertainmentViet.backend.features.security.roles.ShoppingCartRole;
+import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.api.advertisement.AdvertisementController;
 import com.EntertainmentViet.backend.features.talent.api.feedback.TalentFeedbackController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageBookingController;
@@ -245,24 +260,26 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
             // Talent manage mapping
-            .mvcMatchers(HttpMethod.POST , ofPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.VERIFY_TALENT.name())
-            .mvcMatchers(HttpMethod.GET , ofPath(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.BROWSE_TALENT.name())
-            .mvcMatchers(HttpMethod.GET , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.READ_TALENT.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
 
             // Admin organizer mapping
-            .mvcMatchers(HttpMethod.GET , ofPath(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.POST , anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.PUT , anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_ORGANIZER.name())
-            .mvcMatchers(HttpMethod.DELETE , anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_REJECT_ORGANIZER.name())
 
             // Admin talent mapping
             .mvcMatchers(HttpMethod.GET, ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
@@ -271,8 +288,10 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_APPROVE_TALENT.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_TALENT.name())
-            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + "/{id}/deactive")
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_REJECT_TALENT.name())
 
             // Admin advertisement mapping
             .mvcMatchers(HttpMethod.GET, ofPath(AdminAdvertisementController.REQUEST_MAPPING_PATH))
