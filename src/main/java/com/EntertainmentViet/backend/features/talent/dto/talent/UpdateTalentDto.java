@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreToggleDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

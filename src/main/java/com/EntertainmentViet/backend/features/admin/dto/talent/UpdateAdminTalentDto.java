@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
 import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import com.EntertainmentViet.backend.features.scoresystem.dto.PriorityScoreDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,5 +30,5 @@ public class UpdateAdminTalentDto {
 
   private String extensions;
 
-  private List<ScoreOperandDto> scoreSystem;
+  private List<PriorityScoreDto> priorityScores;
 }

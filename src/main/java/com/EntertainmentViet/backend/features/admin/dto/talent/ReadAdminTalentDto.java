@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.admin.dto.talent;
 
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
+import com.EntertainmentViet.backend.features.scoresystem.dto.PriorityScoreDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class ReadAdminTalentDto extends ReadUserDto {
 
   private Set<CategoryDto> offerCategories;
 
-  private List<ScoreOperandDto> scoreSystem;
+  private List<PriorityScoreDto> priorityScores;
 
   private String fullName;
 

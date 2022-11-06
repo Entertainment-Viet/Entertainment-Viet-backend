@@ -5,8 +5,6 @@ import com.EntertainmentViet.backend.features.admin.dto.talent.AdminTalentMapper
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
-import com.EntertainmentViet.backend.features.talent.dto.talent.TalentMapper;
-import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

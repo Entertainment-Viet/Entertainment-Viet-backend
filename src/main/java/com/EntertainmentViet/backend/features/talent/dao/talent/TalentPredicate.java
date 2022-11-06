@@ -30,8 +30,9 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QBooking booking = QBooking.booking;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
-
   private final QPackage aPackage = QPackage.package$;
+  private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
+  private final QScoreType scoreType = QScoreType.scoreType;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -66,12 +67,18 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .fetch();
 
     // join offerCategories
-    queryFactory.selectFrom(talent).distinct()
+    talents = queryFactory.selectFrom(talent).distinct()
             .leftJoin(talent.offerCategories, category).fetchJoin()
             .leftJoin(category.parent).fetchJoin()
             .where(talent.in(talents))
             .fetch();
 
+    // join priorityScores
+    queryFactory.selectFrom(talent).distinct()
+        .leftJoin(talent.priorityScores, priorityScore).fetchJoin()
+        .leftJoin(priorityScore.scoreType, scoreType).fetchJoin()
+        .where(talent.in(talents))
+        .fetch();
     return null;
   }
 

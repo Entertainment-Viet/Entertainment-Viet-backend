@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.admin.dto.talent;
+package com.EntertainmentViet.backend.features.scoresystem.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ScoreToggleDto {
-  private String id;
-  private String name;
-  private Boolean active;
+public class ReadScoreRewardListDto {
+  private Long scoreTypeId;
+  private String scoreTypeName;
+  private String achievement;
+  private Boolean approved;
   private List<String> proof;
 }
