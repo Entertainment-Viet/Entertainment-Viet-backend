@@ -7,7 +7,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
-import com.EntertainmentViet.backend.features.common.dto.ScoreMapper;
+import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
@@ -56,7 +56,8 @@ public abstract class TalentMapper {
     @Mapping(target = "citizenId", source = "talentDetail.citizenId")
     @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
     @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
-    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToTalentDto.class)
+    @Mapping(target = "songs", source = "priorityScores", qualifiedBy = ScoreMapper.FromModelToScoreSongListDto.class)
+    @Mapping(target = "rewards", source = "priorityScores", qualifiedBy = ScoreMapper.FromModelToScoreRewardListDto.class)
     @Mapping(target = "avgReviewRate", source = ".", qualifiedByName = "toAvgReviewRate")
     @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
     @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
@@ -73,12 +74,13 @@ public abstract class TalentMapper {
     @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
-    @Mapping(target = "scoreSystem", ignore = true)
+    @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
     public abstract Talent fromUpdateDtoToModel(UpdateTalentDto updateTalentDto);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"songs", "rewards"})
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "reviews", ignore = true)
@@ -102,7 +104,7 @@ public abstract class TalentMapper {
     @Mapping(target = "talentDetail.fullName", source = "fullName")
     @Mapping(target = "talentDetail.citizenId", source = "citizenId")
     @Mapping(target = "talentDetail.citizenPaper", source = "citizenPaper")
-    @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromTalentDtoToJson.class)
+    @Mapping(target = "priorityScores", source = ".", qualifiedBy = ScoreMapper.FromKycDtoToModel.class)
     public abstract Talent fromKycDtoToModel(UpdateTalentKycInfoDto kycInfoDto);
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"password"})
@@ -118,7 +120,7 @@ public abstract class TalentMapper {
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", constant = "0")
     @Mapping(target = "offerCategories", ignore = true)
-    @Mapping(target = "scoreSystem", ignore = true)
+    @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "displayName", source = "username")
     @Mapping(target = "talentDetail.email", source = "email")
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);

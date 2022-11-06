@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import com.EntertainmentViet.backend.domain.businessLogic.TalentScoreCalculator;
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback_;
@@ -8,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
+import com.EntertainmentViet.backend.domain.entities.organizer.Event_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
@@ -16,7 +16,6 @@ import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.domain.values.ScoreInfo;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
@@ -27,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -34,7 +34,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Predicate;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -59,9 +58,8 @@ public class Talent extends User implements Advertisable {
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Package> packages;
 
-  @Type(type = "jsonb")
-  @Column(columnDefinition = "jsonb")
-  private Map<String, ScoreInfo> scoreSystem;
+  @OneToMany(mappedBy = PriorityScore_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<PriorityScore> priorityScores;
 
   // priority score for display in browsing page
   private Double finalScore;
@@ -194,6 +192,16 @@ public class Talent extends User implements Advertisable {
     aPackage.setTalent(null);
   }
 
+  public void addScore(PriorityScore score) {
+    priorityScores.add(score);
+    score.setTalent(this);
+  }
+
+  public void removeScore(PriorityScore score) {
+    priorityScores.remove(score);
+    score.setTalent(null);
+  }
+
   public Booking applyToEventPosition(EventOpenPosition position, JobDetail jobDetail, PaymentType paymentType) {
     Booking newApplication = Booking.builder()
         .talent(this)
@@ -217,57 +225,98 @@ public class Talent extends User implements Advertisable {
   }
 
   public Double obtainScore() {
-    return TalentScoreCalculator.calculateScore(getScoreSystem());
+    return priorityScores.stream().map(PriorityScore::calculateScore).mapToDouble(Double::doubleValue).sum();
   }
 
-  public void updateScore(Map<String, ScoreInfo> scoreData, boolean isAdmin) {
-    if (scoreSystem == null) {
-      setScoreSystem(new HashMap<>());
+  public void updateScore(List<PriorityScore> newScores, boolean isAdmin) {
+    if (priorityScores == null) {
+      setPriorityScores(new ArrayList<>());
     }
 
-    scoreData.forEach((key, value) -> {
-      if (scoreSystem.containsKey(key)) {
-        var currentScoreOperand = scoreSystem.get(key);
-        if (value.getName() != null && isAdmin) {
-          currentScoreOperand.setName(value.getName());
+    // Setup existing Score storage
+    Map<String, PriorityScore> scoreAchievementToExistSongs = new HashMap<>();
+    Map<Long, PriorityScore> scoreTypeIdToExistRewards = new HashMap<>();
+    for (PriorityScore curScore : priorityScores) {
+        if (curScore.checkIfSongScore()) {
+          scoreAchievementToExistSongs.put(curScore.getAchievement(), curScore);
+        } else {
+          scoreTypeIdToExistRewards.put(curScore.getScoreType().getId(), curScore);
         }
-        if (value.getRate() != null && isAdmin) {
-          currentScoreOperand.setRate(value.getRate());
+    }
+
+    List<String> finalSongId = new ArrayList<>();
+    List<Long> finalRewardScoreTypeId = new ArrayList<>();
+    newScores.forEach(score -> {
+      // Update Song List
+      if (score.checkIfSongScore()) {
+        var existSong = scoreAchievementToExistSongs.get(score.getAchievement());
+        // Song didn't exist yet
+        if (existSong == null) {
+          var newSongScore = PriorityScore.builder()
+              .talent(this)
+              .scoreType(score.getScoreType())
+              .proof(score.getProof())
+              .achievement(score.getAchievement())
+              .approved(isAdmin ? score.getApproved() : false)
+              .build();
+
+          // Add new Song to current Score List to check if there is duplicated Song, it will override the existing one.
+          scoreAchievementToExistSongs.put(score.getAchievement(), newSongScore);
+          // Add new Song to the final Score list
+          finalSongId.add(score.getAchievement());
+          addScore(newSongScore);
         }
-        if (value.getMultiply() != null && isAdmin) {
-          currentScoreOperand.setMultiply(value.getMultiply());
-        }
-        if (value.getActive() != null) {
-          currentScoreOperand.setActive(value.getActive());
-        }
-        if (value.getProof() != null) {
-          currentScoreOperand.getProof().addAll(value.getProof());
+        // If Song already exist
+        else {
+          existSong.setAchievement(score.getAchievement());
+          existSong.setProof(score.getProof());
+          existSong.setApproved(isAdmin ? score.getApproved() : false);
+          finalSongId.add(score.getAchievement());
         }
       }
-      // If the score option not exist yet, only add new option when it is admin
-      else if (isAdmin) {
-        createNewScore(key, value);
+      // Update for Reward List
+      else {
+        if (score.getScoreType() == null) {
+          log.error(String.format("Can not find score type for achievement %s of talent with uid '%s'", score.getAchievement(), getUid()));
+          return;
+        }
+        var existReward = scoreTypeIdToExistRewards.get(score.getScoreType().getId());
+        // If Reward didn't exist yet
+        if (existReward == null) {
+          var newRewardScore = PriorityScore.builder()
+              .talent(this)
+              .scoreType(score.getScoreType())
+              .proof(score.getProof())
+              .achievement(score.getAchievement())
+              .approved(isAdmin ? score.getApproved() : false)
+              .build();
+
+          // Add new Reward to current Score List to check if there is duplicated Reward, it will override the existing one.
+          scoreTypeIdToExistRewards.put(score.getScoreType().getId(), newRewardScore);
+          // Add new Reward to the current Score list
+          finalRewardScoreTypeId.add(score.getScoreType().getId());
+          addScore(newRewardScore);
+        }
+        // If Reward already exist
+        else {
+          existReward.setAchievement(score.getAchievement());
+          existReward.setProof(score.getProof());
+          existReward.setApproved(isAdmin ? score.getApproved() : false);
+          finalRewardScoreTypeId.add(score.getScoreType().getId());
+        }
       }
+
     });
+    // Remove unspecified Score
+    scoreAchievementToExistSongs.entrySet().stream()
+        .filter(entry -> !finalSongId.contains(entry.getKey()))
+        .forEach(entry -> removeScore(entry.getValue()));
+
+    scoreTypeIdToExistRewards.entrySet().stream()
+        .filter(entry -> !finalRewardScoreTypeId.contains(entry.getKey()))
+        .forEach(entry -> removeScore(entry.getValue()));
 
     setFinalScore(obtainScore());
-  }
-
-  public void createNewScore(String id, ScoreInfo scoreInfo) {
-    if (scoreInfo.getActive() == null) {
-      scoreInfo.setActive(false);
-    }
-    if (scoreInfo.getMultiply() == null) {
-      scoreInfo.setMultiply(1);
-    }
-    if (scoreInfo.getRate() == null) {
-      scoreInfo.setRate(1.0);
-    }
-    if (scoreInfo.getProof() == null) {
-      scoreInfo.setProof(new ArrayList<>());
-    }
-
-    scoreSystem.put(id, scoreInfo);
   }
 
   public void withdrawCash() {
@@ -330,16 +379,16 @@ public class Talent extends User implements Advertisable {
 
   public Talent updateInfoByAdmin(Talent newData) {
     updateInfo(newData);
-    if (newData.getScoreSystem() != null) {
-      updateScore (newData.getScoreSystem(), true);
+    if (newData.getPriorityScores() != null) {
+      updateScore(newData.getPriorityScores(), true);
     }
     return this;
   }
 
   public Talent requestKycInfoChange(Talent newData) {
     getTalentDetail().updateKycInfo(newData.getTalentDetail());
-    if (newData.getScoreSystem() != null) {
-      updateScore(newData.getScoreSystem(), false);
+    if (newData.getPriorityScores() != null) {
+      updateScore(newData.getPriorityScores(), false);
     }
     // If the user already verified, change the state back to pending waiting for admin approval
     if (!getUserState().equals(UserState.GUEST)) {

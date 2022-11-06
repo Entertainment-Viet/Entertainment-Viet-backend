@@ -1,14 +1,10 @@
 package com.EntertainmentViet.backend.domain.businessLogic;
 
 import com.EntertainmentViet.backend.domain.values.ScoreInfo;
-import com.EntertainmentViet.backend.features.admin.dto.talent.ScoreOperandDto;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 @UtilityClass
 @Slf4j

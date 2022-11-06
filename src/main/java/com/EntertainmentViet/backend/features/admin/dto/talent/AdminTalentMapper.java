@@ -9,7 +9,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
-import com.EntertainmentViet.backend.features.common.dto.ScoreMapper;
+import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReviewMapper;
@@ -34,7 +34,8 @@ import java.util.stream.Collectors;
     PackageMapper.class,
     CategoryMapper.class,
     ScoreMapper.class,
-    LocationAddressMapper.class
+    LocationAddressMapper.class,
+    ScoreMapper.class
 },
     config = MappingConfig.class)
 public abstract class AdminTalentMapper {
@@ -58,7 +59,6 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "citizenId", source = "talentDetail.citizenId")
   @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
   @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
-  @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromJsonToAdminDto.class)
   public abstract ReadAdminTalentDto toAdminDto(Talent talent);
 
   @Mapping(target = "id", ignore = true)
@@ -77,7 +77,6 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "talentDetail.address", source = "address")
   @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-  @Mapping(target = "scoreSystem", source = "scoreSystem", qualifiedBy = ScoreMapper.FromAdminDtoToJson.class)
   @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
   public abstract Talent toModel(UpdateAdminTalentDto updateAdminTalentDto);
 
