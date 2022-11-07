@@ -1,10 +1,14 @@
 package com.EntertainmentViet.backend.features.organizer.dao.event;
 
-import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
-import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
+import com.EntertainmentViet.backend.domain.entities.organizer.Event;
+import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -12,12 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> implements EventRepository {

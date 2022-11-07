@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.common.dao;
 
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
+import javax.persistence.EntityManager;
+
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -10,15 +11,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-
 @Component
 public abstract class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements BaseRepository<T, ID> {
 
   private final EntityManager em;
   protected final JPAQueryFactory queryFactory;
 
-  public BaseRepositoryImpl(Class<T> domainClass, EntityManager em) {
+  protected BaseRepositoryImpl(Class<T> domainClass, EntityManager em) {
     super(domainClass, em);
     this.em = em;
     this.queryFactory = new JPAQueryFactory(em);
