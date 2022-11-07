@@ -1,8 +1,12 @@
 package com.EntertainmentViet.backend.features.talent.api.talent;
 
-import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
-import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
@@ -19,12 +23,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = TalentController.REQUEST_MAPPING_PATH)
@@ -45,6 +50,10 @@ public class TalentController {
   @GetMapping
   public CompletableFuture<ResponseEntity<CustomPage<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
                                                                               @ParameterObject ListTalentParamDto paramDto) {
+    if (QueryParamsUtils.isCurrencyNotProvided(paramDto)) {
+      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
+      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(paramDto, pageable)));
   }
 

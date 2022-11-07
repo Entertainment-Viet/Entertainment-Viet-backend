@@ -26,7 +26,7 @@ public abstract class EventMapper {
     @Mapping(target = "occurrenceStartTime", source = "eventDetail.occurrenceStartTime")
     @Mapping(target = "occurrenceEndTime", source = "eventDetail.occurrenceEndTime")
     @Mapping(target = "legalPaper", source = "eventDetail.legalPaper")
-    @Mapping(target = "openPositions", source = "openPositions", qualifiedByName = "toEventOpenPositions")
+    @Mapping(target = "openPositionsCount", source = "openPositions", qualifiedByName = "toEventOpenPositions")
     @Mapping(target = "description", source = "eventDetail.description", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)

@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
+import com.EntertainmentViet.backend.domain.businessLogic.TalentScoreCalculator;
 import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemUtils;
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback;
@@ -19,6 +20,7 @@ import com.EntertainmentViet.backend.domain.values.ScoreInfo;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
+import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
@@ -51,12 +53,14 @@ public class Talent extends User implements Advertisable {
   private List<Review> reviews;
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<Booking> bookings;
 
   @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TalentFeedback> feedbacks;
 
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<Package> packages;
 
   @OneToMany(mappedBy = PriorityScore_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)

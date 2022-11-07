@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
+import com.querydsl.core.annotations.QueryInit;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,7 @@ public class Event extends Identifiable implements Advertisable {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
+  @QueryInit("*.*")
   private Organizer organizer;
 
   @OneToOne(mappedBy = EventDetail_.EVENT, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
@@ -49,6 +51,7 @@ public class Event extends Identifiable implements Advertisable {
   private EventDetail eventDetail;
 
   @OneToMany(mappedBy = EventOpenPosition_.EVENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<EventOpenPosition> openPositions;
 
   public void addOpenPosition(EventOpenPosition eventOpenPosition) {

@@ -35,5 +35,5 @@ public class ReadEventDto extends IdentifiableDto {
 
   private List<String> legalPaper;
 
-  private Integer openPositions;
+  private Integer openPositionsCount;
 }

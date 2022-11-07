@@ -20,10 +20,10 @@ import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.domain.values.Price_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
@@ -60,11 +60,8 @@ public class JobDetail implements Serializable {
   private WorkType workType;
 
   @Embedded
-  @AttributeOverrides({
-          @AttributeOverride(name = Price_.MAX, column = @Column(name = Price_.MAX)),
-          @AttributeOverride(name = Price_.MIN, column = @Column(name = Price_.MIN)),
-          @AttributeOverride(name = Price_.CURRENCY, column = @Column(name = Price_.CURRENCY))
-  })
+  @NotNull
+  @QueryInit("*.*")
   private Price price;
 
   @NotNull

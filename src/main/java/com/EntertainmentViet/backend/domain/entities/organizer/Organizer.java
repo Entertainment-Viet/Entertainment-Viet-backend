@@ -1,5 +1,17 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
@@ -7,27 +19,19 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
+import com.querydsl.core.annotations.QueryInit;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.persistence.*;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -39,12 +43,14 @@ import java.util.stream.Collectors;
 public class Organizer extends User {
 
   @OneToMany(mappedBy = JobOffer_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<JobOffer> jobOffers;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Event> events;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<Booking> bookings;
 
   @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)

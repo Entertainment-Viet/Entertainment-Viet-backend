@@ -4,10 +4,12 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = EventController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
+@Slf4j
 public class EventController {
 
   public static final String REQUEST_MAPPING_PATH = "/events";
@@ -29,6 +32,10 @@ public class EventController {
   @GetMapping
   public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findAll(@ParameterObject Pageable pageable,
                                                                              @ParameterObject ListEventParamDto paramDto) {
+    if (QueryParamsUtils.isCurrencyNotProvided(paramDto)) {
+      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
+      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(eventService.findAll(paramDto, pageable)));
   }
 

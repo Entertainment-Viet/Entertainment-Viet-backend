@@ -28,7 +28,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "location", source = "location", qualifiedBy = LocationAddressMapper.ToReadDto.class)
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
-    @Mapping(target = "price", source = "price", qualifiedBy = PriceMapper.ToReadDto.class)
     public abstract ReadJobDetailDto toDto(JobDetail jobDetail);
 
     @Mapping(target = "id", ignore = true)
@@ -36,7 +35,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
-    //@Mapping(target = "price", source = "price", qualifiedBy = PriceMapper.ToReadDto.class)
     public abstract JobDetail fromCreateDtoToModel(CreateJobDetailDto jobDetailDto);
 
     @Mapping(target = "id", ignore = true)
@@ -44,7 +42,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
-    //@Mapping(target = "price", source = "price", qualifiedBy = PriceMapper.ToReadDto.class)
     public abstract JobDetail fromUpdateDtoToModel(UpdateJobDetailDto jobDetailDto);
 
     @Named("toWorkType")

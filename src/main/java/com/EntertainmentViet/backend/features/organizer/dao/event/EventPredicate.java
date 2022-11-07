@@ -10,15 +10,12 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QEventDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.standardTypes.Currency;
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -93,134 +90,49 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
               event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not()
       );
     }
-
-    if (paramDto.getMax() != null && paramDto.getMin() == null) {
+    if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(Currency.valueOf(paramDto.getCurrency())
+                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
                               ))),
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.max.eq(paramDto.getMax()
+                              eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
                               )))
       );
     }
-    else if (paramDto.getMax() == null && paramDto.getMin() != null) {
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              event.openPositions.any().jobOffer.jobDetail.price.currency.stringValue().eq(paramDto.getCurrency()),
-              event.openPositions.any().jobOffer.jobDetail.price.min.goe(paramDto.getMin())
+              event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
+                              ))),
+              event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                              eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
+                              )))
       );
     }
-    else if (paramDto.getMax() != null && paramDto.getMin() != null) {
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              jobDetail.price.currency.stringValue().eq(paramDto.getCurrency()),
-              jobDetail.price.min.goe(paramDto.getMin()),
-              jobDetail.price.max.loe(paramDto.getMax())
+              event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
+                              ))),
+              event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                              eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
+                              ))),
+              event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                              eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
+                              )))
       );
     }
-
-    if (paramDto.getCity() != null && paramDto.getDistrict() != null &&
-            paramDto.getStreet() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .city(paramDto.getCity())
-                              .district(paramDto.getDistrict())
-                              .street(paramDto.getStreet())
-                              .build()
-              )
-      );
-    }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() != null &&
-            paramDto.getStreet() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .city(paramDto.getCity())
-                              .district(paramDto.getDistrict())
-                              .build()
-              )
-      );
-    }
-
-    else if (paramDto.getCity() == null && paramDto.getDistrict() != null &&
-            paramDto.getStreet() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .district(paramDto.getDistrict())
-                              .street(paramDto.getStreet())
-                              .build()
-              )
-      );
-    }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() == null &&
-            paramDto.getStreet() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .city(paramDto.getCity())
-                              .street(paramDto.getStreet())
-                              .build()
-              )
-      );
-    }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() == null &&
-            paramDto.getStreet() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .city(paramDto.getCity())
-                              .build()
-              )
-      );
-    }
-    else if (paramDto.getCity() == null && paramDto.getDistrict() != null &&
-            paramDto.getStreet() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .district(paramDto.getDistrict())
-                              .build()
-              )
-      );
-    }
-    else if (paramDto.getCity() == null && paramDto.getDistrict() == null &&
-            paramDto.getStreet() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              Expressions.booleanTemplate(
-                      "json_contains_key({0}, {1})",
-                      jobDetail.location,
-                      LocationAddress.builder()
-                              .street(paramDto.getStreet())
-                              .build()
-              )
-      );
-    }
-
     return predicate;
   }
 
