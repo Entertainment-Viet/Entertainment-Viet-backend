@@ -1,6 +1,22 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import com.EntertainmentViet.backend.domain.businessLogic.TalentScoreCalculator;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.OptionalDouble;
+import java.util.Set;
+import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.validation.constraints.NotNull;
+
 import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemUtils;
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback;
@@ -9,14 +25,12 @@ import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
-import com.EntertainmentViet.backend.domain.entities.organizer.Event_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.domain.values.ScoreInfo;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
@@ -29,14 +43,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.*;
 
 @SuperBuilder
 @NoArgsConstructor

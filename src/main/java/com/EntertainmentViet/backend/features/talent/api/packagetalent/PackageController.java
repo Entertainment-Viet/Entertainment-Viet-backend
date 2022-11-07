@@ -48,7 +48,7 @@ public class PackageController {
   public CompletableFuture<ResponseEntity<CustomPage<ReadPackageDto>>> findAll(@PathVariable("talent_uid") UUID talentUid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListPackageParamDto paramDto) {
-    if (QueryParamsUtils.isCurrencyNotProvided(paramDto)) {
+    if (QueryParamsUtils.isInvalidParams(paramDto)) {
       log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
       return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
     }

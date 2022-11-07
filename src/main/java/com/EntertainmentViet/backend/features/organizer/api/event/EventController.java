@@ -32,7 +32,7 @@ public class EventController {
   @GetMapping
   public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findAll(@ParameterObject Pageable pageable,
                                                                              @ParameterObject ListEventParamDto paramDto) {
-    if (QueryParamsUtils.isCurrencyNotProvided(paramDto)) {
+    if (QueryParamsUtils.isInvalidParams(paramDto)) {
       log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
       return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
     }

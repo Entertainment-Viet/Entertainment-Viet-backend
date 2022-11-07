@@ -44,7 +44,7 @@ public class OrganizerEventController {
   public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
                                                                                         @ParameterObject Pageable pageable,
                                                                                         @ParameterObject ListEventParamDto paramDto) {
-    if (QueryParamsUtils.isCurrencyNotProvided(paramDto)) {
+    if (QueryParamsUtils.isInvalidParams(paramDto)) {
       log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
       return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
     }
