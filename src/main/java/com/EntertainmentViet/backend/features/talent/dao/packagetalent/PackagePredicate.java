@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.dao.packagetalent;
 
+import java.util.UUID;
+
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
@@ -15,8 +17,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -84,6 +84,28 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
       predicate = ExpressionUtils.allOf(
           predicate,
           talentPackage.orders.size().eq(paramDto.getOrderCount())
+      );
+    }
+    if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
+      );
+    }
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice())
+      );
+    }
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice()),
+              talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
       );
     }
 

@@ -1,10 +1,18 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
+import java.util.UUID;
+
 import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.entities.talent.*;
+import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
+import com.EntertainmentViet.backend.domain.entities.talent.QPriorityScore;
+import com.EntertainmentViet.backend.domain.entities.talent.QReview;
+import com.EntertainmentViet.backend.domain.entities.talent.QScoreType;
+import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
+import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
+import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
@@ -16,8 +24,6 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -133,6 +139,50 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               .or(booking.jobDetail.performanceEndTime.between(paramDto.getStartTime(), paramDto.getEndTime()))
                       )
               ).not()
+      );
+    }
+
+    if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
+                              ))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
+                              )))
+      );
+    }
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
+                              ))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
+                              )))
+      );
+    }
+    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
+                              ))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
+                              ))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
+                              )))
       );
     }
     return predicate;

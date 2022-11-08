@@ -1,6 +1,12 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
@@ -15,12 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = OrganizerEventController.REQUEST_MAPPING_PATH)
@@ -36,6 +44,10 @@ public class OrganizerEventController {
   public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findByOrganizerUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid,
                                                                                         @ParameterObject Pageable pageable,
                                                                                         @ParameterObject ListEventParamDto paramDto) {
+    if (QueryParamsUtils.isInvalidParams(paramDto)) {
+      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
+      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
         eventService.findByOrganizerUid(organizerUid, paramDto, pageable)
     )));

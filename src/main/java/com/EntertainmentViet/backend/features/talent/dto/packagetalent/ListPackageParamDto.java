@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,4 +17,10 @@ public class ListPackageParamDto {
 
   // Number of order
   private Integer orderCount;
+
+  private Double minPrice;
+
+  private Double maxPrice;
+
+  private Currency currency;
 }

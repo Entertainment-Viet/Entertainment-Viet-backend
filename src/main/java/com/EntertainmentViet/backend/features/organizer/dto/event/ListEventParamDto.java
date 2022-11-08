@@ -1,10 +1,11 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
+import java.time.OffsetDateTime;
+
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.OffsetDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -22,4 +23,16 @@ public class ListEventParamDto {
 
   // organizer name
   private String organizer;
+
+  private Double maxPrice;
+
+  private Double minPrice;
+
+  private Currency currency;
+
+  private String city;
+
+  private String district;
+
+  private String street;
 }

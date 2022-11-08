@@ -12,7 +12,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.time.Duration;
 
 @Mapper(uses = {
         CategoryMapper.class,
@@ -24,7 +23,7 @@ import java.time.Duration;
     config = MappingConfig.class)
 public abstract class JobDetailMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = { "id" })
     @Mapping(target = "workType", source = "workType.i18nKey")
     @Mapping(target = "location", source = "location", qualifiedBy = LocationAddressMapper.ToReadDto.class)
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)

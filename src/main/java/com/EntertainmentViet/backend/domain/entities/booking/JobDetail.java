@@ -1,8 +1,29 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
+import java.io.Serializable;
+import java.time.OffsetDateTime;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
-import com.EntertainmentViet.backend.domain.values.*;
+import com.EntertainmentViet.backend.domain.values.Category;
+import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.domain.values.UserInputText;
+import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
@@ -11,22 +32,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Enumerated;
-import javax.persistence.Embedded;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -56,6 +61,7 @@ public class JobDetail implements Serializable {
 
   @Embedded
   @NotNull
+  @QueryInit("*.*")
   private Price price;
 
   @NotNull

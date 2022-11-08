@@ -1,5 +1,20 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
+import java.time.OffsetDateTime;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
+
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
@@ -9,6 +24,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
@@ -18,10 +34,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -64,9 +76,11 @@ public class Booking extends Identifiable implements Auditable {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @JoinColumn(name = "job_detail_id", referencedColumnName = JobDetail_.ID)
   @NotNull
+  @QueryInit("*.*")
   private JobDetail jobDetail;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @QueryInit("*.*")
   private Package talentPackage;
 
   @Enumerated(EnumType.STRING)
