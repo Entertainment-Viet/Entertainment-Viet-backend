@@ -44,7 +44,7 @@ public class EventDetail {
   @MapsId
   private Event event;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
   @QueryInit("*.*")
   private LocationAddress occurrenceAddress;
