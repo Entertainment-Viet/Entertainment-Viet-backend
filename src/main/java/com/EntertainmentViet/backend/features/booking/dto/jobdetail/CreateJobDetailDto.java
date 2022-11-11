@@ -1,14 +1,13 @@
 package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import javax.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -34,7 +33,7 @@ public class CreateJobDetailDto {
   @NotNull
   private Integer performanceCount;
 
-  private LocationAddress location;
+  private UUID locationAddressId;
 
   private String note;
 

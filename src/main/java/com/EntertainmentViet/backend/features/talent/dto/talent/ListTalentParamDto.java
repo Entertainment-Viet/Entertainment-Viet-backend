@@ -3,7 +3,6 @@ package com.EntertainmentViet.backend.features.talent.dto.talent;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +25,7 @@ public class ListTalentParamDto {
 
     private Double minPrice;
 
-    private Currency currency;
+    private String currency;
 
     private String city;
 

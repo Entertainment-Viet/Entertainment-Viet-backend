@@ -37,6 +37,8 @@ dependencies {
 	implementation "com.vladmihalcea:hibernate-types-55:${hibernateTypeVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
 	implementation "org.flywaydb:flyway-core"
+	implementation "com.bedatadriven:jackson-datatype-jts:2.4"
+	implementation 'org.wololo:jts2geojson:0.18.1'
 	annotationProcessor 'org.hibernate:hibernate-jpamodelgen'
 
 	// QueryDsl

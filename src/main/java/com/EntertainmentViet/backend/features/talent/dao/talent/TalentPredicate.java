@@ -13,6 +13,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.QScoreType;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
@@ -147,8 +148,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
@@ -160,8 +160,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -173,8 +172,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -183,6 +181,33 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
                               )))
+      );
+    }
+    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%"))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
+      );
+    }
+    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%")))
+      );
+    }
+    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
       );
     }
     return predicate;

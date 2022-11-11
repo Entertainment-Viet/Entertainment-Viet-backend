@@ -10,7 +10,9 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QEventDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -32,12 +34,16 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
+
   private final QCategory category = QCategory.category;
+
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(event).distinct()
-        .leftJoin(event.eventDetail, eventDetail).fetchJoin()
+            .leftJoin(event.eventDetail, eventDetail).fetchJoin()
+            .leftJoin(eventDetail.occurrenceAddress, locationAddress).fetchJoin()
         .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
@@ -95,8 +101,8 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
               predicate,
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              eventOpenPosition.jobOffer.jobDetail.price.currency
+                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
                               eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
@@ -108,8 +114,8 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
               predicate,
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              eventOpenPosition.jobOffer.jobDetail.price.currency
+                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
                               eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -121,8 +127,8 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
               predicate,
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              eventOpenPosition.jobOffer.jobDetail.price.currency
+                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               event.openPositions.any().in(
                       JPAExpressions.selectFrom(eventOpenPosition).where(
                               eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -132,6 +138,22 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
                               eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
                               )))
       );
+    }
+    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              event.eventDetail.occurrenceAddress.city.like("%" + paramDto.getCity() + "%"),
+              event.eventDetail.occurrenceAddress.district.like("%" + paramDto.getDistrict() + "%"));
+    }
+    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              event.eventDetail.occurrenceAddress.city.like("%" + paramDto.getCity() + "%"));
+    }
+    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              event.eventDetail.occurrenceAddress.district.like("%" + paramDto.getDistrict() + "%"));
     }
     return predicate;
   }

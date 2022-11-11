@@ -14,11 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import com.EntertainmentViet.backend.domain.values.LocationAddress_;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
@@ -73,8 +75,9 @@ public class JobDetail implements Serializable {
   @NotNull
   private Integer performanceCount;
 
-  @Type(type = "jsonb")
-  @Column(columnDefinition = "jsonb")
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
+  @QueryInit("*.*")
   private LocationAddress location;
 
   @Embedded

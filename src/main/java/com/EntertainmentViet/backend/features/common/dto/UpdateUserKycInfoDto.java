@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class UpdateUserKycInfoDto {
 
   private String phoneNumber;
 
-  private LocationAddress address;
+  private UUID address;
 
   private String taxId;
 
