@@ -69,7 +69,7 @@ public class Talent extends User implements Advertisable {
 
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
-  private List<Package> packages;
+  private Set<Package> packages;
 
   @OneToMany(mappedBy = PriorityScore_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PriorityScore> priorityScores;

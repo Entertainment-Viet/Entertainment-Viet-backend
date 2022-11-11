@@ -82,6 +82,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
             .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
             .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
             .leftJoin(aPackage.orders, booking).fetchJoin()
+            .where(talent.in(talents))
             .fetch();
 
     // join review
