@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.domain.values;
 
-import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,10 +17,10 @@ import org.locationtech.jts.geom.Point;
 @Getter
 @Setter
 @Entity
-public class LocationAddress extends Identifiable implements Serializable {
+public class LocationAddress extends Identifiable {
 
   @Id
-  @GeneratedValue()
+  @GeneratedValue
   private Long id;
 
   private String street;

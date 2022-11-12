@@ -1,14 +1,15 @@
 package com.EntertainmentViet.backend.features.booking.boundary.location;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.EntertainmentViet.backend.features.booking.dao.locationaddress.LocationAddressRepository;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.ListLocationAddressResponseDto;
 import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
 import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +21,13 @@ public class LocationAddressService implements LocationAddressBoundary {
 	private final LocationAddressRepository locationAddressRepository;
 
 	@Override
-	public List<LocationAddressDto> findAll() {
-		return locationAddressRepository.findAll().stream().map(locationAddressMapper::toDto).collect(Collectors.toList());
+	public ListLocationAddressResponseDto findAll(Pageable pageable) {
+		var locationAddressList =
+						locationAddressRepository.findAll().stream().map(locationAddressMapper::toDto).toList();
+		var dataPage = RestUtils.getPageEntity(locationAddressList, pageable);
+		return ListLocationAddressResponseDto.builder()
+						.locationAddresses(RestUtils.toPageResponse(dataPage))
+						.build();
 	}
 
 	@Override

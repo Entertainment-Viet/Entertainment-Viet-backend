@@ -10,6 +10,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -32,6 +33,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   private final QCategory parentCategory = new QCategory("parent");
 
   private final QOrganizer organizer = QOrganizer.organizer;
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -40,6 +42,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     var packages = queryFactory.selectFrom(talentPackage).distinct()
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
           .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();

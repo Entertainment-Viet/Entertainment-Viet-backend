@@ -2,9 +2,6 @@ package com.EntertainmentViet.backend.features.booking.dto.booking;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.entities.talent.Package;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
@@ -12,16 +9,11 @@ import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetai
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
-import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.security.roles.BookingRole;
-import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
 
 @Mapper(uses = {
     JobDetailMapper.class,

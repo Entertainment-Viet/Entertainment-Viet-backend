@@ -15,6 +15,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -40,6 +41,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QPackage aPackage = QPackage.package$;
   private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
   private final QScoreType scoreType = QScoreType.scoreType;
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -50,6 +52,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
 

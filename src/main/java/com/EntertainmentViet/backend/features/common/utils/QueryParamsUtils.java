@@ -1,7 +1,3 @@
-/*
- * Author : AdNovum Informatik AG
- */
-
 package com.EntertainmentViet.backend.features.common.utils;
 
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
@@ -29,8 +25,8 @@ public class QueryParamsUtils {
 						priceRangeNotValid(paramDto.getMaxPrice(), paramDto.getMinPrice());
 	}
 
-	public boolean currencyNotProvided(String currency, Double maxPrice, Double minPrice) {
-		return currency == null && (maxPrice != null || minPrice != null);
+	public boolean currencyNotProvided(String currencyI18n, Double maxPrice, Double minPrice) {
+		return currencyI18n == null && (maxPrice != null || minPrice != null);
 	}
 
 	public boolean priceRangeNotValid(Double maxPrice, Double minPrice) {

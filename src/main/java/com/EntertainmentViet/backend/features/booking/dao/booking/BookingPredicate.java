@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dao.booking;
 
+import java.util.UUID;
+
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
@@ -10,6 +12,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
@@ -19,8 +22,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QBooking bookingOfTalent =  new QBooking("bookingOfTalent");
   private final QCategory category = QCategory.category;
   private final QCategory parentCategory = new QCategory("parent");
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -49,6 +51,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .leftJoin(organizer.bookings, bookingOfOrganizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .where(booking.in(bookingList))
         .fetch();

@@ -53,7 +53,7 @@ public abstract class UserDetail {
 
   private String email;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
   @QueryInit("*.*")
   private LocationAddress address;

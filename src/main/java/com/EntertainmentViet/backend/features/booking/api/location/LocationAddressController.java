@@ -1,12 +1,14 @@
 package com.EntertainmentViet.backend.features.booking.api.location;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.EntertainmentViet.backend.features.booking.boundary.location.LocationAddressBoundary;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.ListLocationAddressResponseDto;
 import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +29,12 @@ public class LocationAddressController {
 	private final LocationAddressBoundary locationService;
 
 	@GetMapping
-	public CompletableFuture<List<LocationAddressDto>> findAll() {
-		return CompletableFuture.completedFuture(locationService.findAll());
+	public CompletableFuture<ResponseEntity<ListLocationAddressResponseDto>> findAll(
+					@ParameterObject Pageable pageable
+	) {
+		return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+						locationService.findAll(pageable))
+		);
 	}
 
 	@GetMapping(value = "/{uid}")
