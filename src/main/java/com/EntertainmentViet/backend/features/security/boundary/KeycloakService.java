@@ -1,17 +1,22 @@
 package com.EntertainmentViet.backend.features.security.boundary;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.config.properties.AuthenticationProperties;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
+import com.EntertainmentViet.backend.features.security.dto.GroupInfoDto;
 import com.EntertainmentViet.backend.features.security.dto.LoginInfoDto;
 import com.EntertainmentViet.backend.features.security.dto.TokenDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -47,10 +52,10 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<CreatedKeycloakUserDto> request = new HttpEntity<>(userDto, headers);
 
     try {
-      //HttpEntity<Void> response = keycloakRestTemplate.exchange(createdUserUrl, HttpMethod.POST, request, Void.class);
-      //String path = response.getHeaders().getLocation().getPath();
-      //String uuidStr = path.substring(path.lastIndexOf('/') +1);
-      //return Optional.of(UUID.fromString(uuidStr));
+      HttpEntity<Void> response = keycloakRestTemplate.exchange(createdUserUrl, HttpMethod.POST, request, Void.class);
+      String path = response.getHeaders().getLocation().getPath();
+      String uuidStr = path.substring(path.lastIndexOf('/') +1);
+      return Optional.of(UUID.fromString(uuidStr));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         throw new KeycloakUnauthorizedException();
@@ -97,12 +102,12 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<CreatedKeycloakUserDto> request = new HttpEntity<>(null, headers);
 
     try {
-      //List<GroupInfoDto> groupsResponse = keycloakRestTemplate.exchange(
-      //    groupsUrl, HttpMethod.GET, request, new ParameterizedTypeReference<List<GroupInfoDto>>(){}).getBody();
-      //
-      //for (GroupInfoDto group : groupsResponse) {
-      //  KeycloakConstant.groupToId.put(group.getName(), UUID.fromString(group.getId()));
-      //}
+      List<GroupInfoDto> groupsResponse = keycloakRestTemplate.exchange(
+          groupsUrl, HttpMethod.GET, request, new ParameterizedTypeReference<List<GroupInfoDto>>(){}).getBody();
+
+      for (GroupInfoDto group : groupsResponse) {
+        KeycloakConstant.groupToId.put(group.getName(), UUID.fromString(group.getId()));
+      }
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         log.error("Can not setup KeycloakConstant due to unauthorized", new KeycloakUnauthorizedException());
@@ -137,7 +142,7 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
     try {
-      //return Optional.ofNullable(keycloakRestTemplate.postForObject(loginUrl, request, TokenDto.class));
+      return Optional.ofNullable(keycloakRestTemplate.postForObject(loginUrl, request, TokenDto.class));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         log.error("Can not authorized to keycloak server. " +
