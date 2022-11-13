@@ -1,10 +1,5 @@
-/*
- * Author : AdNovum Informatik AG
- */
-
 package com.EntertainmentViet.backend.features.common.utils;
 
-import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
@@ -30,8 +25,8 @@ public class QueryParamsUtils {
 						priceRangeNotValid(paramDto.getMaxPrice(), paramDto.getMinPrice());
 	}
 
-	public boolean currencyNotProvided(Currency currency, Double maxPrice, Double minPrice) {
-		return currency == null && (maxPrice != null || minPrice != null);
+	public boolean currencyNotProvided(String currencyI18n, Double maxPrice, Double minPrice) {
+		return currencyI18n == null && (maxPrice != null || minPrice != null);
 	}
 
 	public boolean priceRangeNotValid(Double maxPrice, Double minPrice) {

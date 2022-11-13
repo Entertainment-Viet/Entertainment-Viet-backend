@@ -1,9 +1,22 @@
 package com.EntertainmentViet.backend.domain.entities;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
+
 import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import com.EntertainmentViet.backend.domain.values.LocationAddress_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +24,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
-import javax.persistence.*;
 
 @MappedSuperclass
 @Getter
@@ -42,8 +53,9 @@ public abstract class UserDetail {
 
   private String email;
 
-  @Type(type = "jsonb")
-  @Column(columnDefinition = "jsonb")
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
+  @QueryInit("*.*")
   private LocationAddress address;
 
   private String taxId;

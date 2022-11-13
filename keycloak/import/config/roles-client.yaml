@@ -279,6 +279,9 @@
     "name": "READ_CATEGORY"
   },
   {
+    "name": "READ_LOCATION"
+  },
+  {
     "name": "ROOT"
   }
 ]

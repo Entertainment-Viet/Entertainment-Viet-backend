@@ -46,8 +46,9 @@ public class Event extends Identifiable implements Advertisable {
   @QueryInit("*.*")
   private Organizer organizer;
 
-  @OneToOne(mappedBy = EventDetail_.EVENT, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+  @OneToOne(mappedBy = EventDetail_.EVENT, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @PrimaryKeyJoinColumn
+  @QueryInit("*.*")
   private EventDetail eventDetail;
 
   @OneToMany(mappedBy = EventOpenPosition_.EVENT, cascade = CascadeType.ALL, orphanRemoval = true)

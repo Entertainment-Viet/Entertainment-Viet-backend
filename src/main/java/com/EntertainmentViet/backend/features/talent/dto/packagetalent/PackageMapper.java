@@ -1,27 +1,27 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
+import java.util.Set;
+
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.util.Set;
-import java.util.UUID;
-
 @Mapper(uses = {
         JobDetailMapper.class,
         BookingMapper.class,
         CategoryMapper.class,
-        EntityMapper.class
-    },
+        EntityMapper.class,
+        LocationAddressMapper.class,
+},
     config = MappingConfig.class)
 public abstract class PackageMapper {
 

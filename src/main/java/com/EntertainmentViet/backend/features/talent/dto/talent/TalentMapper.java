@@ -1,28 +1,31 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
-import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
-import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
+import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(uses = {
         ExtensionsMapper.class,
@@ -46,7 +49,7 @@ public abstract class TalentMapper {
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
     @Mapping(target = "email", source = "talentDetail.email")
-    @Mapping(target = "address", source = "talentDetail.address", qualifiedBy = LocationAddressMapper.ToReadDto.class)
+    @Mapping(target = "address", source = "talentDetail.address")
     @Mapping(target = "taxId", source = "talentDetail.taxId")
     @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
     @Mapping(target = "bankAccountOwner", source = "talentDetail.bankAccountOwner")
@@ -95,7 +98,7 @@ public abstract class TalentMapper {
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
-    @Mapping(target = "talentDetail.address", source = "address")
+    @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationAddressMapper.ToLocationAddress.class)
     @Mapping(target = "talentDetail.taxId", source = "taxId")
     @Mapping(target = "talentDetail.bankAccountNumber", source = "bankAccountNumber")
     @Mapping(target = "talentDetail.bankAccountOwner", source = "bankAccountOwner")

@@ -2,8 +2,8 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class UpdateEventDto {
 
   private Boolean isActive;
 
-  private LocationAddress occurrenceAddress;
+  private UUID occurrenceAddress;
 
   private OffsetDateTime occurrenceStartTime;
 

@@ -1,13 +1,12 @@
 package com.EntertainmentViet.backend.features.booking.dto.jobdetail;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -27,7 +26,7 @@ public class UpdateJobDetailDto {
 
   private Integer performanceCount;
 
-  private LocationAddress location;
+  private UUID locationAddressId;
 
   private String note;
 

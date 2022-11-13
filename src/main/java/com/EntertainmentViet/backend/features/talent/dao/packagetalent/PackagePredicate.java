@@ -8,7 +8,9 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -31,6 +33,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   private final QCategory parentCategory = new QCategory("parent");
 
   private final QOrganizer organizer = QOrganizer.organizer;
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -39,6 +42,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     var packages = queryFactory.selectFrom(talentPackage).distinct()
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
           .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();
@@ -89,23 +93,42 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
               talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
       );
     }
     else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
               talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice())
       );
     }
     else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.price.currency.eq(paramDto.getCurrency()),
+              talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
               talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice()),
               talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
+      );
+    }
+    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%"),
+              talentPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")
+      );
+    }
+    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%")
+      );
+    }
+    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talentPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")
       );
     }
 
