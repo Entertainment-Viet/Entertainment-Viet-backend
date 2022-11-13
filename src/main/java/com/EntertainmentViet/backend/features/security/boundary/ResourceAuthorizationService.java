@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.features.admin.api.talent.AdminTalentContro
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
+import com.EntertainmentViet.backend.features.booking.api.location.LocationAddressController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
@@ -24,6 +25,7 @@ import com.EntertainmentViet.backend.features.security.roles.EventPositionRole;
 import com.EntertainmentViet.backend.features.security.roles.EventRole;
 import com.EntertainmentViet.backend.features.security.roles.FeedbackRole;
 import com.EntertainmentViet.backend.features.security.roles.JobOfferRole;
+import com.EntertainmentViet.backend.features.security.roles.LocationAddressRole;
 import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import com.EntertainmentViet.backend.features.security.roles.PackageOrderRole;
 import com.EntertainmentViet.backend.features.security.roles.PackageRole;
@@ -316,6 +318,12 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
+
+            // Location address mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(LocationAddressController.REQUEST_MAPPING_PATH))
+            .hasAuthority(LocationAddressRole.READ_LOCATION.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(LocationAddressController.REQUEST_MAPPING_PATH))
+            .hasAuthority(LocationAddressRole.READ_LOCATION.name())
 
             // Spring docs mapping
             .mvcMatchers(HttpMethod.GET, anyPathAfter("/swagger-ui"))

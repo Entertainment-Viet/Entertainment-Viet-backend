@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class ReadEventDto extends IdentifiableDto {
 
   private Boolean isActive;
 
-  private LocationAddress occurrenceAddress;
+  private LocationAddressDto occurrenceAddress;
 
   private OffsetDateTime occurrenceStartTime;
 

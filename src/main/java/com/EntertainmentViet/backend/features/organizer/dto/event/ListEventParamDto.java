@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.organizer.dto.event;
 
 import java.time.OffsetDateTime;
 
-import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,7 +27,7 @@ public class ListEventParamDto {
 
   private Double minPrice;
 
-  private Currency currency;
+  private String currency;
 
   private String city;
 

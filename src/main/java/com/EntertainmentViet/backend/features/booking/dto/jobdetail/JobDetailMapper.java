@@ -4,8 +4,8 @@ import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
+import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
-import com.EntertainmentViet.backend.features.common.dto.LocationAddressMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -25,7 +25,6 @@ public abstract class JobDetailMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = { "id" })
     @Mapping(target = "workType", source = "workType.i18nKey")
-    @Mapping(target = "location", source = "location", qualifiedBy = LocationAddressMapper.ToReadDto.class)
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadJobDetailDto toDto(JobDetail jobDetail);
@@ -35,6 +34,7 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
+    @Mapping(target = "location", source = "locationAddressId", qualifiedBy = LocationAddressMapper.ToLocationAddress.class)
     public abstract JobDetail fromCreateDtoToModel(CreateJobDetailDto jobDetailDto);
 
     @Mapping(target = "id", ignore = true)
@@ -42,6 +42,7 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
+    @Mapping(target = "location", source = "locationAddressId", qualifiedBy = LocationAddressMapper.ToLocationAddress.class)
     public abstract JobDetail fromUpdateDtoToModel(UpdateJobDetailDto jobDetailDto);
 
     @Named("toWorkType")

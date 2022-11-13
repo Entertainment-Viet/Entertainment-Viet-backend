@@ -13,7 +13,9 @@ import com.EntertainmentViet.backend.domain.entities.talent.QScoreType;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
+import com.EntertainmentViet.backend.domain.values.QLocationAddress;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -39,6 +41,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QPackage aPackage = QPackage.package$;
   private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
   private final QScoreType scoreType = QScoreType.scoreType;
+  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -49,6 +52,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
 
@@ -147,8 +151,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
@@ -160,8 +163,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -173,8 +175,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.currency.eq(paramDto.getCurrency()
-                              ))),
+                              aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
@@ -183,6 +184,33 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
                               )))
+      );
+    }
+    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%"))),
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
+      );
+    }
+    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%")))
+      );
+    }
+    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              talent.packages.any().in(
+                      JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
       );
     }
     return predicate;

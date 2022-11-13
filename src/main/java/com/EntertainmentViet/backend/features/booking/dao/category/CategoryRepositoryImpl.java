@@ -1,15 +1,14 @@
 package com.EntertainmentViet.backend.features.booking.dao.category;
 
-import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class CategoryRepositoryImpl extends BaseRepositoryImpl<Category, Long> implements CategoryRepository {

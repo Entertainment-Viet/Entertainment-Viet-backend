@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
-import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -22,5 +21,11 @@ public class ListPackageParamDto {
 
   private Double maxPrice;
 
-  private Currency currency;
+  private String currency;
+
+  private String city;
+
+  private String district;
+
+  private String street;
 }

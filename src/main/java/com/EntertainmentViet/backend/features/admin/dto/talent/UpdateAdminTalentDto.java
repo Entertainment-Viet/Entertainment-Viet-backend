@@ -1,14 +1,13 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
+import java.util.List;
+import java.util.UUID;
+
 import com.EntertainmentViet.backend.features.scoresystem.dto.PriorityScoreDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
-import java.util.UUID;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -22,7 +21,7 @@ public class UpdateAdminTalentDto {
 
   private String email;
 
-  private LocationAddress address;
+  private UUID address;
 
   private String bio;
 
