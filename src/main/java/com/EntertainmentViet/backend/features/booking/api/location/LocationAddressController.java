@@ -4,8 +4,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.EntertainmentViet.backend.features.booking.boundary.location.LocationAddressBoundary;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.ListLocationAddressResponseDto;
 import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +29,7 @@ public class LocationAddressController {
 	private final LocationAddressBoundary locationService;
 
 	@GetMapping
-	public CompletableFuture<ResponseEntity<ListLocationAddressResponseDto>> findAll(
+	public CompletableFuture<ResponseEntity<CustomPage<LocationAddressDto>>> findAll(
 					@ParameterObject Pageable pageable
 	) {
 		return CompletableFuture.completedFuture(ResponseEntity.ok().body(

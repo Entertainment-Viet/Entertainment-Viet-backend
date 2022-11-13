@@ -8,3 +8,4 @@ insert into location_address(id, city, district, street, coordinates, uid) VALUE
 	(4,'Hồ Chí Minh', 'Phú Nhuận', null, st_geomfromtext('POINT(105.804817 21.028511)'), gen_random_uuid());
 insert into location_address(id, city, district, street, coordinates, uid) VALUES
 	(5,'Hồ Chí Minh', 'Tân Bình', 'Cộng Hoà', st_geomfromtext('POINT(105.804817 21.028511)'), gen_random_uuid());
+
