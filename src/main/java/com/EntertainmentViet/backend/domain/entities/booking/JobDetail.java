@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.OffsetDateTime;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -76,7 +75,7 @@ public class JobDetail implements Serializable {
   @NotNull
   private Integer performanceCount;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
   @QueryInit("*.*")
   private LocationAddress location;
