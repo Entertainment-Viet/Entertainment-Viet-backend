@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  backend:
+    image: vietentertainment2023/ve-backend:0.1.15
+    depends_on:
+      #      - db
+      - keycloak
+    environment:
+      - SPRING_PROFILES_ACTIVE=preprod
+      - DB_HOST=ve-db-sing.cx231bjlowki.ap-southeast-1.rds.amazonaws.com
+      - DB_PORT=5432
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PWD=postgres
+    ports:
+      - 8888:8888
+    networks:
+      - internal-network
+    restart: on-failure:10
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0
+    environment:
+      KEYCLOAK_ADMIN: keycloak
+      KEYCLOAK_ADMIN_PASSWORD: keycloak
+      KC_DB: postgres
+      KC_DB_URL_HOST: ve-db-sing.cx231bjlowki.ap-southeast-1.rds.amazonaws.com
+      KC_DB_URL_PORT: 5432
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_HOSTNAME_URL: https://18.143.189.238:8443/auth
+      KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/server.crt.pem
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/server.key.pem
+    entrypoint: [ "/opt/keycloak/bin/kc.sh", "-v start-dev"]
+    ports:
+      - 8080:8080
+      - 8443:8443
+    volumes:
+      - $PWD/server.crt.pem:/opt/keycloak/conf/server.crt.pem
+      - $PWD/server.key.pem:/opt/keycloak/conf/server.key.pem
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
