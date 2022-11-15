@@ -7,7 +7,8 @@ import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -26,8 +27,8 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   private final QCategory category = QCategory.category;
 
   private final QOrganizer organizer = QOrganizer.organizer;
-
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -35,7 +36,8 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
         .leftJoin(jobOffer.organizer, organizer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .fetch();
 
     return null;

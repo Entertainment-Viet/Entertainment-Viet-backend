@@ -15,7 +15,8 @@ import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -41,8 +42,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QPackage aPackage = QPackage.package$;
   private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
   private final QScoreType scoreType = QScoreType.scoreType;
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
-
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
 
@@ -52,7 +53,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
 
@@ -98,7 +100,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     if (paramDto.getDisplayName() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talent.displayName.like("%"+paramDto.getDisplayName()+"%")
+              talent.displayName.like("%" + paramDto.getDisplayName() + "%")
       );
     }
 
@@ -121,7 +123,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                       )
               )
       );
-    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
+    }
+    else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       // Get talent don't have any booking occur at endTime
       predicate = ExpressionUtils.allOf(
               predicate,
@@ -133,14 +136,16 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                       )
               )
       );
-    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+    }
+    else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       // Get talent that don't have any booking occur during period from startTime to endTime
       predicate = ExpressionUtils.allOf(
               predicate,
               talent.bookings.any().in(
                       JPAExpressions.selectFrom(booking).where(
                               booking.jobDetail.performanceStartTime.between(paramDto.getStartTime(), paramDto.getEndTime())
-                              .or(booking.jobDetail.performanceEndTime.between(paramDto.getStartTime(), paramDto.getEndTime()))
+                                      .or(booking.jobDetail.performanceEndTime.between(paramDto.getStartTime(),
+                                              paramDto.getEndTime()))
                       )
               ).not()
       );
@@ -186,31 +191,15 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               )))
       );
     }
-    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%"))),
+                              aPackage.jobDetail.location.typeId.type.like("%" + paramDto.getLocationType() + "%"))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
-      );
-    }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%")))
-      );
-    }
-    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")))
+                              aPackage.jobDetail.location.name.like("%" + paramDto.getLocationName() + "%")))
       );
     }
     return predicate;

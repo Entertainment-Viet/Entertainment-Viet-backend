@@ -3,9 +3,9 @@ package com.EntertainmentViet.backend.features.booking.boundary.location;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.EntertainmentViet.backend.features.booking.dao.locationaddress.LocationAddressRepository;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +16,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LocationAddressService implements LocationAddressBoundary {
 
-	private final LocationAddressMapper locationAddressMapper;
+	private final LocationMapper locationMapper;
 
-	private final LocationAddressRepository locationAddressRepository;
+	private final LocationRepository locationRepository;
 
 	@Override
-	public CustomPage<LocationAddressDto> findAll(Pageable pageable) {
+	public CustomPage<LocationDto> findAll(Pageable pageable) {
 		var dataPage = RestUtils.toLazyLoadPageResponse(
-						locationAddressRepository.findAll(pageable)
-										.map(locationAddressMapper::toDto)
+						locationRepository.findAll(pageable)
+										.map(locationMapper::toDto)
 		);
 
-		if (locationAddressRepository.findAll(pageable.next()).hasContent()) {
+		if (locationRepository.findAll(pageable.next()).hasContent()) {
 			dataPage.getPaging().setLast(false);
 		}
 
@@ -35,7 +35,7 @@ public class LocationAddressService implements LocationAddressBoundary {
 	}
 
 	@Override
-	public Optional<LocationAddressDto> findByUid(UUID uid) {
-		return Optional.ofNullable(locationAddressMapper.toDto(locationAddressRepository.findByUid(uid).orElse(null)));
+	public Optional<LocationDto> findByUid(UUID uid) {
+		return Optional.ofNullable(locationMapper.toDto(locationRepository.findByUid(uid).orElse(null)));
 	}
 }

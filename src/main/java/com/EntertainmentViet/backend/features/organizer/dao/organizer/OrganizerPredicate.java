@@ -15,7 +15,8 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizerShoppin
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -41,7 +42,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
   private final QPackage aPackage = QPackage.package$;
 
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     // join jobOffers
@@ -50,7 +52,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(organizer.jobOffers, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .fetch();
 
     // join bookings
@@ -58,7 +61,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(organizer.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .leftJoin(booking.talent, QTalent.talent).fetchJoin()
         .leftJoin(booking.talentPackage, aPackage).fetchJoin()
         .where(organizer.in(organizers))
@@ -89,7 +93,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(aPackage.talent, QTalent.talent).fetchJoin()
         .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .where(organizer.in(organizers))
         .fetch();
 

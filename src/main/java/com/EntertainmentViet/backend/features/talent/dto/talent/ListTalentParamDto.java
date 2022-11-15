@@ -27,9 +27,7 @@ public class ListTalentParamDto {
 
     private String currency;
 
-    private String city;
+    private String locationType;
 
-    private String district;
-
-    private String street;
+    private String locationName;
 }

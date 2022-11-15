@@ -71,6 +71,7 @@ public class Booking extends Identifiable implements Auditable {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
+  @QueryInit("*.*")
   private Talent talent;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)

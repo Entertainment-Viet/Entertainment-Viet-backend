@@ -8,7 +8,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -20,7 +20,7 @@ import org.mapstruct.Named;
         BookingMapper.class,
         CategoryMapper.class,
         EntityMapper.class,
-        LocationAddressMapper.class,
+        LocationMapper.class,
 },
     config = MappingConfig.class)
 public abstract class PackageMapper {

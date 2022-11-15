@@ -19,8 +19,8 @@ import javax.validation.constraints.NotNull;
 
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
-import com.EntertainmentViet.backend.domain.values.LocationAddress_;
+import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
@@ -76,9 +76,9 @@ public class JobDetail implements Serializable {
   private Integer performanceCount;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
+  @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
-  private LocationAddress location;
+  private Location location;
 
   @Embedded
   @AttributeOverrides({

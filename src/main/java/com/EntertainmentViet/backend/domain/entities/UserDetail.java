@@ -11,8 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
-import com.EntertainmentViet.backend.domain.values.LocationAddress_;
+import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -54,9 +54,9 @@ public abstract class UserDetail {
   private String email;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
+  @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
-  private LocationAddress address;
+  private Location address;
 
   private String taxId;
 

@@ -12,7 +12,8 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
@@ -36,7 +37,8 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QBooking bookingOfTalent =  new QBooking("bookingOfTalent");
   private final QCategory category = QCategory.category;
   private final QCategory parentCategory = new QCategory("parent");
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -51,7 +53,8 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .leftJoin(organizer.bookings, bookingOfOrganizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .where(booking.in(bookingList))
         .fetch();
