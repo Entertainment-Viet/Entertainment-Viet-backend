@@ -13,7 +13,7 @@ import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
     PackageMapper.class,
     CategoryMapper.class,
     ScoreMapper.class,
-    LocationAddressMapper.class,
+    LocationMapper.class,
     ScoreMapper.class
 },
     config = MappingConfig.class)
@@ -74,7 +74,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
-  @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationAddressMapper.ToLocationAddress.class)
+  @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
   @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")

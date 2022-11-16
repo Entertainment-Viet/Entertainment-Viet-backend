@@ -1,9 +1,9 @@
-package com.EntertainmentViet.backend.features.booking.dao.locationaddress;
+package com.EntertainmentViet.backend.features.booking.dao.location;
 
 import java.util.UUID;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.domain.values.QLocation;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LocationAddressPredicate extends IdentifiablePredicate<LocationAddress> {
+public class LocationPredicate extends IdentifiablePredicate<Location> {
 
-	private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
+	private final QLocation location = QLocation.location;
 
 	@Override
 	public Predicate joinAll(JPAQueryFactory queryFactory) {
-		queryFactory.selectFrom(locationAddress).distinct()
+		queryFactory.selectFrom(location).distinct()
 						.fetch();
 
 		return null;
@@ -27,6 +27,6 @@ public class LocationAddressPredicate extends IdentifiablePredicate<LocationAddr
 
 	@Override
 	public BooleanExpression uidEqual(UUID uid) {
-		return locationAddress.uid.eq(uid);
+		return location.uid.eq(uid);
 	}
 }

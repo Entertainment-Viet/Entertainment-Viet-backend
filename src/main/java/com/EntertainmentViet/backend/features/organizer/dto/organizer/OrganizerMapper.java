@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressMapper;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
@@ -27,7 +27,7 @@ import org.mapstruct.Named;
     EventMapper.class,
     BookingMapper.class,
     OrganizerFeedBackMapper.class,
-    LocationAddressMapper.class
+    LocationMapper.class
   },
   config = MappingConfig.class)
 public abstract class OrganizerMapper {
@@ -77,7 +77,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
-  @Mapping(target = "organizerDetail.address", source = "address", qualifiedBy = LocationAddressMapper.ToLocationAddress.class)
+  @Mapping(target = "organizerDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
   @Mapping(target = "organizerDetail.taxId", source = "taxId")
   @Mapping(target = "organizerDetail.bankAccountNumber", source = "bankAccountNumber")
   @Mapping(target = "organizerDetail.bankAccountOwner", source = "bankAccountOwner")

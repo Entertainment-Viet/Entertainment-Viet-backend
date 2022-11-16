@@ -33,7 +33,7 @@ public class CreateJobDetailDto {
   @NotNull
   private Integer performanceCount;
 
-  private UUID locationAddressId;
+  private UUID locationId;
 
   private String note;
 

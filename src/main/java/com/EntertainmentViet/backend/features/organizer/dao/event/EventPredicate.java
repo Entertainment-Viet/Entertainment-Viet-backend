@@ -12,7 +12,8 @@ import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -36,15 +37,15 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   private final QBooking booking = QBooking.booking;
 
   private final QCategory category = QCategory.category;
-
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
-
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(event).distinct()
             .leftJoin(event.eventDetail, eventDetail).fetchJoin()
-            .leftJoin(eventDetail.occurrenceAddress, locationAddress).fetchJoin()
-        .leftJoin(event.organizer, organizer).fetchJoin()
+            .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
+            .leftJoin(location.typeId, locationType).fetchJoin()
+            .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
@@ -139,21 +140,11 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
                               )))
       );
     }
-    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              event.eventDetail.occurrenceAddress.city.like("%" + paramDto.getCity() + "%"),
-              event.eventDetail.occurrenceAddress.district.like("%" + paramDto.getDistrict() + "%"));
-    }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceAddress.city.like("%" + paramDto.getCity() + "%"));
-    }
-    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceAddress.district.like("%" + paramDto.getDistrict() + "%"));
+              event.eventDetail.occurrenceAddress.typeId.type.like("%" + paramDto.getLocationType() + "%"),
+              event.eventDetail.occurrenceAddress.name.like("%" + paramDto.getLocationName() + "%"));
     }
     return predicate;
   }

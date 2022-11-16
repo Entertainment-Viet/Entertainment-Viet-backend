@@ -1,3 +1,7 @@
+/*
+ * Author : AdNovum Informatik AG
+ */
+
 package com.EntertainmentViet.backend.domain.values;
 
 import javax.persistence.Entity;
@@ -5,31 +9,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
-import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.locationtech.jts.geom.Point;
 
 @SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class LocationAddress extends Identifiable {
+public class LocationType {
 
-  @Id
-  @GeneratedValue
-  private Long id;
+	@Id
+	@GeneratedValue
+	private Long id;
 
-  private String street;
+	@NotNull
+	private String type;
 
-  private String district;
+	@NotNull
+	private String level;
 
-  @NotNull
-  private String city;
-
-  @NotNull
-  private Point coordinates;
 }

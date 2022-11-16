@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.common.dto;
 
 import java.time.OffsetDateTime;
 
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +28,7 @@ public abstract class ReadUserDto extends IdentifiableDto {
 
   private String email;
 
-  private LocationAddressDto address;
+  private LocationDto address;
 
   private String taxId;
 

@@ -44,6 +44,7 @@ public class EventOpenPosition extends Identifiable {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @NotNull
+  @QueryInit("*.*")
   private Event event;
 
   @NotNull

@@ -10,7 +10,8 @@ import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
-import com.EntertainmentViet.backend.domain.values.QLocationAddress;
+import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -33,7 +34,9 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   private final QCategory parentCategory = new QCategory("parent");
 
   private final QOrganizer organizer = QOrganizer.organizer;
-  private final QLocationAddress locationAddress = QLocationAddress.locationAddress;
+
+  private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -42,7 +45,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     var packages = queryFactory.selectFrom(talentPackage).distinct()
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
-        .leftJoin(jobDetail.location, locationAddress).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
           .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();
@@ -53,6 +57,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
         .leftJoin(booking.organizer, organizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.typeId, locationType).fetchJoin()
         .where(talentPackage.in(packages))
         .fetch();
 
@@ -112,26 +118,12 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
               talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
       );
     }
-    if (paramDto.getCity() != null && paramDto.getDistrict() != null) {
+    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%"),
-              talentPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")
-      );
+              talentPackage.jobDetail.location.typeId.type.like("%" + paramDto.getLocationType() + "%"),
+              talentPackage.jobDetail.location.name.like("%" + paramDto.getLocationName() + "%"));
     }
-    else if (paramDto.getCity() != null && paramDto.getDistrict() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              talentPackage.jobDetail.location.city.like("%" + paramDto.getCity() + "%")
-      );
-    }
-    else if (paramDto.getCity() == null && paramDto.getDistrict() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              talentPackage.jobDetail.location.district.like("%" + paramDto.getDistrict() + "%")
-      );
-    }
-
     return predicate;
   }
 

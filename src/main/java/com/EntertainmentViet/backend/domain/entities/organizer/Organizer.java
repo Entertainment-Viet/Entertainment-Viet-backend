@@ -47,6 +47,7 @@ public class Organizer extends User {
   private List<JobOffer> jobOffers;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<Event> events;
 
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)

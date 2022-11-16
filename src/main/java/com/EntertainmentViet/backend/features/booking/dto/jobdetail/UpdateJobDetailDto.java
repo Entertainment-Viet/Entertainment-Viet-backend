@@ -26,7 +26,7 @@ public class UpdateJobDetailDto {
 
   private Integer performanceCount;
 
-  private UUID locationAddressId;
+  private UUID locationId;
 
   private String note;
 

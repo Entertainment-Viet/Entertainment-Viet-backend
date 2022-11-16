@@ -16,8 +16,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
-import com.EntertainmentViet.backend.domain.values.LocationAddress;
-import com.EntertainmentViet.backend.domain.values.LocationAddress_;
+import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.querydsl.core.annotations.QueryInit;
@@ -45,9 +45,9 @@ public class EventDetail {
   private Event event;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "location_address_id", referencedColumnName = LocationAddress_.ID)
+  @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
-  private LocationAddress occurrenceAddress;
+  private Location occurrenceAddress;
 
   @NotNull
   private OffsetDateTime occurrenceStartTime;

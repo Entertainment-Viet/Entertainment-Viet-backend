@@ -3,8 +3,8 @@ package com.EntertainmentViet.backend.features.booking.api.location;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import com.EntertainmentViet.backend.features.booking.boundary.location.LocationAddressBoundary;
-import com.EntertainmentViet.backend.features.booking.dto.locationaddress.LocationAddressDto;
+import com.EntertainmentViet.backend.features.booking.boundary.location.LocationBoundary;
+import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
@@ -26,10 +26,10 @@ public class LocationAddressController {
 
 	public static final String REQUEST_MAPPING_PATH = "/locations";
 
-	private final LocationAddressBoundary locationService;
+	private final LocationBoundary locationService;
 
 	@GetMapping
-	public CompletableFuture<ResponseEntity<CustomPage<LocationAddressDto>>> findAll(
+	public CompletableFuture<ResponseEntity<CustomPage<LocationDto>>> findAll(
 					@ParameterObject Pageable pageable
 	) {
 		return CompletableFuture.completedFuture(ResponseEntity.ok().body(
@@ -38,7 +38,7 @@ public class LocationAddressController {
 	}
 
 	@GetMapping(value = "/{uid}")
-	public CompletableFuture<ResponseEntity<LocationAddressDto>> findAll(@PathVariable("uid") UUID uid) {
+	public CompletableFuture<ResponseEntity<LocationDto>> findAll(@PathVariable("uid") UUID uid) {
 		return CompletableFuture.completedFuture(locationService.findByUid(uid)
 						.map(categoryDto -> ResponseEntity
 										.ok()
