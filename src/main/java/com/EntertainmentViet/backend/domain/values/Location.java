@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.locationtech.jts.geom.Geometry;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -32,8 +33,9 @@ public class Location extends Identifiable {
   private Long id;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "type_id", referencedColumnName = Location_.ID)
-  private LocationType typeId;
+  @JoinColumn(name = "type_id", referencedColumnName = LocationType_.ID)
+  @NotNull
+  private LocationType type;
 
   @NotNull
   private String name;

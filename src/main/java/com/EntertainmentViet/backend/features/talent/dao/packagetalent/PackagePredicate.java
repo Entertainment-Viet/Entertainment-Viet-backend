@@ -46,7 +46,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
           .leftJoin(talentPackage.talent, talent).fetchJoin()
           .fetch();
@@ -58,7 +58,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .where(talentPackage.in(packages))
         .fetch();
 
@@ -121,7 +121,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.location.typeId.type.like("%" + paramDto.getLocationType() + "%"),
+              talentPackage.jobDetail.location.type.type.like("%" + paramDto.getLocationType() + "%"),
               talentPackage.jobDetail.location.name.like("%" + paramDto.getLocationName() + "%"));
     }
     return predicate;

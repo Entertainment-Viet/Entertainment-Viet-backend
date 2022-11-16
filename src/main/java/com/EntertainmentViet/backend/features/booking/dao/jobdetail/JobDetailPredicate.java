@@ -26,7 +26,7 @@ public class JobDetailPredicate extends BasePredicate<JobDetail> {
     queryFactory.selectFrom(jobDetail).distinct()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .fetch();
 
     return null;

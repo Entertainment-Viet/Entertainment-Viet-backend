@@ -53,7 +53,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .fetch();
 
     // join bookings
@@ -62,7 +62,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .leftJoin(booking.talent, QTalent.talent).fetchJoin()
         .leftJoin(booking.talentPackage, aPackage).fetchJoin()
         .where(organizer.in(organizers))
@@ -94,7 +94,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .where(organizer.in(organizers))
         .fetch();
 

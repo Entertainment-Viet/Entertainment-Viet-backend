@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Async
 @Validated
-@RequestMapping(path = LocationAddressController.REQUEST_MAPPING_PATH)
-public class LocationAddressController {
+@RequestMapping(path = LocationController.REQUEST_MAPPING_PATH)
+public class LocationController {
 
 	public static final String REQUEST_MAPPING_PATH = "/locations";
 

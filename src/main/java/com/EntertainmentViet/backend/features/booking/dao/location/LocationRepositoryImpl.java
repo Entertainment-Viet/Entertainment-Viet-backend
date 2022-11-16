@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.dao.location;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.EntityManager;
@@ -8,6 +9,9 @@ import com.EntertainmentViet.backend.domain.values.Location;
 import com.EntertainmentViet.backend.domain.values.QLocation;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,5 +35,20 @@ public class LocationRepositoryImpl extends BaseRepositoryImpl<Location, Long>
                     locationPredicate.uidEqual(uid))
             )
             .fetchOne());
+  }
+
+  @Override
+  public Page<Location> findAll(Pageable pageable) {
+    var locationList = Optional.ofNullable(queryFactory.selectFrom(location)
+                    .where(ExpressionUtils.allOf(
+                            locationPredicate.joinAll(queryFactory)
+                    ))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .orderBy(getSortedColumn(pageable.getSort(), Location.class))
+                    .fetch())
+            .orElse(Collections.emptyList());
+
+    return new PageImpl<>(locationList, pageable, locationList.size());
   }
 }
