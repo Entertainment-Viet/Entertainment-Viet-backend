@@ -37,7 +37,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .fetch();
 
     return null;

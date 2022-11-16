@@ -44,7 +44,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     queryFactory.selectFrom(event).distinct()
             .leftJoin(event.eventDetail, eventDetail).fetchJoin()
             .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
-            .leftJoin(location.typeId, locationType).fetchJoin()
+            .leftJoin(location.type, locationType).fetchJoin()
             .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
@@ -143,7 +143,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              event.eventDetail.occurrenceAddress.typeId.type.like("%" + paramDto.getLocationType() + "%"),
+              event.eventDetail.occurrenceAddress.type.type.like("%" + paramDto.getLocationType() + "%"),
               event.eventDetail.occurrenceAddress.name.like("%" + paramDto.getLocationName() + "%"));
     }
     return predicate;

@@ -8,7 +8,7 @@ import com.EntertainmentViet.backend.features.admin.api.talent.AdminTalentContro
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
-import com.EntertainmentViet.backend.features.booking.api.location.LocationAddressController;
+import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
@@ -320,9 +320,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
 
             // Location address mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(LocationAddressController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(LocationController.REQUEST_MAPPING_PATH))
             .hasAuthority(LocationAddressRole.READ_LOCATION.name())
-            .mvcMatchers(HttpMethod.GET, anyPathAfter(LocationAddressController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(LocationController.REQUEST_MAPPING_PATH))
             .hasAuthority(LocationAddressRole.READ_LOCATION.name())
 
             // Spring docs mapping

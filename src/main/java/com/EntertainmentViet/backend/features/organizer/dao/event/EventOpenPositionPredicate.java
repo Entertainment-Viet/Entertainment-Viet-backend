@@ -13,6 +13,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventPositionParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -36,6 +37,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   private final QCategory category = QCategory.category;
   private final QCategory parentCategory = new QCategory("parent");
   private final QLocation location = QLocation.location;
+  private final QLocationType locationType = QLocationType.locationType;
 
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
@@ -46,6 +48,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
         .leftJoin(booking.talent, talent).fetchJoin()
@@ -53,6 +56,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .fetch();
 

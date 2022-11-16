@@ -54,7 +54,7 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.typeId, locationType).fetchJoin()
+        .leftJoin(location.type, locationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .where(booking.in(bookingList))
         .fetch();

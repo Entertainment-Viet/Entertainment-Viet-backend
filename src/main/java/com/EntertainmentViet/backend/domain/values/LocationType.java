@@ -4,6 +4,7 @@
 
 package com.EntertainmentViet.backend.domain.values;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @Entity
-public class LocationType {
+public class LocationType implements Serializable {
 
 	@Id
 	@GeneratedValue
