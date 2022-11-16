@@ -41,18 +41,18 @@ public abstract class LocationMapper {
 	@Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentLocation")
 	public abstract Location toModel(LocationDto locationDto);
 
-	@ToLocationAddress
-	public Location toLocationAddress(UUID locationAddressUid) {
-		if (locationAddressUid == null) {
+	@ToLocation
+	public Location toModel(UUID locationUid) {
+		if (locationUid == null) {
 			return null;
 		}
-		return locationRepository.findByUid(locationAddressUid).orElse(null);
+		return locationRepository.findByUid(locationUid).orElse(null);
 	}
 
 	@Qualifier
 	@Target(ElementType.METHOD)
 	@Retention(RetentionPolicy.CLASS)
-	public @interface ToLocationAddress {
+	public @interface ToLocation {
 
 	}
 

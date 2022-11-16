@@ -7,7 +7,7 @@ import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import org.springframework.data.domain.Pageable;
 
-public interface LocationAddressBoundary {
+public interface LocationBoundary {
 
 	CustomPage<LocationDto> findAll(Pageable pageable);
 

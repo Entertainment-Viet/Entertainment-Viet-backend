@@ -77,7 +77,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
-  @Mapping(target = "organizerDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocationAddress.class)
+  @Mapping(target = "organizerDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
   @Mapping(target = "organizerDetail.taxId", source = "taxId")
   @Mapping(target = "organizerDetail.bankAccountNumber", source = "bankAccountNumber")
   @Mapping(target = "organizerDetail.bankAccountOwner", source = "bankAccountOwner")

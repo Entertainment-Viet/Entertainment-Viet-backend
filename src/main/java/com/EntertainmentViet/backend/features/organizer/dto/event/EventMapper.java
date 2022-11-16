@@ -39,7 +39,7 @@ public abstract class EventMapper {
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress",
-            qualifiedBy = LocationMapper.ToLocationAddress.class)
+            qualifiedBy = LocationMapper.ToLocation.class)
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
@@ -51,7 +51,7 @@ public abstract class EventMapper {
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress",
-            qualifiedBy = LocationMapper.ToLocationAddress.class)
+            qualifiedBy = LocationMapper.ToLocation.class)
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")

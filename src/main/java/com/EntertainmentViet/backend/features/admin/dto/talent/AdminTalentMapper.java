@@ -74,7 +74,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
-  @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocationAddress.class)
+  @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
   @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LocationAddressService implements LocationAddressBoundary {
+public class LocationService implements LocationBoundary {
 
 	private final LocationMapper locationMapper;
 

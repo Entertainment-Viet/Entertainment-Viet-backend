@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.features.booking.api.location;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import com.EntertainmentViet.backend.features.booking.boundary.location.LocationAddressBoundary;
+import com.EntertainmentViet.backend.features.booking.boundary.location.LocationBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class LocationAddressController {
 
 	public static final String REQUEST_MAPPING_PATH = "/locations";
 
-	private final LocationAddressBoundary locationService;
+	private final LocationBoundary locationService;
 
 	@GetMapping
 	public CompletableFuture<ResponseEntity<CustomPage<LocationDto>>> findAll(
