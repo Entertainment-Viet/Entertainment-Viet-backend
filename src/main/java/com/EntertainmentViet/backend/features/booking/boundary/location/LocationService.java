@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
+import com.EntertainmentViet.backend.features.booking.dto.location.ListLocationParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -21,13 +22,13 @@ public class LocationService implements LocationBoundary {
 	private final LocationRepository locationRepository;
 
 	@Override
-	public CustomPage<LocationDto> findAll(Pageable pageable) {
+	public CustomPage<LocationDto> findAll(ListLocationParamDto paramDto, Pageable pageable) {
 		var dataPage = RestUtils.toLazyLoadPageResponse(
-						locationRepository.findAll(pageable)
+						locationRepository.findAll(paramDto, pageable)
 										.map(locationMapper::toDto)
 		);
 
-		if (locationRepository.findAll(pageable.next()).hasContent()) {
+		if (locationRepository.findAll(paramDto, pageable.next()).hasContent()) {
 			dataPage.getPaging().setLast(false);
 		}
 

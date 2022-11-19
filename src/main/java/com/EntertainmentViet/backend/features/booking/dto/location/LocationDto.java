@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class LocationDto extends IdentifiableDto {
 
-	private LocationTypeDto type;
+	private LocationTypeDto locationType;
 
 	@NotNull
 	private String name;

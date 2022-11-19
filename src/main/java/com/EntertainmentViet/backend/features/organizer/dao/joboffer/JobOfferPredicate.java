@@ -29,7 +29,8 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-
+  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(jobOffer).distinct()
@@ -37,7 +38,9 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.type, locationType).fetchJoin()
+        .leftJoin(location.locationType(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
         .fetch();
 
     return null;

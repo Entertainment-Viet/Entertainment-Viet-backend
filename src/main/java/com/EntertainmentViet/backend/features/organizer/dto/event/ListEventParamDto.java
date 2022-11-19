@@ -32,4 +32,8 @@ public class ListEventParamDto {
   private String locationType;
 
   private String locationName;
+
+  private String parentType;
+
+  private String parentName;
 }

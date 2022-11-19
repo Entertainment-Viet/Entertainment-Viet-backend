@@ -39,12 +39,16 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   private final QCategory category = QCategory.category;
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
+  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(event).distinct()
             .leftJoin(event.eventDetail, eventDetail).fetchJoin()
             .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
-            .leftJoin(location.type, locationType).fetchJoin()
+            .leftJoin(location.locationType(), locationType).fetchJoin()
+            .leftJoin(location.parent(), parentLocation).fetchJoin()
+            .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
             .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
@@ -143,8 +147,14 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              event.eventDetail.occurrenceAddress.type.type.like("%" + paramDto.getLocationType() + "%"),
-              event.eventDetail.occurrenceAddress.name.like("%" + paramDto.getLocationName() + "%"));
+              event.eventDetail.occurrenceAddress.locationType().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
+              event.eventDetail.occurrenceAddress.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
+    }
+    if (paramDto.getParentName() != null && paramDto.getParentType() != null) {
+      predicate = ExpressionUtils.allOf(
+              predicate,
+              event.eventDetail.occurrenceAddress.parent().locationType().type.likeIgnoreCase("%" + paramDto.getParentType() + "%"),
+              event.eventDetail.occurrenceAddress.parent().name.likeIgnoreCase("%" + paramDto.getParentName() + "%"));
     }
     return predicate;
   }
