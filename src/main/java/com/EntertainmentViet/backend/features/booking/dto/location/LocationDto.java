@@ -22,6 +22,8 @@ public class LocationDto extends IdentifiableDto {
 
 	private String nameCode;
 
+	private String phoneCode;
+
 	private String zipcode;
 
 	private String coordinate;

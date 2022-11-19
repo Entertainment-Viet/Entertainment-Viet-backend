@@ -44,7 +44,9 @@ public class Location extends Identifiable {
   @NotNull
   private String name;
 
-  private Long nameCode;
+  private String nameCode;
+
+  private Long phoneCode;
 
   private Long zipcode;
 
