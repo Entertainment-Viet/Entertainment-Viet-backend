@@ -66,6 +66,10 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
   @Override
   public Optional<UUID> update(UUID organizerUid, UUID eventUid, UUID uid, UpdateEventOpenPositionDto updateEventOpenPositionDto) {
     EventOpenPosition eventOpenPosition = eventOpenPositionRepository.findByUid(uid).orElse(null);
+    if (Objects.isNull(updateEventOpenPositionDto.getJobOffer().getJobDetail().getLocationId()) && Objects.nonNull(eventOpenPosition)) {
+      updateEventOpenPositionDto.getJobOffer().getJobDetail()
+              .setLocationId(eventOpenPosition.getEvent().getEventDetail().getOccurrenceAddress().getUid());
+    }
     if (!EntityValidationUtils.isOpenPositionWithUidExist(eventOpenPosition, uid)) {
       return Optional.empty();
     }
