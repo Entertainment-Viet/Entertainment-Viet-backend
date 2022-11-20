@@ -39,7 +39,7 @@ public class LocationPredicate extends IdentifiablePredicate<Location> {
 		if (paramDto.getType() != null) {
 			predicate = ExpressionUtils.allOf(
 							predicate,
-							location.type().type.eq(paramDto.getType())
+							location.type().type.likeIgnoreCase("%" +paramDto.getType() + "%")
 			);
 		}
 		if (paramDto.getParentId() != null) {
