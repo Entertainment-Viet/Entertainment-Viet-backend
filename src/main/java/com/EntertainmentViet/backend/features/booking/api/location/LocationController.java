@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.EntertainmentViet.backend.features.booking.boundary.location.LocationBoundary;
+import com.EntertainmentViet.backend.features.booking.dto.location.ListLocationParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,11 @@ public class LocationController {
 
 	@GetMapping
 	public CompletableFuture<ResponseEntity<CustomPage<LocationDto>>> findAll(
+					ListLocationParamDto paramDto,
 					@ParameterObject Pageable pageable
 	) {
 		return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-						locationService.findAll(pageable))
+						locationService.findAll(paramDto, pageable))
 		);
 	}
 

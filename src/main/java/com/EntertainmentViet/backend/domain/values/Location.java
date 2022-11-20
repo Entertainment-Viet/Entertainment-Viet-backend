@@ -15,6 +15,8 @@ import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.querydsl.core.annotations.Config;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,8 @@ import org.locationtech.jts.geom.Geometry;
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@Config(entityAccessors = true)
 public class Location extends Identifiable {
 
   @Id
@@ -40,7 +44,9 @@ public class Location extends Identifiable {
   @NotNull
   private String name;
 
-  private Long nameCode;
+  private String nameCode;
+
+  private Long phoneCode;
 
   private Long zipcode;
 
@@ -53,5 +59,6 @@ public class Location extends Identifiable {
   private Geometry boundary;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "parent_id")
   private Location parent;
 }

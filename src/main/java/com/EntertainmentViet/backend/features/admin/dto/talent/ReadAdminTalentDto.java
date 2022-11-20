@@ -1,17 +1,16 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
+import java.util.List;
+import java.util.Set;
+
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
 import com.EntertainmentViet.backend.features.scoresystem.dto.PriorityScoreDto;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
-import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
-import java.util.Set;
 
 @SuperBuilder
 @NoArgsConstructor

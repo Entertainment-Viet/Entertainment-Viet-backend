@@ -32,6 +32,7 @@ public abstract class LocationMapper {
 	@Mapping(target = "boundary", source = "boundary", qualifiedByName = "toGeometryText")
 	@Mapping(target = "parentName", source = "parent", qualifiedByName = "toParentName")
 	@Mapping(target = "parentUid", source = "parent", qualifiedByName = "toParentUid")
+	@Mapping(target = "locationType", source = "type")
 	public abstract LocationDto toDto(Location location);
 
 	@BeanMapping(ignoreUnmappedSourceProperties = {"parentName"})
@@ -39,6 +40,7 @@ public abstract class LocationMapper {
 	@Mapping(target = "coordinate", source = "coordinate", qualifiedByName = "toGeometry")
 	@Mapping(target = "boundary", source = "boundary", qualifiedByName = "toGeometry")
 	@Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentLocation")
+	@Mapping(target = "type", source = "locationType")
 	public abstract Location toModel(LocationDto locationDto);
 
 	@ToLocation

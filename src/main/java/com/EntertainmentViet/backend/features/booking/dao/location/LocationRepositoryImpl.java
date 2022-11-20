@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 
 import com.EntertainmentViet.backend.domain.values.Location;
 import com.EntertainmentViet.backend.domain.values.QLocation;
+import com.EntertainmentViet.backend.features.booking.dto.location.ListLocationParamDto;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Page;
@@ -38,11 +39,12 @@ public class LocationRepositoryImpl extends BaseRepositoryImpl<Location, Long>
   }
 
   @Override
-  public Page<Location> findAll(Pageable pageable) {
+  public Page<Location> findAll(ListLocationParamDto paramDto, Pageable pageable) {
     var locationList = Optional.ofNullable(queryFactory.selectFrom(location)
                     .where(ExpressionUtils.allOf(
-                            locationPredicate.joinAll(queryFactory)
-                    ))
+                            locationPredicate.joinAll(queryFactory),
+                            locationPredicate.fromLocationParams(paramDto))
+                    )
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .orderBy(getSortedColumn(pageable.getSort(), Location.class))

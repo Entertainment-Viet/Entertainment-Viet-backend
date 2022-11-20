@@ -39,7 +39,8 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QCategory parentCategory = new QCategory("parent");
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-
+  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     var bookingList = queryFactory.selectFrom(booking).distinct()
@@ -54,7 +55,9 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.type, locationType).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .where(booking.in(bookingList))
         .fetch();
