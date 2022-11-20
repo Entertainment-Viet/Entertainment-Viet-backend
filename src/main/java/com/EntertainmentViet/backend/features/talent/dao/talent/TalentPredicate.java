@@ -56,9 +56,9 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.locationType(), locationType).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
-        .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
 
@@ -68,9 +68,9 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
             .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
             .leftJoin(jobDetail.category, category).fetchJoin()
             .leftJoin(jobDetail.location, location).fetchJoin()
-            .leftJoin(location.locationType(), locationType).fetchJoin()
+            .leftJoin(location.type(), locationType).fetchJoin()
             .leftJoin(location.parent(), parentLocation).fetchJoin()
-            .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
+            .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
             .leftJoin(aPackage.orders, booking).fetchJoin()
             .fetch();
 
@@ -204,21 +204,21 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.locationType().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"))),
+                              aPackage.jobDetail.location.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
                               aPackage.jobDetail.location.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%")))
       );
     }
-    if (paramDto.getParentName() != null && paramDto.getParentType() != null) {
+    if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.parent().locationType().type.likeIgnoreCase("%" + paramDto.getParentType() + "%"))),
+                              aPackage.jobDetail.location.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getParentName() + "%")))
+                              aPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%")))
       );
     }
     return predicate;

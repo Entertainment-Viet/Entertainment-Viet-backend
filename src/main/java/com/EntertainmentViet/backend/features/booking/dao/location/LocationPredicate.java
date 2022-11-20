@@ -26,9 +26,9 @@ public class LocationPredicate extends IdentifiablePredicate<Location> {
 	@Override
 	public Predicate joinAll(JPAQueryFactory queryFactory) {
 		queryFactory.selectFrom(location).distinct()
-						.leftJoin(location.locationType(), locationType).fetchJoin()
+						.leftJoin(location.type(), locationType).fetchJoin()
 						.leftJoin(location.parent(), parent).fetchJoin()
-						.leftJoin(parent.locationType(), parentLocationType).fetchJoin()
+						.leftJoin(parent.type(), parentLocationType).fetchJoin()
 						.fetch();
 
 		return null;
@@ -39,7 +39,7 @@ public class LocationPredicate extends IdentifiablePredicate<Location> {
 		if (paramDto.getType() != null) {
 			predicate = ExpressionUtils.allOf(
 							predicate,
-							location.locationType().type.eq(paramDto.getType())
+							location.type().type.eq(paramDto.getType())
 			);
 		}
 		if (paramDto.getParentId() != null) {

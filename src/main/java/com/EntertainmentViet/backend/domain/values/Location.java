@@ -39,7 +39,7 @@ public class Location extends Identifiable {
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "type_id", referencedColumnName = LocationType_.ID)
   @NotNull
-  private LocationType locationType;
+  private LocationType type;
 
   @NotNull
   private String name;

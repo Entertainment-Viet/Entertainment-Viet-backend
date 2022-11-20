@@ -31,7 +31,7 @@ public class ListTalentParamDto {
 
     private String locationName;
 
-    private String parentType;
+    private String locationParentType;
 
-    private String parentName;
+    private String locationParentName;
 }

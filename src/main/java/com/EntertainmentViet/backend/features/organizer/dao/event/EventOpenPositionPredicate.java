@@ -49,9 +49,9 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.locationType(), locationType).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
-        .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
         .leftJoin(booking.talent, talent).fetchJoin()
@@ -59,9 +59,9 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.locationType(), locationType).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
-        .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .fetch();
 

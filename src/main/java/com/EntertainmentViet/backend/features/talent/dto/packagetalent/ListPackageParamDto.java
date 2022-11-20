@@ -27,7 +27,7 @@ public class ListPackageParamDto {
 
   private String locationName;
 
-  private String parentType;
+  private String locationParentType;
 
-  private String parentName;
+  private String locationParentName;
 }

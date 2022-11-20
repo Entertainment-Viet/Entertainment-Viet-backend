@@ -48,9 +48,9 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
-        .leftJoin(location.locationType(), locationType).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
-        .leftJoin(parentLocation.locationType(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(talentPackage.talent, talent).fetchJoin()
         .fetch();
@@ -124,14 +124,14 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.location.locationType().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
+              talentPackage.jobDetail.location.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
               talentPackage.jobDetail.location.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
     }
-    if (paramDto.getParentName() != null && paramDto.getParentType() != null) {
+    if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talentPackage.jobDetail.location.parent().locationType().type.likeIgnoreCase("%" + paramDto.getParentType() + "%"),
-              talentPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getParentName() + "%"));
+              talentPackage.jobDetail.location.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
+              talentPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
     }
     return predicate;
   }
