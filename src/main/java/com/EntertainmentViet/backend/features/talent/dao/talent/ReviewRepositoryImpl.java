@@ -1,5 +1,10 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
 import com.EntertainmentViet.backend.domain.entities.talent.QReview;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
@@ -8,11 +13,6 @@ import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-
-import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
 
 public class ReviewRepositoryImpl extends BaseRepositoryImpl<Review, Long> implements ReviewRepository {
 
@@ -44,6 +44,7 @@ public class ReviewRepositoryImpl extends BaseRepositoryImpl<Review, Long> imple
         ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .orderBy(review.createdAt.desc())
             .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
             .fetch())
         .orElse(Collections.emptyList());
