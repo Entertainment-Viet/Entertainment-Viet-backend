@@ -31,7 +31,7 @@ public class LocationController {
 
 	@GetMapping
 	public CompletableFuture<ResponseEntity<CustomPage<LocationDto>>> findAll(
-					ListLocationParamDto paramDto,
+					@ParameterObject ListLocationParamDto paramDto,
 					@ParameterObject Pageable pageable
 	) {
 		return CompletableFuture.completedFuture(ResponseEntity.ok().body(
