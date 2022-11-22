@@ -1,12 +1,11 @@
 package com.EntertainmentViet.backend.features.booking.boundary.booking;
-import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 
 import java.util.Optional;
 import java.util.UUID;
 
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+
 public interface BookingBoundary {
 
-    Optional<ReadBookingDto> findByUid(UUID ownerUid, UUID uid);
+    Optional<ReadBookingDto> findByUid(boolean isCurrentUser, UUID ownerUid, UUID uid);
 }
