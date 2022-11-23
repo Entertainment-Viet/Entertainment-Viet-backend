@@ -33,6 +33,8 @@ public abstract class BookingMapper {
     @Mapping(target = "packageId", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageUid.class)
     @Mapping(target = "packageName", source = "talentPackage", qualifiedBy = EntityMapper.ToPackageName.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
+    @Mapping(target = "performanceStartTime", ignore = true)
+    @Mapping(target = "performanceEndTime", ignore = true)
     public abstract ReadBookingDto toReadDto(Booking booking);
 
     @Mapping(target = "uid", ignore = true)
@@ -77,6 +79,16 @@ public abstract class BookingMapper {
                 .build();
         }
         return readBookingDto;
+    }
+
+    public ReadBookingDto toReadOtherBooking(ReadBookingDto readBookingDto) {
+        return ReadBookingDto.builder()
+                .uid(readBookingDto.getUid())
+                .jobDetail(ReadJobDetailDto.builder()
+                        .performanceStartTime(readBookingDto.getJobDetail().getPerformanceStartTime())
+                        .performanceEndTime(readBookingDto.getJobDetail().getPerformanceEndTime())
+                        .build()
+                ).build();
     }
 
     @Named("toBookingStatus")

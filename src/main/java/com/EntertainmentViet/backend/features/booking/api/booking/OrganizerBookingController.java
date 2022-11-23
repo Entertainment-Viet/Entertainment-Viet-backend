@@ -1,9 +1,19 @@
 package com.EntertainmentViet.backend.features.booking.api.booking;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import com.EntertainmentViet.backend.exception.InconsistentDataException;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.OrganizerBookingBoundary;
-import com.EntertainmentViet.backend.features.booking.dto.booking.*;
+import com.EntertainmentViet.backend.features.booking.dto.booking.CreateBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +24,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = OrganizerBookingController.REQUEST_MAPPING_PATH)
@@ -38,8 +49,9 @@ public class OrganizerBookingController {
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
-
-    return CompletableFuture.completedFuture(bookingService.findByUid(organizerUid, uid)
+    boolean isCurrentUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token,
+            "ROOT");
+    return CompletableFuture.completedFuture(bookingService.findByUid(isCurrentUser, organizerUid, uid)
         .map(bookingDto -> ResponseEntity
             .ok()
             .body(bookingDto)
@@ -95,8 +107,9 @@ public class OrganizerBookingController {
                                                                                @PathVariable("organizer_uid") UUID organizerUid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListOrganizerBookingParamDto paramDto) {
+    boolean isCurrentUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-        organizerBookingService.listBooking(organizerUid, paramDto, pageable)
+        organizerBookingService.listBooking(isCurrentUser, organizerUid, paramDto, pageable)
     ));
   }
 
