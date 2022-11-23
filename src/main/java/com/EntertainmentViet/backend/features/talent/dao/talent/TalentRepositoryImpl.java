@@ -1,5 +1,10 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
@@ -9,11 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public class TalentRepositoryImpl extends BaseRepositoryImpl<Talent, Long> implements TalentRepository {
@@ -46,6 +46,7 @@ public class TalentRepositoryImpl extends BaseRepositoryImpl<Talent, Long> imple
             ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .orderBy(talent.finalScore.desc())
             .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
             .fetch())
             .orElse(Collections.emptyList());
