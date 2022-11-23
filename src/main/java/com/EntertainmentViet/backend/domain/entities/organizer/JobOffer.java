@@ -51,6 +51,9 @@ public class JobOffer extends Identifiable {
   @NotNull
   private Organizer organizer;
 
+  @NotNull
+  private Boolean archived;
+
   public Booking sendOffer(Talent talent) {
     Booking booking = new Booking();
     booking.setJobDetail(getJobDetail().clone());

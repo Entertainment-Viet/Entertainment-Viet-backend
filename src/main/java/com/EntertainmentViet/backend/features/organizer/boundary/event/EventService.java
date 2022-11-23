@@ -1,5 +1,9 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -7,16 +11,16 @@ import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.event.*;
+import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
+import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
+import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
+import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
+import com.EntertainmentViet.backend.features.organizer.dto.event.UpdateEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -113,7 +117,8 @@ public class EventService implements EventBoundary {
       return false;
     }
 
-    eventRepository.deleteById(event.getId());
+    event.setArchived(Boolean.TRUE);
+    eventRepository.save(event);
     return true;
   }
 }

@@ -71,6 +71,9 @@ public class Package extends Identifiable {
   )
   private Set<Booking> orders;
 
+  @NotNull
+  private Boolean archived;
+
   public void addOrder(Booking order) {
     orders.add(order);
     order.setTalentPackage(this);

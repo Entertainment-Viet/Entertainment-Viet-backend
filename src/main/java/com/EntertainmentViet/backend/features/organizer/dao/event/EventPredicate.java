@@ -164,6 +164,10 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     return event.uid.eq(uid);
   }
 
+  public BooleanExpression isArchived() {
+    return event.archived.isTrue();
+  }
+
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);
   }

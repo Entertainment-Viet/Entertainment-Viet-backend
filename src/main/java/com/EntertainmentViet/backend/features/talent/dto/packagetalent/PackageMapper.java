@@ -25,7 +25,7 @@ import org.mapstruct.Named;
     config = MappingConfig.class)
 public abstract class PackageMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "archived"})
     @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
     @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
     @Mapping(target = "orderNum", source = "orders", qualifiedByName = "toOrderNum")
@@ -36,12 +36,14 @@ public abstract class PackageMapper {
     @Mapping(target = "isActive", constant = "true")
     @Mapping(target = "talent", ignore = true)
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "archived", ignore = true)
     public abstract Package fromCreateDtoToModel(CreatePackageDto createPackageDto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "talent", ignore = true)
     @Mapping(target = "orders", ignore = true)
+    @Mapping(target = "archived", ignore = true)
     public abstract Package fromUpdateDtoToModel(UpdatePackageDto updatePackageDto);
 
     @Named("toOrderNum")

@@ -16,7 +16,7 @@ import org.mapstruct.Named;
     config = MappingConfig.class)
 public abstract class EventOpenPositionMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "applicants"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "applicants", "archived"})
     @Mapping(target = "eventId", source = "event", qualifiedBy = EntityMapper.ToEventUid.class)
     @Mapping(target = "applicantCount", source = ".", qualifiedByName = "toApplicantCount")
     public abstract ReadEventOpenPositionDto toDto(EventOpenPosition eventOpenPosition);
@@ -25,12 +25,14 @@ public abstract class EventOpenPositionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "applicants", ignore = true)
     @Mapping(target = "event", ignore = true)
+    @Mapping(target = "archived", ignore = true)
     public abstract EventOpenPosition fromCreateDtoToModel(CreateEventOpenPositionDto dto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "applicants", ignore = true)
     @Mapping(target = "event", ignore = true)
+    @Mapping(target = "archived", ignore = true)
     public abstract EventOpenPosition fromUpdateDtoToModel(UpdateEventOpenPositionDto dto);
 
     @Named("toApplicantCount")

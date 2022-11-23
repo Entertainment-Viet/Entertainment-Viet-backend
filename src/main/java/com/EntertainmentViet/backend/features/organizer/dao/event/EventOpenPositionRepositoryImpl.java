@@ -1,5 +1,10 @@
 package com.EntertainmentViet.backend.features.organizer.dao.event;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
@@ -7,11 +12,6 @@ import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventPositionParamDto;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Pageable;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class EventOpenPositionRepositoryImpl extends BaseRepositoryImpl<EventOpenPosition, Long> implements EventOpenPositionRepository {
 
@@ -29,7 +29,8 @@ public class EventOpenPositionRepositoryImpl extends BaseRepositoryImpl<EventOpe
     return Optional.ofNullable(queryFactory.selectFrom(eventOpenPosition)
         .where(ExpressionUtils.allOf(
             eventOpenPositionPredicate.joinAll(queryFactory),
-            eventOpenPositionPredicate.uidEqual(uid))
+            eventOpenPositionPredicate.uidEqual(uid)),
+            eventOpenPositionPredicate.isArchived().not()
         )
         .fetchOne());
   }
@@ -41,7 +42,8 @@ public class EventOpenPositionRepositoryImpl extends BaseRepositoryImpl<EventOpe
             eventOpenPositionPredicate.joinAll(queryFactory),
             eventOpenPositionPredicate.belongToOrganizer(organizerUid),
             eventOpenPositionPredicate.belongToEvent(eventUid),
-            eventOpenPositionPredicate.fromParams(paramDto)
+            eventOpenPositionPredicate.fromParams(paramDto),
+            eventOpenPositionPredicate.isArchived().not()
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();

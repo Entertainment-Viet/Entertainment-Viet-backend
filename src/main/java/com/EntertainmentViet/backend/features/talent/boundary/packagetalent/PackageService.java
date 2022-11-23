@@ -1,21 +1,25 @@
 package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
-import com.EntertainmentViet.backend.features.talent.dto.packagetalent.*;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ReadPackageDto;
+import com.EntertainmentViet.backend.features.talent.dto.packagetalent.UpdatePackageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -98,7 +102,8 @@ public class PackageService implements PackageBoundary {
             return false;
         }
 
-        packageRepository.deleteById(talentPackage.getId());
+        talentPackage.setArchived(Boolean.TRUE);
+        packageRepository.save(talentPackage);
         return true;
     }
 }

@@ -80,6 +80,10 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
       return jobOffer.organizer.uid.eq(uid);
   }
 
+  public BooleanExpression isArchived() {
+    return jobOffer.archived.isTrue();
+  }
+
   @Override
   public BooleanExpression uidEqual(UUID uid) {
     return jobOffer.uid.eq(uid);

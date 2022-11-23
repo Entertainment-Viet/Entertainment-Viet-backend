@@ -55,6 +55,9 @@ public class Event extends Identifiable implements Advertisable {
   @QueryInit("*.*")
   private List<EventOpenPosition> openPositions;
 
+  @NotNull
+  private Boolean archived;
+
   public void addOpenPosition(EventOpenPosition eventOpenPosition) {
     openPositions.add(eventOpenPosition);
     eventOpenPosition.setEvent(this);

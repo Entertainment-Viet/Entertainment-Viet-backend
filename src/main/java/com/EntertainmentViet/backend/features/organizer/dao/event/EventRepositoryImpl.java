@@ -35,7 +35,8 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
     return Optional.ofNullable(queryFactory.selectFrom(event)
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
-            eventPredicate.uidEqual(uid))
+            eventPredicate.uidEqual(uid)),
+            eventPredicate.isArchived().not()
         )
         .fetchOne());
   }
@@ -45,7 +46,8 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
     var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
             .where(ExpressionUtils.allOf(
                 eventPredicate.joinAll(queryFactory),
-                eventPredicate.fromParams(paramDto)
+                eventPredicate.fromParams(paramDto),
+                eventPredicate.isArchived().not()
             ))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -62,7 +64,8 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
             eventPredicate.belongToOrganizer(uid),
-            eventPredicate.fromParams(paramDto)
+            eventPredicate.fromParams(paramDto),
+            eventPredicate.isArchived().not()
         ))
         .orderBy(getSortedColumn(pageable.getSort(), Event.class))
         .fetch();

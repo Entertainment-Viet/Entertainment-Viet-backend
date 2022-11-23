@@ -140,4 +140,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   public BooleanExpression uidEqual(UUID uid) {
     return talentPackage.uid.eq(uid);
   }
+
+  public BooleanExpression isArchived() {
+    return talentPackage.archived.isTrue();
+  }
 }
