@@ -30,6 +30,6 @@ public class LocationType implements Serializable {
 	private String type;
 
 	@NotNull
-	private String level;
+	private Integer level;
 
 }

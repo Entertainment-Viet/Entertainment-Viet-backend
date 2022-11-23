@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
+import com.EntertainmentViet.backend.features.booking.dto.location.ReadLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +28,7 @@ public class ReadJobDetailDto {
 
   private Integer performanceCount;
 
-  private LocationDto location;
+  private ReadLocationDto location;
 
   private String note;
 

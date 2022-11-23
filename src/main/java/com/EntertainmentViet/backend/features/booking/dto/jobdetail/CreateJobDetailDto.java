@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
+import com.EntertainmentViet.backend.features.booking.dto.location.InputLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public class CreateJobDetailDto {
   @NotNull
   private Integer performanceCount;
 
-  private UUID locationId;
+  private InputLocationDto location;
 
   private String note;
 

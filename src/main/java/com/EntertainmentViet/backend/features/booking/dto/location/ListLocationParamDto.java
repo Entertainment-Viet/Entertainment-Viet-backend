@@ -11,6 +11,8 @@ public class ListLocationParamDto {
 
 	private String type;
 
+	private Integer level;
+
 	private UUID parentId;
 
 }

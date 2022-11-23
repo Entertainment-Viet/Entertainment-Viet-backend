@@ -98,7 +98,7 @@ public abstract class TalentMapper {
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
-    @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
+    @Mapping(target = "talentDetail.address", source = "address")
     @Mapping(target = "talentDetail.taxId", source = "taxId")
     @Mapping(target = "talentDetail.bankAccountNumber", source = "bankAccountNumber")
     @Mapping(target = "talentDetail.bankAccountOwner", source = "bankAccountOwner")

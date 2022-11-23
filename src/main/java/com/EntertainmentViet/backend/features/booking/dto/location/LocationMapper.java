@@ -8,7 +8,9 @@ import java.util.UUID;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.domain.values.LocationType;
 import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
+import com.EntertainmentViet.backend.features.booking.dao.location.LocationTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Geometry;
 import org.mapstruct.BeanMapping;
@@ -27,6 +29,9 @@ public abstract class LocationMapper {
 	@Autowired
 	private LocationRepository locationRepository;
 
+	@Autowired
+	private LocationTypeRepository locationTypeRepository;
+
 	@BeanMapping(ignoreUnmappedSourceProperties = { "id" })
 	@Mapping(target = "coordinate", source = "coordinate", qualifiedByName = "toGeometryText")
 	@Mapping(target = "boundary", source = "boundary", qualifiedByName = "toGeometryText")
@@ -42,6 +47,31 @@ public abstract class LocationMapper {
 	@Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentLocation")
 	@Mapping(target = "type", source = "locationType")
 	public abstract Location toModel(LocationDto locationDto);
+
+	public Location fromInputToModel(InputLocationDto locationDto) {
+		if (locationDto == null) {
+			return null;
+		}
+
+		return Location.builder()
+				.type(locationTypeRepository.findById(1L).orElseThrow())
+				.name(locationDto.getAddress())
+				.parent(locationRepository.findByUid(locationDto.getParentUid()).orElse(null))
+				.build();
+	}
+
+	public ReadLocationDto fromModelToReadDto(Location location) {
+		if (location == null) {
+			return null;
+		}
+		return ReadLocationDto.builder()
+				.uid(location.getUid())
+				.name(location.getName())
+				.type(location.getType().getType())
+				.level(location.getType().getLevel())
+				.parent(fromModelToReadDto(location.getParent()))
+				.build();
+	}
 
 	@ToLocation
 	public Location toModel(UUID locationUid) {

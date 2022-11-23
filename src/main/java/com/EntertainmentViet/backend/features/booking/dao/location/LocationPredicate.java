@@ -48,6 +48,12 @@ public class LocationPredicate extends IdentifiablePredicate<Location> {
 							location.parent().uid.eq(paramDto.getParentId())
 			);
 		}
+		if (paramDto.getLevel() != null) {
+			predicate = ExpressionUtils.allOf(
+					predicate,
+					location.type().level.eq(paramDto.getLevel())
+			);
+		}
 
 		return predicate;
 	}
