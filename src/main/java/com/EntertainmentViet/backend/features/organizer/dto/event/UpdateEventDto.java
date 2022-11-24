@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.EntertainmentViet.backend.features.booking.dto.location.InputLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class UpdateEventDto {
 
   private Boolean isActive;
 
-  private UUID occurrenceAddress;
+  private InputLocationDto occurrenceAddress;
 
   private OffsetDateTime occurrenceStartTime;
 

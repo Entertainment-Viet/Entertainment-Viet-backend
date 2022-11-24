@@ -25,10 +25,13 @@ public class RestUtils {
     return new PageImpl<>(list.subList(start, end), pageable, list.size());
   }
 
+  // For lazy loading in Application level only
   public <T> CustomPage<T> toPageResponse(Page<T> page) {
     return new CustomPage<>(page);
   }
 
+
+  // For lazy loading up to DB level
   public <T> CustomPage<T> toLazyLoadPageResponse(Page<T> page) {
     var lazyLoadCustomPage = new CustomPage<>(page);
     lazyLoadCustomPage.getPaging().setTotalPages(null);

@@ -34,7 +34,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
-    @Mapping(target = "location", source = "locationId", qualifiedBy = LocationMapper.ToLocation.class)
     public abstract JobDetail fromCreateDtoToModel(CreateJobDetailDto jobDetailDto);
 
     @Mapping(target = "id", ignore = true)
@@ -42,7 +41,6 @@ public abstract class JobDetailMapper {
     @Mapping(target = "note", source = "note", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "category", source = "categoryId", qualifiedBy = CategoryMapper.ToCategory.class)
-    @Mapping(target = "location", source = "locationId", qualifiedBy = LocationMapper.ToLocation.class)
     public abstract JobDetail fromUpdateDtoToModel(UpdateJobDetailDto jobDetailDto);
 
     @Named("toWorkType")

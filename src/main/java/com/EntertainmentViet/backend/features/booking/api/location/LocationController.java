@@ -40,11 +40,11 @@ public class LocationController {
 	}
 
 	@GetMapping(value = "/{uid}")
-	public CompletableFuture<ResponseEntity<LocationDto>> findAll(@PathVariable("uid") UUID uid) {
+	public CompletableFuture<ResponseEntity<LocationDto>> findById(@PathVariable("uid") UUID uid) {
 		return CompletableFuture.completedFuture(locationService.findByUid(uid)
-						.map(categoryDto -> ResponseEntity
+						.map(locationDto -> ResponseEntity
 										.ok()
-										.body(categoryDto)
+										.body(locationDto)
 						)
 						.orElse(ResponseEntity.notFound().build())
 		);

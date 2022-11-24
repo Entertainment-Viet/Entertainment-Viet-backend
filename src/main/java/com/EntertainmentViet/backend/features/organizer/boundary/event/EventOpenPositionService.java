@@ -45,10 +45,7 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
   @Override
   public Optional<UUID> createInEvent(UUID organizerUid, UUID eventUid, CreateEventOpenPositionDto createEventOpenPositionDto) {
     Event event = eventRepository.findByUid(eventUid).orElse(null);
-    if (Objects.isNull(createEventOpenPositionDto.getJobOffer().getJobDetail().getLocationId()) && Objects.nonNull(event)) {
-      createEventOpenPositionDto.getJobOffer().getJobDetail()
-              .setLocationId(event.getEventDetail().getOccurrenceAddress().getUid());
-    }
+
     if (!EntityValidationUtils.isEventWithUidExist(event, eventUid)) {
       return Optional.empty();
     }
@@ -59,6 +56,7 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
 
     EventOpenPosition eventOpenPosition = eventOpenPositionMapper.fromCreateDtoToModel(createEventOpenPositionDto);
     eventOpenPosition.setEvent(event);
+    eventOpenPosition.getJobOffer().getJobDetail().setLocation(event.getEventDetail().getOccurrenceAddress());
     eventOpenPosition.getJobOffer().setOrganizer(eventOpenPosition.getEvent().getOrganizer());
     return Optional.ofNullable(eventOpenPositionRepository.save(eventOpenPosition).getUid());
   }
@@ -66,10 +64,7 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
   @Override
   public Optional<UUID> update(UUID organizerUid, UUID eventUid, UUID uid, UpdateEventOpenPositionDto updateEventOpenPositionDto) {
     EventOpenPosition eventOpenPosition = eventOpenPositionRepository.findByUid(uid).orElse(null);
-    if (Objects.isNull(updateEventOpenPositionDto.getJobOffer().getJobDetail().getLocationId()) && Objects.nonNull(eventOpenPosition)) {
-      updateEventOpenPositionDto.getJobOffer().getJobDetail()
-              .setLocationId(eventOpenPosition.getEvent().getEventDetail().getOccurrenceAddress().getUid());
-    }
+
     if (!EntityValidationUtils.isOpenPositionWithUidExist(eventOpenPosition, uid)) {
       return Optional.empty();
     }
@@ -83,6 +78,7 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
     }
 
     EventOpenPosition newEventOpenPosition = eventOpenPositionMapper.fromUpdateDtoToModel(updateEventOpenPositionDto);
+    newEventOpenPosition.getJobOffer().getJobDetail().setLocation(eventOpenPosition.getJobOffer().getJobDetail().getLocation());
     eventOpenPosition.updateInfo(newEventOpenPosition);
     return Optional.ofNullable(eventOpenPositionRepository.save(eventOpenPosition).getUid());
   }

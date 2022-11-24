@@ -32,7 +32,7 @@ public class CategoryController {
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<CategoryDto>> findAll(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<CategoryDto>> findByUid(@PathVariable("uid") UUID uid) {
     return CompletableFuture.completedFuture(categoryService.findByUid(uid)
         .map( categoryDto -> ResponseEntity
             .ok()
