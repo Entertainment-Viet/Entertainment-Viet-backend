@@ -102,7 +102,8 @@ public class EventOpenPositionService implements EventOpenPositionBoundary {
       return false;
     }
 
-    eventOpenPositionRepository.deleteById(eventOpenPosition.getId());
+    eventOpenPosition.setArchived(Boolean.TRUE);
+    eventOpenPositionRepository.save(eventOpenPosition);
     return true;
   }
 

@@ -108,6 +108,10 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
     return eventOpenPosition.uid.eq(uid);
   }
 
+  public BooleanExpression isArchived() {
+    return eventOpenPosition.archived.isTrue();
+  }
+
 
   public Predicate belongToOrganizer(UUID organizerUid) {
     return eventOpenPosition.event.organizer.uid.eq(organizerUid);

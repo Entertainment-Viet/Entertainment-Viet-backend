@@ -64,6 +64,9 @@ public class EventOpenPosition extends Identifiable {
   )
   private Set<Booking> applicants;
 
+  @NotNull
+  private Boolean archived;
+
   public void addApplicant(Booking booking) {
     applicants.add(booking);
   }

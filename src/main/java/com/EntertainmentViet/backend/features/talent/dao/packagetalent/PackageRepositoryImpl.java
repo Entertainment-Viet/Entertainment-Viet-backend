@@ -1,16 +1,16 @@
 package com.EntertainmentViet.backend.features.talent.dao.packagetalent;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import javax.persistence.EntityManager;
+
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPackageParamDto;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Pageable;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class PackageRepositoryImpl extends BaseRepositoryImpl<Package, Long> implements PackageRepository {
 
@@ -28,7 +28,8 @@ public class PackageRepositoryImpl extends BaseRepositoryImpl<Package, Long> imp
     return Optional.ofNullable(queryFactory.selectFrom(packages)
             .where(ExpressionUtils.allOf(
                     packagePredicate.joinAll(queryFactory),
-                    packagePredicate.uidEqual(uid))
+                    packagePredicate.uidEqual(uid)),
+                    packagePredicate.isArchived().not()
             )
             .fetchOne());
   }
@@ -39,7 +40,8 @@ public class PackageRepositoryImpl extends BaseRepositoryImpl<Package, Long> imp
             .where(ExpressionUtils.allOf(
                 packagePredicate.joinAll(queryFactory),
                 packagePredicate.belongToTalent(uid)),
-                packagePredicate.fromParams(paramDto)
+                packagePredicate.fromParams(paramDto),
+                packagePredicate.isArchived().not()
             )
             .fetch();
   }

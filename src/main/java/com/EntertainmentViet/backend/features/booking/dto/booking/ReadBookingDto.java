@@ -42,7 +42,4 @@ public class ReadBookingDto extends Identifiable {
 
     private String extensions;
 
-    private OffsetDateTime performanceStartTime;
-
-    private OffsetDateTime performanceEndTime;
 }

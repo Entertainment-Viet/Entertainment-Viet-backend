@@ -23,7 +23,7 @@ import org.mapstruct.Named;
 }, config = MappingConfig.class)
 public abstract class EventMapper {
 
-    @BeanMapping(ignoreUnmappedSourceProperties = { "id" })
+    @BeanMapping(ignoreUnmappedSourceProperties = { "id", "archived" })
     @Mapping(target = "occurrenceAddress", source = "eventDetail.occurrenceAddress")
     @Mapping(target = "occurrenceStartTime", source = "eventDetail.occurrenceStartTime")
     @Mapping(target = "occurrenceEndTime", source = "eventDetail.occurrenceEndTime")
@@ -38,6 +38,7 @@ public abstract class EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "archived", ignore = true)
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress",
             qualifiedBy = LocationMapper.ToLocation.class)
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
@@ -57,6 +58,7 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
     @Mapping(target = "eventDetail.description", source = "description",
             qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
+    @Mapping(target = "archived", ignore = true)
     public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 
     @Named("toEventOpenPositions")
