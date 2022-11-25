@@ -56,7 +56,7 @@ public abstract class LocationMapper {
 		return Location.builder()
 				.type(locationTypeRepository.findById(1L).orElseThrow())
 				.name(locationDto.getAddress())
-				.parent(locationRepository.findByUid(locationDto.getParentUid()).orElse(null))
+				.parent(locationRepository.findByUid(locationDto.getParentId()).orElse(null))
 				.build();
 	}
 

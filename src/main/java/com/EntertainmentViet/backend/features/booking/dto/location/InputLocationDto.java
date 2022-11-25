@@ -13,5 +13,5 @@ import java.util.UUID;
 @Setter
 public class InputLocationDto {
   private String address;
-  private UUID parentUid;
+  private UUID parentId;
 }
