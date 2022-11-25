@@ -51,6 +51,10 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
     // join jobOffers
     var organizers = queryFactory.selectFrom(organizer).distinct()
         .leftJoin(organizer.organizerDetail, organizerDetail).fetchJoin()
+        .leftJoin(organizerDetail.address, location).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(organizer.jobOffers, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()

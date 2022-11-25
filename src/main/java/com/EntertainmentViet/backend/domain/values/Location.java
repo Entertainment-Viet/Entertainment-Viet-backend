@@ -36,7 +36,9 @@ public class Location extends Identifiable {
   @GeneratedValue
   private Long id;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  // Workaround for now to make it eager loading so the recursive can get the type
+  // TODO fix this to use the fetchjoin
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "type_id", referencedColumnName = LocationType_.ID)
   @NotNull
   private LocationType type;
@@ -58,7 +60,9 @@ public class Location extends Identifiable {
   @JsonDeserialize(using = GeometryDeserializer.class)
   private Geometry boundary;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  // Workaround for now to make it eager loading so the recursive can get the parent
+  // TODO fix this to use the fetchjoin
+  @ManyToOne
   @JoinColumn(name = "parent_id")
   private Location parent;
 }

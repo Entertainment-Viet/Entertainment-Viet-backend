@@ -52,6 +52,10 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     // join bookings
     var talents = queryFactory.selectFrom(talent).distinct()
         .leftJoin(talent.talentDetail, talentDetail).fetchJoin()
+        .leftJoin(talentDetail.address, location).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
