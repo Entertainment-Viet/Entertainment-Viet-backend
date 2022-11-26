@@ -40,6 +40,8 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   private final QLocationType locationType = QLocationType.locationType;
   private final QLocation parentLocation = new QLocation("parent");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
+  private final QLocation grandparentLocation = new QLocation("grandparentLocation");
+  private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(eventOpenPosition).distinct()
@@ -52,6 +54,8 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
         .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
         .leftJoin(booking.talent, talent).fetchJoin()
@@ -62,6 +66,8 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
         .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
         .leftJoin(category.parent, parentCategory).fetchJoin()
         .fetch();
 

@@ -23,13 +23,13 @@ public abstract class JobOfferMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", constant = "true")
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract JobOffer fromCreateDtoToModel(CreateJobOfferDto createJobOfferDto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isActive", ignore = true)
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract JobOffer fromUpdateDtoToModel(UpdateJobOfferDto updateJobOfferDto);
 }
