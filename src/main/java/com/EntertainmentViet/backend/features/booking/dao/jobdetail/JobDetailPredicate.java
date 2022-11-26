@@ -22,6 +22,8 @@ public class JobDetailPredicate extends BasePredicate<JobDetail> {
   private final QLocationType locationType = QLocationType.locationType;
   private final QLocation parentLocation = new QLocation("parent");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
+  private final QLocation grandparentLocation = new QLocation("grandparentLocation");
+  private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(jobDetail).distinct()
@@ -30,6 +32,8 @@ public class JobDetailPredicate extends BasePredicate<JobDetail> {
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
         .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
         .fetch();
 
     return null;

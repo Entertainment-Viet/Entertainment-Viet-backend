@@ -46,6 +46,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QLocationType locationType = QLocationType.locationType;
   private final QLocation parentLocation = new QLocation("parentLocation");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
+  private final QLocation grandparentLocation = new QLocation("grandparentLocation");
+  private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
 
@@ -63,6 +65,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
         .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
         .leftJoin(booking.organizer, QOrganizer.organizer).fetchJoin()
         .fetch();
 
@@ -75,6 +79,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
             .leftJoin(location.type(), locationType).fetchJoin()
             .leftJoin(location.parent(), parentLocation).fetchJoin()
             .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+            .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+            .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
             .leftJoin(aPackage.orders, booking).fetchJoin()
             .fetch();
 

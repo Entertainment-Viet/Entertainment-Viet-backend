@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.values.Location;
-import com.EntertainmentViet.backend.domain.values.LocationType;
 import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
 import com.EntertainmentViet.backend.features.booking.dao.location.LocationTypeRepository;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +68,7 @@ public abstract class LocationMapper {
 				.name(location.getName())
 				.type(location.getType().getType())
 				.level(location.getType().getLevel())
-				.parent(fromModelToReadDto(location.getParent()))
+				.parent(location.getParent() != null ? fromModelToReadDto(location.getParent()) : null)
 				.build();
 	}
 

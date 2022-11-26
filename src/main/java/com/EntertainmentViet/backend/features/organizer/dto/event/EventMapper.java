@@ -38,7 +38,7 @@ public abstract class EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "openPositions", ignore = true)
     @Mapping(target = "organizer", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
@@ -56,7 +56,7 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
     @Mapping(target = "eventDetail.description", source = "description",
             qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract Event fromUpdateDtoToModel(UpdateEventDto dto);
 
     @Named("toEventOpenPositions")

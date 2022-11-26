@@ -36,14 +36,14 @@ public abstract class PackageMapper {
     @Mapping(target = "isActive", constant = "true")
     @Mapping(target = "talent", ignore = true)
     @Mapping(target = "orders", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract Package fromCreateDtoToModel(CreatePackageDto createPackageDto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "talent", ignore = true)
     @Mapping(target = "orders", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract Package fromUpdateDtoToModel(UpdatePackageDto updatePackageDto);
 
     @Named("toOrderNum")

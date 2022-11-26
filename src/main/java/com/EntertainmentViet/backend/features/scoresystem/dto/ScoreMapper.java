@@ -1,5 +1,15 @@
 package com.EntertainmentViet.backend.features.scoresystem.dto;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.PriorityScore;
 import com.EntertainmentViet.backend.domain.entities.talent.ScoreType;
@@ -10,16 +20,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mapper(config = MappingConfig.class,
     uses = {
@@ -53,6 +53,7 @@ public abstract class ScoreMapper {
   public List<ReadScoreRewardListDto> fromModelToReadScoreRewardListDto(List<PriorityScore> priorityScores) {
     return priorityScores.stream()
         .filter(priorityScore -> !priorityScore.getScoreType().getName().equals("song"))
+        .filter(priorityScore -> priorityScore.getApproved().equals(true))
         .map(priorityScore -> ReadScoreRewardListDto.builder()
             .scoreTypeId(priorityScore.getScoreType().getId())
             .scoreTypeName(priorityScore.getScoreType().getName())

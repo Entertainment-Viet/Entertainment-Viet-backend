@@ -36,9 +36,7 @@ public class Location extends Identifiable {
   @GeneratedValue
   private Long id;
 
-  // Workaround for now to make it eager loading so the recursive can get the type
-  // TODO fix this to use the fetchjoin
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
   @JoinColumn(name = "type_id", referencedColumnName = LocationType_.ID)
   @NotNull
   private LocationType type;

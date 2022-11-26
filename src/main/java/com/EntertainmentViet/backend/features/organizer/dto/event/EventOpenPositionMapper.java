@@ -25,14 +25,14 @@ public abstract class EventOpenPositionMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "applicants", ignore = true)
     @Mapping(target = "event", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract EventOpenPosition fromCreateDtoToModel(CreateEventOpenPositionDto dto);
 
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "applicants", ignore = true)
     @Mapping(target = "event", ignore = true)
-    @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "archived", constant = "false")
     public abstract EventOpenPosition fromUpdateDtoToModel(UpdateEventOpenPositionDto dto);
 
     @Named("toApplicantCount")
