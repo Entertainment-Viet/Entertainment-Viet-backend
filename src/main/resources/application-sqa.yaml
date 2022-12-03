@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL}
+    url: jdbc:postgresql://${DB_HOST}:5432/${DB_NAME}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -8,13 +8,13 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://shielded-escarpment-36770.herokuapp.com/auth/realms/ve-sso
+          issuer-uri: https://18.143.189.238:8443/auth/realms/ve-sso
 
 security:
   allowed_origins:
+    - http://host.docker.internal:3000
     - http://localhost:3000
-    - https://comfy-cheesecake-9cf057.netlify.app
 
 authentication:
   keycloak:
-    serverUrl: https://shielded-escarpment-36770.herokuapp.com/auth
+    serverUrl: https://18.143.189.238:8443/auth
