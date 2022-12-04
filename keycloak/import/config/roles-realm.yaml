@@ -272,5 +272,17 @@
         ]
       }
     }
+  },
+  {
+    "name": "ADMIN_RESOLVE_SCORE_TYPE_ACCESS",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
+          "ADMIN_READ_SCORE",
+          "ADMIN_UPDATE_SCORE"
+        ]
+      }
+    }
   }
 ]

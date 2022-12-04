@@ -34,10 +34,10 @@ public class ScoreTypeController {
 
     @GetMapping
     public CompletableFuture<ResponseEntity<List<ScoreTypeDto>>> findAll(JwtAuthenticationToken token, @PathVariable UUID id) {
-//        if (!id.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-//            log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", id));
-//            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-//        }
+        if (!id.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+            log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", id));
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        }
         return CompletableFuture.completedFuture(ResponseEntity.ok().body(scoreTypeService.findAll(id)));
     }
 
@@ -47,10 +47,10 @@ public class ScoreTypeController {
     public CompletableFuture<ResponseEntity<Long>> create(JwtAuthenticationToken token,
                                                           @PathVariable("id") UUID id,
                                                           @RequestBody @Valid ScoreTypeDto scoreTypeDto) {
-//        if (!id.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
-//            log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", id));
-//            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-//        }
+        if (!id.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+            log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", id));
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        }
 
         return CompletableFuture.completedFuture(scoreTypeService.create(id, scoreTypeDto)
                 .map(newScoreTypeId -> ResponseEntity

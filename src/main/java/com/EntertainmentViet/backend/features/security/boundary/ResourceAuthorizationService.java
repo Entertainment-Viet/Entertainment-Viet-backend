@@ -17,6 +17,7 @@ import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFe
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
 import com.EntertainmentViet.backend.features.organizer.api.organizer.OrganizerController;
 import com.EntertainmentViet.backend.features.organizer.api.shoppingcart.ShoppingCartController;
+import com.EntertainmentViet.backend.features.scoresystem.api.ScoreTypeController;
 import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
 import com.EntertainmentViet.backend.features.security.roles.BookingRole;
@@ -312,6 +313,12 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_BOOKING.name())
+
+            // Admin score mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_READ_SCORE.name())
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_UPDATE_SCORE.name())
 
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
