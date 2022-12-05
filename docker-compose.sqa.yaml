@@ -1,12 +1,11 @@
 version: '3.8'
 services:
   backend:
-    image: vietentertainment2023/ve-backend:0.1.15
+    image: vietentertainment2023/ve-backend:0.1.19
     depends_on:
-      #      - db
       - keycloak
     environment:
-      - SPRING_PROFILES_ACTIVE=preprod
+      - SPRING_PROFILES_ACTIVE=sqa
       - DB_HOST=ve-db-sing.cx231bjlowki.ap-southeast-1.rds.amazonaws.com
       - DB_PORT=5432
       - DB_NAME=postgres
@@ -29,7 +28,7 @@ services:
       KC_DB_PASSWORD: postgres
       KC_DB_URL_DATABASE: keycloak
       KC_HTTP_RELATIVE_PATH: /auth
-      KC_HOSTNAME_URL: https://18.143.189.238:8443/auth
+      KC_HOSTNAME_URL: https://13.214.197.81:8443/auth
       KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/server.crt.pem
       KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/server.key.pem
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "-v start-dev"]
