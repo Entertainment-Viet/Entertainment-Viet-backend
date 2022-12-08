@@ -206,7 +206,6 @@
       "client": {
         "backend": [
           "ADMIN_DEACTIVE_ORGANIZER",
-          "ADMIN_BROWSE_BOOKING",
         ]
       }
     }
@@ -258,6 +257,7 @@
       "client": {
         "backend": [
           "ADMIN_READ_BOOKING",
+          "ADMIN_BROWSE_BOOKING"
         ]
       }
     }
@@ -268,7 +268,6 @@
       "realm": null,
       "client": {
         "backend": [
-          "ADMIN_READ_BOOKING",
           "ADMIN_UPDATE_BOOKING",
         ]
       }
