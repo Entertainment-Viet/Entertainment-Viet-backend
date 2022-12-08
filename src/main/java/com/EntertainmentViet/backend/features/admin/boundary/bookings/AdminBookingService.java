@@ -1,8 +1,8 @@
 package com.EntertainmentViet.backend.features.admin.boundary.bookings;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -38,16 +37,14 @@ public class AdminBookingService implements AdminBookingBoundary {
     }
 
     @Override
-    public ListBookingResponseDto listBooking(boolean isCurrentUser, AdminListBookingParamDto paramDto, Pageable pageable) {
+    public AdminListBookingResponseDto listBooking(boolean isCurrentUser, AdminListBookingParamDto paramDto, Pageable pageable) {
         var bookingList = bookingRepository.findAllBookings(paramDto, pageable);
         Stream<ReadBookingDto> dtoList = bookingList.stream().map(bookingMapper::toReadDto);
         if (!isCurrentUser) {
             dtoList = bookingList.stream().map(bookingMapper::toReadDto).map(bookingMapper::toReadOtherBooking);
         }
         var dataPage = RestUtils.getPageEntity(dtoList.toList(), pageable);
-        var unpaidSum = bookingList.stream().findAny().map(Booking::getTalent).map(Talent::computeUnpaidSum).orElse(0.0);
-        return ListBookingResponseDto.builder()
-                .unpaidSum(BigDecimal.valueOf(unpaidSum))
+        return AdminListBookingResponseDto.builder()
                 .bookings(RestUtils.toPageResponse(dataPage))
                 .build();
     }

@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -33,10 +33,10 @@ public class AdminBookingController {
   private final AdminBookingBoundary adminBookingService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<ListBookingResponseDto>> listBooking(JwtAuthenticationToken token,
-                                                                               @PathVariable("admin_uid") UUID adminUid,
-                                                                               @ParameterObject Pageable pageable,
-                                                                               @ParameterObject AdminListBookingParamDto paramDto) {
+  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(JwtAuthenticationToken token,
+                                                                                    @PathVariable("admin_uid") UUID adminUid,
+                                                                                    @ParameterObject Pageable pageable,
+                                                                                    @ParameterObject AdminListBookingParamDto paramDto) {
     boolean isCurrentUser = adminUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
             adminBookingService.listBooking(isCurrentUser, paramDto, pageable)
