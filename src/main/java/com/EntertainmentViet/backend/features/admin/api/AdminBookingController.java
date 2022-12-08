@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +24,13 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @RequestMapping(path = AdminBookingController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
-@Async
 @Validated
 @Slf4j
 public class AdminBookingController {
 
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/bookings";
 
-  private final AdminBookingBoundary bookingService;
+  private final AdminBookingBoundary adminBookingService;
 
   @GetMapping
   public CompletableFuture<ResponseEntity<ListBookingResponseDto>> listBooking(JwtAuthenticationToken token,
@@ -41,7 +39,7 @@ public class AdminBookingController {
                                                                                @ParameterObject AdminListBookingParamDto paramDto) {
     boolean isCurrentUser = adminUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            bookingService.listBooking(isCurrentUser, paramDto, pageable)
+            adminBookingService.listBooking(isCurrentUser, paramDto, pageable)
     ));
   }
 
@@ -49,7 +47,7 @@ public class AdminBookingController {
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
                                                                      @PathVariable("admin_uid") UUID adminUid, @PathVariable("uid") UUID uid) {
     boolean isCurrentUser = adminUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
-    return CompletableFuture.completedFuture(bookingService.findByUid(isCurrentUser, uid)
+    return CompletableFuture.completedFuture(adminBookingService.findByUid(isCurrentUser, uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
                     .body(bookingDto)
@@ -69,7 +67,7 @@ public class AdminBookingController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(bookingService.update(uid, updateBookingDto)
+    return  CompletableFuture.completedFuture(adminBookingService.update(uid, updateBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .ok()
                     .body(newBookingDto)

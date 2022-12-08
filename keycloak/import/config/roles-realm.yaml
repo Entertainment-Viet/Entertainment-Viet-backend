@@ -205,7 +205,8 @@
       "realm": null,
       "client": {
         "backend": [
-          "ADMIN_DEACTIVE_ORGANIZER"
+          "ADMIN_DEACTIVE_ORGANIZER",
+          "ADMIN_BROWSE_BOOKING",
         ]
       }
     }
@@ -256,22 +257,7 @@
       "realm": null,
       "client": {
         "backend": [
-          "ADMIN_BROWSE_BOOKING",
           "ADMIN_READ_BOOKING",
-          "ADMIN_UPDATE_BOOKING",
-        ]
-      }
-    }
-  },
-  {
-    "name": "ADMIN_UPDATE_BOOKING_ACCESS",
-    "composites": {
-      "realm": null,
-      "client": {
-        "backend": [
-          "ADMIN_BROWSE_BOOKING",
-          "ADMIN_READ_BOOKING",
-          "ADMIN_UPDATE_BOOKING",
         ]
       }
     }
@@ -282,8 +268,6 @@
       "realm": null,
       "client": {
         "backend": [
-          "ADMIN_BROWSE_BOOKING",
-          "ADMIN_READ_BOOKING",
           "ADMIN_UPDATE_BOOKING",
         ]
       }
