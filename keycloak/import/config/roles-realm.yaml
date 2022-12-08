@@ -30,7 +30,8 @@
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
           "READ_CART_ITEM",
-          "SELF_UPDATE_ORGANIZER"
+          "SELF_UPDATE_ORGANIZER",
+          "READ_SCORE",
         ]
       }
     }
@@ -53,7 +54,8 @@
           "CLEAR_SHOPPING_CART",
           "ADD_CART_ITEM",
           "ADD_REVIEW",
-          "DELETE_CART_ITEM"
+          "DELETE_CART_ITEM",
+          "UPDATE_SCORE",
         ]
       }
     }
@@ -119,7 +121,8 @@
           "READ_EVENT_POSITION",
           "READ_EVENT",
           "BROWSE_EVENT",
-          "SELF_UPDATE_TALENT"
+          "SELF_UPDATE_TALENT",
+          "READ_SCORE",
         ]
       }
     }
@@ -136,7 +139,8 @@
           "ADD_BOOKING",
           "ADD_ADVERTISEMENT",
           "DELETE_ADVERTISEMENT",
-          "ADD_TALENT_FEEDBACK"
+          "ADD_TALENT_FEEDBACK",
+          "UPDATE_SCORE",
         ]
       }
     }
@@ -269,18 +273,6 @@
       "client": {
         "backend": [
           "ADMIN_READ_BOOKING"
-        ]
-      }
-    }
-  },
-  {
-    "name": "ADMIN_RESOLVE_SCORE_TYPE_ACCESS",
-    "composites": {
-      "realm": null,
-      "client": {
-        "backend": [
-          "ADMIN_READ_SCORE",
-          "ADMIN_UPDATE_SCORE"
         ]
       }
     }
