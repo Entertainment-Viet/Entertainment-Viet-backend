@@ -122,7 +122,6 @@
           "READ_EVENT",
           "BROWSE_EVENT",
           "SELF_UPDATE_TALENT",
-          "READ_SCORE",
         ]
       }
     }
@@ -222,7 +221,8 @@
         "backend": [
           "READ_TALENT_DETAIL",
           "ADMIN_BROWSE_TALENT",
-          "ADMIN_BROWSE_ADVERTISEMENT"
+          "ADMIN_BROWSE_ADVERTISEMENT",
+          "READ_SCORE",
         ]
       }
     }
@@ -237,7 +237,8 @@
           "ADMIN_UPDATE_TALENT",
           "ADMIN_REJECT_TALENT",
           "ADMIN_APPROVE_ADVERTISEMENT",
-          "ADMIN_UPDATE_ADVERTISEMENT"
+          "ADMIN_UPDATE_ADVERTISEMENT",
+          "UPDATE_SCORE",
         ]
       }
     }
