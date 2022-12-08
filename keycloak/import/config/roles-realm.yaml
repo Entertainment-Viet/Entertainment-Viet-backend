@@ -55,7 +55,6 @@
           "ADD_CART_ITEM",
           "ADD_REVIEW",
           "DELETE_CART_ITEM",
-          "UPDATE_SCORE",
         ]
       }
     }
@@ -139,7 +138,6 @@
           "ADD_ADVERTISEMENT",
           "DELETE_ADVERTISEMENT",
           "ADD_TALENT_FEEDBACK",
-          "UPDATE_SCORE",
         ]
       }
     }
