@@ -268,6 +268,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "ADMIN_READ_BOOKING",
           "ADMIN_UPDATE_BOOKING",
         ]
       }
