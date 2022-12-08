@@ -282,6 +282,15 @@
     "name": "READ_LOCATION"
   },
   {
+    "name": "READ_FILE"
+  },
+  {
+    "name": "UPLOAD_FILE"
+  },
+  {
+    "name": "DELETE_FILE"
+  },
+  {
     "name": "ROOT"
   },
   {
