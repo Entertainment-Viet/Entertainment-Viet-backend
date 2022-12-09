@@ -12,7 +12,7 @@ spring:
 
 security:
   allowed_origins:
-    - http://host.internal.docker:3000
+    - http://host.docker.internal:3000
 
 authentication:
   keycloak:

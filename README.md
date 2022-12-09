@@ -19,8 +19,8 @@ The `keycloak` folder store the automation configuration for keycloak. Refer its
 ### Build docker image
 1. docker login
 2. ./gradlew clean bootJar
-3. docker build -t duckhai1/ve-backend:0.1.3 .
-4. docker push duckhai1/ve-backend:0.1.3
+3. docker build -t vietentertainment2023/ve-backend:0.1.3 .
+4. docker push vietentertainment2023/ve-backend:0.1.3
 
 ### Deploy to SQA heroku 
 1. Login to heroku: `heroku login`
