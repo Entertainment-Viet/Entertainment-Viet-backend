@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   backend:
-    image: vietentertainment2023/ve-backend:0.1.19
+    image: vietentertainment2023/ve-backend:0.1.20
     depends_on:
       - keycloak
     environment:
