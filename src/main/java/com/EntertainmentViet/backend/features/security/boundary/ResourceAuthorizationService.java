@@ -17,23 +17,8 @@ import com.EntertainmentViet.backend.features.organizer.api.feedback.OrganizerFe
 import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferController;
 import com.EntertainmentViet.backend.features.organizer.api.organizer.OrganizerController;
 import com.EntertainmentViet.backend.features.organizer.api.shoppingcart.ShoppingCartController;
-import com.EntertainmentViet.backend.features.security.roles.AdminRole;
-import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
-import com.EntertainmentViet.backend.features.security.roles.BookingRole;
-import com.EntertainmentViet.backend.features.security.roles.CategoryRole;
-import com.EntertainmentViet.backend.features.security.roles.EventPositionRole;
-import com.EntertainmentViet.backend.features.security.roles.EventRole;
-import com.EntertainmentViet.backend.features.security.roles.FeedbackRole;
-import com.EntertainmentViet.backend.features.security.roles.JobOfferRole;
-import com.EntertainmentViet.backend.features.security.roles.LocationAddressRole;
-import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageOrderRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageRole;
-import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
-import com.EntertainmentViet.backend.features.security.roles.PositionApplicantRole;
-import com.EntertainmentViet.backend.features.security.roles.ReviewRole;
-import com.EntertainmentViet.backend.features.security.roles.ShoppingCartRole;
-import com.EntertainmentViet.backend.features.security.roles.TalentRole;
+import com.EntertainmentViet.backend.features.scoresystem.api.ScoreTypeController;
+import com.EntertainmentViet.backend.features.security.roles.*;
 import com.EntertainmentViet.backend.features.talent.api.advertisement.AdvertisementController;
 import com.EntertainmentViet.backend.features.talent.api.feedback.TalentFeedbackController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageBookingController;
@@ -312,6 +297,12 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_BOOKING.name())
+
+            // Admin score mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ScoreTypeRole.READ_SCORE.name())
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ScoreTypeRole.UPDATE_SCORE.name())
 
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))

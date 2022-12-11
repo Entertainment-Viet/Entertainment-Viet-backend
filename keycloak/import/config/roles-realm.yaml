@@ -30,7 +30,8 @@
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
           "READ_CART_ITEM",
-          "SELF_UPDATE_ORGANIZER"
+          "SELF_UPDATE_ORGANIZER",
+          "READ_SCORE",
         ]
       }
     }
@@ -53,7 +54,7 @@
           "CLEAR_SHOPPING_CART",
           "ADD_CART_ITEM",
           "ADD_REVIEW",
-          "DELETE_CART_ITEM"
+          "DELETE_CART_ITEM",
         ]
       }
     }
@@ -119,7 +120,7 @@
           "READ_EVENT_POSITION",
           "READ_EVENT",
           "BROWSE_EVENT",
-          "SELF_UPDATE_TALENT"
+          "SELF_UPDATE_TALENT",
         ]
       }
     }
@@ -136,7 +137,7 @@
           "ADD_BOOKING",
           "ADD_ADVERTISEMENT",
           "DELETE_ADVERTISEMENT",
-          "ADD_TALENT_FEEDBACK"
+          "ADD_TALENT_FEEDBACK",
         ]
       }
     }
@@ -218,7 +219,8 @@
         "backend": [
           "READ_TALENT_DETAIL",
           "ADMIN_BROWSE_TALENT",
-          "ADMIN_BROWSE_ADVERTISEMENT"
+          "ADMIN_BROWSE_ADVERTISEMENT",
+          "READ_SCORE",
         ]
       }
     }
@@ -233,7 +235,8 @@
           "ADMIN_UPDATE_TALENT",
           "ADMIN_REJECT_TALENT",
           "ADMIN_APPROVE_ADVERTISEMENT",
-          "ADMIN_UPDATE_ADVERTISEMENT"
+          "ADMIN_UPDATE_ADVERTISEMENT",
+          "UPDATE_SCORE",
         ]
       }
     }
