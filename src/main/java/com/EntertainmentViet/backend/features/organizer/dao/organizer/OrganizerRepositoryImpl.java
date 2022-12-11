@@ -6,6 +6,12 @@ import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
 
 import javax.persistence.EntityManager;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,8 +31,20 @@ public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long>
     return Optional.ofNullable(queryFactory.selectFrom(organizer)
         .where(ExpressionUtils.allOf(
             organizerPredicate.joinAll(queryFactory),
-            organizerPredicate.uidEqual(uid))
-        )
+            organizerPredicate.uidEqual(uid)))
         .fetchOne());
+  }
+
+  @Override
+  public Page<Organizer> findAll(Pageable pageable) {
+    var organizerList = Optional.ofNullable(queryFactory.selectFrom(organizer)
+        .where(organizerPredicate.joinAll(queryFactory))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .orderBy(getSortedColumn(pageable.getSort(), Organizer.class))
+        .fetch())
+        .orElse(Collections.emptyList());
+
+    return new PageImpl<>(organizerList, pageable, organizerList.size());
   }
 }

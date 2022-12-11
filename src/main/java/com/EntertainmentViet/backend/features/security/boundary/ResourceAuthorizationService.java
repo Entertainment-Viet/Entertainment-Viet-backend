@@ -277,6 +277,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             .mvcMatchers(HttpMethod.GET, ofPath(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_ORGANIZER.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_READ_ORGANIZER.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_ORGANIZER.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
