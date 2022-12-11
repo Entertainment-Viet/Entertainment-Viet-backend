@@ -5,6 +5,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "VERIFY_ORGANIZER",
           "READ_ORGANIZER",
           "READ_ORGANIZER_DETAIL",
@@ -42,6 +43,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPLOAD_FILE",
           "ADD_JOBOFFER",
           "DELETE_JOBOFFER",
           "ADD_EVENT",
@@ -65,6 +67,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "DELETE_FILE",
           "SELF_UPDATE_ORGANIZER",
           "UPDATE_JOBOFFER",
           "UPDATE_EVENT",
@@ -98,6 +101,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "VERIFY_TALENT",
           "READ_TALENT",
           "READ_TALENT_DETAIL",
@@ -131,6 +135,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPLOAD_FILE",
           "APPLY_ORGANIZER_POSITION",
           "ADD_PACKAGE",
           "DELETE_PACKAGE",
@@ -148,6 +153,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "DELETE_FILE",
           "SELF_UPDATE_TALENT",
           "UPDATE_PACKAGE",
           "ACCEPT_PACKAGE_ORDER",
@@ -259,6 +265,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "ADMIN_BROWSE_BOOKING",
           "ADMIN_READ_BOOKING"
         ]
@@ -271,6 +278,8 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPLOAD_FILE",
+          "DELETE_FILE",
           "ADMIN_UPDATE_BOOKING"
         ]
       }
