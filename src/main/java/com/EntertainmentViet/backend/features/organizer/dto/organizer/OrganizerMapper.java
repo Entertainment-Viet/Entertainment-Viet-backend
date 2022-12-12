@@ -105,8 +105,8 @@ public abstract class OrganizerMapper {
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission
-  public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {
-    if (!SecurityUtils.hasRole(OrganizerRole.READ_ORGANIZER_DETAIL.name())) {
+  public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto, boolean isOwnerUser) {
+    if (!isOwnerUser) {
       return ReadOrganizerDto.builder()
           .uid(readOrganizerDto.getUid())
           .events(readOrganizerDto.getEvents())

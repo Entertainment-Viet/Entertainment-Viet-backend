@@ -130,8 +130,8 @@ public abstract class TalentMapper {
 
 
     // Only return non-confidential detail if token have enough permission
-    public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {
-        if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
+    public ReadTalentDto checkPermission(ReadTalentDto readTalentDto, boolean isOwnerUser) {
+        if (!isOwnerUser) {
             return ReadTalentDto.builder()
                 .uid(readTalentDto.getUid())
                 .packages(readTalentDto.getPackages())

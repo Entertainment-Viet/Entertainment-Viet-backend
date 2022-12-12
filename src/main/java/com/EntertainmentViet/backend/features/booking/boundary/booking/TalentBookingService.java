@@ -37,13 +37,13 @@ public class TalentBookingService implements TalentBookingBoundary {
 
 
     @Override
-    public ListBookingResponseDto listBooking(boolean isCurrentUser, UUID talentId, ListTalentBookingParamDto paramDto,
+    public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID talentId, ListTalentBookingParamDto paramDto,
             Pageable pageable) {
         var bookingList = bookingRepository.findByTalentUid(talentId, paramDto, pageable);
-        Stream<ReadBookingDto> dtoList = bookingList.stream().map(bookingMapper::toReadDto);
-        if (!isCurrentUser) {
-            dtoList = bookingList.stream().map(bookingMapper::toReadDto).map(bookingMapper::toReadOtherBooking);
-        }
+        Stream<ReadBookingDto> dtoList = bookingList.stream()
+            .map(bookingMapper::toReadDto)
+            .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser));
+
         var dataPage = RestUtils.getPageEntity(dtoList.toList(), pageable);
         var unpaidSum = bookingList.stream().findAny().map(Booking::getTalent).map(Talent::computeUnpaidSum).orElse(0.0);
         return ListBookingResponseDto.builder()

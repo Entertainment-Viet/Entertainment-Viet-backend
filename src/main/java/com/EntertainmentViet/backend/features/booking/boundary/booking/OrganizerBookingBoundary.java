@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrganizerBookingBoundary {
 
-  ListBookingResponseDto listBooking(boolean isCurrentUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
+  ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
           Pageable pageable);
 
   Optional<UUID> create(UUID organizerUid, CreateBookingDto createBookingDto);

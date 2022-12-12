@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface TalentBookingBoundary {
 
-  ListBookingResponseDto listBooking(boolean isCurrentUser, UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable);
+  ListBookingResponseDto listBooking(boolean isOwnerUser, UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable);
 
   Optional<UUID> create(UUID talentUid, CreateBookingDto createBookingDto);
 

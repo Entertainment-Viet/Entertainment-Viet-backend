@@ -36,7 +36,7 @@ public class Location extends Identifiable {
   @GeneratedValue
   private Long id;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "type_id", referencedColumnName = LocationType_.ID)
   @NotNull
   private LocationType type;

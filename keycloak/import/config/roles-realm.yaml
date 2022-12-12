@@ -8,7 +8,7 @@
           "READ_FILE",
           "VERIFY_ORGANIZER",
           "READ_ORGANIZER",
-          "READ_ORGANIZER_DETAIL",
+          "READ_ORGANIZER_CONFIDENTIAL",
           "BROWSE_JOBOFFER",
           "READ_JOBOFFER",
           "BROWSE_EVENT",
@@ -17,7 +17,6 @@
           "BROWSE_EVENT_POSITION",
           "READ_EVENT_POSITION",
           "BROWSE_BOOKING_ORGANIZER",
-          "BROWSE_BOOKING_ORGANIZER_DETAIL",
           "BROWSE_BOOKING_TALENT",
           "READ_BOOKING",
           "READ_CATEGORY",
@@ -31,7 +30,7 @@
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
           "READ_CART_ITEM",
-          "SELF_UPDATE_ORGANIZER",
+          "UPDATE_ORGANIZER_CONFIDENTIAL",
           "READ_SCORE",
         ]
       }
@@ -68,7 +67,7 @@
       "client": {
         "backend": [
           "DELETE_FILE",
-          "SELF_UPDATE_ORGANIZER",
+          "UPDATE_ORGANIZER",
           "UPDATE_JOBOFFER",
           "UPDATE_EVENT",
           "ACCEPT_POSITION_APPLICANT",
@@ -78,7 +77,8 @@
           "CANCEL_BOOKING_ORGANIZER",
           "UPDATE_BOOKING",
           "UPDATE_CART_ITEM",
-          "FINISH_BOOKING_ORGANIZER"
+          "FINISH_BOOKING_ORGANIZER",
+          "UPDATE_ORGANIZER_CONFIDENTIAL"
         ]
       }
     }
@@ -104,12 +104,11 @@
           "READ_FILE",
           "VERIFY_TALENT",
           "READ_TALENT",
-          "READ_TALENT_DETAIL",
+          "READ_TALENT_CONFIDENTIAL",
           "BROWSE_PACKAGE",
           "READ_PACKAGE",
           "BROWSE_PACKAGE_ORDER",
           "BROWSE_BOOKING_TALENT",
-          "BROWSE_BOOKING_TALENT_DETAIL",
           "BROWSE_BOOKING_ORGANIZER",
           "READ_BOOKING",
           "BROWSE_ADVERTISEMENT",
@@ -124,7 +123,7 @@
           "READ_EVENT_POSITION",
           "READ_EVENT",
           "BROWSE_EVENT",
-          "SELF_UPDATE_TALENT",
+          "UPDATE_TALENT_CONFIDENTIAL",
         ]
       }
     }
@@ -154,7 +153,8 @@
       "client": {
         "backend": [
           "DELETE_FILE",
-          "SELF_UPDATE_TALENT",
+          "UPDATE_TALENT",
+          "UPDATE_TALENT_CONFIDENTIAL",
           "UPDATE_PACKAGE",
           "ACCEPT_PACKAGE_ORDER",
           "REJECT_PACKAGE_ORDER",
@@ -187,7 +187,7 @@
       "realm": null,
       "client": {
         "backend": [
-          "READ_ORGANIZER_DETAIL",
+          "READ_ORGANIZER_CONFIDENTIAL",
           "ADMIN_BROWSE_ORGANIZER"
         ]
       }
@@ -223,7 +223,7 @@
       "realm": null,
       "client": {
         "backend": [
-          "READ_TALENT_DETAIL",
+          "READ_TALENT_CONFIDENTIAL",
           "ADMIN_BROWSE_TALENT",
           "ADMIN_BROWSE_ADVERTISEMENT",
           "READ_SCORE",
