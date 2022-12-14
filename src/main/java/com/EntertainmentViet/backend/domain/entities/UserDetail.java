@@ -17,6 +17,7 @@ import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.querydsl.core.annotations.QueryInit;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,16 +26,28 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import java.util.List;
+
 @MappedSuperclass
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@TypeDef(name = "list-array",typeClass = ListArrayType.class)
 public abstract class UserDetail {
 
   @Id
   private Long id;
+
+  private String avatar;
+
+  @Type(type = "list-array")
+  @Column(
+      name = "description_img",
+      columnDefinition = "text[]"
+  )
+  private List<String> descriptionImg;
 
   @Embedded
   @AttributeOverrides({
@@ -74,6 +87,9 @@ public abstract class UserDetail {
     }
     if (newData.getExtensions() != null) {
       setExtensions(newData.getExtensions());
+    }
+    if (newData.getDescriptionImg() != null) {
+      setDescriptionImg(newData.getDescriptionImg());
     }
     return this;
   }

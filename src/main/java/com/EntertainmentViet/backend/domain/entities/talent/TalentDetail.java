@@ -54,10 +54,7 @@ public class TalentDetail extends UserDetail {
       setCitizenId(newData.getCitizenId());
     }
     if (newData.getCitizenPaper() != null) {
-      if (getCitizenPaper() == null) {
-        setCitizenPaper(new ArrayList<>());
-      }
-      getCitizenPaper().addAll(newData.getCitizenPaper());
+      setCitizenPaper(newData.getCitizenPaper());
     }
 
     return this;

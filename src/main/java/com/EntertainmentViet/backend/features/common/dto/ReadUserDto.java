@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.ReadLocationDto;
@@ -18,6 +19,10 @@ public abstract class ReadUserDto extends IdentifiableDto {
   private String accountType;
 
   private String displayName;
+
+  private String avatar;
+
+  private List<String> descriptionImg;
 
   private String bio;
 

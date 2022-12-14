@@ -47,6 +47,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "representative", source = "organizerDetail.representative")
   @Mapping(target = "position", source = "organizerDetail.position")
   @Mapping(target = "businessPaper", source = "organizerDetail.businessPaper")
+  @Mapping(target = "avatar", source = "organizerDetail.avatar")
+  @Mapping(target = "descriptionImg", source = "organizerDetail.descriptionImg")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
