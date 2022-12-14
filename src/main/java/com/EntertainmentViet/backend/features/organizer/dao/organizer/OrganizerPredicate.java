@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
+import com.EntertainmentViet.backend.domain.entities.organizer.QEventDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
@@ -48,6 +49,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
+  private final QEventDetail eventDetail = QEventDetail.eventDetail;
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     // join jobOffers
@@ -87,6 +90,13 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
     // join events
     organizers = queryFactory.selectFrom(organizer).distinct()
         .leftJoin(organizer.events, event).fetchJoin()
+        .leftJoin(event.eventDetail, eventDetail).fetchJoin()
+        .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
         .where(organizer.in(organizers))
         .fetch();
 
