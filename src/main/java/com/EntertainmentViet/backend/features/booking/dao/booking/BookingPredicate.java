@@ -207,6 +207,10 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     return booking.talent.uid.eq(uid);
   }
 
+  public BooleanExpression isArchived() {
+    return booking.talent.archived.isTrue().or(booking.organizer.archived.isTrue());
+  }
+
   public Predicate fromParams(AdminListBookingParamDto paramDto) {
     var predicate = defaultPredicate();
 
