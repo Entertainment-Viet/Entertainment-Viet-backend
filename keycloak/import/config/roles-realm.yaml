@@ -188,7 +188,8 @@
       "client": {
         "backend": [
           "READ_ORGANIZER_DETAIL",
-          "ADMIN_BROWSE_ORGANIZER"
+          "ADMIN_BROWSE_ORGANIZER",
+          "ADMIN_READ_ORGANIZER"
         ]
       }
     }

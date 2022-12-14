@@ -228,6 +228,9 @@
     "name": "ADMIN_BROWSE_ORGANIZER"
   },
   {
+    "name": "ADMIN_READ_ORGANIZER"
+  },
+  {
     "name": "ADMIN_APPROVE_ORGANIZER"
   },
   {
