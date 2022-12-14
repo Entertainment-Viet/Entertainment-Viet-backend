@@ -21,6 +21,8 @@ public interface OrganizerBoundary {
 
   Optional<UUID> updateKyc(UpdateOrganizerKycInfoDto kycInfoDto, UUID uid);
 
+  boolean delete(UUID uid);
+
   boolean sendVerifyRequest(UUID uid);
 
   boolean verify(UUID uid);

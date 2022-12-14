@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -8,8 +9,6 @@ import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +55,17 @@ public class OrganizerService implements OrganizerBoundary {
         .map(organizer -> organizer.requestKycInfoChange(organizerMapper.fromKycDtoToModel(kycInfoDto)))
         .map(organizerRepository::save)
         .map(Identifiable::getUid);
+  }
+
+  @Override
+  public boolean delete(UUID uid) {
+    Organizer organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer != null) {
+      organizer.setArchived(Boolean.TRUE);
+      organizerRepository.save(organizer);
+      return true;
+    }
+    return false;
   }
 
   @Override
