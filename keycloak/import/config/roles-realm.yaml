@@ -5,6 +5,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "VERIFY_ORGANIZER",
           "READ_ORGANIZER",
           "READ_ORGANIZER_DETAIL",
@@ -30,7 +31,8 @@
           "READ_PACKAGE",
           "READ_SHOPPING_CART",
           "READ_CART_ITEM",
-          "SELF_UPDATE_ORGANIZER"
+          "SELF_UPDATE_ORGANIZER",
+          "READ_SCORE",
         ]
       }
     }
@@ -41,6 +43,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPLOAD_FILE",
           "ADD_JOBOFFER",
           "DELETE_JOBOFFER",
           "ADD_EVENT",
@@ -53,7 +56,7 @@
           "CLEAR_SHOPPING_CART",
           "ADD_CART_ITEM",
           "ADD_REVIEW",
-          "DELETE_CART_ITEM"
+          "DELETE_CART_ITEM",
         ]
       }
     }
@@ -64,6 +67,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "DELETE_FILE",
           "SELF_UPDATE_ORGANIZER",
           "UPDATE_JOBOFFER",
           "UPDATE_EVENT",
@@ -97,6 +101,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "VERIFY_TALENT",
           "READ_TALENT",
           "READ_TALENT_DETAIL",
@@ -119,7 +124,7 @@
           "READ_EVENT_POSITION",
           "READ_EVENT",
           "BROWSE_EVENT",
-          "SELF_UPDATE_TALENT"
+          "SELF_UPDATE_TALENT",
         ]
       }
     }
@@ -130,13 +135,14 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPLOAD_FILE",
           "APPLY_ORGANIZER_POSITION",
           "ADD_PACKAGE",
           "DELETE_PACKAGE",
           "ADD_BOOKING",
           "ADD_ADVERTISEMENT",
           "DELETE_ADVERTISEMENT",
-          "ADD_TALENT_FEEDBACK"
+          "ADD_TALENT_FEEDBACK",
         ]
       }
     }
@@ -147,6 +153,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "DELETE_FILE",
           "SELF_UPDATE_TALENT",
           "UPDATE_PACKAGE",
           "ACCEPT_PACKAGE_ORDER",
@@ -218,7 +225,8 @@
         "backend": [
           "READ_TALENT_DETAIL",
           "ADMIN_BROWSE_TALENT",
-          "ADMIN_BROWSE_ADVERTISEMENT"
+          "ADMIN_BROWSE_ADVERTISEMENT",
+          "READ_SCORE",
         ]
       }
     }
@@ -233,7 +241,8 @@
           "ADMIN_UPDATE_TALENT",
           "ADMIN_REJECT_TALENT",
           "ADMIN_APPROVE_ADVERTISEMENT",
-          "ADMIN_UPDATE_ADVERTISEMENT"
+          "ADMIN_UPDATE_ADVERTISEMENT",
+          "UPDATE_SCORE",
         ]
       }
     }
@@ -256,6 +265,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_FILE",
           "ADMIN_BROWSE_BOOKING",
           "ADMIN_READ_BOOKING"
         ]
@@ -268,7 +278,9 @@
       "realm": null,
       "client": {
         "backend": [
-          "ADMIN_READ_BOOKING"
+          "UPLOAD_FILE",
+          "DELETE_FILE",
+          "ADMIN_UPDATE_BOOKING"
         ]
       }
     }

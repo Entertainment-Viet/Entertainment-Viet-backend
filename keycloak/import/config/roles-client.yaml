@@ -1,49 +1,49 @@
 "backend": [
-    {
-        "name": "VERIFY_ORGANIZER"
-    },
-    {
-        "name": "READ_ORGANIZER"
-    },
-    {
-        "name": "READ_ORGANIZER_DETAIL"
-    },
-    {
-        "name": "SELF_UPDATE_ORGANIZER"
-    },
-    {
-        "name": "RECEIVE_ORGANIZER_CASH"
-    },
-    {
-        "name": "PAY_ORGANIZER_CASH"
-    },
-    {
-        "name": "BROWSE_JOBOFFER"
-    },
-    {
-        "name": "ADD_JOBOFFER"
-    },
-    {
-        "name": "READ_JOBOFFER"
-    },
-    {
-        "name": "UPDATE_JOBOFFER"
-    },
-    {
-        "name": "DELETE_JOBOFFER"
-    },
-    {
-        "name": "BROWSE_EVENT"
-    },
-    {
-        "name": "ADD_EVENT"
-    },
-    {
-        "name": "READ_EVENT"
-    },
-    {
-        "name": "UPDATE_EVENT"
-    },
+  {
+    "name": "VERIFY_ORGANIZER"
+  },
+  {
+    "name": "READ_ORGANIZER"
+  },
+  {
+    "name": "READ_ORGANIZER_DETAIL"
+  },
+  {
+    "name": "SELF_UPDATE_ORGANIZER"
+  },
+  {
+    "name": "RECEIVE_ORGANIZER_CASH"
+  },
+  {
+    "name": "PAY_ORGANIZER_CASH"
+  },
+  {
+    "name": "BROWSE_JOBOFFER"
+  },
+  {
+    "name": "ADD_JOBOFFER"
+  },
+  {
+    "name": "READ_JOBOFFER"
+  },
+  {
+    "name": "UPDATE_JOBOFFER"
+  },
+  {
+    "name": "DELETE_JOBOFFER"
+  },
+  {
+    "name": "BROWSE_EVENT"
+  },
+  {
+    "name": "ADD_EVENT"
+  },
+  {
+    "name": "READ_EVENT"
+  },
+  {
+    "name": "UPDATE_EVENT"
+  },
   {
     "name": "DELETE_EVENT"
   },
@@ -101,48 +101,48 @@
   {
     "name": "READ_TALENT"
   },
-    {
-        "name": "READ_TALENT_DETAIL"
-    },
-    {
-        "name": "SELF_UPDATE_TALENT"
-    },
-    {
-        "name": "RECEIVE_TALENT_CASH"
-    },
-    {
-        "name": "PAY_TALENT_CASH"
-    },
-    {
-        "name": "BROWSE_PACKAGE"
-    },
-    {
-        "name": "ADD_PACKAGE"
-    },
-    {
-        "name": "READ_PACKAGE"
-    },
-    {
-        "name": "UPDATE_PACKAGE"
-    },
-    {
-        "name": "DELETE_PACKAGE"
-    },
-    {
-        "name": "ORDER_TALENT_PACKAGE"
-    },
-    {
-        "name": "BROWSE_PACKAGE_ORDER"
-    },
-    {
-        "name": "ACCEPT_PACKAGE_ORDER"
-    },
-    {
-        "name": "REJECT_PACKAGE_ORDER"
-    },
-    {
-        "name": "BROWSE_BOOKING_ORGANIZER"
-    },
+  {
+    "name": "READ_TALENT_DETAIL"
+  },
+  {
+    "name": "SELF_UPDATE_TALENT"
+  },
+  {
+    "name": "RECEIVE_TALENT_CASH"
+  },
+  {
+    "name": "PAY_TALENT_CASH"
+  },
+  {
+    "name": "BROWSE_PACKAGE"
+  },
+  {
+    "name": "ADD_PACKAGE"
+  },
+  {
+    "name": "READ_PACKAGE"
+  },
+  {
+    "name": "UPDATE_PACKAGE"
+  },
+  {
+    "name": "DELETE_PACKAGE"
+  },
+  {
+    "name": "ORDER_TALENT_PACKAGE"
+  },
+  {
+    "name": "BROWSE_PACKAGE_ORDER"
+  },
+  {
+    "name": "ACCEPT_PACKAGE_ORDER"
+  },
+  {
+    "name": "REJECT_PACKAGE_ORDER"
+  },
+  {
+    "name": "BROWSE_BOOKING_ORGANIZER"
+  },
   {
     "name": "BROWSE_BOOKING_ORGANIZER_DETAIL"
   },
@@ -181,25 +181,25 @@
   },
   {
     "name": "BROWSE_ADVERTISEMENT"
-    },
-    {
-        "name": "ADD_ADVERTISEMENT"
-    },
-    {
-        "name": "READ_ADVERTISEMENT"
-    },
-    {
-        "name": "UPDATE_ADVERTISEMENT"
-    },
-    {
-        "name": "DELETE_ADVERTISEMENT"
-    },
-    {
-        "name": "GET_ADVERTISEMENT_CASH"
-    },
-    {
-        "name": "PAY_ADVERTISEMENT_CASH"
-    },
+  },
+  {
+    "name": "ADD_ADVERTISEMENT"
+  },
+  {
+    "name": "READ_ADVERTISEMENT"
+  },
+  {
+    "name": "UPDATE_ADVERTISEMENT"
+  },
+  {
+    "name": "DELETE_ADVERTISEMENT"
+  },
+  {
+    "name": "GET_ADVERTISEMENT_CASH"
+  },
+  {
+    "name": "PAY_ADVERTISEMENT_CASH"
+  },
   {
     "name": "BROWSE_TALENT_FEEDBACK"
   },
@@ -282,6 +282,21 @@
     "name": "READ_LOCATION"
   },
   {
+    "name": "READ_FILE"
+  },
+  {
+    "name": "UPLOAD_FILE"
+  },
+  {
+    "name": "DELETE_FILE"
+  },
+  {
     "name": "ROOT"
+  },
+  {
+    "name": "READ_SCORE"
+  },
+  {
+    "name": "UPDATE_SCORE"
   }
 ]

@@ -59,9 +59,27 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
-#
-#logging:
-#  level:
+
+cloud:
+  aws:
+    region:
+      static: ap-southeast-1
+    stack:
+      auto: false
+    credentials:
+      accessKey: AKIA5BNKYFTGKHR5ZOGH
+      secretKey: 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
+
+
+amazonProperties:
+  bucketName: ve-storage
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
 #    org:
 #      hibernate:
 #        type:

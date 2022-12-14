@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
+@Async
 @RequestMapping(path = AdminTalentController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
 @Slf4j

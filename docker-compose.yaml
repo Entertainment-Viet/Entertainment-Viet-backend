@@ -30,7 +30,7 @@ services:
     networks:
       - internal-network
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0
+    image: quay.io/keycloak/keycloak:20.0.1
     environment:
       KEYCLOAK_ADMIN: keycloak
       KEYCLOAK_ADMIN_PASSWORD: keycloak
@@ -41,7 +41,7 @@ services:
       KC_DB_URL_DATABASE: keycloakdb
       KC_DB: postgres
       KC_HTTP_RELATIVE_PATH: /auth
-      KC_HTTP_ENABLED: true
+      KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_URL: http://keycloak:8080/auth
     entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev" ]
     ports:
