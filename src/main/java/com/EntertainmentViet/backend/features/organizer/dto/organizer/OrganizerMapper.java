@@ -13,13 +13,11 @@ import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
-import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Slf4j
 @Mapper(uses = {
     ExtensionsMapper.class,
     JobOfferMapper.class,
@@ -27,12 +25,10 @@ import org.mapstruct.Named;
     EventMapper.class,
     BookingMapper.class,
     OrganizerFeedBackMapper.class,
-    LocationMapper.class
-  },
-  config = MappingConfig.class)
+    LocationMapper.class }, config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "shoppingCart"})
+  @BeanMapping(ignoreUnmappedSourceProperties = { "id", "shoppingCart" })
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
@@ -61,6 +57,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "archived", ignore = true)
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer fromUpdateDtoToModel(UpdateOrganizerDto updateOrganizerDto);
@@ -75,6 +72,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "displayName", ignore = true)
+  @Mapping(target = "archived", ignore = true)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.address", source = "address")
@@ -89,7 +87,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "organizerDetail.businessPaper", source = "businessPaper")
   public abstract Organizer fromKycDtoToModel(UpdateOrganizerKycInfoDto kycInfoDto);
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"password"})
+  @BeanMapping(ignoreUnmappedSourceProperties = { "password" })
   @Mapping(target = "id", ignore = true)
   @Mapping(target = "uid", ignore = true)
   @Mapping(target = "jobOffers", ignore = true)
@@ -100,6 +98,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "archived", ignore = true)
   @Mapping(target = "displayName", source = "username")
   @Mapping(target = "organizerDetail.email", source = "email")
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);

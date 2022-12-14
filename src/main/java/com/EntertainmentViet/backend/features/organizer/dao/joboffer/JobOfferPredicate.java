@@ -85,7 +85,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   }
 
   public BooleanExpression isArchived() {
-    return jobOffer.archived.isTrue();
+    return jobOffer.archived.isTrue().or(jobOffer.organizer.archived.isTrue());
   }
 
   @Override

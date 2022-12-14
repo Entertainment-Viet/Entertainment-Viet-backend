@@ -3,9 +3,6 @@ package com.EntertainmentViet.backend.domain.entities;
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.domain.values.UserInputText;
-import com.EntertainmentViet.backend.domain.values.UserInputText_;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
@@ -13,14 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -40,7 +33,6 @@ import java.time.OffsetDateTime;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class})
-@Slf4j
 public abstract class  User extends Account implements Auditable {
 
   private OffsetDateTime createdAt;
@@ -55,6 +47,8 @@ public abstract class  User extends Account implements Auditable {
   @Column(columnDefinition = "account_type")
   @Type( type = "pgsql_enum" )
   private AccountType accountType;
+
+  private Boolean archived;
 
   public boolean sendVerifyRequest() {
     if (!userState.equals(UserState.GUEST)) {

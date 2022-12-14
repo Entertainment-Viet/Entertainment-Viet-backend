@@ -87,4 +87,8 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
     return organizerShoppingCart.organizer.uid.eq(uid);
   }
 
+  public BooleanExpression isArchived() {
+        return organizerShoppingCart.organizer.archived.isTrue();
+      }
+
 }

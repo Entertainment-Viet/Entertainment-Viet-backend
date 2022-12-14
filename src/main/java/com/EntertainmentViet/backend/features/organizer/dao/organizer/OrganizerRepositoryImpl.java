@@ -31,7 +31,9 @@ public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long>
     return Optional.ofNullable(queryFactory.selectFrom(organizer)
         .where(ExpressionUtils.allOf(
             organizerPredicate.joinAll(queryFactory),
-            organizerPredicate.uidEqual(uid)))
+            organizerPredicate.uidEqual(uid),
+            organizerPredicate.isArchived().not())
+        )
         .fetchOne());
   }
 

@@ -35,7 +35,8 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
     return Optional.ofNullable(queryFactory.selectFrom(booking)
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
-            bookingPredicate.uidEqual(uid))
+            bookingPredicate.uidEqual(uid)),
+            bookingPredicate.isArchived().not()
         )
         .fetchOne());
   }
@@ -46,7 +47,8 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToOrganizer(organizerId),
-            bookingPredicate.fromOrganizerParams(paramDto)
+            bookingPredicate.fromOrganizerParams(paramDto),
+            bookingPredicate.isArchived().not()
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
@@ -58,7 +60,8 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToTalent(talentId),
-            bookingPredicate.fromTalentParams(paramDto)
+            bookingPredicate.fromTalentParams(paramDto),
+            bookingPredicate.isArchived().not()
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
@@ -69,7 +72,8 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
     return queryFactory.selectFrom(booking)
             .where(ExpressionUtils.allOf(
                     bookingPredicate.joinAll(queryFactory),
-                    bookingPredicate.fromParams(paramDto)
+                    bookingPredicate.fromParams(paramDto),
+                    bookingPredicate.isArchived().not()
             ))
             .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
             .fetch();
