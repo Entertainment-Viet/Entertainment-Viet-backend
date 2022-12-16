@@ -43,9 +43,10 @@ public class OrganizerController {
   private final OrganizerBoundary organizerService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadOrganizerDto>> findByUid(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<ReadOrganizerDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    boolean isOwnerUser = uid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token,"ROOT");
 
-    return CompletableFuture.completedFuture(organizerService.findByUid(uid)
+    return CompletableFuture.completedFuture(organizerService.findByUid(uid, isOwnerUser)
         .map(organizerDto -> ResponseEntity
             .ok()
             .body(organizerDto)

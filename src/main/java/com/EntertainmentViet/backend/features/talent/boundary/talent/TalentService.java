@@ -31,7 +31,7 @@ public class TalentService implements TalentBoundary {
         var dataPage = RestUtils.toLazyLoadPageResponse(
             talentRepository.findAll(paramDto, pageable)
                 .map(talentMapper::toDto)
-                .map(talentMapper::checkPermission)
+                .map(dto -> talentMapper.checkPermission(dto, false))
         );
 
         if (talentRepository.findAll(paramDto, pageable.next()).hasContent()) {
@@ -42,8 +42,8 @@ public class TalentService implements TalentBoundary {
     }
 
     @Override
-    public Optional<ReadTalentDto> findByUid(UUID uid) {
-        return talentRepository.findByUid(uid).map(talentMapper::toDto).map(talentMapper::checkPermission);
+    public Optional<ReadTalentDto> findByUid(UUID uid, boolean isOwnerUser) {
+        return talentRepository.findByUid(uid).map(talentMapper::toDto).map(dto -> talentMapper.checkPermission(dto, isOwnerUser));
     }
 
     @Override

@@ -58,6 +58,8 @@ public abstract class TalentMapper {
     @Mapping(target = "fullName", source = "talentDetail.fullName")
     @Mapping(target = "citizenId", source = "talentDetail.citizenId")
     @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
+    @Mapping(target = "avatar", source = "talentDetail.avatar")
+    @Mapping(target = "descriptionImg", source = "talentDetail.descriptionImg")
     @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     @Mapping(target = "songs", source = "priorityScores", qualifiedBy = ScoreMapper.FromModelToScoreSongListDto.class)
     @Mapping(target = "rewards", source = "priorityScores", qualifiedBy = ScoreMapper.FromModelToScoreRewardListDto.class)
@@ -130,8 +132,8 @@ public abstract class TalentMapper {
 
 
     // Only return non-confidential detail if token have enough permission
-    public ReadTalentDto checkPermission(ReadTalentDto readTalentDto) {
-        if (!SecurityUtils.hasRole(TalentRole.READ_TALENT_DETAIL.name())) {
+    public ReadTalentDto checkPermission(ReadTalentDto readTalentDto, boolean isOwnerUser) {
+        if (!isOwnerUser) {
             return ReadTalentDto.builder()
                 .uid(readTalentDto.getUid())
                 .packages(readTalentDto.getPackages())

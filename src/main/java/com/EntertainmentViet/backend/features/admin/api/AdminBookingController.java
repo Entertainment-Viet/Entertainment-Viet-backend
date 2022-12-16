@@ -35,21 +35,17 @@ public class AdminBookingController {
   private final AdminBookingBoundary adminBookingService;
 
   @GetMapping
-  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(JwtAuthenticationToken token,
-                                                                                    @PathVariable("admin_uid") UUID adminUid,
+  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(@PathVariable("admin_uid") UUID adminUid,
                                                                                     @ParameterObject Pageable pageable,
                                                                                     @ParameterObject AdminListBookingParamDto paramDto) {
-    boolean isCurrentUser = adminUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-            adminBookingService.listBooking(isCurrentUser, paramDto, pageable)
+            adminBookingService.listBooking(paramDto, pageable)
     ));
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
-                                                                     @PathVariable("admin_uid") UUID adminUid, @PathVariable("uid") UUID uid) {
-    boolean isCurrentUser = adminUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
-    return CompletableFuture.completedFuture(adminBookingService.findByUid(isCurrentUser, uid)
+  public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(@PathVariable("admin_uid") UUID adminUid, @PathVariable("uid") UUID uid) {
+    return CompletableFuture.completedFuture(adminBookingService.findByUid(uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
                     .body(bookingDto)

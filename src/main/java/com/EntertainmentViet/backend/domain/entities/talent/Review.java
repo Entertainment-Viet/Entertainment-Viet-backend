@@ -6,10 +6,13 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -17,6 +20,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -24,6 +28,7 @@ import java.time.OffsetDateTime;
 @Setter
 @Entity
 @EntityListeners({AuditableListener.class})
+@TypeDef(name = "list-array",typeClass = ListArrayType.class)
 public class Review extends Identifiable implements Auditable, Serializable{
 
   @Id
@@ -52,4 +57,11 @@ public class Review extends Identifiable implements Auditable, Serializable{
   @Max(5)
   @NotNull
   private Integer score;
+
+  @Type(type = "list-array")
+  @Column(
+      name = "review_img",
+      columnDefinition = "text[]"
+  )
+  private List<String> reviewImg;
 }

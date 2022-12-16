@@ -42,13 +42,13 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     private final ReviewBoundary reviewService;
 
     @Override
-    public ListBookingResponseDto listBooking(boolean isCurrentUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
+    public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
             Pageable pageable) {
         var bookingList = bookingRepository.findByOrganizerUid(organizerId, paramDto, pageable);
-        Stream<ReadBookingDto> dtoList = bookingList.stream().map(bookingMapper::toReadDto);
-        if (!isCurrentUser) {
-            dtoList = bookingList.stream().map(bookingMapper::toReadDto).map(bookingMapper::toReadOtherBooking);
-        }
+        Stream<ReadBookingDto> dtoList = bookingList.stream()
+            .map(bookingMapper::toReadDto)
+            .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser));
+
         var dataPage = RestUtils.getPageEntity(dtoList.toList(), pageable);
         var unpaidSum = bookingList.stream().findAny().map(Booking::getOrganizer).map(Organizer::computeUnpaidSum).orElse(0.0);
         return ListBookingResponseDto.builder()

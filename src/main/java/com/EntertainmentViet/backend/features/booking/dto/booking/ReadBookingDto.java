@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dto.booking;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
@@ -40,6 +41,7 @@ public class ReadBookingDto extends Identifiable {
 
     private String paymentType;
 
-    private String extensions;
+    private List<String> finishProof;
 
+    private String extensions;
 }

@@ -11,7 +11,7 @@ public interface TalentBoundary {
 
     CustomPage<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable);
 
-    Optional<ReadTalentDto> findByUid(UUID uid);
+    Optional<ReadTalentDto> findByUid(UUID uid, boolean isOwnerUser);
 
     Optional<UUID> create(CreatedTalentDto createTalentDto, UUID uid);
 

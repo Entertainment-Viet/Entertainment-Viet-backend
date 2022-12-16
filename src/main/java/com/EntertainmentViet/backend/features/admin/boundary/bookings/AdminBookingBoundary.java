@@ -11,9 +11,9 @@ import java.util.UUID;
 
 public interface AdminBookingBoundary {
 
-    Optional<ReadBookingDto> findByUid(boolean isCurrentUser, UUID uid);
+    Optional<ReadBookingDto> findByUid(UUID uid);
 
-    AdminListBookingResponseDto listBooking(boolean isCurrentUser, AdminListBookingParamDto paramDto, Pageable pageable);
+    AdminListBookingResponseDto listBooking(AdminListBookingParamDto paramDto, Pageable pageable);
 
     Optional<UUID> update(UUID uid, UpdateBookingDto updateBookingDto);
 }

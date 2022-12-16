@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder
@@ -26,6 +27,8 @@ public class CreateBookingDto {
 
     @NotNull
     private String paymentType;
+
+    private List<String> finishProof;
 
     private String extensions;
 }
