@@ -32,4 +32,9 @@ public class AdminListBookingParamDto {
 
   // talent name
   private String talent;
+
+  /**
+   * It is false by default, it lists out bookings that from non-archived talent
+   */
+  private Boolean withArchived = Boolean.FALSE;
 }

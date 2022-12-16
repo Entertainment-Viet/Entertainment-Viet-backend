@@ -29,4 +29,9 @@ public class ListTalentBookingParamDto {
 
   // organizer name
   private String organizer;
+
+  /**
+   * It is false by default, it lists out bookings that from non-archived talent
+   */
+  private Boolean withArchived = Boolean.FALSE;
 }

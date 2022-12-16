@@ -35,9 +35,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
     return Optional.ofNullable(queryFactory.selectFrom(booking)
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
-            bookingPredicate.uidEqual(uid)),
-            bookingPredicate.isArchived().not()
-        )
+            bookingPredicate.uidEqual(uid)))
         .fetchOne());
   }
 
@@ -47,9 +45,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToOrganizer(organizerId),
-            bookingPredicate.fromOrganizerParams(paramDto),
-            bookingPredicate.isArchived().not()
-        ))
+            bookingPredicate.fromOrganizerParams(paramDto)))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
   }
@@ -60,9 +56,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToTalent(talentId),
-            bookingPredicate.fromTalentParams(paramDto),
-            bookingPredicate.isArchived().not()
-        ))
+            bookingPredicate.fromTalentParams(paramDto)))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
   }
@@ -70,12 +64,10 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
   @Override
   public List<Booking> findAllBookings(AdminListBookingParamDto paramDto, Pageable pageable) {
     return queryFactory.selectFrom(booking)
-            .where(ExpressionUtils.allOf(
-                    bookingPredicate.joinAll(queryFactory),
-                    bookingPredicate.fromParams(paramDto),
-                    bookingPredicate.isArchived().not()
-            ))
-            .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
-            .fetch();
+        .where(ExpressionUtils.allOf(
+            bookingPredicate.joinAll(queryFactory),
+            bookingPredicate.fromParams(paramDto)))
+        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .fetch();
   }
 }
