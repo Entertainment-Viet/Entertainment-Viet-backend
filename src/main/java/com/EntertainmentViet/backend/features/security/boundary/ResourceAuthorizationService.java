@@ -103,6 +103,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.ADD_EVENT.name())
 
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH) + OrganizerEventController.BOOKING_PATH))
+            .hasAuthority(EventRole.BROWSE_EVENT_BOOKING.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH))
             .hasAuthority(EventRole.READ_EVENT.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerEventController.REQUEST_MAPPING_PATH))

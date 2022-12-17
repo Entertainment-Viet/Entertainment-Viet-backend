@@ -76,6 +76,11 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
 
   public Predicate fromParams(ListEventPositionParamDto paramDto) {
     var predicate = defaultPredicate();
+
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getEvent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,

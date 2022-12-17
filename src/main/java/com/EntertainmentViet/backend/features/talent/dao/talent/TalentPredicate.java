@@ -115,6 +115,10 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   public Predicate fromParams(ListTalentParamDto paramDto) {
     var predicate = defaultPredicate();
 
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getDisplayName() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
