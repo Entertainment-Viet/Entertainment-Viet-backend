@@ -49,6 +49,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
+        .leftJoin(jobOffer.organizer, organizer).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
