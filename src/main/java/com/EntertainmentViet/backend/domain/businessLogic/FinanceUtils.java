@@ -29,7 +29,7 @@ public class FinanceUtils {
         price += netPrice;
 
         if (!booking.isPaid()) {
-          unpaid += price;
+          unpaid += netPrice;
         }
 
         if (booking.getOrganizer().getAccountType().equals(AccountType.CORPORATION)) {

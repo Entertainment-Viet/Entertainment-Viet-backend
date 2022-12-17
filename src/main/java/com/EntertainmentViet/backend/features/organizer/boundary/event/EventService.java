@@ -1,9 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.EntertainmentViet.backend.domain.businessLogic.FinanceUtils;
@@ -142,7 +139,7 @@ public class EventService implements EventBoundary {
   @Override
   public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
     var eventList = eventRepository.findByOrganizerUid(organizerId, null, pageable);
-    List<Booking> bookingList = new ArrayList<>();
+    Set<Booking> bookingList = new HashSet<>();
     for (Event event : eventList) {
       for (EventOpenPosition position : event.getOpenPositions()) {
         EventOpenPosition fetchedOpenPosition = eventOpenPositionRepository.findByUid(position.getUid()).orElse(null);
@@ -154,9 +151,10 @@ public class EventService implements EventBoundary {
         .map(bookingMapper::toReadDto)
         .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser))
         .toList();
-
     var dataPage = RestUtils.getPageEntity(dtoList, pageable);
-    var financeReport = FinanceUtils.generateOrganizerBookingReport(bookingList);
+
+    var dataOffset = RestUtils.getPagingOffer(bookingList.stream().toList(), pageable);
+    var financeReport = FinanceUtils.generateOrganizerBookingReport(bookingList.stream().toList().subList(dataOffset.getStart(), dataOffset.getEnd()));
     return ListBookingResponseDto.builder()
         .unpaidSum(financeReport.getUnpaid())
         .price(financeReport.getPrice())
