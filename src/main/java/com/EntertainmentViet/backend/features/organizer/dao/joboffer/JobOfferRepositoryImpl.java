@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.dao.joboffer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,5 +57,19 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
             jobOfferPredicate.uidEqual(uid))
         )
         .fetchOne());
+  }
+
+  @Override
+  public void archiveJobOffersOfOrganizer(UUID organizerUid) {
+    var jobOfferList = Optional.ofNullable(queryFactory.selectFrom(jobOffer)
+        .where(ExpressionUtils.allOf(
+            jobOfferPredicate.joinAll(queryFactory),
+            jobOfferPredicate.belongToOrganizer(organizerUid),
+            jobOfferPredicate.isArchived().not()))
+        .fetch()).orElse(Collections.emptyList());
+    for (JobOffer jobOffer : jobOfferList) {
+      jobOffer.setArchived(Boolean.TRUE);
+      this.save(jobOffer);
+    }
   }
 }

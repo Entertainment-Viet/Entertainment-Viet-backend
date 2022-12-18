@@ -60,7 +60,7 @@ public class AdminOrganizerController {
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadOrganizerDto>> findById(@PathVariable("uid") UUID uid) {
-    return CompletableFuture.completedFuture(organizerService.findByUid(uid)
+    return CompletableFuture.completedFuture(organizerService.findByUid(uid, true)
         .map(locationDto -> ResponseEntity
             .ok()
             .body(locationDto))
