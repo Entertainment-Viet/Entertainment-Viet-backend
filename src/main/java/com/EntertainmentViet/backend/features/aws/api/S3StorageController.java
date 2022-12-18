@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,7 +43,7 @@ public class S3StorageController {
   }
 
   @GetMapping("/{fileCode}")
-  public CompletableFuture<ResponseEntity<InputStreamResource>> getFile(JwtAuthenticationToken token, @PathVariable("fileCode") String fileCode) {
+  public CompletableFuture<ResponseEntity<byte[]>> getFile(JwtAuthenticationToken token, @PathVariable("fileCode") String fileCode) throws IOException {
     UUID ownerId = RestUtils.getUidFromToken(token);
     boolean isAccessible = FileUtils.checkIfFileAccessible(fileCode, ownerId);
     if (!isAccessible) {
@@ -51,7 +52,7 @@ public class S3StorageController {
     MediaType contentType = FileUtils.getFileType(fileCode);
     return CompletableFuture.completedFuture(ResponseEntity.ok()
         .contentType(contentType)
-        .body(new InputStreamResource(s3StorageService.getFile(fileCode)))
+        .body(s3StorageService.getFile(fileCode).readAllBytes())
     );
   }
 
