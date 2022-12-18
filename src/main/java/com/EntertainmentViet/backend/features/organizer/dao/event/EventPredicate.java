@@ -147,6 +147,12 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
           event.eventDetail.occurrenceAddress.parent().name
               .likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
     }
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+          predicate = ExpressionUtils.allOf(
+              predicate,
+              this.isArchived().or(this.isOrganizerArchived()).not() // neither
+          );
+        }
     return predicate;
   }
 
@@ -156,8 +162,12 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   }
 
   public BooleanExpression isArchived() {
-    return event.archived.isTrue().or(event.organizer.archived.isTrue());
+    return event.archived.isTrue();
   }
+
+      public BooleanExpression isOrganizerArchived() {
+        return event.organizer.archived.isTrue();
+      }
 
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);

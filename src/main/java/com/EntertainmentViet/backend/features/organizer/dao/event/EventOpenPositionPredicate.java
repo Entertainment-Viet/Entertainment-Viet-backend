@@ -103,6 +103,12 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
           predicate,
           eventOpenPosition.jobOffer.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType())));
     }
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          this.isArchived().or(this.isEventArchived()).or(this.isEventOrganizerArchived()).not() // neither
+      );
+    }
     return predicate;
   }
 
@@ -112,9 +118,15 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   }
 
   public BooleanExpression isArchived() {
-    return eventOpenPosition.archived.isTrue()
-        .or(eventOpenPosition.event.archived.isTrue())
-        .or(eventOpenPosition.event.organizer.archived.isTrue());
+    return eventOpenPosition.archived.isTrue();
+  }
+
+  public BooleanExpression isEventArchived() {
+    return eventOpenPosition.event.archived.isTrue();
+  }
+
+  public BooleanExpression isEventOrganizerArchived() {
+    return eventOpenPosition.event.organizer.archived.isTrue();
   }
 
   public Predicate belongToOrganizer(UUID organizerUid) {

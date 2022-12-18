@@ -31,8 +31,7 @@ public class ShoppingCartRepositoryImpl extends BaseRepositoryImpl<OrganizerShop
     return Optional.ofNullable(queryFactory.selectFrom(organizerShoppingCart)
         .where(ExpressionUtils.allOf(
             shoppingCartPredicate.joinAll(queryFactory),
-            shoppingCartPredicate.uidEqual(uid)),
-                shoppingCartPredicate.isArchived().not()
+            shoppingCartPredicate.uidEqual(uid))
         )
         .fetchOne());
   }
@@ -43,8 +42,7 @@ public class ShoppingCartRepositoryImpl extends BaseRepositoryImpl<OrganizerShop
         .where(ExpressionUtils.allOf(
             shoppingCartPredicate.joinAll(queryFactory),
             shoppingCartPredicate.belongToOrganizer(uid),
-            shoppingCartPredicate.fromParams(paramDto),
-            shoppingCartPredicate.isArchived().not()
+        shoppingCartPredicate.fromParams(paramDto)
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();

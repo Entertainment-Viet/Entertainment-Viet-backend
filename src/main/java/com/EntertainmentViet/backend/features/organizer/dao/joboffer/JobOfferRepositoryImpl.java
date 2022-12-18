@@ -31,8 +31,7 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
         .where(ExpressionUtils.allOf(
             jobOfferPredicate.joinAll(queryFactory),
             jobOfferPredicate.belongToOrganizer(uid),
-            jobOfferPredicate.fromParams(paramDto),
-            jobOfferPredicate.isArchived().not()
+        jobOfferPredicate.fromParams(paramDto)
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
@@ -44,8 +43,7 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
         .where(ExpressionUtils.allOf(
             jobOfferPredicate.joinAll(queryFactory),
             jobOfferPredicate.belongToOrganizer(organizerUid),
-            jobOfferPredicate.uidEqual(uid)),
-            jobOfferPredicate.isArchived().not()
+        jobOfferPredicate.uidEqual(uid))
         )
         .fetchOne());
   }
@@ -55,8 +53,7 @@ public class JobOfferRepositoryImpl extends BaseRepositoryImpl<JobOffer, Long> i
     return Optional.ofNullable(queryFactory.selectFrom(jobOffer)
         .where(ExpressionUtils.allOf(
             jobOfferPredicate.joinAll(queryFactory),
-            jobOfferPredicate.uidEqual(uid)),
-            jobOfferPredicate.isArchived().not()
+            jobOfferPredicate.uidEqual(uid))
         )
         .fetchOne());
   }
