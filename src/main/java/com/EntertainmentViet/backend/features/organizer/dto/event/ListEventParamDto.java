@@ -36,4 +36,6 @@ public class ListEventParamDto {
   private String locationParentType;
 
   private String locationParentName;
+
+  private Boolean withArchived = Boolean.FALSE;
 }
