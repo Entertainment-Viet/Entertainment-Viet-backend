@@ -29,8 +29,7 @@ public class EventOpenPositionRepositoryImpl extends BaseRepositoryImpl<EventOpe
     return Optional.ofNullable(queryFactory.selectFrom(eventOpenPosition)
         .where(ExpressionUtils.allOf(
             eventOpenPositionPredicate.joinAll(queryFactory),
-            eventOpenPositionPredicate.uidEqual(uid)),
-            eventOpenPositionPredicate.isArchived().not()
+            eventOpenPositionPredicate.uidEqual(uid))
         )
         .fetchOne());
   }
@@ -42,8 +41,7 @@ public class EventOpenPositionRepositoryImpl extends BaseRepositoryImpl<EventOpe
             eventOpenPositionPredicate.joinAll(queryFactory),
             eventOpenPositionPredicate.belongToOrganizer(organizerUid),
             eventOpenPositionPredicate.belongToEvent(eventUid),
-            eventOpenPositionPredicate.fromParams(paramDto),
-            eventOpenPositionPredicate.isArchived().not()
+            eventOpenPositionPredicate.fromParams(paramDto)
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();

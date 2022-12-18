@@ -20,4 +20,9 @@ public class ListEventPositionParamDto {
   private UUID category;
 
   private String workType;
+
+  /**
+   * It is false by default, it lists out events that from non-archived event, event's organizer
+   */
+  private Boolean withArchived = Boolean.FALSE;
 }
