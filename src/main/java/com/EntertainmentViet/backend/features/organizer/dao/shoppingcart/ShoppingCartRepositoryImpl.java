@@ -42,7 +42,7 @@ public class ShoppingCartRepositoryImpl extends BaseRepositoryImpl<OrganizerShop
         .where(ExpressionUtils.allOf(
             shoppingCartPredicate.joinAll(queryFactory),
             shoppingCartPredicate.belongToOrganizer(uid),
-            shoppingCartPredicate.fromParams(paramDto)
+        shoppingCartPredicate.fromParams(paramDto)
         ))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();

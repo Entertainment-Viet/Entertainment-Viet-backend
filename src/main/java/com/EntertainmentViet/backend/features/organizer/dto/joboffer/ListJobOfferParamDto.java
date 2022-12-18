@@ -15,4 +15,6 @@ public class ListJobOfferParamDto {
   private String organizer;
 
   private UUID category;
+
+  private Boolean withArchived = Boolean.FALSE;
 }

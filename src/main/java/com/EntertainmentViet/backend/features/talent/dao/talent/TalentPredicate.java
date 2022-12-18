@@ -238,4 +238,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   public BooleanExpression uidEqual(UUID uid) {
     return talent.uid.eq(uid);
   }
+
+  public BooleanExpression isArchived() {
+        return talent.archived.isTrue();
+  }
 }

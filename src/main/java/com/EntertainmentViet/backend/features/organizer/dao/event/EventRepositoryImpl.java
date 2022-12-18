@@ -29,30 +29,26 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
     this.eventPredicate = eventPredicate;
   }
 
-
   @Override
   public Optional<Event> findByUid(UUID uid) {
     return Optional.ofNullable(queryFactory.selectFrom(event)
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
             eventPredicate.uidEqual(uid)),
-            eventPredicate.isArchived().not()
-        )
+            eventPredicate.isArchived().not())
         .fetchOne());
   }
 
   @Override
   public Page<Event> findAll(ListEventParamDto paramDto, Pageable pageable) {
     var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
-            .where(ExpressionUtils.allOf(
-                eventPredicate.joinAll(queryFactory),
-                eventPredicate.fromParams(paramDto),
-                eventPredicate.isArchived().not()
-            ))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
-            .fetch())
+        .where(ExpressionUtils.allOf(
+            eventPredicate.joinAll(queryFactory),
+            eventPredicate.fromParams(paramDto)))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
+        .fetch())
         .orElse(Collections.emptyList());
 
     return new PageImpl<>(eventList, pageable, eventList.size());
@@ -64,9 +60,7 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
             eventPredicate.belongToOrganizer(uid),
-            eventPredicate.fromParams(paramDto),
-            eventPredicate.isArchived().not()
-        ))
+            eventPredicate.fromParams(paramDto)))
         .orderBy(getSortedColumn(pageable.getSort(), Event.class))
         .fetch();
   }

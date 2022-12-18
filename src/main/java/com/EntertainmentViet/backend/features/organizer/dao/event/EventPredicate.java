@@ -43,17 +43,18 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(event).distinct()
-            .leftJoin(event.eventDetail, eventDetail).fetchJoin()
-            .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
-            .leftJoin(location.type(), locationType).fetchJoin()
-            .leftJoin(location.parent(), parentLocation).fetchJoin()
-            .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
-            .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
-            .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
-            .leftJoin(event.organizer, organizer).fetchJoin()
+        .leftJoin(event.eventDetail, eventDetail).fetchJoin()
+        .leftJoin(eventDetail.occurrenceAddress, location).fetchJoin()
+        .leftJoin(location.type(), locationType).fetchJoin()
+        .leftJoin(location.parent(), parentLocation).fetchJoin()
+        .leftJoin(parentLocation.type(), parentLocationType).fetchJoin()
+        .leftJoin(parentLocation.parent(), grandparentLocation).fetchJoin()
+        .leftJoin(grandparentLocation.type(), grandParentLocationType).fetchJoin()
+        .leftJoin(event.organizer, organizer).fetchJoin()
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.jobOffer, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
@@ -69,97 +70,89 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.name.like("%"+paramDto.getName()+"%")
-      );
+          event.name.like("%" + paramDto.getName() + "%"));
     }
     if (paramDto.getIsActive() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getIsActive() ? event.isActive.isTrue() : event.isActive.isFalse()
-      );
+          paramDto.getIsActive() ? event.isActive.isTrue() : event.isActive.isFalse());
     }
     if (paramDto.getOrganizer() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
-      );
+          event.organizer.displayName.like("%" + paramDto.getOrganizer() + "%"));
     }
     if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
       // Get event occurrenceTime is equal or after start time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not()
-      );
+          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not());
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
-      // Get event occurrenceTime is equal or before end  time
+      // Get event occurrenceTime is equal or before end time
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not()
-      );
-    }
-    else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+          predicate,
+          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not());
+    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is between start time and end time
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not(),
-              event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not()
-      );
+          predicate,
+          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not(),
+          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not());
     }
     if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency
-                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
-                              )))
-      );
-    }
-    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
+          predicate,
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.currency
+                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()))));
+    } else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency
-                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
-                              )))
-      );
-    }
-    else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
+          predicate,
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.currency
+                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()))));
+    } else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.currency
-                                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()
-                              ))),
-              event.openPositions.any().in(
-                      JPAExpressions.selectFrom(eventOpenPosition).where(
-                              eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()
-                              )))
-      );
+          predicate,
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.currency
+                      .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()))),
+          event.openPositions.any().in(
+              JPAExpressions.selectFrom(eventOpenPosition).where(
+                  eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()))));
     }
     if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceAddress.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
-              event.eventDetail.occurrenceAddress.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
+          predicate,
+          event.eventDetail.occurrenceAddress.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
+          event.eventDetail.occurrenceAddress.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
     }
     if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              event.eventDetail.occurrenceAddress.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
-              event.eventDetail.occurrenceAddress.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
+          predicate,
+          event.eventDetail.occurrenceAddress.parent().type().type
+              .likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
+          event.eventDetail.occurrenceAddress.parent().name
+              .likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
     }
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+          predicate = ExpressionUtils.allOf(
+              predicate,
+              this.isArchived().or(this.isOrganizerArchived()).not() // neither
+          );
+        }
     return predicate;
   }
 
@@ -172,8 +165,11 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     return event.archived.isTrue();
   }
 
+      public BooleanExpression isOrganizerArchived() {
+        return event.organizer.archived.isTrue();
+      }
+
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);
   }
-
 }

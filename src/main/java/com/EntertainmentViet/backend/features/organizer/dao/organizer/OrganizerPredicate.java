@@ -121,4 +121,8 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   public BooleanExpression uidEqual(UUID uid) {
     return organizer.uid.eq(uid);
   }
+
+  public BooleanExpression isArchived() {
+    return organizer.archived.isTrue();
+  }
 }

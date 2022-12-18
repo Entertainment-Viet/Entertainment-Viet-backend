@@ -42,6 +42,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     queryFactory.selectFrom(eventOpenPosition).distinct()
@@ -79,31 +80,33 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getEvent() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.name.like("%"+paramDto.getEvent()+"%")
-      );
+          event.name.like("%" + paramDto.getEvent() + "%"));
     }
     if (paramDto.getIsActive() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getIsActive() ? eventOpenPosition.jobOffer.isActive.isTrue() : eventOpenPosition.jobOffer.isActive.isFalse()
-      );
+          paramDto.getIsActive() ? eventOpenPosition.jobOffer.isActive.isTrue()
+              : eventOpenPosition.jobOffer.isActive.isFalse());
     }
     if (paramDto.getQuantity() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          eventOpenPosition.quantity.eq(paramDto.getQuantity())
-      );
+          eventOpenPosition.quantity.eq(paramDto.getQuantity()));
     }
     if (paramDto.getCategory() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          eventOpenPosition.jobOffer.jobDetail.category.uid.eq(paramDto.getCategory())
-      );
+          eventOpenPosition.jobOffer.jobDetail.category.uid.eq(paramDto.getCategory()));
     }
     if (paramDto.getWorkType() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          eventOpenPosition.jobOffer.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
+          eventOpenPosition.jobOffer.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType())));
+    }
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          this.isArchived().or(this.isEventArchived()).or(this.isEventOrganizerArchived()).not() // neither
       );
     }
     return predicate;
@@ -118,6 +121,13 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
     return eventOpenPosition.archived.isTrue();
   }
 
+  public BooleanExpression isEventArchived() {
+    return eventOpenPosition.event.archived.isTrue();
+  }
+
+  public BooleanExpression isEventOrganizerArchived() {
+    return eventOpenPosition.event.organizer.archived.isTrue();
+  }
 
   public Predicate belongToOrganizer(UUID organizerUid) {
     return eventOpenPosition.event.organizer.uid.eq(organizerUid);

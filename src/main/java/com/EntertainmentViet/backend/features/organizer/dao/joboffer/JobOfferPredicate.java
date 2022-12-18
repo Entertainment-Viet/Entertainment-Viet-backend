@@ -77,6 +77,14 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
               jobOffer.jobDetail.category.uid.eq(paramDto.getCategory())
       );
     }
+
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+       predicate,
+       this.isArchived().or(this.isOrganizerArchived()).not() // neither
+      );
+    }
+
     return predicate;
   }
 
@@ -87,6 +95,10 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   public BooleanExpression isArchived() {
     return jobOffer.archived.isTrue();
   }
+
+  public BooleanExpression isOrganizerArchived() {
+        return jobOffer.organizer.archived.isTrue();
+      }
 
   @Override
   public BooleanExpression uidEqual(UUID uid) {

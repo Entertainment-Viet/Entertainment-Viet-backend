@@ -47,4 +47,6 @@ public abstract class ReadUserDto extends IdentifiableDto {
   private String bankBranchName;
 
   private String extensions;
+
+  private Boolean archived;
 }

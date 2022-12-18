@@ -66,13 +66,17 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
     if (paramDto.getWorkType() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          organizerShoppingCart.talentPackage.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
-      );
+          organizerShoppingCart.talentPackage.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType())));
     }
     if (paramDto.getCategory() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          organizerShoppingCart.talentPackage.jobDetail.category.uid.eq(paramDto.getCategory())
+          organizerShoppingCart.talentPackage.jobDetail.category.uid.eq(paramDto.getCategory()));
+    }
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+        predicate,
+        this.isOrganizerArchived()
       );
     }
     return predicate;
@@ -87,4 +91,7 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
     return organizerShoppingCart.organizer.uid.eq(uid);
   }
 
+  public BooleanExpression isOrganizerArchived() {
+    return organizerShoppingCart.organizer.archived.isTrue();
+  }
 }

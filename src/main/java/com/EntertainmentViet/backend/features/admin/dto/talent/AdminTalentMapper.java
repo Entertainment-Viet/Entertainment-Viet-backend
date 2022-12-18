@@ -74,6 +74,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "packages", ignore = true)
   @Mapping(target = "finalScore", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "archived", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
   @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)

@@ -129,6 +129,13 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
+    // hide bookings whose talent is archived
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+        predicate,
+        this.isOrganizerArchived().not()
+      );
+    }
     return predicate;
   }
 
@@ -191,6 +198,13 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
+    // hide bookings whose organizer is archived
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+        predicate,
+        this.isTalentArchived().not()
+      );
+    }
     return predicate;
   }
 
@@ -205,6 +219,14 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
 
   public BooleanExpression belongToTalent(UUID uid) {
     return booking.talent.uid.eq(uid);
+  }
+
+  public BooleanExpression isTalentArchived() {
+    return booking.talent.archived.isTrue();
+  }
+
+  public BooleanExpression isOrganizerArchived() {
+    return booking.organizer.archived.isTrue();
   }
 
   public Predicate fromParams(AdminListBookingParamDto paramDto) {
@@ -266,11 +288,17 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
               booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
-
     if (paramDto.getOrganizer() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               booking.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
+      );
+    }
+    // hide bookings whose either talent or organizer is archived
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+        predicate,
+        this.isTalentArchived().or(this.isOrganizerArchived()).not() // neither
       );
     }
     return predicate;
