@@ -43,6 +43,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "representative", source = "organizerDetail.representative")
   @Mapping(target = "position", source = "organizerDetail.position")
   @Mapping(target = "businessPaper", source = "organizerDetail.businessPaper")
+  @Mapping(target = "avatar", source = "organizerDetail.avatar")
+  @Mapping(target = "descriptionImg", source = "organizerDetail.descriptionImg")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
@@ -104,8 +106,8 @@ public abstract class OrganizerMapper {
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission
-  public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto) {
-    if (!SecurityUtils.hasRole(OrganizerRole.READ_ORGANIZER_DETAIL.name())) {
+  public ReadOrganizerDto checkPermission(ReadOrganizerDto readOrganizerDto, boolean isOwnerUser) {
+    if (!isOwnerUser) {
       return ReadOrganizerDto.builder()
           .uid(readOrganizerDto.getUid())
           .events(readOrganizerDto.getEvents())

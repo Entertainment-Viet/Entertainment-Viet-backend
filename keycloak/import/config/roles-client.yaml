@@ -6,10 +6,13 @@
     "name": "READ_ORGANIZER"
   },
   {
-    "name": "READ_ORGANIZER_DETAIL"
+    "name": "READ_ORGANIZER_CONFIDENTIAL"
   },
   {
-    "name": "SELF_UPDATE_ORGANIZER"
+    "name": "UPDATE_ORGANIZER"
+  },
+  {
+    "name": "UPDATE_ORGANIZER_CONFIDENTIAL"
   },
   {
     "name": "RECEIVE_ORGANIZER_CASH"
@@ -102,10 +105,13 @@
     "name": "READ_TALENT"
   },
   {
-    "name": "READ_TALENT_DETAIL"
+    "name": "READ_TALENT_CONFIDENTIAL"
   },
   {
-    "name": "SELF_UPDATE_TALENT"
+    "name": "UPDATE_TALENT"
+  },
+  {
+    "name": "UPDATE_TALENT_CONFIDENTIAL"
   },
   {
     "name": "RECEIVE_TALENT_CASH"
@@ -144,9 +150,6 @@
     "name": "BROWSE_BOOKING_ORGANIZER"
   },
   {
-    "name": "BROWSE_BOOKING_ORGANIZER_DETAIL"
-  },
-  {
     "name": "ACCEPT_BOOKING_ORGANIZER"
   },
   {
@@ -157,9 +160,6 @@
   },
   {
     "name": "BROWSE_BOOKING_TALENT"
-  },
-  {
-    "name": "BROWSE_BOOKING_TALENT_DETAIL"
   },
   {
     "name": "ACCEPT_BOOKING_TALENT"

@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface OrganizerBoundary {
 
-  Optional<ReadOrganizerDto> findByUid(UUID uid);
+  Optional<ReadOrganizerDto> findByUid(UUID uid, boolean isOwnerUser);
 
   Optional<UUID> create(CreatedOrganizerDto createOrganizerDto, UUID uid);
 

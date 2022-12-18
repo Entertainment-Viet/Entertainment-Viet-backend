@@ -58,9 +58,10 @@ public class TalentController {
   }
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(@PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    boolean isOwnerUser = uid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
 
-    return CompletableFuture.completedFuture(talentService.findByUid(uid)
+    return CompletableFuture.completedFuture(talentService.findByUid(uid, isOwnerUser)
             .map( talentDto -> ResponseEntity
                     .ok()
                     .body(talentDto)

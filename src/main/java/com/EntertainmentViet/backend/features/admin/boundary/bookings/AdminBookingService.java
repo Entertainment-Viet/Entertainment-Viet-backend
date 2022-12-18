@@ -25,24 +25,16 @@ public class AdminBookingService implements AdminBookingBoundary {
     private final BookingMapper bookingMapper;
 
     @Override
-    public Optional<ReadBookingDto> findByUid(boolean isCurrentUser, UUID uid) {
-        if (!isCurrentUser) {
-            return bookingRepository.findByUid(uid)
-                    .map(bookingMapper::toReadDto)
-                    .map(bookingMapper::toReadOtherBooking);
-        }
+    public Optional<ReadBookingDto> findByUid(UUID uid) {
         return bookingRepository.findByUid(uid)
-            .map(bookingMapper::toReadDto)
-            .map(bookingMapper::checkPermission);
-    }
+            .map(bookingMapper::toReadDto);}
 
     @Override
-    public AdminListBookingResponseDto listBooking(boolean isCurrentUser, AdminListBookingParamDto paramDto, Pageable pageable) {
+    public AdminListBookingResponseDto listBooking(AdminListBookingParamDto paramDto, Pageable pageable) {
         var bookingList = bookingRepository.findAllBookings(paramDto, pageable);
-        Stream<ReadBookingDto> dtoList = bookingList.stream().map(bookingMapper::toReadDto);
-        if (!isCurrentUser) {
-            dtoList = bookingList.stream().map(bookingMapper::toReadDto).map(bookingMapper::toReadOtherBooking);
-        }
+        Stream<ReadBookingDto> dtoList = bookingList.stream()
+            .map(bookingMapper::toReadDto);
+
         var dataPage = RestUtils.getPageEntity(dtoList.toList(), pageable);
         return AdminListBookingResponseDto.builder()
                 .bookings(RestUtils.toPageResponse(dataPage))

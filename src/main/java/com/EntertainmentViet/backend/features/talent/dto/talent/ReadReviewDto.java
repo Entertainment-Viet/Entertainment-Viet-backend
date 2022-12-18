@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @SuperBuilder
@@ -27,4 +28,6 @@ public class ReadReviewDto extends IdentifiableDto {
   private String comment;
 
   private Integer score;
+
+  private List<String> reviewImg;
 }

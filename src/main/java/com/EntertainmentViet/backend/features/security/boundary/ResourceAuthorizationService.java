@@ -162,9 +162,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             // Organizer confidential mapping
             .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CONFIDENTIAL_PATH))
-            .hasAuthority(OrganizerRole.READ_ORGANIZER_DETAIL.name())
+            .hasAuthority(OrganizerRole.READ_ORGANIZER_CONFIDENTIAL.name())
             .mvcMatchers(HttpMethod.PUT, ofPath(anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH) + OrganizerController.CONFIDENTIAL_PATH))
-            .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
+            .hasAuthority(OrganizerRole.UPDATE_ORGANIZER_CONFIDENTIAL.name())
 
             // Organizer manage mapping
             .mvcMatchers(HttpMethod.POST, ofPath(OrganizerController.REQUEST_MAPPING_PATH))
@@ -172,7 +172,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(OrganizerRole.READ_ORGANIZER.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(OrganizerController.REQUEST_MAPPING_PATH))
-            .hasAuthority(OrganizerRole.SELF_UPDATE_ORGANIZER.name())
+            .hasAuthority(OrganizerRole.UPDATE_ORGANIZER.name())
 
             // Talent package order mapping
             .mvcMatchers(HttpMethod.POST, ofPath(PackageBookingController.REQUEST_MAPPING_PATH + PackageBookingController.CART_PATH))
@@ -261,9 +261,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             // Talent confidential mapping
             .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CONFIDENTIAL_PATH))
-            .hasAuthority(TalentRole.READ_TALENT_DETAIL.name())
+            .hasAuthority(TalentRole.READ_TALENT_CONFIDENTIAL.name())
             .mvcMatchers(HttpMethod.PUT, ofPath(anyPathAfter(TalentController.REQUEST_MAPPING_PATH) + TalentController.CONFIDENTIAL_PATH))
-            .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
+            .hasAuthority(TalentRole.UPDATE_TALENT_CONFIDENTIAL.name())
 
             // Talent manage mapping
             .mvcMatchers(HttpMethod.POST, ofPath(TalentController.REQUEST_MAPPING_PATH))
@@ -273,7 +273,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET, anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(TalentRole.READ_TALENT.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(TalentController.REQUEST_MAPPING_PATH))
-            .hasAuthority(TalentRole.SELF_UPDATE_TALENT.name())
+            .hasAuthority(TalentRole.UPDATE_TALENT.name())
 
             // Admin organizer mapping
             .mvcMatchers(HttpMethod.DELETE, ofPath(anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + AdminOrganizerController.DEACTIVE_PATH))

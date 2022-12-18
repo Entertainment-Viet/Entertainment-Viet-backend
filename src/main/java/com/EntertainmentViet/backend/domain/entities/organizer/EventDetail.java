@@ -66,6 +66,13 @@ public class EventDetail {
 
   @Type(type = "list-array")
   @Column(
+      name = "description_img",
+      columnDefinition = "text[]"
+  )
+  private List<String> descriptionImg;
+
+  @Type(type = "list-array")
+  @Column(
       name = "legal_paper",
       columnDefinition = "text[]"
   )
@@ -85,10 +92,10 @@ public class EventDetail {
       setDescription(newData.getDescription());
     }
     if (newData.getLegalPaper() != null) {
-      if (getLegalPaper() == null) {
-        setLegalPaper(new ArrayList<>());
-      }
-      getLegalPaper().addAll(newData.getLegalPaper());
+      setLegalPaper(newData.getLegalPaper());
+    }
+    if (newData.getDescriptionImg() != null) {
+      setDescriptionImg(newData.getDescriptionImg());
     }
     return this;
   }

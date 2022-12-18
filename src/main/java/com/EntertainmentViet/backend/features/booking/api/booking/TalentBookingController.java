@@ -55,8 +55,8 @@ public class TalentBookingController {
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token,
                                                                      @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
-    boolean isCurrentUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
-    return CompletableFuture.completedFuture(bookingService.findByUid(isCurrentUser, talentUid, uid)
+    boolean isOwnerUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    return CompletableFuture.completedFuture(bookingService.findByUid(isOwnerUser, talentUid, uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
                     .body(bookingDto)
@@ -111,9 +111,9 @@ public class TalentBookingController {
                                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListTalentBookingParamDto paramDto) {
-    boolean isCurrentUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-        talentBookingService.listBooking(isCurrentUser, talentUid, paramDto, pageable)
+        talentBookingService.listBooking(isOwnerUser, talentUid, paramDto, pageable)
     ));
   }
 

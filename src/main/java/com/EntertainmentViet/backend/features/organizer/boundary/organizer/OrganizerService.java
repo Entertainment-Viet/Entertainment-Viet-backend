@@ -25,10 +25,10 @@ public class OrganizerService implements OrganizerBoundary {
   private final OrganizerMapper organizerMapper;
 
   @Override
-  public Optional<ReadOrganizerDto> findByUid(UUID id) {
+  public Optional<ReadOrganizerDto> findByUid(UUID id, boolean isOwnerUser) {
     return organizerRepository.findByUid(id)
         .map(organizerMapper::toDto)
-        .map(organizerMapper::checkPermission);
+        .map(dto -> organizerMapper.checkPermission(dto, isOwnerUser));
   }
 
   @Override

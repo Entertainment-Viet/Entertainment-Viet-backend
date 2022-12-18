@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.querydsl.core.annotations.QueryInit;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.EqualsAndHashCode;
@@ -45,6 +47,7 @@ import org.hibernate.annotations.TypeDef;
     typeClass = PostgreSQLEnumType.class
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@TypeDef(name = "list-array",typeClass = ListArrayType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class})
 public class Booking extends Identifiable implements Auditable {
@@ -93,6 +96,13 @@ public class Booking extends Identifiable implements Auditable {
   @NotNull
   private Boolean isReview;
 
+  @Type(type = "list-array")
+  @Column(
+      name = "finish_proof",
+      columnDefinition = "text[]"
+  )
+  private List<String> finishProof;
+
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
@@ -109,6 +119,9 @@ public class Booking extends Identifiable implements Auditable {
     }
     if (newData.getExtensions() != null) {
       setExtensions(newData.getExtensions());
+    }
+    if (newData.getFinishProof() != null) {
+      setFinishProof(newData.getFinishProof());
     }
   }
 

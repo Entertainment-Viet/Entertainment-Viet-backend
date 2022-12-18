@@ -64,29 +64,17 @@ public abstract class BookingMapper {
     public abstract Booking fromUpdateDtoToModel(UpdateBookingDto updateBookingDto);
 
     // Only return non-confidential detail if token have enough permission
-    public ReadBookingDto checkPermission(ReadBookingDto readBookingDto) {
-        if (!SecurityUtils.hasRole(BookingRole.BROWSE_BOOKING_ORGANIZER_DETAIL.name())
-            && !SecurityUtils.hasRole(BookingRole.BROWSE_BOOKING_TALENT_DETAIL.name())) {
+    public ReadBookingDto checkPermission(ReadBookingDto readBookingDto, boolean isOwnerUser) {
+        if (!isOwnerUser) {
             return ReadBookingDto.builder()
-                .status(readBookingDto.getStatus())
+                .uid(readBookingDto.getUid())
                 .jobDetail(ReadJobDetailDto.builder()
                     .performanceStartTime(readBookingDto.getJobDetail().getPerformanceStartTime())
                     .performanceEndTime(readBookingDto.getJobDetail().getPerformanceEndTime())
                     .build()
-                )
-                .build();
+                ).build();
         }
         return readBookingDto;
-    }
-
-    public ReadBookingDto toReadOtherBooking(ReadBookingDto readBookingDto) {
-        return ReadBookingDto.builder()
-                .uid(readBookingDto.getUid())
-                .jobDetail(ReadJobDetailDto.builder()
-                        .performanceStartTime(readBookingDto.getJobDetail().getPerformanceStartTime())
-                        .performanceEndTime(readBookingDto.getJobDetail().getPerformanceEndTime())
-                        .build()
-                ).build();
     }
 
     @Named("toBookingStatus")

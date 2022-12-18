@@ -7,5 +7,5 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto
 
 public interface BookingBoundary {
 
-    Optional<ReadBookingDto> findByUid(boolean isCurrentUser, UUID ownerUid, UUID uid);
+    Optional<ReadBookingDto> findByUid(boolean isOwnerUser, UUID ownerUid, UUID uid);
 }

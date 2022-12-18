@@ -58,6 +58,8 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "fullName", source = "talentDetail.fullName")
   @Mapping(target = "citizenId", source = "talentDetail.citizenId")
   @Mapping(target = "citizenPaper", source = "talentDetail.citizenPaper")
+  @Mapping(target = "avatar", source = "talentDetail.avatar")
+  @Mapping(target = "descriptionImg", source = "talentDetail.descriptionImg")
   @Mapping(target = "extensions", source = "talentDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   public abstract ReadAdminTalentDto toAdminDto(Talent talent);
 

@@ -33,7 +33,6 @@ public class OrganizerDetail extends UserDetail {
 
   private String position;
 
-  // TODO storage for image of citizen paper
   @Type(type = "list-array")
   @Column(
       name = "business_paper",
@@ -59,11 +58,9 @@ public class OrganizerDetail extends UserDetail {
       setPosition(newData.getPosition());
     }
     if (newData.getBusinessPaper() != null) {
-      if (getBusinessPaper() == null) {
-        setBusinessPaper(new ArrayList<>());
-      }
-      getBusinessPaper().addAll(newData.getBusinessPaper());
+      setBusinessPaper(newData.getBusinessPaper());
     }
+
     return this;
   }
 
