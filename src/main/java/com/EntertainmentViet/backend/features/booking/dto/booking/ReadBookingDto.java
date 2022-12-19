@@ -43,5 +43,7 @@ public class ReadBookingDto extends Identifiable {
 
     private List<String> finishProof;
 
+    private String bookingCode;
+
     private String extensions;
 }

@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
+import com.EntertainmentViet.backend.domain.businessLogic.BookingCodeListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
@@ -49,7 +50,7 @@ import org.hibernate.annotations.TypeDef;
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "list-array",typeClass = ListArrayType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@EntityListeners({AuditableListener.class})
+@EntityListeners({AuditableListener.class, BookingCodeListener.class})
 public class Booking extends Identifiable implements Auditable {
 
   @Id
@@ -106,6 +107,8 @@ public class Booking extends Identifiable implements Auditable {
   @Type(type = "jsonb")
   @Column(columnDefinition = "jsonb")
   private JsonNode extensions;
+
+  private String bookingCode;
 
   public void updateInfo(Booking newData) {
     if (checkIfConfirmed()) {
