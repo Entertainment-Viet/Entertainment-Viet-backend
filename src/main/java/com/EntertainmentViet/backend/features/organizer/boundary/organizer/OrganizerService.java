@@ -7,8 +7,6 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
-import com.EntertainmentViet.backend.features.organizer.dao.joboffer.JobOfferRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.*;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +22,6 @@ import java.util.UUID;
 public class OrganizerService implements OrganizerBoundary {
 
   private final OrganizerRepository organizerRepository;
-  private final EventRepository eventRepository;
-  private final JobOfferRepository jobOfferRepository;
 
   private final OrganizerMapper organizerMapper;
 
@@ -65,7 +61,8 @@ public class OrganizerService implements OrganizerBoundary {
   @Override
   public boolean delete(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
-    if (organizer == null) return false;
+    if (organizer == null)
+      return false;
     for (Event event : organizer.getEvents()) {
       event.setArchived(Boolean.TRUE);
     }
