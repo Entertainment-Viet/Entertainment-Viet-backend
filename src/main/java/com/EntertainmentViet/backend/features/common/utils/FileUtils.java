@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @UtilityClass
 @Slf4j
@@ -28,7 +27,7 @@ public class FileUtils {
   public boolean checkIfFileAccessible(String fileCode, UUID ownerId) {
     var parts = fileCode.split("_");
     UUID ownerPart = UUID.fromString(parts[0]);
-    boolean isPublic = Boolean.valueOf(parts[0]);
+    boolean isPublic = Boolean.valueOf(parts[1]);
     if (isPublic || ownerPart.equals(ownerId)) {
       return true;
     }
