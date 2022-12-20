@@ -1,12 +1,16 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.organizer.Event;
+import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
+import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +19,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OrganizerService implements OrganizerBoundary {
 
   private final OrganizerRepository organizerRepository;
@@ -56,6 +59,21 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
+  public boolean delete(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null)
+      return false;
+    for (Event event : organizer.getEvents()) {
+      event.setArchived(Boolean.TRUE);
+    }
+    for (JobOffer jobOffer : organizer.getJobOffers()) {
+      jobOffer.setArchived(Boolean.TRUE);
+    }
+    organizerRepository.save(organizer);
+    return true;
+  }
+
+  @Override
   public boolean sendVerifyRequest(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
 
@@ -69,7 +87,6 @@ public class OrganizerService implements OrganizerBoundary {
     organizerRepository.save(organizer);
     return true;
   }
-
 
   @Override
   @Transactional
@@ -86,4 +103,18 @@ public class OrganizerService implements OrganizerBoundary {
     organizerRepository.save(organizer);
     return true;
   }
+
+  @Override
+  public CustomPage<ReadOrganizerDto> findAll(Pageable pageable) {
+    var dataPage = RestUtils.toLazyLoadPageResponse(
+        organizerRepository.findAll(pageable)
+            .map(organizerMapper::toDto));
+
+    if (organizerRepository.findAll(pageable.next()).hasContent()) {
+      dataPage.getPaging().setLast(false);
+    }
+
+    return dataPage;
+  }
+
 }

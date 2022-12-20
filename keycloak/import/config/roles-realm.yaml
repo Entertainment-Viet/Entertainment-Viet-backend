@@ -187,8 +187,9 @@
       "realm": null,
       "client": {
         "backend": [
-          "READ_ORGANIZER_CONFIDENTIAL",
-          "ADMIN_BROWSE_ORGANIZER"
+          "READ_ORGANIZER_DETAIL",
+          "ADMIN_BROWSE_ORGANIZER",
+          "ADMIN_READ_ORGANIZER"
         ]
       }
     }

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.security.roles;
 
 public enum AdminRole {
   ADMIN_BROWSE_ORGANIZER,
+  ADMIN_READ_ORGANIZER,
   ADMIN_APPROVE_ORGANIZER,
   ADMIN_UPDATE_ORGANIZER,
   ADMIN_DEACTIVE_ORGANIZER,
