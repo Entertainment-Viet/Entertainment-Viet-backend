@@ -53,6 +53,10 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   public Predicate fromParams(ListJobOfferParamDto paramDto) {
     var predicate = defaultPredicate();
 
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,

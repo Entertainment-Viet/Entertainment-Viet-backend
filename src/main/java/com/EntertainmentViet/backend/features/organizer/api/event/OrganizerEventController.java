@@ -5,6 +5,8 @@ import java.util.concurrent.CompletableFuture;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -39,6 +41,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrganizerEventController {
 
   public static final String REQUEST_MAPPING_PATH = "/organizers/{organizer_uid}/events";
+
+  public static final String BOOKING_PATH = "/bookings";
 
   private final EventBoundary eventService;
 
@@ -120,5 +124,17 @@ public class OrganizerEventController {
       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @GetMapping(value = "/{uid}" + BOOKING_PATH)
+  public CompletableFuture<ResponseEntity<ListBookingResponseDto>> listBooking(JwtAuthenticationToken token,
+                                                                               @PathVariable("organizer_uid") UUID organizerUid,
+                                                                               @PathVariable("uid") UUID uid,
+                                                                               @ParameterObject Pageable pageable,
+                                                                               @ParameterObject ListOrganizerBookingParamDto paramDto) {
+    boolean isOwnerUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+        eventService.listBooking(isOwnerUser, organizerUid, paramDto, pageable)
+    ));
   }
 }

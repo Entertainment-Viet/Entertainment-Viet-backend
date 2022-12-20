@@ -67,6 +67,11 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
 
   public Predicate fromParams(ListEventParamDto paramDto) {
     var predicate = defaultPredicate();
+
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,

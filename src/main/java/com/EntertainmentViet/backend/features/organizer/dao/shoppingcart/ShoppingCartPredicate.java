@@ -63,6 +63,10 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
   public Predicate fromParams(ListCartItemParamDto paramDto) {
     var predicate = defaultPredicate();
 
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getWorkType() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,

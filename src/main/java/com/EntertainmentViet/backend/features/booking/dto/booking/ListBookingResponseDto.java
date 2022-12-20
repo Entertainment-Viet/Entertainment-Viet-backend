@@ -13,7 +13,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class ListBookingResponseDto {
-  private BigDecimal unpaidSum;
-
+  private Double unpaidSum;
+  private Double price;
+  private Double tax;
+  private Double total;
   private CustomPage<ReadBookingDto> bookings;
 }

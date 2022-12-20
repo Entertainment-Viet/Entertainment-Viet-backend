@@ -1,6 +1,10 @@
 package com.EntertainmentViet.backend.features.common.utils;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Value;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,9 +24,8 @@ import java.util.stream.Collectors;
 public class RestUtils {
 
   public <T> Page<T> getPageEntity(List<T> list, Pageable pageable) {
-    int start = (int) pageable.getOffset();
-    int end = Math.min((start + pageable.getPageSize()), list.size());
-    return new PageImpl<>(list.subList(start, end), pageable, list.size());
+    var offset = getPagingOffer(list, pageable);
+    return new PageImpl<>(list.subList(offset.getStart(), offset.getEnd()), pageable, list.size());
   }
 
   // For lazy loading in Application level only
@@ -62,5 +65,25 @@ public class RestUtils {
         .filter(permission -> !permissionList.contains(permission))
         .count();
     return missingPermissionsCount == 0;
+  }
+
+  public PagingOffset getPagingOffer(List list, Pageable pageable) {
+    int start = (int) pageable.getOffset();
+    int end = Math.min((start + pageable.getPageSize()), list.size());
+
+    if (start <= end) {
+      return PagingOffset.builder().start(start).end(end).build();
+    }
+    // If start > end, return nothing
+    else {
+      return PagingOffset.builder().start(0).end(0).build();
+    }
+  }
+
+  @Builder
+  @Value
+  public static class PagingOffset {
+    int start;
+    int end;
   }
 }

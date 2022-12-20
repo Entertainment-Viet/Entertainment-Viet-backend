@@ -32,6 +32,7 @@
           "READ_CART_ITEM",
           "UPDATE_ORGANIZER_CONFIDENTIAL",
           "READ_SCORE",
+          "BROWSE_EVENT_BOOKING"
         ]
       }
     }

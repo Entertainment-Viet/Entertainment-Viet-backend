@@ -3,6 +3,8 @@ package com.EntertainmentViet.backend.features.organizer.boundary.event;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
@@ -26,4 +28,7 @@ public interface EventBoundary {
   Optional<UUID> update(UpdateEventDto updateEventDto, UUID organizerUid, UUID uid);
 
   boolean delete(UUID uid, UUID organizerUid);
+
+  ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
+                                     Pageable pageable);
 }

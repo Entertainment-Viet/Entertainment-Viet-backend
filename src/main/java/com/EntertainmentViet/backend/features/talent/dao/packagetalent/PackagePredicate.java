@@ -85,6 +85,10 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   public Predicate fromParams(ListPackageParamDto paramDto) {
     var predicate = defaultPredicate();
 
+    if (paramDto == null) {
+      return predicate;
+    }
+
     if (paramDto.getName() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,

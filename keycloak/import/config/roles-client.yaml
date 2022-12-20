@@ -51,6 +51,9 @@
     "name": "DELETE_EVENT"
   },
   {
+    "name": "BROWSE_EVENT_BOOKING"
+  },
+  {
     "name": "APPLY_ORGANIZER_POSITION"
   },
   {

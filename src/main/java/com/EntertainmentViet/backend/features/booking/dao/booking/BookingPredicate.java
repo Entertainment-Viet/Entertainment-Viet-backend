@@ -232,6 +232,10 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   public Predicate fromParams(AdminListBookingParamDto paramDto) {
     var predicate = defaultPredicate();
 
+    if (paramDto == null) {
+      return predicate;
+    }
+    
     // List all booking have performanceStartTime equal or after the paramDto.startTime
     if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
       predicate = ExpressionUtils.allOf(

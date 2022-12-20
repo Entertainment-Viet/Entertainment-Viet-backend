@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import com.EntertainmentViet.backend.domain.businessLogic.FinanceUtils;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -45,14 +46,18 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
             Pageable pageable) {
         var bookingList = bookingRepository.findByOrganizerUid(organizerId, paramDto, pageable);
-        Stream<ReadBookingDto> dtoList = bookingList.stream()
+        var dtoList = bookingList.stream()
             .map(bookingMapper::toReadDto)
-            .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser));
+            .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser))
+            .toList();
 
-        var dataPage = RestUtils.getPageEntity(dtoList.toList(), pageable);
-        var unpaidSum = bookingList.stream().findAny().map(Booking::getOrganizer).map(Organizer::computeUnpaidSum).orElse(0.0);
+        var dataPage = RestUtils.getPageEntity(dtoList, pageable);
+        var financeReport = FinanceUtils.generateOrganizerBookingReport(bookingList);
         return ListBookingResponseDto.builder()
-            .unpaidSum(BigDecimal.valueOf(unpaidSum))
+            .unpaidSum(financeReport.getUnpaid())
+            .price(financeReport.getPrice())
+            .tax(financeReport.getTax())
+            .total(financeReport.getTotal())
             .bookings(RestUtils.toPageResponse(dataPage))
             .build();
     }
