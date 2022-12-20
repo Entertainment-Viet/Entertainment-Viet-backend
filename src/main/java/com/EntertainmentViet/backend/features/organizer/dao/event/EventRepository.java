@@ -14,6 +14,4 @@ public interface EventRepository extends IdentifiableRepository<Event> {
   Page<Event> findAll(ListEventParamDto paramDto, Pageable pageable);
 
   List<Event> findByOrganizerUid(UUID uid, ListEventParamDto paramDto, Pageable pageable);
-
-  void archiveEventsOfOrganizerUid(UUID organizerUid);
 }

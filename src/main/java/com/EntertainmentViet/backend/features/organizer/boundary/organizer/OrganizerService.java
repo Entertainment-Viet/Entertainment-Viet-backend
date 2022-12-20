@@ -1,7 +1,8 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
+import com.EntertainmentViet.backend.domain.entities.organizer.Event;
+import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -63,12 +64,16 @@ public class OrganizerService implements OrganizerBoundary {
 
   @Override
   public boolean delete(UUID uid) {
-    if (organizerRepository.archive(uid)) {
-      eventRepository.archiveEventsOfOrganizerUid(uid);
-      jobOfferRepository.archiveJobOffersOfOrganizer(uid);
-      return true;
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null) return false;
+    for (Event event : organizer.getEvents()) {
+      event.setArchived(Boolean.TRUE);
     }
-    return false;
+    for (JobOffer jobOffer : organizer.getJobOffers()) {
+      jobOffer.setArchived(Boolean.TRUE);
+    }
+    organizerRepository.save(organizer);
+    return true;
   }
 
   @Override

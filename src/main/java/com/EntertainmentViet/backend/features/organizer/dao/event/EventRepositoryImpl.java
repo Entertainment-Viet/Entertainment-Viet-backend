@@ -64,18 +64,4 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
         .orderBy(getSortedColumn(pageable.getSort(), Event.class))
         .fetch();
   }
-
-  @Override
-  public void archiveEventsOfOrganizerUid(UUID organizerUid) {
-    var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
-        .where(ExpressionUtils.allOf(
-            eventPredicate.joinAll(queryFactory),
-            eventPredicate.belongToOrganizer(organizerUid),
-            eventPredicate.isArchived().not()))
-        .fetch()).orElse(Collections.emptyList());
-    for (Event event : eventList) {
-      event.setArchived(Boolean.TRUE);
-      this.save(event);
-    }
-  }
 }

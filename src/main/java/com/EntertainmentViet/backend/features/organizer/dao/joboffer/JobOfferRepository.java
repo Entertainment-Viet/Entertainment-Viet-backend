@@ -18,6 +18,4 @@ public interface JobOfferRepository extends IdentifiableRepository<JobOffer> {
     List<JobOffer> findByOrganizerUid(UUID uid, ListJobOfferParamDto paramDto, Pageable pageable);
 
     Optional<JobOffer> findByOrganizerUidAndUid(UUID organizerUid, UUID uid);
-
-    void archiveJobOffersOfOrganizer(UUID organizerUid);
 }

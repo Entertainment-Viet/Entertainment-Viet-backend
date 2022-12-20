@@ -15,5 +15,4 @@ import javax.transaction.Transactional;
 @Transactional
 public interface OrganizerRepository extends IdentifiableRepository<Organizer> {
     Page<Organizer> findAll(Pageable pageable);
-    public boolean archive(UUID uid) ;
 }

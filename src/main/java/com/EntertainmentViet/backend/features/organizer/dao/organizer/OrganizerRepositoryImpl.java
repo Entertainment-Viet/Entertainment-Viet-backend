@@ -48,14 +48,4 @@ public class OrganizerRepositoryImpl extends BaseRepositoryImpl<Organizer, Long>
 
     return new PageImpl<>(organizerList, pageable, organizerList.size());
   }
-
-  public boolean archive(UUID uid) {
-    Organizer organizer = this.findByUid(uid).orElse(null);
-    if (organizer != null) {
-      organizer.setArchived(Boolean.TRUE);
-      this.save(organizer);
-      return true;
-    }
-    return false;    
-  }
 }
