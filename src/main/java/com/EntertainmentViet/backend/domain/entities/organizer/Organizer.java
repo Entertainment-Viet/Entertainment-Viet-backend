@@ -1,17 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-
 import com.EntertainmentViet.backend.domain.entities.User;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
@@ -32,6 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -198,6 +193,7 @@ public class Organizer extends User {
   public void pay(Booking booking) {
     if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfConfirmed()) {
       booking.setPaid(true);
+      booking.setPaidAt(OffsetDateTime.now());
     }
   }
 
