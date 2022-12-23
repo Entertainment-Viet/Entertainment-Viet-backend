@@ -1,14 +1,9 @@
 package com.EntertainmentViet.backend.features.admin.dto.talent;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
@@ -25,6 +20,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Mapper(uses = {
     ExtensionsMapper.class,
     UserInputTextMapper.class,
@@ -35,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
     CategoryMapper.class,
     ScoreMapper.class,
     LocationMapper.class,
-    ScoreMapper.class
 },
     config = MappingConfig.class)
 public abstract class AdminTalentMapper {
@@ -46,6 +46,7 @@ public abstract class AdminTalentMapper {
   // TODO
   @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum", "finalScore"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
+  @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserTypeKey")
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "email", source = "talentDetail.email")
   @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
@@ -74,6 +75,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "packages", ignore = true)
   @Mapping(target = "finalScore", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
@@ -86,6 +88,16 @@ public abstract class AdminTalentMapper {
   @Named("toUserStateKey")
   public String toUserStateKey(UserState userState) {
     return userState != null ? userState.i18nKey : null;
+  }
+
+  @Named("toUserTypeKey")
+  public String toUserTypeKey(UserType userType) {
+    return userType != null ? userType.i18nKey : null;
+  }
+
+  @Named("toUserType")
+  public UserType toUserType(String i18nKey) {
+    return UserType.ofI18nKey(i18nKey);
   }
 
   @Named("toOfferCategories")

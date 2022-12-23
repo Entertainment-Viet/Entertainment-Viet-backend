@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.domain.entities.admin;
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.User;
+import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.standardTypes.FeedbackStatus;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
@@ -16,18 +16,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
@@ -42,7 +31,7 @@ import java.time.OffsetDateTime;
     typeClass = PostgreSQLEnumType.class
 )
 @EntityListeners({AuditableListener.class})
-public abstract class Feedback<T extends User> extends Identifiable implements Auditable {
+public abstract class Feedback<T extends Users> extends Identifiable implements Auditable {
 
   @Id
   @GeneratedValue

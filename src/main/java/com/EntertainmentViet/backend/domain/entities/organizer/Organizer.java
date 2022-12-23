@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import com.EntertainmentViet.backend.domain.entities.User;
+import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Entity
 @Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Organizer extends User {
+public class Organizer extends Users {
 
   @OneToMany(mappedBy = JobOffer_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
@@ -239,6 +239,10 @@ public class Organizer extends User {
   public Organizer requestKycInfoChange(Organizer newData) {
     getOrganizerDetail().updateKycInfo(newData.getOrganizerDetail());
 
+    if (newData.getUserType() != null) {
+      setUserType(newData.getUserType());
+    }
+
     // If the user already verified, change the state back to pending waiting for admin approval
     if (!getUserState().equals(UserState.GUEST)) {
       setUserState(UserState.PENDING);
@@ -248,7 +252,7 @@ public class Organizer extends User {
 
   @Override
   protected boolean checkIfUserVerifiable() {
-    if (getAccountType() == null) {
+    if (getUserType() == null) {
       log.warn(String.format("The organizer with uid '%s' do not have accountType yet", getUid()));
       return false;
     }

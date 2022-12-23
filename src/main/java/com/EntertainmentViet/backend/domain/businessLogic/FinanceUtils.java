@@ -1,8 +1,8 @@
 package com.EntertainmentViet.backend.domain.businessLogic;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.FinanceReport;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class FinanceUtils {
           unpaid += netPrice;
         }
 
-        if (booking.getOrganizer().getAccountType().equals(AccountType.CORPORATION)) {
+        if (booking.getOrganizer().getUserType().equals(UserType.CORPORATION)) {
           tax += netPrice*CORPORATION_TAX;
         } else {
           tax += netPrice*INDIVIDUAL_TAX;
@@ -63,7 +63,7 @@ public class FinanceUtils {
           unpaid += price;
         }
 
-        if (booking.getTalent().getAccountType().equals(AccountType.CORPORATION)) {
+        if (booking.getTalent().getUserType().equals(UserType.CORPORATION)) {
           tax += netPrice*CORPORATION_TAX;
         } else {
           tax += netPrice*INDIVIDUAL_TAX;

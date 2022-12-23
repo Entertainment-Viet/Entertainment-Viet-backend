@@ -4,15 +4,14 @@ import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
-import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
-import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -47,6 +46,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "descriptionImg", source = "organizerDetail.descriptionImg")
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
+  @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserTypeKey")
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
@@ -58,6 +58,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "shoppingCart", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
+  @Mapping(target = "userType", ignore = true)
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
@@ -75,7 +76,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "archived", ignore = true)
-  @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
+  @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.address", source = "address")
   @Mapping(target = "organizerDetail.taxId", source = "taxId")
@@ -100,6 +102,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "displayName", source = "username")
   @Mapping(target = "organizerDetail.email", source = "email")
@@ -131,6 +134,16 @@ public abstract class OrganizerMapper {
   @Named("toUserState")
   public UserState toUserState(String i18nKey) {
     return UserState.ofI18nKey(i18nKey);
+  }
+
+  @Named("toUserTypeKey")
+  public String toUserTypeKey(UserType userType) {
+    return userType != null ? userType.i18nKey : null;
+  }
+
+  @Named("toUserType")
+  public UserType toUserType(String i18nKey) {
+    return UserType.ofI18nKey(i18nKey);
   }
 
   @Named("toAccountTypeKey")

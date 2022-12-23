@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.features.booking.dto.location.InputLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class UpdateUserKycInfoDto {
 
-  private String accountType;
+  private String userType;
 
   private String phoneNumber;
 
