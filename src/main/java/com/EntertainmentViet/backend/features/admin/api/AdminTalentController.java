@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.admin.api.talent;
+package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
@@ -6,8 +6,6 @@ import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentB
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
