@@ -27,7 +27,7 @@ import org.mapstruct.Named;
     LocationMapper.class }, config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
-  @BeanMapping(ignoreUnmappedSourceProperties = { "id", "shoppingCart" })
+  @BeanMapping(ignoreUnmappedSourceProperties = { "id", "shoppingCart", "conversations" })
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
@@ -61,6 +61,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "userType", ignore = true)
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "archived", ignore = true)
+  @Mapping(target = "conversations", ignore = true)
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer fromUpdateDtoToModel(UpdateOrganizerDto updateOrganizerDto);
@@ -77,6 +78,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "accountType", ignore = true)
+  @Mapping(target = "conversations", ignore = true)
   @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserType")
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.address", source = "address")
@@ -104,6 +106,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
+  @Mapping(target = "conversations", ignore = true)
   @Mapping(target = "displayName", source = "username")
   @Mapping(target = "organizerDetail.email", source = "email")
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);

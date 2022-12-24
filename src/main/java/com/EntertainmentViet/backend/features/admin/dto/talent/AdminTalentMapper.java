@@ -43,8 +43,7 @@ public abstract class AdminTalentMapper {
   @Autowired
   private CategoryMapper categoryMapper;
 
-  // TODO
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum", "finalScore"})
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum", "finalScore", "conversations"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserTypeKey")
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
@@ -77,6 +76,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
+  @Mapping(target = "conversations", ignore = true)
   @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "talentDetail.email", source = "email")
   @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)

@@ -2,17 +2,24 @@ package com.EntertainmentViet.backend.domain.entities.message;
 
 import com.EntertainmentViet.backend.domain.entities.Account;
 import com.EntertainmentViet.backend.domain.entities.admin.Feedback_;
+import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
 import com.EntertainmentViet.backend.domain.values.UserInputText_;
+import com.querydsl.core.annotations.QueryInit;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
-//@SuperBuilder
-//@NoArgsConstructor
-//@Getter
-//@Setter
-//@Entity
+@SuperBuilder
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
 public class Message {
 
   @Id
@@ -29,5 +36,12 @@ public class Message {
 
   private OffsetDateTime sentAt;
 
-  private Account account;
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "from_account_id", referencedColumnName = Location_.ID)
+  @QueryInit("*.*")
+  private Account fromAccount;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @NotNull
+  private Conversation conversation;
 }

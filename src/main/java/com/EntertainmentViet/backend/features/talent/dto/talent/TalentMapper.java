@@ -43,7 +43,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore", "conversations"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
@@ -82,6 +82,7 @@ public abstract class TalentMapper {
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
@@ -102,6 +103,7 @@ public abstract class TalentMapper {
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "archived", ignore = true)
     @Mapping(target = "accountType", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.address", source = "address")
@@ -132,6 +134,7 @@ public abstract class TalentMapper {
     @Mapping(target = "finalScore", constant = "0")
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "priorityScores", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "displayName", source = "username")
     @Mapping(target = "talentDetail.email", source = "email")
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
