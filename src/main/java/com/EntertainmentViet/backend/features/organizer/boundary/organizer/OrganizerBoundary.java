@@ -28,4 +28,8 @@ public interface OrganizerBoundary {
   boolean verify(UUID uid);
 
   CustomPage<ReadOrganizerDto> findAll(Pageable pageable);
+
+  boolean approve(UUID uid);
+
+  boolean disapprove(UUID uid);
 }
