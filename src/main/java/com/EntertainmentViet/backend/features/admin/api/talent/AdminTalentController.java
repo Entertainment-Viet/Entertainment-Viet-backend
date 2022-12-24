@@ -5,11 +5,15 @@ import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentBoundary;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -88,5 +92,20 @@ public class AdminTalentController {
             .body(updatedTalent)
         ).orElse(ResponseEntity.badRequest().build())
     );
+  }
+
+  @GetMapping()
+  public CompletableFuture<ResponseEntity<CustomPage<ReadAdminTalentDto>>> findAll(
+      @ParameterObject Pageable pageable) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+      adminTalentService.findAll(pageable)));
+  }
+
+  @DeleteMapping(value = "/{uid}" + DEACTIVE_PATH)
+  public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    if (adminTalentService.delete(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 }

@@ -298,6 +298,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             .mvcMatchers(HttpMethod.GET, ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_TALENT.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
+            .hasAuthority(AdminRole.ADMIN_READ_TALENT.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_APPROVE_TALENT.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH))
