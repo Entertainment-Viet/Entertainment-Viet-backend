@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS conversation CASCADE;
 CREATE TABLE conversation (
     id BIGINT NOT NULL,
     uid UUID NOT NULL,
-    String TEXT NOT NULL,
+    name TEXT,
     archived BOOLEAN NOT NULL DEFAULT FALSE,
     CONSTRAINT pk_conversation PRIMARY KEY (id)
 );
