@@ -2,8 +2,6 @@ package com.EntertainmentViet.backend.domain.entities.talent;
 
 import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemUtils;
 import com.EntertainmentViet.backend.domain.entities.Users;
-import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback;
-import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback_;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
@@ -51,9 +49,6 @@ public class Talent extends Users implements Advertisable {
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
   private List<Booking> bookings;
-
-  @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<TalentFeedback> feedbacks;
 
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
@@ -173,16 +168,6 @@ public class Talent extends Users implements Advertisable {
     booking.setTalent(null);
   }
 
-  public void addFeedback(TalentFeedback feedback) {
-    feedbacks.add(feedback);
-    feedback.setTalent(this);
-  }
-
-  public void removeFeedback(TalentFeedback feedback) {
-    feedbacks.remove(feedback);
-    feedback.setTalent(null);
-  }
-
   public void addPackage(Package aPackage) {
     packages.add(aPackage);
     aPackage.setTalent(this);
@@ -286,9 +271,6 @@ public class Talent extends Users implements Advertisable {
     }
     if (newData.getDisplayName() != null) {
       setDisplayName(newData.getDisplayName());
-    }
-    if (newData.getFeedbacks() != null) {
-      setFeedbacks(newData.getFeedbacks());
     }
     if (newData.getOfferCategories() != null) {
       setOfferCategories(newData.getOfferCategories());

@@ -1,18 +1,8 @@
 package com.EntertainmentViet.backend.features.organizer.dao.organizer;
 
-import java.util.UUID;
-
-import com.EntertainmentViet.backend.domain.entities.admin.QOrganizerFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEventDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
-import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizerDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizerShoppingCart;
+import com.EntertainmentViet.backend.domain.entities.organizer.*;
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.values.QCategory;
@@ -24,6 +14,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +30,6 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QCategory parentCategory = new QCategory("parentCategory");
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QEvent event = QEvent.event;
-  private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
 
   private final QOrganizerShoppingCart organizerShoppingCart = QOrganizerShoppingCart.organizerShoppingCart;
 
@@ -107,12 +98,6 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(event.openPositions, eventOpenPosition).fetchJoin()
         .leftJoin(eventOpenPosition.applicants, booking).fetchJoin()
         .where(event.organizer.in(organizers))
-        .fetch();
-
-    // join feedbacks
-    organizers = queryFactory.selectFrom(organizer).distinct()
-        .leftJoin(organizer.feedbacks, organizerFeedback).fetchJoin()
-        .where(organizer.in(organizers))
         .fetch();
 
     // join shoppingCart

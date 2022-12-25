@@ -1,8 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Users;
-import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
-import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
@@ -48,9 +46,6 @@ public class Organizer extends Users {
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
   private List<Booking> bookings;
-
-  @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrganizerFeedback> feedbacks;
 
   @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrganizerShoppingCart> shoppingCart;
@@ -155,16 +150,6 @@ public class Organizer extends Users {
         );
   }
 
-  public void addFeedback(OrganizerFeedback feedback) {
-    feedbacks.add(feedback);
-    feedback.setOrganizer(this);
-  }
-
-  public void removeFeedback(OrganizerFeedback feedback) {
-    feedbacks.remove(feedback);
-    feedback.setOrganizer(null);
-  }
-
   public boolean addPackageToCart(Package talentPackage, Double price) {
     OrganizerShoppingCart cartItem = new OrganizerShoppingCart(this, talentPackage, price);
     var overlapCartItem = shoppingCart.stream().filter(item -> item.getId().equals(cartItem.getId())).toList();
@@ -226,9 +211,6 @@ public class Organizer extends Users {
     }
     if (newData.getEvents() != null) {
       setEvents(newData.getEvents());
-    }
-    if (newData.getFeedbacks() != null) {
-      setFeedbacks(newData.getFeedbacks());
     }
     if (newData.getShoppingCart() != null) {
       setShoppingCart(newData.getShoppingCart());

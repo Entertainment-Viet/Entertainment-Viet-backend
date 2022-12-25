@@ -5,7 +5,6 @@ import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
     UserInputTextMapper.class,
     ReviewMapper.class,
     BookingMapper.class,
-    TalentFeedBackMapper.class,
     PackageMapper.class,
     CategoryMapper.class,
     ScoreMapper.class,
@@ -43,7 +41,7 @@ public abstract class AdminTalentMapper {
   @Autowired
   private CategoryMapper categoryMapper;
 
-  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "feedbacks","reviewSum", "finalScore", "conversations"})
+  @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews","reviewSum", "finalScore", "conversations"})
   @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
   @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserTypeKey")
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
@@ -68,7 +66,6 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "reviews", ignore = true)
   @Mapping(target = "reviewSum", ignore = true)
   @Mapping(target = "bookings", ignore = true)
-  @Mapping(target = "feedbacks", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "userState", ignore = true)
   @Mapping(target = "packages", ignore = true)

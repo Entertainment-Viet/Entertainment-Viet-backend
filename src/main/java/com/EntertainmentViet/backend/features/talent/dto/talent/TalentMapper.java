@@ -6,7 +6,6 @@ import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
         UserInputTextMapper.class,
         ReviewMapper.class,
         BookingMapper.class,
-        TalentFeedBackMapper.class,
         PackageMapper.class,
         CategoryMapper.class,
         ScoreMapper.class,
@@ -73,7 +71,6 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "accountType", ignore = true)
@@ -94,7 +91,6 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "packages", ignore = true)
@@ -124,7 +120,6 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "accountType", ignore = true)
