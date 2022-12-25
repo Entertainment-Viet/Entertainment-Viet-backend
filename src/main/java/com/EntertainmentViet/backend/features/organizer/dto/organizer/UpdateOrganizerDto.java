@@ -13,6 +13,8 @@ public class UpdateOrganizerDto {
 
   private String displayName;
 
+  private String avatar;
+
   private String bio;
 
   private String extensions;
