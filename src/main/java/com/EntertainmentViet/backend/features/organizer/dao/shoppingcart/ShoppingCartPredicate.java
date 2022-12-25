@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dao.shoppingcart;
 
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
@@ -21,6 +19,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppingCart> {
@@ -32,10 +32,10 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QTalent talent = QTalent.talent;
   private final QCategory category = QCategory.category;
-  private final QCategory parentCategory = new QCategory("parent");
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocation parentLocation = new QLocation("parentLocation");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");

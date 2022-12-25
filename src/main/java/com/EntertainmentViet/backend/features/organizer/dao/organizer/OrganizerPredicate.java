@@ -35,6 +35,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QBooking booking = QBooking.booking;
   private final QCategory category = QCategory.category;
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
   private final QEvent event = QEvent.event;
   private final QOrganizerFeedback organizerFeedback = QOrganizerFeedback.organizerFeedback;
@@ -45,7 +46,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
 
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocation parentLocation = new QLocation("parentLocation");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
@@ -63,6 +64,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(organizer.jobOffers, jobOffer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -76,6 +78,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(organizer.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -119,6 +122,7 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
         .leftJoin(aPackage.talent, QTalent.talent).fetchJoin()
         .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .where(organizer.in(organizers))

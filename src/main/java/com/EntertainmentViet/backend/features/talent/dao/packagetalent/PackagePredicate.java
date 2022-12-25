@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.talent.dao.packagetalent;
 
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
@@ -21,6 +19,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class PackagePredicate extends IdentifiablePredicate<Package> {
@@ -31,7 +31,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
 
   private final QTalent talent = QTalent.talent;
   private final QCategory category = QCategory.category;
-  private final QCategory parentCategory = new QCategory("parent");
+  private final QCategory parentCategory = new QCategory("parentCategory");
 
   private final QOrganizer organizer = QOrganizer.organizer;
 
@@ -50,6 +50,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     var packages = queryFactory.selectFrom(talentPackage).distinct()
         .leftJoin(talentPackage.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -66,6 +67,7 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
         .leftJoin(booking.organizer, organizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()

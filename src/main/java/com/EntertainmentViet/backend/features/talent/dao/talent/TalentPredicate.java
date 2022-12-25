@@ -39,6 +39,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QBooking booking = QBooking.booking;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QPackage aPackage = QPackage.package$;
   private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
   private final QScoreType scoreType = QScoreType.scoreType;
@@ -61,6 +62,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -75,6 +77,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
             .leftJoin(talent.packages, aPackage).fetchJoin()
             .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
             .leftJoin(jobDetail.category, category).fetchJoin()
+            .leftJoin(category.parent, parentCategory).fetchJoin()
             .leftJoin(jobDetail.location, location).fetchJoin()
             .leftJoin(location.type(), locationType).fetchJoin()
             .leftJoin(location.parent(), parentLocation).fetchJoin()

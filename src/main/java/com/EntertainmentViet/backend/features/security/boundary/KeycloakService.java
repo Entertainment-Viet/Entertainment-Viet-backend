@@ -1,9 +1,5 @@
 package com.EntertainmentViet.backend.features.security.boundary;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.config.properties.AuthenticationProperties;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
@@ -14,16 +10,16 @@ import com.EntertainmentViet.backend.features.security.dto.LoginInfoDto;
 import com.EntertainmentViet.backend.features.security.dto.TokenDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -80,7 +76,7 @@ public class KeycloakService implements KeycloakBoundary {
     HttpEntity<CreatedKeycloakUserDto> request = new HttpEntity<>(null, headers);
 
     try {
-//      keycloakRestTemplate.put(url, request);
+      keycloakRestTemplate.put(url, request);
       return true;
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
