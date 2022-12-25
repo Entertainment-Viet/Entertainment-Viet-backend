@@ -1,21 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.businessLogic.AuditableListener;
 import com.EntertainmentViet.backend.domain.businessLogic.BookingCodeListener;
 import com.EntertainmentViet.backend.domain.entities.Auditable;
@@ -37,6 +21,11 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -62,6 +51,8 @@ public class Booking extends Identifiable implements Auditable {
   private OffsetDateTime confirmedAt;
 
   private boolean isPaid;
+
+  private OffsetDateTime paidAt;
 
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "booking_status")

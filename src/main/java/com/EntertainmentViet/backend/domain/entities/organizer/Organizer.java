@@ -1,20 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-
-import com.EntertainmentViet.backend.domain.entities.User;
-import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback;
-import com.EntertainmentViet.backend.domain.entities.admin.OrganizerFeedback_;
+import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
@@ -33,6 +19,13 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -40,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Entity
 @Slf4j
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Organizer extends User {
+public class Organizer extends Users {
 
   @OneToMany(mappedBy = JobOffer_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
@@ -53,9 +46,6 @@ public class Organizer extends User {
   @OneToMany(mappedBy = Event_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
   private List<Booking> bookings;
-
-  @OneToMany(mappedBy = OrganizerFeedback_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrganizerFeedback> feedbacks;
 
   @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<OrganizerShoppingCart> shoppingCart;
@@ -160,16 +150,6 @@ public class Organizer extends User {
         );
   }
 
-  public void addFeedback(OrganizerFeedback feedback) {
-    feedbacks.add(feedback);
-    feedback.setOrganizer(this);
-  }
-
-  public void removeFeedback(OrganizerFeedback feedback) {
-    feedbacks.remove(feedback);
-    feedback.setOrganizer(null);
-  }
-
   public boolean addPackageToCart(Package talentPackage, Double price) {
     OrganizerShoppingCart cartItem = new OrganizerShoppingCart(this, talentPackage, price);
     var overlapCartItem = shoppingCart.stream().filter(item -> item.getId().equals(cartItem.getId())).toList();
@@ -198,6 +178,7 @@ public class Organizer extends User {
   public void pay(Booking booking) {
     if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfConfirmed()) {
       booking.setPaid(true);
+      booking.setPaidAt(OffsetDateTime.now());
     }
   }
 
@@ -231,9 +212,6 @@ public class Organizer extends User {
     if (newData.getEvents() != null) {
       setEvents(newData.getEvents());
     }
-    if (newData.getFeedbacks() != null) {
-      setFeedbacks(newData.getFeedbacks());
-    }
     if (newData.getShoppingCart() != null) {
       setShoppingCart(newData.getShoppingCart());
     }
@@ -242,6 +220,10 @@ public class Organizer extends User {
 
   public Organizer requestKycInfoChange(Organizer newData) {
     getOrganizerDetail().updateKycInfo(newData.getOrganizerDetail());
+
+    if (newData.getUserType() != null) {
+      setUserType(newData.getUserType());
+    }
 
     // If the user already verified, change the state back to pending waiting for admin approval
     if (!getUserState().equals(UserState.GUEST)) {
@@ -252,7 +234,7 @@ public class Organizer extends User {
 
   @Override
   protected boolean checkIfUserVerifiable() {
-    if (getAccountType() == null) {
+    if (getUserType() == null) {
       log.warn(String.format("The organizer with uid '%s' do not have accountType yet", getUid()));
       return false;
     }

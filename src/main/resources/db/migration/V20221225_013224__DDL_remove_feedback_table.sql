@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS organizer_feedback CASCADE;
+DROP TABLE IF EXISTS talent_feedback CASCADE;

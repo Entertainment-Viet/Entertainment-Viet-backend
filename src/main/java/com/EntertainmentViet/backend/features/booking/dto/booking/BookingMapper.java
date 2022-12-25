@@ -8,8 +8,6 @@ import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMap
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
-import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
-import com.EntertainmentViet.backend.features.security.roles.BookingRole;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -40,6 +38,7 @@ public abstract class BookingMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "confirmedAt", ignore = true)
     @Mapping(target = "isPaid", constant = "false")
+    @Mapping(target = "paidAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "talentPackage", ignore = true)
     @Mapping(target = "bookingCode", ignore = true)
@@ -55,6 +54,7 @@ public abstract class BookingMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "confirmedAt", ignore = true)
     @Mapping(target = "isPaid", ignore = true)
+    @Mapping(target = "paidAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "bookingCode", ignore = true)
     @Mapping(target = "organizer", ignore = true)

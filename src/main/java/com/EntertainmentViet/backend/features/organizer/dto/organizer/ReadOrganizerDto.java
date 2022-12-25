@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
-import com.EntertainmentViet.backend.features.admin.dto.OrganizerFeedBackDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
@@ -23,8 +22,6 @@ public class ReadOrganizerDto extends ReadUserDto {
   private List<ReadEventDto> events;
 
   private List<ReadBookingDto> bookings;
-
-  private List<OrganizerFeedBackDto> feedbacks;
 
   private String companyName;
 

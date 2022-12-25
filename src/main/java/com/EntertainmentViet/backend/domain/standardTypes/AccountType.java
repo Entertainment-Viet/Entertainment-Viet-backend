@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum AccountType {
-  INDIVIDUAL("account.type.individual"),
-  CORPORATION("account.type.corporation"),
+  TALENT("account.type.talent"),
+  ORGANIZER("account.type.organizer"),
+  ADMIN("account.type.admin"),
   ;
 
   private static final Map<String, AccountType> BY_I18N_KEY = new HashMap<>();
