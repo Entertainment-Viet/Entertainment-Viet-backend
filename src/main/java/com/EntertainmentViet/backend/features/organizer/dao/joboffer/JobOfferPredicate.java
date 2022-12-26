@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dao.joboffer;
 
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
@@ -18,6 +16,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
@@ -25,11 +25,11 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
-
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QOrganizer organizer = QOrganizer.organizer;
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocation parentLocation = new QLocation("parentLocation");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
@@ -39,6 +39,7 @@ public class JobOfferPredicate extends IdentifiablePredicate<JobOffer> {
         .leftJoin(jobOffer.organizer, organizer).fetchJoin()
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()

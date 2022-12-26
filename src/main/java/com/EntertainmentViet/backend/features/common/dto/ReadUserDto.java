@@ -1,14 +1,13 @@
 package com.EntertainmentViet.backend.features.common.dto;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-
-import com.EntertainmentViet.backend.features.booking.dto.location.LocationDto;
 import com.EntertainmentViet.backend.features.booking.dto.location.ReadLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -17,6 +16,8 @@ import lombok.experimental.SuperBuilder;
 public abstract class ReadUserDto extends IdentifiableDto {
 
   private String accountType;
+
+  private String userType;
 
   private String displayName;
 

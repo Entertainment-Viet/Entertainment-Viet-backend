@@ -17,4 +17,8 @@ public interface AdminTalentBoundary {
   boolean delete(UUID uid);
 
   CustomPage<ReadAdminTalentDto> findAll(Pageable pageable);
+
+  boolean approve(UUID uid);
+
+  boolean disapprove(UUID uid);
 }

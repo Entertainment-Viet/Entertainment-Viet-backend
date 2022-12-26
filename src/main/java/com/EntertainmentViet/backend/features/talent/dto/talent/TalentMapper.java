@@ -1,25 +1,17 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.features.admin.dto.TalentFeedBackMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
-import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
-import com.EntertainmentViet.backend.features.security.roles.TalentRole;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -27,12 +19,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Mapper(uses = {
         ExtensionsMapper.class,
         UserInputTextMapper.class,
         ReviewMapper.class,
         BookingMapper.class,
-        TalentFeedBackMapper.class,
         PackageMapper.class,
         CategoryMapper.class,
         ScoreMapper.class,
@@ -44,7 +41,7 @@ public abstract class TalentMapper {
     @Autowired
     private CategoryMapper categoryMapper;
 
-    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore"})
+    @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore", "conversations"})
     @Mapping(target = "userState", source = "userState", qualifiedByName = "toUserStateKey")
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
@@ -66,6 +63,7 @@ public abstract class TalentMapper {
     @Mapping(target = "avgReviewRate", source = ".", qualifiedByName = "toAvgReviewRate")
     @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
     @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
+    @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserTypeKey")
     public abstract ReadTalentDto toDto(Talent talent);
 
     @Mapping(target = "id", ignore = true)
@@ -73,14 +71,15 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "accountType", ignore = true)
+    @Mapping(target = "userType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "finalScore", ignore = true)
     @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "archived", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
@@ -92,7 +91,6 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "packages", ignore = true)
@@ -100,7 +98,9 @@ public abstract class TalentMapper {
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "archived", ignore = true)
-    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountType")
+    @Mapping(target = "accountType", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
+    @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.address", source = "address")
     @Mapping(target = "talentDetail.taxId", source = "taxId")
@@ -120,15 +120,16 @@ public abstract class TalentMapper {
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "reviewSum", ignore = true)
     @Mapping(target = "bookings", ignore = true)
-    @Mapping(target = "feedbacks", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "userState", ignore = true)
     @Mapping(target = "accountType", ignore = true)
+    @Mapping(target = "userType", ignore = true)
     @Mapping(target = "packages", ignore = true)
     @Mapping(target = "archived", ignore = true)
     @Mapping(target = "finalScore", constant = "0")
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "priorityScores", ignore = true)
+    @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "displayName", source = "username")
     @Mapping(target = "talentDetail.email", source = "email")
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
@@ -161,13 +162,23 @@ public abstract class TalentMapper {
     }
 
     @Named("toAccountTypeKey")
-    public String toAccountTypeKey(AccountType accountType) {
-        return accountType != null ? accountType.i18nKey : null;
+    public String toAccountTypeKey(AccountType userType) {
+        return userType != null ? userType.i18nKey : null;
     }
 
     @Named("toAccountType")
     public AccountType toAccountType(String i18nKey) {
         return AccountType.ofI18nKey(i18nKey);
+    }
+
+    @Named("toUserTypeKey")
+    public String toUserTypeKey(UserType userType) {
+        return userType != null ? userType.i18nKey : null;
+    }
+
+    @Named("toUserType")
+    public UserType toUserType(String i18nKey) {
+        return UserType.ofI18nKey(i18nKey);
     }
 
     @Named("toUserState")

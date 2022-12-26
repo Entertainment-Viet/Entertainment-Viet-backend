@@ -1,14 +1,8 @@
 package com.EntertainmentViet.backend.features.organizer.dao.event;
 
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
-import com.EntertainmentViet.backend.domain.entities.organizer.Event;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
-import com.EntertainmentViet.backend.domain.entities.organizer.QJobOffer;
-import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
+import com.EntertainmentViet.backend.domain.entities.organizer.*;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
@@ -23,6 +17,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
@@ -35,10 +31,10 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
   private final QJobOffer jobOffer = QJobOffer.jobOffer;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
-  private final QCategory parentCategory = new QCategory("parent");
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QLocation location = QLocation.location;
   private final QLocationType locationType = QLocationType.locationType;
-  private final QLocation parentLocation = new QLocation("parent");
+  private final QLocation parentLocation = new QLocation("parentLocation");
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
@@ -52,6 +48,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(jobOffer.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobOffer.organizer, organizer).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -64,6 +61,7 @@ public class EventOpenPositionPredicate extends IdentifiablePredicate<Event> {
         .leftJoin(booking.organizer, organizer).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()

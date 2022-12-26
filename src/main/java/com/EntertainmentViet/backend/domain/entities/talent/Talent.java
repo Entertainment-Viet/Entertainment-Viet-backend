@@ -1,26 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.OptionalDouble;
-import java.util.Set;
-import java.util.UUID;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemUtils;
-import com.EntertainmentViet.backend.domain.entities.User;
-import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback;
-import com.EntertainmentViet.backend.domain.entities.admin.TalentFeedback_;
+import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
@@ -46,6 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
+import java.util.*;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -55,7 +41,7 @@ import org.hibernate.annotations.TypeDef;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @TypeDef(name = "list-array",typeClass = ListArrayType.class)
-public class Talent extends User implements Advertisable {
+public class Talent extends Users implements Advertisable {
 
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
@@ -63,9 +49,6 @@ public class Talent extends User implements Advertisable {
   @OneToMany(mappedBy = Review_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
   private List<Booking> bookings;
-
-  @OneToMany(mappedBy = TalentFeedback_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<TalentFeedback> feedbacks;
 
   @OneToMany(mappedBy = Package_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
   @QueryInit("*.*")
@@ -185,16 +168,6 @@ public class Talent extends User implements Advertisable {
     booking.setTalent(null);
   }
 
-  public void addFeedback(TalentFeedback feedback) {
-    feedbacks.add(feedback);
-    feedback.setTalent(this);
-  }
-
-  public void removeFeedback(TalentFeedback feedback) {
-    feedbacks.remove(feedback);
-    feedback.setTalent(null);
-  }
-
   public void addPackage(Package aPackage) {
     packages.add(aPackage);
     aPackage.setTalent(this);
@@ -299,9 +272,6 @@ public class Talent extends User implements Advertisable {
     if (newData.getDisplayName() != null) {
       setDisplayName(newData.getDisplayName());
     }
-    if (newData.getFeedbacks() != null) {
-      setFeedbacks(newData.getFeedbacks());
-    }
     if (newData.getOfferCategories() != null) {
       setOfferCategories(newData.getOfferCategories());
     }
@@ -321,6 +291,9 @@ public class Talent extends User implements Advertisable {
     if (newData.getPriorityScores() != null) {
       updateScore(newData.getPriorityScores(), false);
     }
+    if (newData.getUserType() != null) {
+      setUserType(newData.getUserType());
+    }
     // If the user already verified, change the state back to pending waiting for admin approval
     if (!getUserState().equals(UserState.GUEST)) {
       setUserState(UserState.PENDING);
@@ -330,7 +303,7 @@ public class Talent extends User implements Advertisable {
 
   @Override
   protected boolean checkIfUserVerifiable() {
-    if (getAccountType() == null) {
+    if (getUserType() == null) {
       log.warn(String.format("The talent with uid '%s' do not have accountType yet", getUid()));
       return false;
     }

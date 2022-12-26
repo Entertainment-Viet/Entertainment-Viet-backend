@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -52,8 +53,10 @@ public class TalentService implements TalentBoundary {
         var createdTalent = talentMapper.fromCreateDtoToModel(createTalentDto);
         createdTalent.setUid(uid);
         createdTalent.setUserState(UserState.GUEST);
+        createdTalent.setAccountType(AccountType.TALENT);
         createdTalent.getTalentDetail().setTalent(createdTalent);
         createdTalent.setReviewSum(Collections.nCopies(5, 0));
+        createdTalent.setArchived(false);
 
         return Optional.ofNullable(talentRepository.save(createdTalent).getUid());
     }

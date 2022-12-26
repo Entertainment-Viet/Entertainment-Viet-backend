@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
+import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -37,7 +38,9 @@ public class OrganizerService implements OrganizerBoundary {
     var createdOrganizer = organizerMapper.fromCreateDtoToModel(createOrganizerDto);
     createdOrganizer.setUid(uid);
     createdOrganizer.setUserState(UserState.GUEST);
+    createdOrganizer.setAccountType(AccountType.ORGANIZER);
     createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
+    createdOrganizer.setArchived(false);
 
     return Optional.ofNullable(organizerRepository.save(createdOrganizer).getUid());
   }
@@ -116,6 +119,28 @@ public class OrganizerService implements OrganizerBoundary {
     }
 
     return dataPage;
+  }
+
+  @Override
+  public boolean approve(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null)
+      return false;
+    
+    organizer.setUserState(UserState.VERIFIED);
+    organizerRepository.save(organizer);
+    return true;
+  }
+
+  @Override
+  public boolean disapprove(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null)
+      return false;
+    
+    organizer.setUserState(UserState.UNVERIFIED);
+    organizerRepository.save(organizer);
+    return true;
   }
 
 }

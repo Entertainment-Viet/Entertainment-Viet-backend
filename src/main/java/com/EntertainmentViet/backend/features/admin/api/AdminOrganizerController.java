@@ -74,4 +74,20 @@ public class AdminOrganizerController {
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
+
+  @PostMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> approve(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    if (organizerService.approve(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @DeleteMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> disapprove(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    if (organizerService.disapprove(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
 }

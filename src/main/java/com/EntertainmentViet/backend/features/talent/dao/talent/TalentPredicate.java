@@ -1,18 +1,9 @@
 package com.EntertainmentViet.backend.features.talent.dao.talent;
 
-import java.util.UUID;
-
-import com.EntertainmentViet.backend.domain.entities.admin.QTalentFeedback;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
-import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
-import com.EntertainmentViet.backend.domain.entities.talent.QPriorityScore;
-import com.EntertainmentViet.backend.domain.entities.talent.QReview;
-import com.EntertainmentViet.backend.domain.entities.talent.QScoreType;
-import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
-import com.EntertainmentViet.backend.domain.entities.talent.QTalentDetail;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.entities.talent.*;
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.domain.values.QLocation;
@@ -28,6 +19,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class TalentPredicate extends IdentifiablePredicate<Talent> {
@@ -35,10 +28,10 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QTalent talent = QTalent.talent;
   private final QTalentDetail talentDetail = QTalentDetail.talentDetail;
   private final QReview review = QReview.review;
-  private final QTalentFeedback feedback = QTalentFeedback.talentFeedback;
   private final QBooking booking = QBooking.booking;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
   private final QCategory category = QCategory.category;
+  private final QCategory parentCategory = new QCategory("parentCategory");
   private final QPackage aPackage = QPackage.package$;
   private final QPriorityScore priorityScore = QPriorityScore.priorityScore;
   private final QScoreType scoreType = QScoreType.scoreType;
@@ -61,6 +54,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
         .leftJoin(talent.bookings, booking).fetchJoin()
         .leftJoin(booking.jobDetail, jobDetail).fetchJoin()
         .leftJoin(jobDetail.category, category).fetchJoin()
+        .leftJoin(category.parent, parentCategory).fetchJoin()
         .leftJoin(jobDetail.location, location).fetchJoin()
         .leftJoin(location.type(), locationType).fetchJoin()
         .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -75,6 +69,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
             .leftJoin(talent.packages, aPackage).fetchJoin()
             .leftJoin(aPackage.jobDetail, jobDetail).fetchJoin()
             .leftJoin(jobDetail.category, category).fetchJoin()
+            .leftJoin(category.parent, parentCategory).fetchJoin()
             .leftJoin(jobDetail.location, location).fetchJoin()
             .leftJoin(location.type(), locationType).fetchJoin()
             .leftJoin(location.parent(), parentLocation).fetchJoin()
@@ -88,12 +83,6 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     // join review
     talents = queryFactory.selectFrom(talent).distinct()
         .leftJoin(talent.reviews, review).fetchJoin()
-        .where(talent.in(talents))
-        .fetch();
-
-    // join talentFeedback
-    talents = queryFactory.selectFrom(talent).distinct()
-        .leftJoin(talent.feedbacks, feedback).fetchJoin()
         .where(talent.in(talents))
         .fetch();
 
