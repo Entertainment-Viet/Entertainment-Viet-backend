@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.admin.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.talent.AdminTalentMapper;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
@@ -30,5 +31,27 @@ public class AdminTalentService implements AdminTalentBoundary {
         .map(talent -> talent.updateInfoByAdmin(adminTalentMapper.toModel(updateAdminTalentDto)))
         .map(talentRepository::save)
         .map(Identifiable::getUid);
+  }
+
+  @Override
+  public boolean approve(UUID uid) {
+    var talent = talentRepository.findByUid(uid).orElse(null);
+    if (talent == null)
+      return false;
+
+    talent.setUserState(UserState.VERIFIED);
+    talentRepository.save(talent);
+    return true;
+  }
+
+  @Override
+  public boolean disapprove(UUID uid) {
+    var talent = talentRepository.findByUid(uid).orElse(null);
+    if (talent == null)
+      return false;
+
+    talent.setUserState(UserState.UNVERIFIED);
+    talentRepository.save(talent);
+    return true;
   }
 }

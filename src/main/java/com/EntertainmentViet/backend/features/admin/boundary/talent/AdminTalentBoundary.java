@@ -10,4 +10,8 @@ public interface AdminTalentBoundary {
   Optional<ReadAdminTalentDto> findByUid(UUID adminUid, UUID uid);
 
   Optional<UUID> update(UpdateAdminTalentDto updateAdminTalentDto, UUID uid);
+
+  boolean approve(UUID uid);
+
+  boolean disapprove(UUID uid);
 }
