@@ -1,8 +1,6 @@
 package com.EntertainmentViet.backend.features.admin.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.organizer.Event;
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.talent.AdminTalentMapper;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
@@ -10,6 +8,8 @@ import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalent
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,12 +59,12 @@ public class AdminTalentService implements AdminTalentBoundary {
   }
 
   @Override
-  public CustomPage<ReadAdminTalentDto> findAll(Pageable pageable) {
+  public CustomPage<ReadAdminTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
     var dataPage = RestUtils.toLazyLoadPageResponse(
         talentRepository.findAll(pageable)
             .map(adminTalentMapper::toAdminDto));
 
-    if (talentRepository.findAll(pageable.next()).hasContent()) {
+    if (talentRepository.findAll(paramDto, pageable.next()).hasContent()) {
       dataPage.getPaging().setLast(false);
     }
 

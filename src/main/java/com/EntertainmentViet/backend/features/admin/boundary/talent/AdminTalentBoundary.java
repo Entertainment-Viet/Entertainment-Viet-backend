@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 
 public interface AdminTalentBoundary {
   Optional<ReadAdminTalentDto> findByUid(UUID adminUid, UUID uid);
@@ -16,7 +17,7 @@ public interface AdminTalentBoundary {
 
   boolean delete(UUID uid);
 
-  CustomPage<ReadAdminTalentDto> findAll(Pageable pageable);
+  CustomPage<ReadAdminTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable);
 
   boolean approve(UUID uid);
 
