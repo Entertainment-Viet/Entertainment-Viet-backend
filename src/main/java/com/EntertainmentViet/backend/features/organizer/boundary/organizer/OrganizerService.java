@@ -121,4 +121,26 @@ public class OrganizerService implements OrganizerBoundary {
     return dataPage;
   }
 
+  @Override
+  public boolean approve(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null)
+      return false;
+    
+    organizer.setUserState(UserState.VERIFIED);
+    organizerRepository.save(organizer);
+    return true;
+  }
+
+  @Override
+  public boolean disapprove(UUID uid) {
+    var organizer = organizerRepository.findByUid(uid).orElse(null);
+    if (organizer == null)
+      return false;
+    
+    organizer.setUserState(UserState.UNVERIFIED);
+    organizerRepository.save(organizer);
+    return true;
+  }
+
 }
