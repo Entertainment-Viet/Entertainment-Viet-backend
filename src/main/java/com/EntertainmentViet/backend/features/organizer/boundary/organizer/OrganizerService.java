@@ -72,6 +72,7 @@ public class OrganizerService implements OrganizerBoundary {
     for (JobOffer jobOffer : organizer.getJobOffers()) {
       jobOffer.setArchived(Boolean.TRUE);
     }
+    organizer.setArchived(Boolean.TRUE);
     organizerRepository.save(organizer);
     return true;
   }
