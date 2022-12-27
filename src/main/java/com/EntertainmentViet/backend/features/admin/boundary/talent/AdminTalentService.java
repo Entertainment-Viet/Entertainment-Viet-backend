@@ -63,7 +63,7 @@ public class AdminTalentService implements AdminTalentBoundary {
 
     talent.setUserState(UserState.VERIFIED);
 
-    // approve priority score which are not yet set
+    // approve priority scores which are not yet set
     var pss = talent.getPriorityScores();
     for (PriorityScore ps : pss) {
       if (ps.getApproved() == Boolean.FALSE) {
@@ -95,7 +95,7 @@ public class AdminTalentService implements AdminTalentBoundary {
 
     talent.setUserState(UserState.UNVERIFIED);
 
-    // disapprove priority score which are already set
+    // disapprove all priority scores
     var pss = talent.getPriorityScores();
     for (PriorityScore ps : pss) {
         ps.setApproved(Boolean.FALSE);
