@@ -4,22 +4,21 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
-import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.domain.values.Price;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class OrganizerShoppingCart extends Identifiable {
 
   @EmbeddedId

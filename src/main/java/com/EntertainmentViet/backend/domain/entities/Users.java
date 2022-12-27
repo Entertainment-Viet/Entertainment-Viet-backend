@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import java.time.OffsetDateTime;
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @EntityListeners({AuditableListener.class})
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public abstract class Users extends Account implements Auditable {
 
   private OffsetDateTime createdAt;

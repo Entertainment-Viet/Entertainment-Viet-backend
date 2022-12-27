@@ -1,8 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.EntertainmentViet.backend.domain.businessLogic.FinanceUtils;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
@@ -20,17 +17,19 @@ import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventOpenPositionRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
-import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
-import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
-import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
-import com.EntertainmentViet.backend.features.organizer.dto.event.UpdateEventDto;
-import com.querydsl.core.types.ExpressionUtils;
+import com.EntertainmentViet.backend.features.organizer.dto.event.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +94,7 @@ public class EventService implements EventBoundary {
   }
 
   @Override
+  @Transactional
   public Optional<UUID> create(CreateEventDto createEventDto, UUID organizerUid) {
     Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
     Event createEvent = eventMapper.fromCreateDtoToModel(createEventDto);

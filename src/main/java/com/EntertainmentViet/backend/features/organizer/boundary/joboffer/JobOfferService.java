@@ -1,25 +1,22 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.joboffer;
 
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dao.joboffer.JobOfferRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.CreateJobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ListJobOfferParamDto;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
-import com.EntertainmentViet.backend.features.organizer.dto.joboffer.UpdateJobOfferDto;
+import com.EntertainmentViet.backend.features.organizer.dto.joboffer.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +52,7 @@ public class JobOfferService implements JobOfferBoundary {
     }
 
     @Override
+    @Transactional
     public Optional<UUID> create(CreateJobOfferDto createJobOfferDto, UUID organizerUid) {
         Organizer organizer = organizerRepository.findByUid(organizerUid).orElse(null);
         JobOffer jobOffer = jobOfferMapper.fromCreateDtoToModel(createJobOfferDto);

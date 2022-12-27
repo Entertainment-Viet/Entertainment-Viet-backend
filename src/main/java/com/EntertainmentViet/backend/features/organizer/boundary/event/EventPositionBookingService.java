@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -63,6 +64,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
   }
 
   @Override
+  @Transactional
   public Optional<UUID> create(UUID organizerUid, UUID eventUid, UUID positionUid, CreatePositionApplicantDto createPositionApplicantDto) {
     EventOpenPosition openPosition = eventOpenPositionRepository.findByUid(positionUid).orElse(null);
     Talent talent = talentRepository.findByUid(createPositionApplicantDto.getTalentId()).orElse(null);
