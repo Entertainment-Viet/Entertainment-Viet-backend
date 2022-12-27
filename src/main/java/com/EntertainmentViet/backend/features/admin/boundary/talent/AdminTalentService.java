@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.admin.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
+import com.EntertainmentViet.backend.domain.entities.talent.PriorityScore;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.talent.AdminTalentMapper;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
@@ -61,6 +62,14 @@ public class AdminTalentService implements AdminTalentBoundary {
       return false;
 
     talent.setUserState(UserState.VERIFIED);
+
+    // approve priority score which are not yet set
+    var pss = talent.getPriorityScores();
+    for (PriorityScore ps : pss) {
+      if (ps.getApproved() == Boolean.FALSE) {
+        ps.setApproved(Boolean.TRUE);
+      }
+    }
     talentRepository.save(talent);
     return true;
   }
@@ -85,6 +94,12 @@ public class AdminTalentService implements AdminTalentBoundary {
       return false;
 
     talent.setUserState(UserState.UNVERIFIED);
+
+    // disapprove priority score which are already set
+    var pss = talent.getPriorityScores();
+    for (PriorityScore ps : pss) {
+        ps.setApproved(Boolean.FALSE);
+    }
     talentRepository.save(talent);
     return true;
   }
