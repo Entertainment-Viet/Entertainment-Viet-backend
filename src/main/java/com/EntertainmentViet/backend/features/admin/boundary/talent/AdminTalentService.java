@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.admin.boundary.talent;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.admin.dto.talent.AdminTalentMapper;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
@@ -44,6 +45,12 @@ public class AdminTalentService implements AdminTalentBoundary {
     if (talent == null)
       return false;
     talent.setArchived(Boolean.TRUE);
+    var packages_it = talent.getPackages().iterator();
+    while (packages_it.hasNext()) {
+      Package pk = packages_it.next();
+      pk.setArchived(Boolean.TRUE);
+    }
+    talentRepository.save(talent);
     return true;
   }
 
