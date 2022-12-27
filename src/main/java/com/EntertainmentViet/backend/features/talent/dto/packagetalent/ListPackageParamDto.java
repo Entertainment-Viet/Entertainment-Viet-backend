@@ -30,4 +30,6 @@ public class ListPackageParamDto {
   private String locationParentType;
 
   private String locationParentName;
+
+  private Boolean withArchived;
 }

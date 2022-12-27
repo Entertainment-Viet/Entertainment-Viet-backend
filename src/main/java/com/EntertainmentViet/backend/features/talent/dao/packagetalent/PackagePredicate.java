@@ -148,7 +148,14 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
               predicate,
               talentPackage.jobDetail.location.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
               talentPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
-    }
+}
+        if (paramDto.getWithArchived() == Boolean.FALSE) {
+          predicate = ExpressionUtils.allOf(
+            predicate,
+            this.isArchived().not(),
+            this.isTalentArchived().not()
+          );
+        }
     return predicate;
   }
 
@@ -160,4 +167,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
   public BooleanExpression isArchived() {
     return talentPackage.archived.isTrue();
   }
+
+      public BooleanExpression isTalentArchived() {
+        return talentPackage.talent.archived.isTrue();
+      }
 }

@@ -225,6 +225,13 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               aPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%")))
       );
     }
+
+        if (paramDto.getWithArchived() == Boolean.FALSE) {
+                predicate = ExpressionUtils.allOf(
+                        predicate,
+                        this.isArchived().not()
+                );
+        }
     return predicate;
   }
 
