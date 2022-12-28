@@ -18,6 +18,7 @@ import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePac
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +78,7 @@ public class PackageBookingService implements PackageBookingBoundary {
     }
 
     @Override
+    @Transactional
     public Optional<UUID> create(UUID talentId, UUID packageId, CreatePackageOrderDto createPackageOrderDto) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
         Organizer organizer = organizerRepository.findByUid(createPackageOrderDto.getOrganizerId()).orElse(null);

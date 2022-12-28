@@ -59,6 +59,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "conversations", ignore = true)
+  @Mapping(target = "organizerDetail.avatar", source = "avatar")
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
   @Mapping(target = "organizerDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
   public abstract Organizer fromUpdateDtoToModel(UpdateOrganizerDto updateOrganizerDto);

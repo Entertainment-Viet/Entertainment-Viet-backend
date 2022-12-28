@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +48,7 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     }
 
     @Override
+    @Transactional
     public boolean charge(UUID organizerUid, ChargeCartItemDto chargeCartItemDto) {
         var organizerOptional = organizerRepository.findByUid(organizerUid);
 

@@ -1,30 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.booking;
 
-import java.io.Serializable;
-import java.time.OffsetDateTime;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
-import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.domain.values.Location;
-import com.EntertainmentViet.backend.domain.values.Location_;
-import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.domain.values.UserInputText;
-import com.EntertainmentViet.backend.domain.values.UserInputText_;
+import com.EntertainmentViet.backend.domain.values.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -35,6 +12,11 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -76,7 +58,7 @@ public class JobDetail implements Serializable {
   @NotNull
   private Integer performanceCount;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
   @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
   private Location location;

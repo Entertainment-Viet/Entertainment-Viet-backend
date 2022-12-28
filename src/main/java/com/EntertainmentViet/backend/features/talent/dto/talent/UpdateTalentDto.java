@@ -16,6 +16,8 @@ public class UpdateTalentDto {
 
   private String displayName;
 
+  private String avatar;
+
   private String bio;
 
   private List<UUID> offerCategories;

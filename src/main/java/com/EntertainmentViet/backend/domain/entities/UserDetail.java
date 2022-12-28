@@ -1,16 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
-
 import com.EntertainmentViet.backend.domain.values.Location;
 import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
@@ -26,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.*;
 import java.util.List;
 
 @MappedSuperclass
@@ -90,6 +80,9 @@ public abstract class UserDetail {
     }
     if (newData.getDescriptionImg() != null) {
       setDescriptionImg(newData.getDescriptionImg());
+    }
+    if (newData.getAvatar() != null) {
+      setAvatar(newData.getAvatar());
     }
     return this;
   }

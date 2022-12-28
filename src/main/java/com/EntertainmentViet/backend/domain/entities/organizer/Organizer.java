@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ public class Organizer extends Users {
   private List<Booking> bookings;
 
   @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<OrganizerShoppingCart> shoppingCart;
+  private Set<OrganizerShoppingCart> shoppingCart;
 
   @OneToOne(mappedBy = OrganizerDetail_.ORGANIZER, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
   @PrimaryKeyJoinColumn
