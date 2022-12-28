@@ -229,6 +229,7 @@
           "ADMIN_BROWSE_TALENT",
           "ADMIN_BROWSE_ADVERTISEMENT",
           "READ_SCORE",
+          "ADMIN_READ_TALENT",
         ]
       }
     }

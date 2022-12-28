@@ -34,4 +34,6 @@ public class ListTalentParamDto {
     private String locationParentType;
 
     private String locationParentName;
+
+    private Boolean withArchived;
 }

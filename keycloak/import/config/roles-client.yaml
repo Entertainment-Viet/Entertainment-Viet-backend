@@ -249,6 +249,9 @@
     "name": "ADMIN_BROWSE_TALENT"
   },
   {
+    "name": "ADMIN_READ_TALENT"
+  },
+  {
     "name": "ADMIN_APPROVE_TALENT"
   },
   {

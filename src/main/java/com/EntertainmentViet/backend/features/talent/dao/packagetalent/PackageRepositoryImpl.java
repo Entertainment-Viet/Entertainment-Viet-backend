@@ -40,8 +40,7 @@ public class PackageRepositoryImpl extends BaseRepositoryImpl<Package, Long> imp
             .where(ExpressionUtils.allOf(
                 packagePredicate.joinAll(queryFactory),
                 packagePredicate.belongToTalent(uid)),
-                packagePredicate.fromParams(paramDto),
-                packagePredicate.isArchived().not()
+                packagePredicate.fromParams(paramDto)
             )
             .fetch();
   }

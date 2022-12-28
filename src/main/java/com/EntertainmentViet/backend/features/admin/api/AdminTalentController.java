@@ -5,9 +5,16 @@ import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentBoundary;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
+import com.EntertainmentViet.backend.features.common.dto.CustomPage;
+import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -85,19 +92,40 @@ public class AdminTalentController {
         .orElse(ResponseEntity.badRequest().build()));
   }
 
-  @PostMapping(value = "/{uid}")
-   public CompletableFuture<ResponseEntity<Void>> approve(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-     if (adminTalentService.approve(uid)) {
-       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
-     }
-     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
-   }
+  @GetMapping()
+  public CompletableFuture<ResponseEntity<CustomPage<ReadAdminTalentDto>>> findAll(
+      @ParameterObject Pageable pageable,
+      @ParameterObject ListTalentParamDto paramDto) {
+    if (QueryParamsUtils.isInvalidParams(paramDto)) {
+      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
+      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+        adminTalentService.findAll(paramDto, pageable)));
+  }
 
-   @DeleteMapping(value = "/{uid}")
-   public CompletableFuture<ResponseEntity<Void>> disapprove(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-     if (adminTalentService.disapprove(uid)) {
-       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
-     }
-     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
-   }
+  @DeleteMapping(value = "/{uid}" + DEACTIVE_PATH)
+  public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    if (adminTalentService.delete(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @PostMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> approve(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
+    if (adminTalentService.approve(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
+
+  @DeleteMapping(value = "/{uid}")
+  public CompletableFuture<ResponseEntity<Void>> disapprove(JwtAuthenticationToken token,
+      @PathVariable("uid") UUID uid) {
+    if (adminTalentService.disapprove(uid)) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+  }
 }
