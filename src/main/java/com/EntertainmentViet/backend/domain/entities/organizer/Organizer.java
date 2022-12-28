@@ -236,7 +236,7 @@ public class Organizer extends Users {
   @Override
   protected boolean checkIfUserVerifiable() {
     if (getUserType() == null) {
-      log.warn(String.format("The organizer with uid '%s' do not have accountType yet", getUid()));
+      log.warn(String.format("The organizer with uid '%s' do not have userType yet", getUid()));
       return false;
     }
     if (!organizerDetail.isAllKycFilled()) {

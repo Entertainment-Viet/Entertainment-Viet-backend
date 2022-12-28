@@ -310,7 +310,7 @@ public class Talent extends Users implements Advertisable {
   @Override
   protected boolean checkIfUserVerifiable() {
     if (getUserType() == null) {
-      log.warn(String.format("The talent with uid '%s' do not have accountType yet", getUid()));
+      log.warn(String.format("The talent with uid '%s' do not have userType yet", getUid()));
       return false;
     }
     if (!talentDetail.isAllKycFilled()) {

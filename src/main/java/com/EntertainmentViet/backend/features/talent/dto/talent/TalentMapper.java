@@ -99,7 +99,7 @@ public abstract class TalentMapper {
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "archived", ignore = true)
-    @Mapping(target = "accountType", ignore = true)
+    @Mapping(target = "accountType", source = "accountType", qualifiedByName = "toAccountTypeKey")
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedByName = "toUserType")
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
@@ -163,8 +163,8 @@ public abstract class TalentMapper {
     }
 
     @Named("toAccountTypeKey")
-    public String toAccountTypeKey(AccountType userType) {
-        return userType != null ? userType.i18nKey : null;
+    public String toAccountTypeKey(AccountType accountType) {
+        return accountType != null ? accountType.i18nKey : null;
     }
 
     @Named("toAccountType")
