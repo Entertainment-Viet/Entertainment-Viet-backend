@@ -98,7 +98,7 @@ public abstract class TalentMapper {
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "displayName", ignore = true)
     @Mapping(target = "archived", ignore = true)
-    @Mapping(target = "accountType", source = "accountType", qualifiedBy = StandardTypeMapper.ToAccountTypeKey.class)
+    @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
