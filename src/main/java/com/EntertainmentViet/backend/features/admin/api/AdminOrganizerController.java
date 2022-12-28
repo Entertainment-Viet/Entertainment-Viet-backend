@@ -7,18 +7,12 @@ import com.EntertainmentViet.backend.features.organizer.boundary.organizer.Organ
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -70,14 +64,6 @@ public class AdminOrganizerController {
   @DeleteMapping(value = "/{uid}" + DEACTIVE_PATH)
   public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
     if (organizerService.delete(uid)) {
-      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
-    }
-    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
-  }
-
-  @PostMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<Void>> approve(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-    if (organizerService.approve(uid)) {
       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
     return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
