@@ -302,6 +302,12 @@ public class Talent extends Users implements Advertisable {
   }
 
   @Override
+  public boolean verifyAccount() {
+    getPriorityScores().forEach(priorityScore -> priorityScore.setApproved(true));
+    return super.verifyAccount();
+  }
+
+  @Override
   protected boolean checkIfUserVerifiable() {
     if (getUserType() == null) {
       log.warn(String.format("The talent with uid '%s' do not have accountType yet", getUid()));

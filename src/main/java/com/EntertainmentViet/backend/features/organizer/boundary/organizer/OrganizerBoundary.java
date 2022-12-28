@@ -5,11 +5,10 @@ import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrg
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerKycInfoDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import org.springframework.data.domain.Pageable;
 
 public interface OrganizerBoundary {
 
@@ -28,8 +27,6 @@ public interface OrganizerBoundary {
   boolean verify(UUID uid);
 
   CustomPage<ReadOrganizerDto> findAll(Pageable pageable);
-
-  boolean approve(UUID uid);
 
   boolean disapprove(UUID uid);
 }
