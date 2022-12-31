@@ -307,5 +307,14 @@
   },
   {
     "name": "UPDATE_SCORE"
+  },
+  {
+    "name": "DELETE_SCORE"
+  },
+  {
+    "name": "READ_CONFIG"
+  },
+  {
+    "name": "CONFIG_FINANCE"
   }
 ]

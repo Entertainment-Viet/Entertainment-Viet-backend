@@ -125,6 +125,7 @@
           "READ_EVENT",
           "BROWSE_EVENT",
           "UPDATE_TALENT_CONFIDENTIAL",
+          "READ_SCORE",
         ]
       }
     }
@@ -228,7 +229,6 @@
           "READ_TALENT_CONFIDENTIAL",
           "ADMIN_BROWSE_TALENT",
           "ADMIN_BROWSE_ADVERTISEMENT",
-          "READ_SCORE",
           "ADMIN_READ_TALENT",
         ]
       }
@@ -245,7 +245,6 @@
           "ADMIN_REJECT_TALENT",
           "ADMIN_APPROVE_ADVERTISEMENT",
           "ADMIN_UPDATE_ADVERTISEMENT",
-          "UPDATE_SCORE",
         ]
       }
     }
@@ -284,6 +283,21 @@
           "UPLOAD_FILE",
           "DELETE_FILE",
           "ADMIN_UPDATE_BOOKING"
+        ]
+      }
+    }
+  },
+  {
+    "name": "ADMIN_CONFIG_ACCESS",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
+          "READ_SCORE",
+          "UPDATE_SCORE",
+          "DELETE_SCORE",
+          "READ_CONFIG",
+          "CONFIG_FINANCE",
         ]
       }
     }

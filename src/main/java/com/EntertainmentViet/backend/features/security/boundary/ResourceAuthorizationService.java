@@ -1,15 +1,12 @@
 package com.EntertainmentViet.backend.features.security.boundary;
 
-import com.EntertainmentViet.backend.features.admin.api.AdminAdvertisementController;
-import com.EntertainmentViet.backend.features.admin.api.AdminBookingController;
-import com.EntertainmentViet.backend.features.admin.api.AdminOrganizerController;
-import com.EntertainmentViet.backend.features.admin.api.AdminTalentController;
-import com.EntertainmentViet.backend.features.admin.api.UserController;
+import com.EntertainmentViet.backend.features.admin.api.*;
 import com.EntertainmentViet.backend.features.aws.api.S3StorageController;
 import com.EntertainmentViet.backend.features.booking.api.booking.OrganizerBookingController;
 import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingController;
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
+import com.EntertainmentViet.backend.features.config.api.ConfigController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
@@ -19,25 +16,7 @@ import com.EntertainmentViet.backend.features.organizer.api.joboffer.JobOfferCon
 import com.EntertainmentViet.backend.features.organizer.api.organizer.OrganizerController;
 import com.EntertainmentViet.backend.features.organizer.api.shoppingcart.ShoppingCartController;
 import com.EntertainmentViet.backend.features.scoresystem.api.ScoreTypeController;
-import com.EntertainmentViet.backend.features.security.roles.AdminRole;
-import com.EntertainmentViet.backend.features.security.roles.AdvertisementRole;
-import com.EntertainmentViet.backend.features.security.roles.BookingRole;
-import com.EntertainmentViet.backend.features.security.roles.CategoryRole;
-import com.EntertainmentViet.backend.features.security.roles.EventPositionRole;
-import com.EntertainmentViet.backend.features.security.roles.EventRole;
-import com.EntertainmentViet.backend.features.security.roles.FeedbackRole;
-import com.EntertainmentViet.backend.features.security.roles.JobOfferRole;
-import com.EntertainmentViet.backend.features.security.roles.LocationAddressRole;
-import com.EntertainmentViet.backend.features.security.roles.OrganizerRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageOrderRole;
-import com.EntertainmentViet.backend.features.security.roles.PackageRole;
-import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
-import com.EntertainmentViet.backend.features.security.roles.PositionApplicantRole;
-import com.EntertainmentViet.backend.features.security.roles.ReviewRole;
-import com.EntertainmentViet.backend.features.security.roles.S3StorageRole;
-import com.EntertainmentViet.backend.features.security.roles.ScoreTypeRole;
-import com.EntertainmentViet.backend.features.security.roles.ShoppingCartRole;
-import com.EntertainmentViet.backend.features.security.roles.TalentRole;
+import com.EntertainmentViet.backend.features.security.roles.*;
 import com.EntertainmentViet.backend.features.talent.api.advertisement.AdvertisementController;
 import com.EntertainmentViet.backend.features.talent.api.feedback.TalentFeedbackController;
 import com.EntertainmentViet.backend.features.talent.api.packagetalent.PackageBookingController;
@@ -328,6 +307,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(ScoreTypeRole.READ_SCORE.name())
             .mvcMatchers(HttpMethod.POST, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
             .hasAuthority(ScoreTypeRole.UPDATE_SCORE.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ScoreTypeRole.DELETE_SCORE.name())
 
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
@@ -356,6 +337,12 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(S3StorageRole.READ_FILE.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(S3StorageController.REQUEST_MAPPING_PATH))
             .hasAuthority(S3StorageRole.DELETE_FILE.name())
+
+            // Config mapping
+            .mvcMatchers(HttpMethod.POST, ofPath(ConfigController.REQUEST_MAPPING_PATH + ConfigController.FINANCE_PATH))
+            .hasAuthority(ConfigRole.CONFIG_FINANCE.name())
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(ConfigController.REQUEST_MAPPING_PATH))
+            .hasAuthority(ConfigRole.READ_CONFIG.name())
 
             .anyRequest().authenticated());
   }

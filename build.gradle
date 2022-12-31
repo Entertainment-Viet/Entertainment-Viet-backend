@@ -32,9 +32,11 @@ ext {
 	commonTextVersion = "1.9"
 	commonsIoVersion = "2.11.0"
 	springDocVersion = "1.6.9"
+	gsonVersion = "2.10"
 }
 
 dependencies {
+	// Hibernate
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
 	implementation "com.vladmihalcea:hibernate-types-55:${hibernateTypeVersion}"
 	implementation "org.hibernate:hibernate-spatial:${hibernateVersion}"
@@ -50,16 +52,19 @@ dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}:general"
 
+	// Spring Framework
 	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springVersion}"
 
+	// Helper Util
 	implementation 'org.apache.httpcomponents:httpclient'
 	implementation "org.apache.commons:commons-lang3:${commonLangVersion}"
 	implementation "org.apache.commons:commons-collections4:${commonCollectionVersion}"
 	implementation "org.apache.commons:commons-text:${commonTextVersion}"
 	implementation "commons-io:commons-io:${commonsIoVersion}"
+	implementation "com.google.code.gson:gson:${gsonVersion}"
 
 	// Lombok + Mapstruct
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
@@ -74,6 +79,7 @@ dependencies {
 	// AWS
 	implementation "org.springframework.cloud:spring-cloud-starter-aws:${springAwsVersion}"
 
+	// Test
 	runtimeOnly "org.postgresql:postgresql"
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 	testImplementation "org.springframework.security:spring-security-test"
