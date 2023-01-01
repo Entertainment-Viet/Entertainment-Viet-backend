@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemUtils;
+import com.EntertainmentViet.backend.domain.businessLogic.ScoreSystemLogic;
 import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
@@ -219,7 +219,7 @@ public class Talent extends Users implements Advertisable {
       setPriorityScores(new ArrayList<>());
     }
 
-    ScoreSystemUtils.updateScoreSystemOfTalent(newScores, this, isAdmin);
+    ScoreSystemLogic.updateScoreSystemOfTalent(newScores, this, isAdmin);
     setFinalScore(obtainScore());
   }
 
@@ -239,16 +239,6 @@ public class Talent extends Users implements Advertisable {
         .map(Booking::getJobDetail)
         .map(JobDetail::getPrice)
         .mapToDouble(Price::getMin)
-        .sum();
-  }
-
-  public Double computeUnpaidSum() {
-    return bookings.stream()
-        .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED))
-        .map(Booking::getJobDetail)
-        .map(JobDetail::getPrice)
-        .map(Price::getMax)
-        .mapToDouble(Double::doubleValue)
         .sum();
   }
 

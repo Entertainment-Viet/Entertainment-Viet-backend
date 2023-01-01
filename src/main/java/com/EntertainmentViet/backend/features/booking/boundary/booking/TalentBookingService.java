@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
-import com.EntertainmentViet.backend.domain.businessLogic.FinanceUtils;
+import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -9,6 +9,7 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class TalentBookingService implements TalentBookingBoundary {
 
     private final BookingMapper bookingMapper;
 
+    private final ConfigBoundary configService;
 
     @Override
     public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID talentId, ListTalentBookingParamDto paramDto,
@@ -41,10 +43,12 @@ public class TalentBookingService implements TalentBookingBoundary {
             .toList();
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
-        var financeReport = FinanceUtils.generateOrganizerBookingReport(bookingList);
+        var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
+        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null));
         return ListBookingResponseDto.builder()
-            .unpaidSum(financeReport.getUnpaid())
+            .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())
+            .fee(financeReport.getFee())
             .tax(financeReport.getTax())
             .total(financeReport.getTotal())
             .bookings(RestUtils.toPageResponse(dataPage))

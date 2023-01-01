@@ -1,10 +1,7 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
-public class ScoreType {
+public class ScoreType extends Identifiable {
 
   public static final Long SONG_SCORE_TYPE_ID = 1L;
 

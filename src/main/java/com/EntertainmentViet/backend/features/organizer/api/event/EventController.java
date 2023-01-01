@@ -1,8 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
@@ -15,15 +12,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @Async
 @RequestMapping(path = EventController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
+@Validated
 @Slf4j
 public class EventController {
 

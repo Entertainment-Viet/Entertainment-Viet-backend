@@ -8,7 +8,9 @@ import java.util.UUID;
 
 public interface ScoreTypeBoundary {
 
-    List<ScoreTypeDto> findAll(UUID id);
+    List<ScoreTypeDto> findAll();
 
-    Optional<Long> create(UUID id, ScoreTypeDto scoreTypeDto);
+    Optional<UUID> create(UUID id, ScoreTypeDto scoreTypeDto);
+
+    boolean delete(UUID id);
 }

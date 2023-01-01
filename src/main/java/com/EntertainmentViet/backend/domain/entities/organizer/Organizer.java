@@ -2,12 +2,10 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Users;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
@@ -187,17 +185,6 @@ public class Organizer extends Users {
     Booking newBooking = jobOffer.sendOffer(talent);
     addBooking(newBooking);
     talent.addBooking(newBooking);
-  }
-
-  public Double computeUnpaidSum() {
-    return bookings.stream()
-        .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED))
-        .filter(booking -> !booking.isPaid())
-        .map(Booking::getJobDetail)
-        .map(JobDetail::getPrice)
-        .map(Price::getMax)
-        .mapToDouble(Double::doubleValue)
-        .sum();
   }
 
   public Organizer updateInfo(Organizer newData) {

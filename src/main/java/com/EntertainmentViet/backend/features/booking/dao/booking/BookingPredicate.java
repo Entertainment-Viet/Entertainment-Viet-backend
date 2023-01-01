@@ -3,6 +3,8 @@ package com.EntertainmentViet.backend.features.booking.dao.booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.booking.QJobDetail;
+import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
+import com.EntertainmentViet.backend.domain.entities.organizer.QEventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizer;
 import com.EntertainmentViet.backend.domain.entities.talent.QPackage;
 import com.EntertainmentViet.backend.domain.entities.talent.QTalent;
@@ -12,13 +14,14 @@ import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.domain.values.QLocation;
 import com.EntertainmentViet.backend.domain.values.QLocationType;
-import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListEventBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -44,6 +47,9 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
   private final QLocationType parentLocationType = new QLocationType("parentLocationType");
   private final QLocation grandparentLocation = new QLocation("grandparentLocation");
   private final QLocationType grandParentLocationType = new QLocationType("grandParentLocationType");
+  private final QEvent event = QEvent.event;
+  private final QEventOpenPosition eventOpenPosition = QEventOpenPosition.eventOpenPosition;
+
   @Override
   public Predicate joinAll(JPAQueryFactory queryFactory) {
     var bookingList = queryFactory.selectFrom(booking).distinct()
@@ -209,6 +215,75 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     return predicate;
   }
 
+  public Predicate fromEventParams(ListEventBookingParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    // List all booking have performanceStartTime equal or after the paramDto.startTime
+    if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not()
+      );
+      // List all booking have performanceEndTime equal or before the paramDto.startTime
+    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
+      );
+      // List all booking have performance duration within paramDto.startTime and paramDto.endTime
+    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not(),
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
+      );
+    }
+    if (paramDto.getPaid() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          paramDto.getPaid() ? booking.isPaid.isTrue() : booking.isPaid.isFalse()
+      );
+    }
+    if (paramDto.getStatus() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+      );
+    }
+    if (paramDto.getPaymentType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.paymentType.eq(PaymentType.ofI18nKey(paramDto.getPaymentType()))
+      );
+    }
+    if (paramDto.getTalent() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.talent.displayName.like("%"+paramDto.getTalent()+"%")
+      );
+    }
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.category.uid.eq(paramDto.getCategory())
+      );
+    }
+    if (paramDto.getWorkType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
+      );
+    }
+    // hide bookings whose talent is archived
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          this.isOrganizerArchived().not()
+      );
+    }
+    return predicate;
+  }
+
   @Override
   public BooleanExpression uidEqual(UUID uid) {
     return booking.uid.eq(uid);
@@ -222,90 +297,20 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     return booking.talent.uid.eq(uid);
   }
 
+  public BooleanExpression belongToEvent(UUID uid) {
+    var bookingInEventQuery = JPAExpressions.select(booking.id)
+        .from(event)
+        .innerJoin(event.openPositions, eventOpenPosition)
+        .innerJoin(eventOpenPosition.applicants, booking)
+        .where(event.uid.eq(uid));
+    return booking.id.in(bookingInEventQuery);
+  }
+
   public BooleanExpression isTalentArchived() {
     return booking.talent.archived.isTrue();
   }
 
   public BooleanExpression isOrganizerArchived() {
     return booking.organizer.archived.isTrue();
-  }
-
-  public Predicate fromParams(AdminListBookingParamDto paramDto) {
-    var predicate = defaultPredicate();
-
-    if (paramDto == null) {
-      return predicate;
-    }
-    
-    // List all booking have performanceStartTime equal or after the paramDto.startTime
-    if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not()
-      );
-      // List all booking have performanceEndTime equal or before the paramDto.startTime
-    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
-      );
-      // List all booking have performance duration within paramDto.startTime and paramDto.endTime
-    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not(),
-              booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
-      );
-    }
-    if (paramDto.getPaid() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              paramDto.getPaid() ? booking.isPaid.isTrue() : booking.isPaid.isFalse()
-      );
-    }
-    if (paramDto.getStatus() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
-      );
-    }
-    if (paramDto.getPaymentType() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.paymentType.eq(PaymentType.ofI18nKey(paramDto.getPaymentType()))
-      );
-    }
-    if (paramDto.getTalent() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.talent.displayName.like("%"+paramDto.getTalent()+"%")
-      );
-    }
-    if (paramDto.getCategory() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.jobDetail.category.uid.eq(paramDto.getCategory())
-      );
-    }
-    if (paramDto.getWorkType() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
-      );
-    }
-    if (paramDto.getOrganizer() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              booking.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
-      );
-    }
-    // hide bookings whose either talent or organizer is archived
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
-      predicate = ExpressionUtils.allOf(
-        predicate,
-        this.isTalentArchived().or(this.isOrganizerArchived()).not() // neither
-      );
-    }
-    return predicate;
   }
 }

@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dto.booking;
 
-import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
+import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReadBookingDto extends Identifiable {
+public class ReadBookingDto extends IdentifiableDto {
 
     private OffsetDateTime createdAt;
 

@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.math.BigDecimal;
-
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
 public class AdminListBookingResponseDto {
+  private Double unpaidSum;
+  private Double price;
+  private Double fee;
+  private Double tax;
+  private Double total;
   private CustomPage<ReadBookingDto> bookings;
 }

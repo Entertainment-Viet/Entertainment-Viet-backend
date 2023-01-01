@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.event;
 
-import com.EntertainmentViet.backend.domain.businessLogic.FinanceUtils;
+import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
@@ -14,6 +14,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerB
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventOpenPositionRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
@@ -45,6 +46,8 @@ public class EventService implements EventBoundary {
   private final EventMapper eventMapper;
 
   private final BookingMapper bookingMapper;
+
+  private final ConfigBoundary configService;
 
   @Override
   public CustomPage<ReadEventDto> findAll(ListEventParamDto paramDto, Pageable pageable) {
@@ -152,12 +155,12 @@ public class EventService implements EventBoundary {
         .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser))
         .toList();
     var dataPage = RestUtils.getPageEntity(dtoList, pageable);
-
-    var dataOffset = RestUtils.getPagingOffer(bookingList.stream().toList(), pageable);
-    var financeReport = FinanceUtils.generateOrganizerBookingReport(bookingList.stream().toList().subList(dataOffset.getStart(), dataOffset.getEnd()));
+    var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
+    var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null));
     return ListBookingResponseDto.builder()
-        .unpaidSum(financeReport.getUnpaid())
+        .unpaidSum(unpaidSum)
         .price(financeReport.getPrice())
+        .fee(financeReport.getFee())
         .tax(financeReport.getTax())
         .total(financeReport.getTotal())
         .bookings(RestUtils.toPageResponse(dataPage))

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 @Async
 @RequestMapping(path = PackageBookingController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
+@Validated
 @Slf4j
 public class PackageBookingController {
 

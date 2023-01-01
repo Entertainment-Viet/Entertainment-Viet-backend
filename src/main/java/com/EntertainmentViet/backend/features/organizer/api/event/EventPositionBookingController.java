@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 @Async
 @RequestMapping(path = EventPositionBookingController.REQUEST_MAPPING_PATH)
+@Validated
 @RequiredArgsConstructor
 @Slf4j
 public class EventPositionBookingController {
