@@ -1,0 +1,2 @@
+ALTER TABLE score_type
+ADD COLUMN uid UUID;

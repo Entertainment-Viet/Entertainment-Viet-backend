@@ -315,7 +315,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Admin score mapping
             .mvcMatchers(HttpMethod.GET, ofPath(ScoreTypeController.REQUEST_MAPPING_PATH))
             .hasAuthority(ScoreTypeRole.READ_SCORE.name())
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(ScoreTypeController.REQUEST_MAPPING_PATH))
             .hasAuthority(ScoreTypeRole.UPDATE_SCORE.name())
             .mvcMatchers(HttpMethod.DELETE, anyPathAfter(ScoreTypeController.REQUEST_MAPPING_PATH))
             .hasAuthority(ScoreTypeRole.DELETE_SCORE.name())

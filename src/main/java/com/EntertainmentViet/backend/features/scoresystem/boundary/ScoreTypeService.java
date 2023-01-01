@@ -20,12 +20,23 @@ public class ScoreTypeService implements ScoreTypeBoundary {
     private final ScoreTypeRepository scoreTypeRepository;
 
     @Override
-    public List<ScoreTypeDto> findAll(UUID id) {
+    public List<ScoreTypeDto> findAll() {
         return scoreTypeRepository.findAll().stream().map(scoreTypeMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Long> create(UUID id, ScoreTypeDto scoreTypeDto) {
-        return Optional.ofNullable(scoreTypeRepository.save(scoreTypeMapper.toModel(scoreTypeDto)).getId());
+    public Optional<UUID> create(UUID id, ScoreTypeDto scoreTypeDto) {
+        return Optional.ofNullable(scoreTypeRepository.save(scoreTypeMapper.toModel(scoreTypeDto)).getUid());
+    }
+
+    @Override
+    public boolean delete(UUID id) {
+        var scoreType = scoreTypeRepository.findByUid(id);
+        if (scoreType.isEmpty()) {
+            return false;
+        }
+
+        scoreTypeRepository.delete(scoreType.get());
+        return true;
     }
 }

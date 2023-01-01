@@ -23,26 +23,34 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class ScoreTypeController {
 
-    public static final String REQUEST_MAPPING_PATH = "/admin/{id}/scoreTypes";
+    public static final String REQUEST_MAPPING_PATH = "/admin/{admin_id}/scoreTypes";
 
     private final ScoreTypeBoundary scoreTypeService;
 
     @GetMapping
-    public CompletableFuture<ResponseEntity<List<ScoreTypeDto>>> findAll(@PathVariable UUID id) {
-        return CompletableFuture.completedFuture(ResponseEntity.ok().body(scoreTypeService.findAll(id)));
+    public CompletableFuture<ResponseEntity<List<ScoreTypeDto>>> findAll() {
+        return CompletableFuture.completedFuture(ResponseEntity.ok().body(scoreTypeService.findAll()));
     }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public CompletableFuture<ResponseEntity<Long>> create(@PathVariable("id") UUID id,
+    public CompletableFuture<ResponseEntity<UUID>> create(@PathVariable("admin_id") UUID adminId,
                                                           @RequestBody @Valid ScoreTypeDto scoreTypeDto) {
-        return CompletableFuture.completedFuture(scoreTypeService.create(id, scoreTypeDto)
+        return CompletableFuture.completedFuture(scoreTypeService.create(adminId, scoreTypeDto)
                 .map(newScoreTypeId -> ResponseEntity
                         .ok()
                         .body(newScoreTypeId)
                 )
                 .orElse(ResponseEntity.badRequest().build())
         );
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public CompletableFuture<ResponseEntity<Void>> delete(@PathVariable("admin_id") UUID adminId, @PathVariable("id") UUID id) {
+        if (scoreTypeService.delete(id)) {
+            return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+        }
+        return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
     }
 }
