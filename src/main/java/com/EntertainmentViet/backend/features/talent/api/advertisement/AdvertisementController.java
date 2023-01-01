@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.api.advertisement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Async
 @RequestMapping(path = AdvertisementController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
+@Validated
 public class AdvertisementController {
 
   public static final String REQUEST_MAPPING_PATH = "/talents/{talent_uid}/advertisements";

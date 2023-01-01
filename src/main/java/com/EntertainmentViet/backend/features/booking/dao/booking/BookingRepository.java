@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dao.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
-import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListEventBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiableRepository;
@@ -20,5 +20,5 @@ public interface BookingRepository extends IdentifiableRepository<Booking> {
 
     List<Booking> findByTalentUid(UUID talentId, ListTalentBookingParamDto paramDto, Pageable pageable);
 
-    List<Booking> findAllBookings(AdminListBookingParamDto paramDto, Pageable pageable);
+    List<Booking> findByEventUid(UUID eventId, ListEventBookingParamDto paramDto, Pageable pageable);
 }

@@ -12,4 +12,8 @@ public class FinanceConfig {
   private Double organizerFee;
   private Double vat;
   private Double pit;
+
+  public boolean ifValid() {
+    return talentFee != null && organizerFee != null && vat != null && pit != null;
+  }
 }

@@ -260,6 +260,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.DELETE, ofPath(anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + AdminOrganizerController.DEACTIVE_PATH))
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_ORGANIZER.name())
 
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH) + AdminOrganizerController.BOOKING_PATH))
+            .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
+
             .mvcMatchers(HttpMethod.GET, ofPath(AdminOrganizerController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_ORGANIZER.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(AdminOrganizerController.REQUEST_MAPPING_PATH))
@@ -274,6 +277,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Admin talent mapping
             .mvcMatchers(HttpMethod.DELETE, ofPath(anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + AdminTalentController.DEACTIVE_PATH))
             .hasAuthority(AdminRole.ADMIN_DEACTIVE_TALENT.name())
+
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(AdminTalentController.REQUEST_MAPPING_PATH) + AdminTalentController.BOOKING_PATH))
+            .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
 
             .mvcMatchers(HttpMethod.GET, ofPath(AdminTalentController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_TALENT.name())
@@ -297,10 +303,14 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(AdminRole.ADMIN_UPDATE_ADVERTISEMENT.name())
 
             // Admin booking mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(AdminBookingController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(AdminBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
             .mvcMatchers(HttpMethod.PUT, anyPathAfter(AdminBookingController.REQUEST_MAPPING_PATH))
             .hasAuthority(AdminRole.ADMIN_UPDATE_BOOKING.name())
+
+            // Admin event mapping
+            .mvcMatchers(HttpMethod.GET, ofPath(anyPathAfter(AdminEventController.REQUEST_MAPPING_PATH) + AdminEventController.BOOKING_PATH))
+            .hasAuthority(AdminRole.ADMIN_BROWSE_BOOKING.name())
 
             // Admin score mapping
             .mvcMatchers(HttpMethod.GET, ofPath(ScoreTypeController.REQUEST_MAPPING_PATH))

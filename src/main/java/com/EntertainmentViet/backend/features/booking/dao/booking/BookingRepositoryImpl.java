@@ -3,7 +3,7 @@ package com.EntertainmentViet.backend.features.booking.dao.booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
 import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
-import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListEventBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
@@ -62,11 +62,12 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
   }
 
   @Override
-  public List<Booking> findAllBookings(AdminListBookingParamDto paramDto, Pageable pageable) {
+  public List<Booking> findByEventUid(UUID eventId, ListEventBookingParamDto paramDto, Pageable pageable) {
     return queryFactory.selectFrom(booking)
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
-            bookingPredicate.fromParams(paramDto)))
+            bookingPredicate.belongToEvent(eventId),
+            bookingPredicate.fromEventParams(paramDto)))
         .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
         .fetch();
   }

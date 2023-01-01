@@ -12,7 +12,7 @@ import java.util.Map;
 
 @UtilityClass
 @Slf4j
-public class ScoreSystemUtils {
+public class ScoreSystemLogic {
 
   public void updateScoreSystemOfTalent(List<PriorityScore> newScores, Talent talent, boolean isAdmin) {
     // Setup existing Score storage

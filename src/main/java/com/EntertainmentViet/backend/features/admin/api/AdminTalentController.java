@@ -2,9 +2,12 @@ package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
+import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
 import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentBoundary;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
+import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -18,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,16 +32,26 @@ import java.util.concurrent.CompletableFuture;
 @Async
 @RequestMapping(path = AdminTalentController.REQUEST_MAPPING_PATH)
 @RequiredArgsConstructor
+@Validated
 @Slf4j
 public class AdminTalentController {
 
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/talents";
-
+  public static final String BOOKING_PATH = "/bookings";
   public static final String DEACTIVE_PATH = "/deactive";
 
   private final AdminTalentBoundary adminTalentService;
-
+  private final AdminBookingBoundary adminBookingService;
   private final UserBoundary userService;
+
+  @GetMapping(value = "/{talent_uid}" + BOOKING_PATH)
+  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(@PathVariable("talent_uid") UUID talentUid,
+                                                                                    @ParameterObject Pageable pageable,
+                                                                                    @ParameterObject ListTalentBookingParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+        adminBookingService.listTalentBooking(talentUid, paramDto, pageable)
+    ));
+  }
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadAdminTalentDto>> findByUid(JwtAuthenticationToken token,
