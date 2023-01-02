@@ -1,6 +1,8 @@
 package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminUpdateBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -8,6 +10,8 @@ import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,15 @@ public class AdminBookingController {
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/bookings";
 
   private final AdminBookingBoundary adminBookingService;
+
+  @GetMapping
+  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(@PathVariable("admin_uid") UUID adminUid,
+                                                                                    @ParameterObject Pageable pageable,
+                                                                                    @ParameterObject AdminListBookingParamDto paramDto) {
+    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
+        adminBookingService.listBooking(paramDto, pageable)
+    ));
+  }
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(@PathVariable("admin_uid") UUID adminUid, @PathVariable("uid") UUID uid) {
