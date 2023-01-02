@@ -1,15 +1,5 @@
 package com.EntertainmentViet.backend.features.scoresystem.dto;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.PriorityScore;
 import com.EntertainmentViet.backend.domain.entities.talent.ScoreType;
@@ -21,6 +11,16 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Qualifier;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Mapper(config = MappingConfig.class,
     uses = {
       ScoreTypeMapper.class
@@ -31,7 +31,7 @@ public abstract class ScoreMapper {
   private ScoreTypeRepository scoreTypeRepository;
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"talent"})
-  public abstract PriorityScoreDto fromModeloAdminDto(PriorityScore priorityScore);
+  public abstract PriorityScoreDto fromModelToAdminDto(PriorityScore priorityScore);
 
   @Mapping(target = "talent", ignore = true)
   public abstract PriorityScore fromAdminDtoToModel(PriorityScoreDto dto);
@@ -55,7 +55,7 @@ public abstract class ScoreMapper {
         .filter(priorityScore -> !priorityScore.getScoreType().getName().equals("song"))
         .filter(priorityScore -> priorityScore.getApproved().equals(true))
         .map(priorityScore -> ReadScoreRewardListDto.builder()
-            .scoreTypeId(priorityScore.getScoreType().getId())
+            .scoreTypeId(priorityScore.getScoreType().getUid())
             .scoreTypeName(priorityScore.getScoreType().getName())
             .achievement(priorityScore.getAchievement())
             .approved(priorityScore.getApproved())
@@ -78,8 +78,7 @@ public abstract class ScoreMapper {
 
     var rewardScores = kycInfoDto.getRewards().stream()
         .map(updateScoreRewardListDto -> PriorityScore.builder()
-            .id(updateScoreRewardListDto.getScoreTypeId())
-            .scoreType(scoreTypeRepository.findById(updateScoreRewardListDto.getScoreTypeId()).orElse(null))
+            .scoreType(scoreTypeRepository.findByUid(updateScoreRewardListDto.getScoreTypeId()).orElse(null))
             .achievement(updateScoreRewardListDto.getAchievement())
             .proof(updateScoreRewardListDto.getProof())
             .build()
