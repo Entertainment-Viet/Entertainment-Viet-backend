@@ -52,7 +52,7 @@ public class AdminTalentService implements AdminTalentBoundary {
   @Override
   public CustomPage<ReadAdminTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
     var dataPage = RestUtils.toLazyLoadPageResponse(
-        talentRepository.findAll(pageable)
+        talentRepository.findAll(paramDto, pageable)
             .map(adminTalentMapper::toAdminDto));
 
     if (talentRepository.findAll(paramDto, pageable.next()).hasContent()) {

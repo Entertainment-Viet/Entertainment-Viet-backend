@@ -226,7 +226,7 @@ public class Talent extends Users implements Advertisable {
   public void withdrawCash() {
     if (SecurityUtils.hasRole(PaymentRole.RECEIVE_TALENT_CASH.name())) {
       bookings.stream()
-          .filter(Booking::isPaid)
+          .filter(Booking::getIsPaid)
           .filter(booking -> booking.getStatus() == BookingStatus.FINISHED)
           .forEach(booking -> booking.setStatus(BookingStatus.ARCHIVED));
     }
@@ -234,7 +234,7 @@ public class Talent extends Users implements Advertisable {
 
   public Double obtainWithdrawableCash() {
     return bookings.stream()
-        .filter(Booking::isPaid)
+        .filter(Booking::getIsPaid)
         .filter(booking -> booking.getStatus() != BookingStatus.ARCHIVED)
         .map(Booking::getJobDetail)
         .map(JobDetail::getPrice)

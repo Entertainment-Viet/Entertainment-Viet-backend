@@ -176,7 +176,7 @@ public class Organizer extends Users {
 
   public void pay(Booking booking) {
     if (SecurityUtils.hasRole(PaymentRole.PAY_ORGANIZER_CASH.name()) && booking.checkIfConfirmed()) {
-      booking.setPaid(true);
+      booking.setIsPaid(true);
       booking.setPaidAt(OffsetDateTime.now());
     }
   }

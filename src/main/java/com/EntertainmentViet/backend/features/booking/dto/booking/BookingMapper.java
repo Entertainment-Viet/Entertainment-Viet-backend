@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminUpdateBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
@@ -21,7 +22,7 @@ import org.mapstruct.Named;
 public abstract class BookingMapper {
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "isReview"})
-    @Mapping(target = "isPaid", source = "paid")
+    @Mapping(target = "isPaid", source = "isPaid")
     @Mapping(target = "status", source = "status.i18nKey")
     @Mapping(target = "paymentType", source = "paymentType.i18nKey")
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
@@ -64,6 +65,22 @@ public abstract class BookingMapper {
     @Mapping(target = "paymentType", source = "paymentType", qualifiedByName = "toPaymentType")
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     public abstract Booking fromUpdateDtoToModel(UpdateBookingDto updateBookingDto);
+
+    @Mapping(target = "uid", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "jobDetail", ignore = true)
+    @Mapping(target = "talentPackage", ignore = true)
+    @Mapping(target = "paymentType", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "extensions", ignore = true)
+    @Mapping(target = "organizer", ignore = true)
+    @Mapping(target = "talent", ignore = true)
+    @Mapping(target = "paidAt", ignore = true)
+    @Mapping(target = "bookingCode", ignore = true)
+    @Mapping(target = "confirmedAt", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "isReview", ignore = true)
+    public abstract Booking fromAdminUpdateDtoToModel(AdminUpdateBookingDto updateBookingDto);
 
     // Only return non-confidential detail if token have enough permission
     public ReadBookingDto checkPermission(ReadBookingDto readBookingDto, boolean isOwnerUser) {

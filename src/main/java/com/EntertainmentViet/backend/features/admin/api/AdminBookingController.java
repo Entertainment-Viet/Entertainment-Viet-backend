@@ -1,9 +1,11 @@
 package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminUpdateBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.UpdateBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
+import com.EntertainmentViet.backend.features.security.roles.AdminRole;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,11 +47,18 @@ public class AdminBookingController {
           value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, @PathVariable("uid") UUID uid,
                                                         @PathVariable("admin_uid") UUID adminUid,
-                                                        @RequestBody @Valid UpdateBookingDto updateBookingDto) {
+                                                        @RequestBody @Valid AdminUpdateBookingDto updateBookingDto) {
 
     if (!adminUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information with uid '%s'", adminUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    if (!SecurityUtils.hasRole(AdminRole.ADMIN_UPDATE_BOOKING_PROOF.name())) {
+      updateBookingDto.setFinishProof(null);
+    }
+    if (!SecurityUtils.hasRole(AdminRole.ADMIN_UPDATE_BOOKING_PAID.name())) {
+      updateBookingDto.setIsPaid(null);
     }
 
     return  CompletableFuture.completedFuture(adminBookingService.update(uid, updateBookingDto)

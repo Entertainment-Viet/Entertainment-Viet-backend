@@ -50,7 +50,7 @@ public class Booking extends Identifiable implements Auditable {
 
   private OffsetDateTime confirmedAt;
 
-  private boolean isPaid;
+  private Boolean isPaid;
 
   private OffsetDateTime paidAt;
 
@@ -116,6 +116,9 @@ public class Booking extends Identifiable implements Auditable {
     }
     if (newData.getFinishProof() != null) {
       setFinishProof(newData.getFinishProof());
+    }
+    if (newData.getIsPaid() != null) {
+      setIsPaid(newData.getIsPaid());
     }
   }
 

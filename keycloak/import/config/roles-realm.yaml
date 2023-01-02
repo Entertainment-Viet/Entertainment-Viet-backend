@@ -226,6 +226,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "READ_SCORE",
           "READ_TALENT_CONFIDENTIAL",
           "ADMIN_BROWSE_TALENT",
           "ADMIN_BROWSE_ADVERTISEMENT",
@@ -240,6 +241,8 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPDATE_SCORE",
+          "DELETE_SCORE",
           "ADMIN_APPROVE_TALENT",
           "ADMIN_UPDATE_TALENT",
           "ADMIN_REJECT_TALENT",
@@ -282,7 +285,8 @@
         "backend": [
           "UPLOAD_FILE",
           "DELETE_FILE",
-          "ADMIN_UPDATE_BOOKING"
+          "ADMIN_UPDATE_BOOKING",
+          "ADMIN_UPDATE_BOOKING_PROOF"
         ]
       }
     }
@@ -293,11 +297,19 @@
       "realm": null,
       "client": {
         "backend": [
-          "READ_SCORE",
-          "UPDATE_SCORE",
-          "DELETE_SCORE",
-          "READ_CONFIG",
+          "READ_CONFIG"
+        ]
+      }
+    }
+  },
+  {
+    "name": "ADMIN_FINANCE_ACCESS",
+    "composites": {
+      "realm": null,
+      "client": {
+        "backend": [
           "CONFIG_FINANCE",
+          "ADMIN_UPDATE_BOOKING_PAID"
         ]
       }
     }

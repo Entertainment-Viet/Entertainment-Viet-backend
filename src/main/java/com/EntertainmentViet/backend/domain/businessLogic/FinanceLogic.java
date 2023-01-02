@@ -20,7 +20,7 @@ public class FinanceLogic {
   public Double calculateUnpaidSum(Collection<Booking> bookings) {
     return bookings.stream()
         .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED))
-        .filter(Predicate.not(Booking::isPaid))
+        .filter(Predicate.not(Booking::getIsPaid))
         .map(Booking::getJobDetail)
         .map(JobDetail::getPrice)
         .map(Price::getMax)

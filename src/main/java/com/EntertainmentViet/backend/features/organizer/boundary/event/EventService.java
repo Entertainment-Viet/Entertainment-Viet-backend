@@ -186,7 +186,7 @@ public class EventService implements EventBoundary {
       }
     }
     if (paramDto.getPaid() != null) {
-      if (booking.isPaid() != paramDto.getPaid()) {
+      if (booking.getIsPaid() != paramDto.getPaid()) {
         return false;
       }
     }
