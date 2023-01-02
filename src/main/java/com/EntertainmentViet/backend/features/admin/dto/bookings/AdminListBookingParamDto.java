@@ -27,6 +27,8 @@ public class AdminListBookingParamDto {
 
   private String workType;
 
+  private String bookingCode;
+
   // organizer name
   private String organizer;
 
