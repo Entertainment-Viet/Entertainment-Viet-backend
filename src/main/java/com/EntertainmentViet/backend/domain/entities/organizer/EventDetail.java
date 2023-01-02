@@ -1,21 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.values.Location;
 import com.EntertainmentViet.backend.domain.values.Location_;
 import com.EntertainmentViet.backend.domain.values.UserInputText;
@@ -28,6 +12,11 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -44,7 +33,7 @@ public class EventDetail {
   @MapsId
   private Event event;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
   private Location occurrenceAddress;

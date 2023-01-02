@@ -56,7 +56,7 @@ public abstract class UserDetail {
 
   private String email;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
   private Location address;
