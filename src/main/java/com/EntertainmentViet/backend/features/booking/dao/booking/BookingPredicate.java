@@ -136,6 +136,13 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
+    if (paramDto.getBookingCode() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.bookingCode.like("%"+paramDto.getBookingCode()+"%")
+      );
+    }
+
     // hide bookings whose talent is archived
     if (paramDto.getWithArchived() == Boolean.FALSE) {
       predicate = ExpressionUtils.allOf(
@@ -205,6 +212,13 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
+    if (paramDto.getBookingCode() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.bookingCode.like("%"+paramDto.getBookingCode()+"%")
+      );
+    }
+
     // hide bookings whose organizer is archived
     if (paramDto.getWithArchived() == Boolean.FALSE) {
       predicate = ExpressionUtils.allOf(
@@ -274,6 +288,13 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
           booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
       );
     }
+    if (paramDto.getBookingCode() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.bookingCode.like("%"+paramDto.getBookingCode()+"%")
+      );
+    }
+
     // hide bookings whose talent is archived
     if (paramDto.getWithArchived() == Boolean.FALSE) {
       predicate = ExpressionUtils.allOf(

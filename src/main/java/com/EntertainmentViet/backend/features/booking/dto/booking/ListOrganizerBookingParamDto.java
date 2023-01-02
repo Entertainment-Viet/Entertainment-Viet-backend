@@ -27,6 +27,8 @@ public class ListOrganizerBookingParamDto {
 
   private String workType;
 
+  private String bookingCode;
+
   // talent name
   private String talent;
 
