@@ -188,11 +188,11 @@ public class Talent extends Users implements Advertisable {
     score.setTalent(null);
   }
 
-  public Booking applyToEventPosition(EventOpenPosition position, JobDetail jobDetail, PaymentType paymentType) {
+  public Booking applyToEventPosition(EventOpenPosition position, PaymentType paymentType) {
     Booking newApplication = Booking.builder()
         .talent(this)
         .organizer(position.getEvent().getOrganizer())
-        .jobDetail(jobDetail != null ? jobDetail : position.getJobOffer().getJobDetail().clone())
+        .jobDetail(position.getJobOffer().getJobDetail().clone())
         .status(BookingStatus.ORGANIZER_PENDING)
         .createdAt(OffsetDateTime.now())
         .isPaid(false)

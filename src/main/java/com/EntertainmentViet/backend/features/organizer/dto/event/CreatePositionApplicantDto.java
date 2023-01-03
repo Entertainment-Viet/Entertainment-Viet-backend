@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +18,4 @@ public class CreatePositionApplicantDto {
 
   @NotNull
   private String paymentType;
-
-  private CreateJobDetailDto jobDetail;
 }
