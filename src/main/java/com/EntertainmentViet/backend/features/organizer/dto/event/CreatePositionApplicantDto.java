@@ -17,5 +17,5 @@ public class CreatePositionApplicantDto {
   private UUID talentId;
 
   @NotNull
-  private String paymentType;
+  private Double suggestedPrice;
 }

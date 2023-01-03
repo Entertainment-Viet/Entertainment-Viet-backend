@@ -3,7 +3,6 @@ package com.EntertainmentViet.backend.features.organizer.boundary.event;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
@@ -81,7 +80,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
       return Optional.empty();
     }
 
-    Booking createdApplicant = talent.applyToEventPosition(openPosition, PaymentType.ofI18nKey(createPositionApplicantDto.getPaymentType()));
+    Booking createdApplicant = talent.applyToEventPosition(openPosition, createPositionApplicantDto.getSuggestedPrice());
     var newBooking = bookingRepository.save(createdApplicant);
 
     talentRepository.save(talent);

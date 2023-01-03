@@ -7,7 +7,6 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
@@ -188,16 +187,19 @@ public class Talent extends Users implements Advertisable {
     score.setTalent(null);
   }
 
-  public Booking applyToEventPosition(EventOpenPosition position, PaymentType paymentType) {
+  public Booking applyToEventPosition(EventOpenPosition position, Double price) {
+    JobDetail jobDetail = position.getJobOffer().getJobDetail().clone();
+    jobDetail.getPrice().setMin(price);
+
     Booking newApplication = Booking.builder()
         .talent(this)
         .organizer(position.getEvent().getOrganizer())
-        .jobDetail(position.getJobOffer().getJobDetail().clone())
+        .jobDetail(jobDetail)
         .status(BookingStatus.ORGANIZER_PENDING)
         .createdAt(OffsetDateTime.now())
         .isPaid(false)
         .isReview(false)
-        .paymentType(paymentType)
+        .paymentType(position.getPaymentType())
         .build();
 
     position.addApplicant(newApplication);

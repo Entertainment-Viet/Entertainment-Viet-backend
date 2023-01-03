@@ -19,4 +19,7 @@ public class CreateEventOpenPositionDto {
 
   @NotNull
   private Integer quantity;
+
+  @NotNull
+  private String paymentType;
 }

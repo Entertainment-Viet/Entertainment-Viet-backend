@@ -1,0 +1,2 @@
+ALTER TABLE event_open_position
+ADD COLUMN payment_type PAYMENT_TYPE;

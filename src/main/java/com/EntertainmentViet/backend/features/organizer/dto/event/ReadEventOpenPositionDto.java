@@ -22,4 +22,6 @@ public class ReadEventOpenPositionDto extends IdentifiableDto {
   private Integer quantity;
 
   private Integer applicantCount;
+
+  private String paymentType;
 }

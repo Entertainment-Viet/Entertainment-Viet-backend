@@ -15,4 +15,6 @@ public class UpdateEventOpenPositionDto {
   private UpdateJobOfferDto jobOffer;
 
   private Integer quantity;
+
+  private String paymentType;
 }

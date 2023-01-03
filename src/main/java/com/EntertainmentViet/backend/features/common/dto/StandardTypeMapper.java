@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.common.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
+import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import org.mapstruct.Mapper;
@@ -45,6 +46,16 @@ public class StandardTypeMapper {
     return UserType.ofI18nKey(i18nKey);
   }
 
+  @ToPaymentType
+  public PaymentType toPaymentType(String payment) {
+    return payment != null ? PaymentType.ofI18nKey(payment) : null;
+  }
+
+  @ToPaymentTypeKey
+  public String toPaymentTypeKey(PaymentType paymentType) {
+    return paymentType != null ? paymentType.i18nKey : null;
+  }
+
   @Qualifier
   @Target(ElementType.METHOD)
   @Retention(RetentionPolicy.CLASS)
@@ -74,4 +85,14 @@ public class StandardTypeMapper {
   @Target(ElementType.METHOD)
   @Retention(RetentionPolicy.CLASS)
   public @interface ToUserType {  }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.CLASS)
+  public @interface ToPaymentTypeKey {  }
+
+  @Qualifier
+  @Target(ElementType.METHOD)
+  @Retention(RetentionPolicy.CLASS)
+  public @interface ToPaymentType {  }
 }
