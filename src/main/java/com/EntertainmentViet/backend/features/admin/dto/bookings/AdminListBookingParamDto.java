@@ -32,8 +32,16 @@ public class AdminListBookingParamDto {
   // organizer name
   private String organizer;
 
+  private UUID organizerId;
+
   // talent name
   private String talent;
+
+  private UUID talentId;
+
+  private UUID eventId;
+
+  private UUID id;
 
   /**
    * It is false by default, it lists out bookings that from non-archived talent

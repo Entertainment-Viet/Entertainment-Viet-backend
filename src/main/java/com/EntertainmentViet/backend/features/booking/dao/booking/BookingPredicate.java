@@ -14,6 +14,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.WorkType;
 import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.domain.values.QLocation;
 import com.EntertainmentViet.backend.domain.values.QLocationType;
+import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListEventBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListTalentBookingParamDto;
@@ -75,6 +76,113 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
         .fetch();
 
     return null;
+  }
+
+  public Predicate fromParams(AdminListBookingParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    // List all booking have performanceStartTime equal or after the paramDto.startTime
+    if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not()
+      );
+      // List all booking have performanceEndTime equal or before the paramDto.startTime
+    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
+      );
+      // List all booking have performance duration within paramDto.startTime and paramDto.endTime
+    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.performanceEndTime.before(paramDto.getStartTime()).not(),
+          booking.jobDetail.performanceStartTime.after(paramDto.getEndTime()).not()
+      );
+    }
+    if (paramDto.getPaid() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          paramDto.getPaid() ? booking.isPaid.isTrue() : booking.isPaid.isFalse()
+      );
+    }
+    if (paramDto.getStatus() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+      );
+    }
+    if (paramDto.getPaymentType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.paymentType.eq(PaymentType.ofI18nKey(paramDto.getPaymentType()))
+      );
+    }
+    if (paramDto.getTalent() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.talent.displayName.like("%"+paramDto.getTalent()+"%")
+      );
+    }
+    if (paramDto.getOrganizer() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.organizer.displayName.like("%"+paramDto.getOrganizer()+"%")
+      );
+    }
+    if (paramDto.getCategory() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.category.uid.eq(paramDto.getCategory())
+      );
+    }
+    if (paramDto.getWorkType() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.jobDetail.workType.eq(WorkType.ofI18nKey(paramDto.getWorkType()))
+      );
+    }
+    if (paramDto.getBookingCode() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          booking.bookingCode.like("%"+paramDto.getBookingCode()+"%")
+      );
+    }
+
+    // hide bookings whose talent is archived
+    if (paramDto.getWithArchived() == Boolean.FALSE) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          this.isOrganizerArchived().not()
+      );
+    }
+
+    if (paramDto.getOrganizerId() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          belongToOrganizer(paramDto.getOrganizerId())
+      );
+    }
+    if (paramDto.getTalentId() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          belongToTalent(paramDto.getTalentId())
+      );
+    }
+    if (paramDto.getEventId() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          belongToEvent(paramDto.getEventId())
+      );
+    }
+    if (paramDto.getId() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          uidEqual(paramDto.getId())
+      );
+    }
+    return predicate;
   }
 
   public Predicate fromOrganizerParams(ListOrganizerBookingParamDto paramDto) {

@@ -2,9 +2,6 @@ package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
-import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
-import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
-import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerService;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
@@ -30,21 +27,10 @@ import java.util.concurrent.CompletableFuture;
 public class AdminOrganizerController {
 
   public static final String REQUEST_MAPPING_PATH = "/admins/{admin_uid}/organizers";
-  public static final String BOOKING_PATH = "/bookings";
   public static final String DEACTIVE_PATH = "/deactive";
 
   private final UserBoundary userService;
-  private final AdminBookingBoundary adminBookingService;
   private final OrganizerService organizerService;
-
-  @GetMapping(value = "/{organizer_uid}" + BOOKING_PATH)
-  public CompletableFuture<ResponseEntity<AdminListBookingResponseDto>> listBooking(@PathVariable("organizer_uid") UUID organizerUid,
-                                                                                    @ParameterObject Pageable pageable,
-                                                                                    @ParameterObject ListOrganizerBookingParamDto paramDto) {
-    return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-        adminBookingService.listOrganizerBooking(organizerUid, paramDto, pageable)
-    ));
-  }
 
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> verify(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {

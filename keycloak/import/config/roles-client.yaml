@@ -285,6 +285,12 @@
     "name": "ADMIN_UPDATE_BOOKING"
   },
   {
+    "name": "ADMIN_UPDATE_BOOKING_PROOF"
+  },
+  {
+    "name": "ADMIN_UPDATE_BOOKING_PAID"
+  },
+  {
     "name": "READ_CATEGORY"
   },
   {

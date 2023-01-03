@@ -58,7 +58,7 @@ public class JobDetail implements Serializable {
   @NotNull
   private Integer performanceCount;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
   @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
   @QueryInit("*.*")
   private Location location;
