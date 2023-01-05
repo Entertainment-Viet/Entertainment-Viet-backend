@@ -15,6 +15,7 @@ import com.EntertainmentViet.backend.features.talent.dto.packagetalent.ListPacka
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -137,25 +138,21 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
               talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
       );
     }
-    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
+
+    if (paramDto.getLocationId() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              talentPackage.jobDetail.location.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
-              talentPackage.jobDetail.location.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
+          predicate,
+          Expressions.booleanTemplate("check_location({0}, {1}) > 0", paramDto.getLocationId(), talentPackage.jobDetail.location.uid)
+      );
     }
-    if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
+
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              talentPackage.jobDetail.location.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
-              talentPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
-}
-        if (paramDto.getWithArchived() == Boolean.FALSE) {
-          predicate = ExpressionUtils.allOf(
-            predicate,
-            this.isArchived().not(),
-            this.isTalentArchived().not()
-          );
-        }
+          predicate,
+          paramDto.getWithArchived() ? this.isArchived().eq(true) :
+              this.isArchived().eq(false).or(this.isTalentArchived().eq(false))
+      );
+    }
     return predicate;
   }
 

@@ -3,6 +3,8 @@ package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Getter
 public class ListPackageParamDto {
@@ -23,13 +25,7 @@ public class ListPackageParamDto {
 
   private String currency;
 
-  private String locationType;
-
-  private String locationName;
-
-  private String locationParentType;
-
-  private String locationParentName;
+  private UUID locationId;
 
   private Boolean withArchived;
 }

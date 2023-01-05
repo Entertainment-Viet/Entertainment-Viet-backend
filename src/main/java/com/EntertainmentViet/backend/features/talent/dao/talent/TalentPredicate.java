@@ -203,35 +203,24 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               )))
       );
     }
-    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
+
+    if (paramDto.getLocationId() != null) {
       predicate = ExpressionUtils.allOf(
-              predicate,
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"))),
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%")))
-      );
-    }
-    if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
-      predicate = ExpressionUtils.allOf(
-              predicate,
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.parent().type().type.likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"))),
-              talent.packages.any().in(
-                      JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.location.parent().name.likeIgnoreCase("%" + paramDto.getLocationParentName() + "%")))
+          predicate,
+          talent.packages.any().in(
+              JPAExpressions.selectFrom(aPackage).where(
+                Expressions.booleanTemplate("check_location({0}, {1}) > 0", paramDto.getLocationId(), aPackage.jobDetail.location.uid)
+              )
+          )
       );
     }
 
-        if (paramDto.getWithArchived() == Boolean.FALSE) {
-                predicate = ExpressionUtils.allOf(
-                        predicate,
-                        this.isArchived().not()
-                );
-        }
+    if (paramDto.getWithArchived() != null) {
+            predicate = ExpressionUtils.allOf(
+                    predicate,
+                    paramDto.getWithArchived() ? this.isArchived().eq(true) : this.isArchived().eq(false)
+            );
+    }
     return predicate;
   }
 

@@ -1,10 +1,11 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
-import java.time.OffsetDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -29,13 +30,7 @@ public class ListEventParamDto {
 
   private String currency;
 
-  private String locationType;
+  private UUID locationId;
 
-  private String locationName;
-
-  private String locationParentType;
-
-  private String locationParentName;
-
-  private Boolean withArchived = Boolean.FALSE;
+  private Boolean withArchived;
 }

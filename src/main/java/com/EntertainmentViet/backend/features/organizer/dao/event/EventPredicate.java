@@ -12,6 +12,7 @@ import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParam
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -135,26 +136,21 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
               JPAExpressions.selectFrom(eventOpenPosition).where(
                   eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()))));
     }
-    if (paramDto.getLocationName() != null && paramDto.getLocationType() != null) {
+
+    if (paramDto.getLocationId() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceAddress.type().type.likeIgnoreCase("%" + paramDto.getLocationType() + "%"),
-          event.eventDetail.occurrenceAddress.name.likeIgnoreCase("%" + paramDto.getLocationName() + "%"));
+          Expressions.booleanTemplate("check_location({0}, {1}) > 0", paramDto.getLocationId(), event.eventDetail.occurrenceAddress.uid)
+      );
     }
-    if (paramDto.getLocationParentName() != null && paramDto.getLocationParentType() != null) {
+
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceAddress.parent().type().type
-              .likeIgnoreCase("%" + paramDto.getLocationParentType() + "%"),
-          event.eventDetail.occurrenceAddress.parent().name
-              .likeIgnoreCase("%" + paramDto.getLocationParentName() + "%"));
+          paramDto.getWithArchived() ? this.isArchived().eq(true) :
+            this.isArchived().eq(false).or(this.isOrganizerArchived().eq(false))
+      );
     }
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
-          predicate = ExpressionUtils.allOf(
-              predicate,
-              this.isArchived().or(this.isOrganizerArchived()).not() // neither
-          );
-        }
     return predicate;
   }
 
