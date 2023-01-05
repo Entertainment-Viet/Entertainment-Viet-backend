@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @NoArgsConstructor
 @Getter
@@ -18,4 +20,6 @@ public class UpdateOrganizerDto {
   private String bio;
 
   private String extensions;
+
+  private List<String> descriptionImg;
 }

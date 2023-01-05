@@ -80,6 +80,7 @@ public abstract class TalentMapper {
     @Mapping(target = "archived", ignore = true)
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "talentDetail.avatar", source = "avatar")
+    @Mapping(target = "talentDetail.descriptionImg", source = "descriptionImg")
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")

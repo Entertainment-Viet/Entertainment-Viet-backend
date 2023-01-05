@@ -1,15 +1,14 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.EntertainmentViet.backend.features.booking.dto.location.InputLocationDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.OffsetDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -35,4 +34,6 @@ public class CreateEventDto {
   private String description;
 
   private List<String> legalPaper;
+
+  private List<String> descriptionImg;
 }

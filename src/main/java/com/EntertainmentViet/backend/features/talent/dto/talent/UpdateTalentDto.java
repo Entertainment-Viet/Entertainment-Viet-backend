@@ -23,4 +23,6 @@ public class UpdateTalentDto {
   private List<UUID> offerCategories;
 
   private String extensions;
+
+  private List<String> descriptionImg;
 }

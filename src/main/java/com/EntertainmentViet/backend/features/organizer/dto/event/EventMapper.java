@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dto.event;
 
-import java.util.List;
-
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
@@ -13,6 +11,8 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+
+import java.util.List;
 
 @Mapper(uses = {
         EventOpenPositionMapper.class,
@@ -27,6 +27,7 @@ public abstract class EventMapper {
     @Mapping(target = "occurrenceAddress", source = "eventDetail.occurrenceAddress")
     @Mapping(target = "occurrenceStartTime", source = "eventDetail.occurrenceStartTime")
     @Mapping(target = "occurrenceEndTime", source = "eventDetail.occurrenceEndTime")
+    @Mapping(target = "descriptionImg", source = "eventDetail.descriptionImg")
     @Mapping(target = "legalPaper", source = "eventDetail.legalPaper")
     @Mapping(target = "openPositionsCount", source = "openPositions", qualifiedByName = "toEventOpenPositions")
     @Mapping(target = "description", source = "eventDetail.description", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
@@ -43,6 +44,7 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
+    @Mapping(target = "eventDetail.descriptionImg", source = "descriptionImg")
     @Mapping(target = "eventDetail.description", source = "description", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
     public abstract Event fromCreateDtoToModel(CreateEventDto dto);
 
@@ -53,6 +55,7 @@ public abstract class EventMapper {
     @Mapping(target = "eventDetail.occurrenceAddress", source = "occurrenceAddress")
     @Mapping(target = "eventDetail.occurrenceEndTime", source = "occurrenceEndTime")
     @Mapping(target = "eventDetail.occurrenceStartTime", source = "occurrenceStartTime")
+    @Mapping(target = "eventDetail.descriptionImg", source = "descriptionImg")
     @Mapping(target = "eventDetail.legalPaper", source = "legalPaper")
     @Mapping(target = "eventDetail.description", source = "description",
             qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
