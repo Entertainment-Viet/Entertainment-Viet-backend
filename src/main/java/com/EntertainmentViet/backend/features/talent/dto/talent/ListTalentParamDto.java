@@ -1,11 +1,11 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
@@ -27,13 +27,7 @@ public class ListTalentParamDto {
 
     private String currency;
 
-    private String locationType;
-
-    private String locationName;
-
-    private String locationParentType;
-
-    private String locationParentName;
+    private UUID locationId;
 
     private Boolean withArchived;
 }
