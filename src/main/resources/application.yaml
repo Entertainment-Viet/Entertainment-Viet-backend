@@ -37,6 +37,10 @@ spring:
     deserialization:
       FAIL_ON_UNKNOWN_PROPERTIES: true
       ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
+  servlet:
+    multipart:
+      max-request-size: 5MB
+      max-file-size: 5MB
 
 hibernate:
   hbm2ddl:
