@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.scoresystem.boundary;
 
+import com.EntertainmentViet.backend.domain.entities.talent.ScoreType;
 import com.EntertainmentViet.backend.features.scoresystem.dao.ScoreTypeRepository;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreTypeDto;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreTypeMapper;
@@ -32,10 +33,14 @@ public class ScoreTypeService implements ScoreTypeBoundary {
     @Override
     public boolean delete(UUID id) {
         var scoreType = scoreTypeRepository.findByUid(id);
+
         if (scoreType.isEmpty()) {
             return false;
         }
 
+        if (scoreType.get().getId().equals(ScoreType.SONG_SCORE_TYPE_ID)) {
+            return false;
+        }
         scoreTypeRepository.delete(scoreType.get());
         return true;
     }

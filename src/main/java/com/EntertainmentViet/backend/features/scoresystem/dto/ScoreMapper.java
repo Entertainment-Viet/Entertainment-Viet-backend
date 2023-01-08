@@ -39,7 +39,7 @@ public abstract class ScoreMapper {
   @FromModelToScoreSongListDto
   public List<ReadScoreSongListDto> fromModelToReadScoreSongListDto(List<PriorityScore> priorityScores) {
     return priorityScores.stream()
-        .filter(priorityScore -> priorityScore.getScoreType().getName().equals("song"))
+        .filter(priorityScore -> priorityScore.getScoreType().getId().equals(ScoreType.SONG_SCORE_TYPE_ID))
         .map(priorityScore -> ReadScoreSongListDto.builder()
             .achievement(priorityScore.getAchievement())
             .approved(priorityScore.getApproved())
@@ -52,8 +52,7 @@ public abstract class ScoreMapper {
   @FromModelToScoreRewardListDto
   public List<ReadScoreRewardListDto> fromModelToReadScoreRewardListDto(List<PriorityScore> priorityScores) {
     return priorityScores.stream()
-        .filter(priorityScore -> !priorityScore.getScoreType().getName().equals("song"))
-        .filter(priorityScore -> priorityScore.getApproved().equals(true))
+        .filter(priorityScore -> !priorityScore.getScoreType().getId().equals(ScoreType.SONG_SCORE_TYPE_ID))
         .map(priorityScore -> ReadScoreRewardListDto.builder()
             .scoreTypeId(priorityScore.getScoreType().getUid())
             .scoreTypeName(priorityScore.getScoreType().getName())
