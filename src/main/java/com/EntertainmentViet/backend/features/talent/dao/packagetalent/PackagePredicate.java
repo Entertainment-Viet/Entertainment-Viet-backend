@@ -149,8 +149,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getWithArchived() ? this.isArchived().eq(true) :
-              this.isArchived().eq(false).or(this.isTalentArchived().eq(false))
+          paramDto.getWithArchived() ? isArchived(true).or(isTalentArchived(true)) :
+              isArchived(false).and(isTalentArchived(false))
       );
     }
     return predicate;
@@ -161,11 +161,11 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     return talentPackage.uid.eq(uid);
   }
 
-  public BooleanExpression isArchived() {
-    return talentPackage.archived.isTrue();
+  public BooleanExpression isArchived(boolean archived) {
+    return talentPackage.archived.eq(archived);
   }
 
-      public BooleanExpression isTalentArchived() {
-        return talentPackage.talent.archived.isTrue();
+      public BooleanExpression isTalentArchived(boolean archived) {
+        return talentPackage.talent.archived.eq(archived);
       }
 }

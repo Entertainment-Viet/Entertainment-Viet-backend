@@ -9,8 +9,12 @@ import com.EntertainmentViet.backend.domain.values.QCategory;
 import com.EntertainmentViet.backend.domain.values.QLocation;
 import com.EntertainmentViet.backend.domain.values.QLocationType;
 import com.EntertainmentViet.backend.features.common.dao.IdentifiablePredicate;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.ListOrganizerParamDto;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -116,12 +120,80 @@ public class OrganizerPredicate extends IdentifiablePredicate<Organizer> {
     return null;
   }
 
+  public Predicate fromParams(ListOrganizerParamDto paramDto) {
+    var predicate = defaultPredicate();
+
+    if (paramDto == null) {
+      return predicate;
+    }
+
+    if (paramDto.getDisplayName() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          organizer.displayName.like("%" + paramDto.getDisplayName() + "%")
+      );
+    }
+
+    if (paramDto.getStartTime() != null && paramDto.getEndTime() == null) {
+      // Get organizer don't have any booking occur at startTime
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          organizer.bookings.any().in(
+              JPAExpressions.selectFrom(booking).where(
+                  Expressions.asDateTime(paramDto.getStartTime())
+                      .between(booking.jobDetail.performanceStartTime, booking.jobDetail.performanceEndTime)
+                      .not()
+              )
+          )
+      );
+    } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
+      // Get talent don't have any booking occur at endTime
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          organizer.bookings.any().in(
+              JPAExpressions.selectFrom(booking).where(
+                  Expressions.asDateTime(paramDto.getEndTime())
+                      .between(booking.jobDetail.performanceStartTime, booking.jobDetail.performanceEndTime)
+                      .not()
+              )
+          )
+      );
+    } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
+      // Get talent that don't have any booking occur during period from startTime to endTime
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          organizer.bookings.any().in(
+              JPAExpressions.selectFrom(booking).where(
+                  booking.jobDetail.performanceStartTime.between(paramDto.getStartTime(), paramDto.getEndTime())
+                      .or(booking.jobDetail.performanceEndTime.between(paramDto.getStartTime(),
+                          paramDto.getEndTime()))
+              )
+          ).not()
+      );
+    }
+
+    if (paramDto.getLocationId() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          Expressions.booleanTemplate("check_location({0}, {1}) > 0", paramDto.getLocationId(), organizer.organizerDetail.address.uid)
+      );
+    }
+
+    if (paramDto.getWithArchived() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          paramDto.getWithArchived() ? isArchived(true) : isArchived(false)
+      );
+    }
+    return predicate;
+  }
+
   @Override
   public BooleanExpression uidEqual(UUID uid) {
     return organizer.uid.eq(uid);
   }
 
-  public BooleanExpression isArchived() {
-    return organizer.archived.isTrue();
+  public BooleanExpression isArchived(boolean archived) {
+    return organizer.archived.eq(archived);
   }
 }

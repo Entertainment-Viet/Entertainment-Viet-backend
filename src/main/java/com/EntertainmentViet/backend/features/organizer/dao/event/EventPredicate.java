@@ -147,8 +147,8 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getWithArchived() ? this.isArchived().eq(true) :
-            this.isArchived().eq(false).or(this.isOrganizerArchived().eq(false))
+          paramDto.getWithArchived() ? isArchived(true).or(isOrganizerArchived(true)) :
+            isArchived(false).and(isOrganizerArchived(false))
       );
     }
     return predicate;
@@ -159,13 +159,13 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     return event.uid.eq(uid);
   }
 
-  public BooleanExpression isArchived() {
-    return event.archived.isTrue();
+  public BooleanExpression isArchived(boolean archived) {
+    return event.archived.eq(archived);
   }
 
-      public BooleanExpression isOrganizerArchived() {
-        return event.organizer.archived.isTrue();
-      }
+  public BooleanExpression isOrganizerArchived(boolean archived) {
+    return event.organizer.archived.eq(archived);
+  }
 
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);

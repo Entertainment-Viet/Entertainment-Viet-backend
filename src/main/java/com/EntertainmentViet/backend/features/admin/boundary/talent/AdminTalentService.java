@@ -43,8 +43,7 @@ public class AdminTalentService implements AdminTalentBoundary {
     var talent = talentRepository.findByUid(uid).orElse(null);
     if (talent == null)
       return false;
-    talent.setArchived(Boolean.TRUE);
-    talent.getPackages().forEach(pk -> pk.setArchived(Boolean.TRUE));
+    talent.archive();
     talentRepository.save(talent);
     return true;
   }

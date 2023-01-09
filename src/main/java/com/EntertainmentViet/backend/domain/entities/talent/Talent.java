@@ -313,6 +313,13 @@ public class Talent extends Users implements Advertisable {
     return true;
   }
 
+  @Override
+  public void archive() {
+    super.archive();
+
+    getPackages().forEach(pk -> pk.setArchived(Boolean.TRUE));
+  }
+
   private void increaseReviewSum(Review review) {
     var reviewPoint = review.getScore();
     var curPointSum = getReviewSum().get(reviewPoint-1);

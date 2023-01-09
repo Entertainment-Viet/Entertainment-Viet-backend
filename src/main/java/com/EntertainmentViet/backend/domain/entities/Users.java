@@ -77,9 +77,8 @@ public abstract class Users extends Account implements Auditable {
     return false;
   }
 
-  public boolean archive() {
+  public void archive() {
     userState = UserState.ARCHIVED;
-    return true;
   }
 
   protected abstract boolean checkIfUserVerifiable();

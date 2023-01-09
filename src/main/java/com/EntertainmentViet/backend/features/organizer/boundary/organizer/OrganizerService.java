@@ -1,8 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
-import com.EntertainmentViet.backend.domain.entities.organizer.Event;
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -64,15 +62,11 @@ public class OrganizerService implements OrganizerBoundary {
   @Override
   public boolean delete(UUID uid) {
     var organizer = organizerRepository.findByUid(uid).orElse(null);
-    if (organizer == null)
+    if (!EntityValidationUtils.isOrganizerWithUid(organizer, uid)) {
       return false;
-    for (Event event : organizer.getEvents()) {
-      event.setArchived(Boolean.TRUE);
     }
-    for (JobOffer jobOffer : organizer.getJobOffers()) {
-      jobOffer.setArchived(Boolean.TRUE);
-    }
-    organizer.setArchived(Boolean.TRUE);
+
+    organizer.archive();
     organizerRepository.save(organizer);
     return true;
   }
@@ -109,9 +103,9 @@ public class OrganizerService implements OrganizerBoundary {
   }
 
   @Override
-  public CustomPage<ReadOrganizerDto> findAll(Pageable pageable) {
+  public CustomPage<ReadOrganizerDto> findAll(Pageable pageable, ListOrganizerParamDto paramDto) {
     var dataPage = RestUtils.toLazyLoadPageResponse(
-        organizerRepository.findAll(pageable)
+        organizerRepository.findAll(pageable, paramDto)
             .map(organizerMapper::toDto));
 
     if (organizerRepository.findAll(pageable.next()).hasContent()) {
