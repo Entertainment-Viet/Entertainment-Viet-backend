@@ -171,7 +171,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
+                              aPackage.jobDetail.price.min.loe(paramDto.getMaxPrice()
                               )))
       );
     }
@@ -183,7 +183,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
+                              aPackage.jobDetail.price.max.goe(paramDto.getMinPrice()
                               )))
       );
     }
@@ -195,12 +195,19 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                               aPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())))),
               talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.min.goe(paramDto.getMinPrice()
-                              ))),
-              talent.packages.any().in(
+                          Expressions.asDateTime(paramDto.getMinPrice()).between(aPackage.jobDetail.price.min, aPackage.jobDetail.price.max)))
+                  .or(talent.packages.any().in(
                       JPAExpressions.selectFrom(aPackage).where(
-                              aPackage.jobDetail.price.max.loe(paramDto.getMaxPrice()
-                              )))
+                          Expressions.asDateTime(paramDto.getMaxPrice()).between(aPackage.jobDetail.price.min, aPackage.jobDetail.price.max)))
+                  )
+                  .or(talent.packages.any().in(
+                          JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.min.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice()))
+                          ))
+                      .or(talent.packages.any().in(
+                          JPAExpressions.selectFrom(aPackage).where(
+                              aPackage.jobDetail.price.max.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice()))
+                          ))))
       );
     }
 
