@@ -8,7 +8,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://13.214.197.81:8443/auth/realms/ve-sso
+          issuer-uri: https://auth.iambao.me/auth/realms/ve-sso
 
 security:
   allowed_origins:
@@ -17,4 +17,4 @@ security:
 
 authentication:
   keycloak:
-    serverUrl: https://13.214.197.81:8443/auth
+    serverUrl: https://auth.iambao.me/auth
