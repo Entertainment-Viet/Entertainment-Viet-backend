@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   backend:
-    image: vietentertainment2023/ve-backend:0.5.3
+    image: vietentertainment2023/ve-backend:0.5.4
     depends_on:
       - keycloak
     environment:
@@ -36,8 +36,8 @@ services:
       - 8080:8080
       - 8443:8443
     volumes:
-      - $PWD/server.crt.pem:/opt/keycloak/conf/server.crt.pem
-      - $PWD/server.key.pem:/opt/keycloak/conf/server.key.pem
+      - /etc/nginx/ssl/hos.pem:/opt/keycloak/conf/server.crt.pem
+      - /etc/nginx/ssl/hos.key:/opt/keycloak/conf/server.key.pem
     networks:
       - internal-network
 
