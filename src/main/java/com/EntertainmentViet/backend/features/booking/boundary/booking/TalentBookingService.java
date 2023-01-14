@@ -44,7 +44,7 @@ public class TalentBookingService implements TalentBookingBoundary {
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
         var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null));
+        var financeReport = FinanceLogic.generateTalentBookingReport(bookingList, configService.getFinance().orElse(null), false);
         return ListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.admin.boundary.bookings;
 
 import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminUpdateBookingDto;
@@ -39,13 +40,14 @@ public class AdminBookingService implements AdminBookingBoundary {
     public AdminListBookingResponseDto listBooking(AdminListBookingParamDto paramDto, Pageable pageable) {
         var bookingList = bookingRepository.findAll(paramDto, pageable);
         var dtoList = bookingList.stream()
+            .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice())
             .map(bookingMapper::toReadDto)
             .toList();
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
 
         var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null));
+        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null), false);
         return AdminListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())
