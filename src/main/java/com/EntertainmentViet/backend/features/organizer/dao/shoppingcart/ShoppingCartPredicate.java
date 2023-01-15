@@ -77,10 +77,10 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
           predicate,
           organizerShoppingCart.talentPackage.jobDetail.category.uid.eq(paramDto.getCategory()));
     }
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
-        predicate,
-        this.isOrganizerArchived()
+          predicate,
+          paramDto.getWithArchived() ? isOrganizerArchived(true) : isOrganizerArchived(false)
       );
     }
     return predicate;
@@ -95,7 +95,7 @@ public class ShoppingCartPredicate extends IdentifiablePredicate<OrganizerShoppi
     return organizerShoppingCart.organizer.uid.eq(uid);
   }
 
-  public BooleanExpression isOrganizerArchived() {
-    return organizerShoppingCart.organizer.archived.isTrue();
+  public BooleanExpression isOrganizerArchived(boolean archived) {
+    return organizerShoppingCart.organizer.archived.eq(archived);
   }
 }

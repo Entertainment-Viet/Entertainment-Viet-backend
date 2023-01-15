@@ -1,10 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerKycInfoDto;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.*;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
@@ -26,7 +23,7 @@ public interface OrganizerBoundary {
 
   boolean verify(UUID uid);
 
-  CustomPage<ReadOrganizerDto> findAll(Pageable pageable);
+  CustomPage<ReadOrganizerDto> findAll(Pageable pageable, ListOrganizerParamDto paramDto);
 
   boolean disapprove(UUID uid);
 }

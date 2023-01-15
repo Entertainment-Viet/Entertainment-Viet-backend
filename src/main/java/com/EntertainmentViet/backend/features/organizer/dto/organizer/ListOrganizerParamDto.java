@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.features.booking.dto.booking;
+package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,9 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
-public class ListOrganizerBookingParamDto {
+public class ListOrganizerParamDto {
+
+  private String displayName;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime startTime;
@@ -17,23 +19,7 @@ public class ListOrganizerBookingParamDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime endTime;
 
-  private Boolean paid;
+  private UUID locationId;
 
-  private String status;
-
-  private String paymentType;
-
-  private UUID category;
-
-  private String workType;
-
-  private String bookingCode;
-
-  // talent name
-  private String talent;
-
-  /**
-   * It is false by default, it lists out bookings that from non-archived talent
-   */
   private Boolean withArchived;
 }

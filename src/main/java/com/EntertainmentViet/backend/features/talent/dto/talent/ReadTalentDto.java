@@ -36,4 +36,6 @@ public class ReadTalentDto extends ReadUserDto {
     private Double avgReviewRate;
 
     private Integer reviewCount;
+
+    private Boolean editorChoice;
 }

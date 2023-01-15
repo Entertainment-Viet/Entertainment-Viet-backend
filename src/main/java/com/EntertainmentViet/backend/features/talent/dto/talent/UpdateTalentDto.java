@@ -25,4 +25,6 @@ public class UpdateTalentDto {
   private String extensions;
 
   private List<String> descriptionImg;
+
+  private Boolean editorChoice;
 }

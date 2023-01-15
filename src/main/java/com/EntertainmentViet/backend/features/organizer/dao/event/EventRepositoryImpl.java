@@ -1,11 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dao.event;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import javax.persistence.EntityManager;
-
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
@@ -16,6 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> implements EventRepository {
@@ -35,7 +35,7 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
             eventPredicate.uidEqual(uid)),
-            eventPredicate.isArchived().not())
+            eventPredicate.isArchived(false))
         .fetchOne());
   }
 

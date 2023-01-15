@@ -151,10 +151,11 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     }
 
     // hide bookings whose talent is archived
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          this.isOrganizerArchived().not()
+          paramDto.getWithArchived() ? isTalentArchived(true).or(isOrganizerArchived(true)) :
+              isTalentArchived(false).and(isOrganizerArchived(false))
       );
     }
 
@@ -252,12 +253,14 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     }
 
     // hide bookings whose talent is archived
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
-        predicate,
-        this.isOrganizerArchived().not()
+          predicate,
+          paramDto.getWithArchived() ? isTalentArchived(true).or(isOrganizerArchived(true)) :
+              isTalentArchived(false).and(isOrganizerArchived(false))
       );
     }
+
     return predicate;
   }
 
@@ -328,10 +331,11 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     }
 
     // hide bookings whose organizer is archived
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
-        predicate,
-        this.isTalentArchived().not()
+          predicate,
+          paramDto.getWithArchived() ? isTalentArchived(true).or(isOrganizerArchived(true)) :
+              isTalentArchived(false).and(isOrganizerArchived(false))
       );
     }
     return predicate;
@@ -404,10 +408,11 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     }
 
     // hide bookings whose talent is archived
-    if (paramDto.getWithArchived() == Boolean.FALSE) {
+    if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          this.isOrganizerArchived().not()
+          paramDto.getWithArchived() ? isTalentArchived(true).or(isOrganizerArchived(true)) :
+              isTalentArchived(false).and(isOrganizerArchived(false))
       );
     }
     return predicate;
@@ -435,11 +440,11 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
     return booking.id.in(bookingInEventQuery);
   }
 
-  public BooleanExpression isTalentArchived() {
-    return booking.talent.archived.isTrue();
+  public BooleanExpression isTalentArchived(boolean archived) {
+    return booking.talent.archived.eq(archived);
   }
 
-  public BooleanExpression isOrganizerArchived() {
-    return booking.organizer.archived.isTrue();
+  public BooleanExpression isOrganizerArchived(boolean archived) {
+    return booking.organizer.archived.eq(archived);
   }
 }

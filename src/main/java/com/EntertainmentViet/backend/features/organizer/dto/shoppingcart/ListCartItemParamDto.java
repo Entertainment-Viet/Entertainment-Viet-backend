@@ -13,5 +13,5 @@ public class ListCartItemParamDto {
 
   private UUID category;
 
-  private Boolean withArchived = Boolean.FALSE;
+  private Boolean withArchived;
 }

@@ -57,6 +57,7 @@ public class TalentService implements TalentBoundary {
         createdTalent.getTalentDetail().setTalent(createdTalent);
         createdTalent.setReviewSum(Collections.nCopies(5, 0));
         createdTalent.setArchived(false);
+        createdTalent.setEditorChoice(false);
 
         return Optional.ofNullable(talentRepository.save(createdTalent).getUid());
     }

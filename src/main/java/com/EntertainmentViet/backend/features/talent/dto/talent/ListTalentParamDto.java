@@ -30,4 +30,6 @@ public class ListTalentParamDto {
     private UUID locationId;
 
     private Boolean withArchived;
+
+    private Boolean editorChoice;
 }

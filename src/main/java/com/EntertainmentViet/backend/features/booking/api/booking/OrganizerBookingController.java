@@ -41,9 +41,9 @@ public class OrganizerBookingController {
   private final BookingBoundary bookingService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadBookingDto>> findByUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<DetailBookingResponseDto>> findByUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
     boolean isOwnerUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token,"ROOT");
-    return CompletableFuture.completedFuture(bookingService.findByUid(isOwnerUser, organizerUid, uid)
+    return CompletableFuture.completedFuture(bookingService.findByUidForOrganizer(isOwnerUser, organizerUid, uid)
         .map(bookingDto -> ResponseEntity
             .ok()
             .body(bookingDto)

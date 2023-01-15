@@ -156,7 +156,7 @@ public class EventService implements EventBoundary {
         .toList();
     var dataPage = RestUtils.getPageEntity(dtoList, pageable);
     var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-    var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null));
+    var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null), false);
     return ListBookingResponseDto.builder()
         .unpaidSum(unpaidSum)
         .price(financeReport.getPrice())

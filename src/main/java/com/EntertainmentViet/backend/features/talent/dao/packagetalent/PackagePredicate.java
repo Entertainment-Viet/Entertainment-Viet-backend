@@ -120,22 +120,25 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
       predicate = ExpressionUtils.allOf(
               predicate,
               talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
-              talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
+              talentPackage.jobDetail.price.min.loe(paramDto.getMaxPrice())
       );
     }
     else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
-              talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice())
+              talentPackage.jobDetail.price.max.goe(paramDto.getMinPrice())
       );
     }
     else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
               talentPackage.jobDetail.price.currency.eq(Currency.ofI18nKey(paramDto.getCurrency())),
-              talentPackage.jobDetail.price.min.goe(paramDto.getMinPrice()),
-              talentPackage.jobDetail.price.max.loe(paramDto.getMaxPrice())
+          Expressions.asDateTime(paramDto.getMinPrice()).between(talentPackage.jobDetail.price.min, talentPackage.jobDetail.price.max)
+                  .or(Expressions.asDateTime(paramDto.getMaxPrice()).between(talentPackage.jobDetail.price.min, talentPackage.jobDetail.price.max))
+              .or(talentPackage.jobDetail.price.min.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice()))
+                  .or(talentPackage.jobDetail.price.max.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice())))
+              )
       );
     }
 
@@ -149,8 +152,8 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getWithArchived() ? this.isArchived().eq(true) :
-              this.isArchived().eq(false).or(this.isTalentArchived().eq(false))
+          paramDto.getWithArchived() ? isArchived(true).or(isTalentArchived(true)) :
+              isArchived(false).and(isTalentArchived(false))
       );
     }
     return predicate;
@@ -161,11 +164,11 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     return talentPackage.uid.eq(uid);
   }
 
-  public BooleanExpression isArchived() {
-    return talentPackage.archived.isTrue();
+  public BooleanExpression isArchived(boolean archived) {
+    return talentPackage.archived.eq(archived);
   }
 
-      public BooleanExpression isTalentArchived() {
-        return talentPackage.talent.archived.isTrue();
+      public BooleanExpression isTalentArchived(boolean archived) {
+        return talentPackage.talent.archived.eq(archived);
       }
 }

@@ -28,7 +28,7 @@ public class FinanceLogic {
         .sum();
   }
 
-  public FinanceReport generateOrganizerBookingReport(Collection<Booking> bookings, FinanceConfig config) {
+  public FinanceReport generateOrganizerBookingReport(Collection<Booking> bookings, FinanceConfig config, boolean containInCompleted) {
     if (config == null || !config.ifValid()) {
       log.warn("Can not generate organizer finance report due to invalid config");
     }
@@ -36,7 +36,7 @@ public class FinanceLogic {
     FinanceReport report = FinanceReport.builder().build();
 
     for (Booking booking : bookings) {
-      if (booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice()) {
+      if (checkGenerateReportForBooking(booking, containInCompleted)) {
         // TODO adding currency conversion
         var grossPrice = booking.getJobDetail().getPrice().getMax();
 
@@ -51,7 +51,7 @@ public class FinanceLogic {
     return report;
   }
 
-  public FinanceReport generateTalentBookingReport(Collection<Booking> bookings, FinanceConfig config) {
+  public FinanceReport generateTalentBookingReport(Collection<Booking> bookings, FinanceConfig config, boolean containInCompleted) {
     if (config == null || !config.ifValid()) {
       log.warn("Can not generate talent finance report due to invalid config");
     }
@@ -59,7 +59,7 @@ public class FinanceLogic {
     FinanceReport report = FinanceReport.builder().build();
 
     for (Booking booking : bookings) {
-      if (booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice()) {
+      if (checkGenerateReportForBooking(booking, containInCompleted)) {
         // TODO adding currency conversion
         var grossPrice = booking.getJobDetail().getPrice().getMax();
 
@@ -113,5 +113,13 @@ public class FinanceLogic {
   private FinanceReport buildCooperationOrganizerReport(Double price, Double taxRate, Double feeRate) {
     // Cooperation Organizer use same formula as Individual Organizer
     return buildIndividualOrganizerReport(price, taxRate, feeRate);
+  }
+
+  private boolean checkGenerateReportForBooking(Booking booking, boolean containInCompleted) {
+    var isFixedPrice = booking.getJobDetail().getPrice().checkIfFixedPrice();
+    if (!containInCompleted) {
+      return booking.getStatus().equals(BookingStatus.FINISHED) && isFixedPrice;
+    }
+    return isFixedPrice;
   }
 }

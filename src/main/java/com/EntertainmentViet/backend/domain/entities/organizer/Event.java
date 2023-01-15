@@ -1,18 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
-import java.util.List;
-import java.util.UUID;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.querydsl.core.annotations.QueryInit;
@@ -22,6 +9,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.UUID;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -90,5 +82,10 @@ public class Event extends Identifiable implements Advertisable {
     }
 
     return this;
+  }
+
+  public void archive() {
+    setArchived(true);
+    getOpenPositions().forEach(position -> position.setArchived(true));
   }
 }

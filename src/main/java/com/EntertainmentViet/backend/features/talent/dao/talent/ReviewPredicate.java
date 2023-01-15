@@ -39,4 +39,9 @@ public class ReviewPredicate extends IdentifiablePredicate<Review> {
   public BooleanExpression uidEqual(UUID uid) {
     return review.uid.eq(uid);
   }
+
+  public BooleanExpression isTalentArchived(boolean archived) {
+    return review.talent.archived.eq(archived);
+  }
+
 }

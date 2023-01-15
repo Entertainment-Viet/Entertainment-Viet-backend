@@ -111,7 +111,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
                       .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
           event.openPositions.any().in(
               JPAExpressions.selectFrom(eventOpenPosition).where(
-                  eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()))));
+                  eventOpenPosition.jobOffer.jobDetail.price.min.loe(paramDto.getMaxPrice()))));
     } else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() == null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
@@ -121,7 +121,7 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
                       .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
           event.openPositions.any().in(
               JPAExpressions.selectFrom(eventOpenPosition).where(
-                  eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()))));
+                  eventOpenPosition.jobOffer.jobDetail.price.max.goe(paramDto.getMinPrice()))));
     } else if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
@@ -130,11 +130,22 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
                   eventOpenPosition.jobOffer.jobDetail.price.currency
                       .eq(Currency.ofI18nKey(paramDto.getCurrency())))),
           event.openPositions.any().in(
-              JPAExpressions.selectFrom(eventOpenPosition).where(
-                  eventOpenPosition.jobOffer.jobDetail.price.min.goe(paramDto.getMinPrice()))),
-          event.openPositions.any().in(
-              JPAExpressions.selectFrom(eventOpenPosition).where(
-                  eventOpenPosition.jobOffer.jobDetail.price.max.loe(paramDto.getMaxPrice()))));
+                  JPAExpressions.selectFrom(eventOpenPosition).where(
+                      Expressions.asDateTime(paramDto.getMinPrice()).between(eventOpenPosition.jobOffer.jobDetail.price.min, eventOpenPosition.jobOffer.jobDetail.price.max)
+                  ))
+              .or(event.openPositions.any().in(
+                  JPAExpressions.selectFrom(eventOpenPosition).where(
+                      Expressions.asDateTime(paramDto.getMaxPrice()).between(eventOpenPosition.jobOffer.jobDetail.price.min, eventOpenPosition.jobOffer.jobDetail.price.max)
+                  )))
+              .or(event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                          eventOpenPosition.jobOffer.jobDetail.price.min.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice()))
+                      ))
+                  .or(event.openPositions.any().in(
+                      JPAExpressions.selectFrom(eventOpenPosition).where(
+                          eventOpenPosition.jobOffer.jobDetail.price.max.between(Expressions.asDateTime(paramDto.getMinPrice()), Expressions.asDateTime(paramDto.getMaxPrice()))
+                      ))))
+      );
     }
 
     if (paramDto.getLocationId() != null) {
@@ -147,8 +158,8 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     if (paramDto.getWithArchived() != null) {
       predicate = ExpressionUtils.allOf(
           predicate,
-          paramDto.getWithArchived() ? this.isArchived().eq(true) :
-            this.isArchived().eq(false).or(this.isOrganizerArchived().eq(false))
+          paramDto.getWithArchived() ? isArchived(true).or(isOrganizerArchived(true)) :
+            isArchived(false).and(isOrganizerArchived(false))
       );
     }
     return predicate;
@@ -159,13 +170,13 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
     return event.uid.eq(uid);
   }
 
-  public BooleanExpression isArchived() {
-    return event.archived.isTrue();
+  public BooleanExpression isArchived(boolean archived) {
+    return event.archived.eq(archived);
   }
 
-      public BooleanExpression isOrganizerArchived() {
-        return event.organizer.archived.isTrue();
-      }
+  public BooleanExpression isOrganizerArchived(boolean archived) {
+    return event.organizer.archived.eq(archived);
+  }
 
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);

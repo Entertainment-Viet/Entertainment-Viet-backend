@@ -233,4 +233,12 @@ public class Organizer extends Users {
 
     return true;
   }
+
+  @Override
+  public void archive() {
+    super.archive();
+
+    getEvents().forEach(Event::archive);
+    getJobOffers().forEach(jobOffer -> jobOffer.setArchived(true));
+  }
 }

@@ -3,12 +3,12 @@ package com.EntertainmentViet.backend.features.admin.api;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentBoundary;
-import com.EntertainmentViet.backend.features.admin.dto.talent.ReadAdminTalentDto;
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -40,9 +40,9 @@ public class AdminTalentController {
   private final UserBoundary userService;
 
   @GetMapping(value = "/{uid}")
-  public CompletableFuture<ResponseEntity<ReadAdminTalentDto>> findByUid(JwtAuthenticationToken token,
-      @PathVariable("admin_uid") UUID adminUid,
-      @PathVariable("uid") UUID uid) {
+  public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(JwtAuthenticationToken token,
+                                                                    @PathVariable("admin_uid") UUID adminUid,
+                                                                    @PathVariable("uid") UUID uid) {
 
     if (!adminUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of admin with uid '%s'",
@@ -91,7 +91,7 @@ public class AdminTalentController {
   }
 
   @GetMapping()
-  public CompletableFuture<ResponseEntity<CustomPage<ReadAdminTalentDto>>> findAll(
+  public CompletableFuture<ResponseEntity<CustomPage<ReadTalentDto>>> findAll(
       @ParameterObject Pageable pageable,
       @ParameterObject ListTalentParamDto paramDto) {
     if (QueryParamsUtils.isInvalidParams(paramDto)) {

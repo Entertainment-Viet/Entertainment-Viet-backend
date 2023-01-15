@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerService;
+import com.EntertainmentViet.backend.features.organizer.dto.organizer.ListOrganizerParamDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +49,9 @@ public class AdminOrganizerController {
 
   @GetMapping()
   public CompletableFuture<ResponseEntity<CustomPage<ReadOrganizerDto>>> findAll(
-      @ParameterObject Pageable pageable) {
+      @ParameterObject Pageable pageable, ListOrganizerParamDto paramDto) {
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
-        organizerService.findAll(pageable)));
+        organizerService.findAll(pageable, paramDto)));
   }
 
   @GetMapping(value = "/{uid}")

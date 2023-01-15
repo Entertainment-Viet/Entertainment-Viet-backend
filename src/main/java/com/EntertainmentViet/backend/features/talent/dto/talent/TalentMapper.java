@@ -101,6 +101,7 @@ public abstract class TalentMapper {
     @Mapping(target = "archived", ignore = true)
     @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "conversations", ignore = true)
+    @Mapping(target = "editorChoice", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.address", source = "address")
@@ -131,10 +132,10 @@ public abstract class TalentMapper {
     @Mapping(target = "offerCategories", ignore = true)
     @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "conversations", ignore = true)
+    @Mapping(target = "editorChoice", ignore = true)
     @Mapping(target = "displayName", source = "username")
     @Mapping(target = "talentDetail.email", source = "email")
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
-
 
     // Only return non-confidential detail if token have enough permission
     public ReadTalentDto checkPermission(ReadTalentDto readTalentDto, boolean isOwnerUser) {
