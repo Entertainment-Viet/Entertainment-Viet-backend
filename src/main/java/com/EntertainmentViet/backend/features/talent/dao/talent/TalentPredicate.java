@@ -228,6 +228,13 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
                     paramDto.getWithArchived() ? this.isArchived().eq(true) : this.isArchived().eq(false)
             );
     }
+
+    if (paramDto.getEditorChoice() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          paramDto.getEditorChoice() ? talent.editorChoice.isTrue() : talent.editorChoice.isFalse()
+      );
+    }
     return predicate;
   }
 

@@ -5,10 +5,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.PriorityScore;
 import com.EntertainmentViet.backend.domain.entities.talent.ScoreType;
 import com.EntertainmentViet.backend.features.scoresystem.dao.ScoreTypeRepository;
 import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentKycInfoDto;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Qualifier;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.annotation.ElementType;
@@ -17,6 +14,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,9 +29,11 @@ public abstract class ScoreMapper {
   private ScoreTypeRepository scoreTypeRepository;
 
   @BeanMapping(ignoreUnmappedSourceProperties = {"talent"})
+  @Mapping(target = "scoreTypeId", source = "scoreType.uid")
   public abstract PriorityScoreDto fromModelToAdminDto(PriorityScore priorityScore);
 
   @Mapping(target = "talent", ignore = true)
+  @Mapping(target = "scoreType", source = "scoreTypeId", qualifiedByName = "toScoreTypeModel")
   public abstract PriorityScore fromAdminDtoToModel(PriorityScoreDto dto);
 
   @FromModelToScoreSongListDto
@@ -84,6 +84,11 @@ public abstract class ScoreMapper {
         );
 
     return Stream.of(songScores, rewardScores).flatMap(Function.identity()).distinct().toList();
+  }
+
+  @Named("toScoreTypeModel")
+  public ScoreType toScoreTypeModel(UUID scoreTypeId) {
+    return scoreTypeRepository.findById(ScoreType.SONG_SCORE_TYPE_ID).orElse(null);
   }
 
   @Qualifier

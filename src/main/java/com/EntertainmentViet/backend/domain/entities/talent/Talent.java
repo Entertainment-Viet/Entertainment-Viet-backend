@@ -79,6 +79,8 @@ public class Talent extends Users implements Advertisable {
   @NotNull
   private List<Integer> reviewSum;
 
+  private Boolean editorChoice;
+
   public void addOfferCategory(Category category) {
     offerCategories.add(category);
   }
@@ -271,9 +273,12 @@ public class Talent extends Users implements Advertisable {
   }
 
   public Talent updateInfoByAdmin(Talent newData) {
-    updateInfo(newData);
+    // updateInfo(newData); // Admin can not update talent infor for now
     if (newData.getPriorityScores() != null) {
       updateScore(newData.getPriorityScores(), true);
+    }
+    if (newData.getEditorChoice() != null) {
+      setEditorChoice(newData.getEditorChoice());
     }
     return this;
   }

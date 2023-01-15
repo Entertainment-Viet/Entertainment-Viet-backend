@@ -76,12 +76,9 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "conversations", ignore = true)
-  @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
-  @Mapping(target = "talentDetail.email", source = "email")
-  @Mapping(target = "talentDetail.address", source = "address", qualifiedBy = LocationMapper.ToLocation.class)
-  @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
-  @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-  @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
+  @Mapping(target = "displayName", ignore = true)
+  @Mapping(target = "talentDetail", ignore = true)
+  @Mapping(target = "offerCategories", ignore = true)
   public abstract Talent toModel(UpdateAdminTalentDto updateAdminTalentDto);
 
   @Named("toUserStateKey")
