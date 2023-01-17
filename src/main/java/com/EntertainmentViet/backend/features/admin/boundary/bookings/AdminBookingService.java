@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +41,17 @@ public class AdminBookingService implements AdminBookingBoundary {
     public AdminListBookingResponseDto listBooking(AdminListBookingParamDto paramDto, Pageable pageable) {
         var bookingList = bookingRepository.findAll(paramDto, pageable);
         var dtoList = bookingList.stream()
-            .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice())
             .map(bookingMapper::toReadDto)
             .toList();
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
 
         var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null), false);
+        var finishBooking = bookingList.stream()
+            .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice())
+            .collect(Collectors.toList());
+
+        var financeReport = FinanceLogic.generateOrganizerBookingReport(finishBooking, configService.getFinance().orElse(null), false);
         return AdminListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())
