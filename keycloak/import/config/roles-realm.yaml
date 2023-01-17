@@ -311,6 +311,7 @@
       "client": {
         "backend": [
           "CONFIG_FINANCE",
+          "ADMIN_UPDATE_BOOKING",
           "ADMIN_UPDATE_BOOKING_PAID"
         ]
       }

@@ -67,8 +67,8 @@ public class AdminBookingService implements AdminBookingBoundary {
 
         Booking updatingBooking = bookingOptional.get();
 
-        var newBookingData = bookingMapper.fromAdminUpdateDtoToModel(updateBookingDto);
-        updatingBooking.getTalent().updateBookingInfo(uid, newBookingData);
+        updatingBooking.setIsPaid(updateBookingDto.getIsPaid());
+        updatingBooking.setFinishProof(updateBookingDto.getFinishProof());
 
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
