@@ -119,6 +119,8 @@ public abstract class OrganizerMapper {
           .bio(readOrganizerDto.getBio())
           .createdAt(readOrganizerDto.getCreatedAt())
           .extensions(readOrganizerDto.getExtensions())
+          .avatar(readOrganizerDto.getAvatar())
+          .descriptionImg(readOrganizerDto.getDescriptionImg())
           .build();
     }
     return readOrganizerDto;

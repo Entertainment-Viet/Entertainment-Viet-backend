@@ -153,6 +153,9 @@ public abstract class TalentMapper {
                 .extensions(readTalentDto.getExtensions())
                 .avgReviewRate(readTalentDto.getAvgReviewRate())
                 .reviewCount(readTalentDto.getReviewCount())
+                .avatar(readTalentDto.getAvatar())
+                .descriptionImg(readTalentDto.getDescriptionImg())
+                .editorChoice(readTalentDto.getEditorChoice())
                 .build();
         }
         return readTalentDto;
