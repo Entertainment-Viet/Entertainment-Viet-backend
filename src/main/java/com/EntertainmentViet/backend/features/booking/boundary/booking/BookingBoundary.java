@@ -7,7 +7,5 @@ import java.util.UUID;
 
 public interface BookingBoundary {
 
-    Optional<DetailBookingResponseDto> findByUidForOrganizer(boolean isOwnerUser, UUID organizerUid, UUID uid);
-
-    Optional<DetailBookingResponseDto> findByUidForTalent(boolean isOwnerUser, UUID talentUid, UUID uid);
+    Optional<DetailBookingResponseDto> findByUid(boolean isOwnerUser, UUID ownerUid, UUID uid);
 }

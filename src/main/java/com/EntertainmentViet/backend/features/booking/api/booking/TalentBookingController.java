@@ -45,7 +45,7 @@ public class TalentBookingController {
   public CompletableFuture<ResponseEntity<DetailBookingResponseDto>> findByUid(JwtAuthenticationToken token,
                                                                                @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
     boolean isOwnerUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
-    return CompletableFuture.completedFuture(bookingService.findByUidForTalent(isOwnerUser, talentUid, uid)
+    return CompletableFuture.completedFuture(bookingService.findByUid(isOwnerUser, talentUid, uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
                     .body(bookingDto)
