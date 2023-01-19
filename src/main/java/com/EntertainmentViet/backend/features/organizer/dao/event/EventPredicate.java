@@ -18,6 +18,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
@@ -180,5 +181,9 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
 
   public BooleanExpression belongToOrganizer(UUID uid) {
     return event.organizer.uid.eq(uid);
+  }
+
+  public BooleanExpression afterCurrentDay() {
+    return event.eventDetail.occurrenceStartTime.after(OffsetDateTime.now());
   }
 }
