@@ -1,20 +1,12 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
-import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dto.EntityMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
-import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
-import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
 
 @Mapper(uses = {
         UserInputTextMapper.class,
@@ -27,6 +19,7 @@ public abstract class ReviewMapper {
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "talentId", source = "talent", qualifiedBy = EntityMapper.ToTalentUid.class)
     @Mapping(target = "talentName", source = "talent", qualifiedBy = EntityMapper.ToTalentName.class)
+    @Mapping(target = "talentAvatar", source = "talent.talentDetail.avatar")
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
     @Mapping(target = "comment", source = "comment", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)

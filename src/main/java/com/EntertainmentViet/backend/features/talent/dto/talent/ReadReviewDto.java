@@ -21,6 +21,8 @@ public class ReadReviewDto extends IdentifiableDto {
 
   private String talentName;
 
+  private String talentAvatar;
+
   private UUID organizerId;
 
   private String organizerName;
