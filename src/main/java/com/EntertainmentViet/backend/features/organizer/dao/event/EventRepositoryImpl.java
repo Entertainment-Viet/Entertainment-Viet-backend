@@ -44,7 +44,8 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
     var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
-            eventPredicate.fromParams(paramDto)))
+            eventPredicate.fromParams(paramDto)),
+            eventPredicate.afterCurrentDay())
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
@@ -60,7 +61,8 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
             eventPredicate.belongToOrganizer(uid),
-            eventPredicate.fromParams(paramDto)))
+            eventPredicate.fromParams(paramDto)),
+            eventPredicate.afterCurrentDay())
         .orderBy(getSortedColumn(pageable.getSort(), Event.class))
         .fetch();
   }

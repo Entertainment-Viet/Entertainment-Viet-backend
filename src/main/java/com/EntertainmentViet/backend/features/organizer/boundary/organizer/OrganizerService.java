@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
+import com.EntertainmentViet.backend.config.properties.StaticResourceProperties;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
@@ -24,6 +25,8 @@ public class OrganizerService implements OrganizerBoundary {
 
   private final OrganizerMapper organizerMapper;
 
+  private final StaticResourceProperties staticResourceProperties;
+
   @Override
   public Optional<ReadOrganizerDto> findByUid(UUID id, boolean isOwnerUser) {
     return organizerRepository.findByUid(id)
@@ -38,6 +41,7 @@ public class OrganizerService implements OrganizerBoundary {
     createdOrganizer.setUserState(UserState.GUEST);
     createdOrganizer.setAccountType(AccountType.ORGANIZER);
     createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
+    createdOrganizer.getOrganizerDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
     createdOrganizer.setArchived(false);
 
     return Optional.ofNullable(organizerRepository.save(createdOrganizer).getUid());

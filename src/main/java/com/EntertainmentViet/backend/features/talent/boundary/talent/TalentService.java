@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
+import com.EntertainmentViet.backend.config.properties.StaticResourceProperties;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
@@ -26,6 +27,8 @@ public class TalentService implements TalentBoundary {
     private final TalentRepository talentRepository;
 
     private final TalentMapper talentMapper;
+
+    private final StaticResourceProperties staticResourceProperties;
 
     @Override
     public CustomPage<ReadTalentDto> findAll(ListTalentParamDto paramDto, Pageable pageable) {
@@ -54,6 +57,7 @@ public class TalentService implements TalentBoundary {
         createdTalent.setUid(uid);
         createdTalent.setUserState(UserState.GUEST);
         createdTalent.setAccountType(AccountType.TALENT);
+        createdTalent.getTalentDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
         createdTalent.getTalentDetail().setTalent(createdTalent);
         createdTalent.setReviewSum(Collections.nCopies(5, 0));
         createdTalent.setArchived(false);

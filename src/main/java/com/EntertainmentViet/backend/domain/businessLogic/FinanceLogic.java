@@ -61,7 +61,7 @@ public class FinanceLogic {
     for (Booking booking : bookings) {
       if (checkGenerateReportForBooking(booking, containInCompleted)) {
         // TODO adding currency conversion
-        var grossPrice = booking.getJobDetail().getPrice().getMax();
+        var grossPrice = booking.getJobDetail().getPrice().getMin();
 
         if (booking.getTalent().getUserType().equals(UserType.CORPORATION)) {
           report.combineWith(buildCooperationTalentReport(grossPrice, config.getVat(), config.getOrganizerFee()));
@@ -120,6 +120,6 @@ public class FinanceLogic {
     if (!containInCompleted) {
       return booking.getStatus().equals(BookingStatus.FINISHED) && isFixedPrice;
     }
-    return isFixedPrice;
+    return true;
   }
 }

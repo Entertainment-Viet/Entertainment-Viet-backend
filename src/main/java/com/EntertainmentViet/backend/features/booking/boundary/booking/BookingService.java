@@ -1,6 +1,8 @@
 package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
 import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
+import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.values.FinanceReport;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.DetailBookingResponseDto;
@@ -10,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,31 +28,26 @@ public class BookingService implements BookingBoundary {
     private final ConfigBoundary configService;
 
     @Override
-    public Optional<DetailBookingResponseDto> findByUidForOrganizer(boolean isOwnerUser, UUID organizerUid, UUID uid) {
-        var fetchedBooking = bookingRepository.findByUid(uid);
-        var readDto = fetchedBooking
-            .filter(booking -> booking.getOrganizer().getUid().equals(organizerUid))
+    public Optional<DetailBookingResponseDto> findByUid(boolean isOwnerUser, UUID ownerUid, UUID uid) {
+        var fetchedBookingOptional = bookingRepository.findByUid(uid);
+        var readDto = fetchedBookingOptional
+            .filter(booking -> booking.getTalent().getUid().equals(ownerUid) || booking.getOrganizer().getUid().equals(ownerUid))
             .map(bookingMapper::toReadDto)
             .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser))
             .orElse(ReadBookingDto.builder().build());
 
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(Arrays.asList(fetchedBooking.get()), configService.getFinance().orElse(null), true);
-        return Optional.of(DetailBookingResponseDto.builder()
-            .readBookingDto(readDto)
-            .financeReport(financeReport)
-            .build());
-    }
-
-    @Override
-    public Optional<DetailBookingResponseDto> findByUidForTalent(boolean isOwnerUser, UUID talentUid, UUID uid) {
-        var fetchedBooking = bookingRepository.findByUid(uid);
-        var readDto = fetchedBooking
-            .filter(booking -> booking.getTalent().getUid().equals(talentUid))
-            .map(bookingMapper::toReadDto)
-            .map(dto -> bookingMapper.checkPermission(dto, isOwnerUser))
-            .orElse(ReadBookingDto.builder().build());
-
-        var financeReport = FinanceLogic.generateTalentBookingReport(Arrays.asList(fetchedBooking.get()), configService.getFinance().orElse(null), true);
+        if (fetchedBookingOptional.isEmpty()) {
+            return Optional.of(DetailBookingResponseDto.builder().build());
+        }
+        var fetchedBooking = fetchedBookingOptional.get();
+        FinanceReport financeReport;
+        if (fetchedBooking.getStatus() == BookingStatus.ORGANIZER_PENDING) {
+            financeReport = FinanceLogic.generateTalentBookingReport(List.of(fetchedBooking), configService.getFinance().orElse(null), true);
+        } else if (fetchedBooking.getStatus() == BookingStatus.TALENT_PENDING) {
+            financeReport = FinanceLogic.generateOrganizerBookingReport(List.of(fetchedBooking), configService.getFinance().orElse(null), true);
+        } else {
+            financeReport = FinanceReport.builder().build();
+        }
         return Optional.of(DetailBookingResponseDto.builder()
             .readBookingDto(readDto)
             .financeReport(financeReport)
