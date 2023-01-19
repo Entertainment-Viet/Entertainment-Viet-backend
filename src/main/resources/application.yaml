@@ -78,6 +78,9 @@ cloud:
 amazonProperties:
   bucketName: ve-storage
 
+static-resource:
+  default-avatar: a4805998-c1cc-4dc6-a34e-53012eef4b99_true_1674145514985.png
+
 logging:
   level:
     com:
