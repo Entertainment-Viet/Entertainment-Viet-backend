@@ -33,6 +33,7 @@ public abstract class EventMapper {
     @Mapping(target = "description", source = "eventDetail.description", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "organizerId", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerUid.class)
     @Mapping(target = "organizerName", source = "organizer", qualifiedBy = EntityMapper.ToOrganizerName.class)
+    @Mapping(target = "organizerAvatar", source = "organizer.organizerDetail.avatar")
     public abstract ReadEventDto toReadDto(Event event);
 
     @Mapping(target = "uid", ignore = true)

@@ -31,6 +31,8 @@ public class ReadEventDto extends IdentifiableDto {
 
   private String organizerName;
 
+  private String organizerAvatar;
+
   private String description;
 
   private List<String> legalPaper;
