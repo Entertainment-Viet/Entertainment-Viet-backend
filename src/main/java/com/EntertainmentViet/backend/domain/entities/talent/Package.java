@@ -1,21 +1,5 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
-import java.time.OffsetDateTime;
-import java.util.Set;
-import java.util.UUID;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
@@ -32,6 +16,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.OffsetDateTime;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -85,6 +77,7 @@ public class Package extends Identifiable {
   }
 
   public void acceptOrder(UUID orderUid) {
+    AtomicBoolean isAcceptSuccessfully = new AtomicBoolean(false);
     orders.stream()
         .filter(orders -> orders.getUid().equals(orderUid))
         .filter(orders -> orders.getStatus().equals(BookingStatus.TALENT_PENDING))
@@ -95,9 +88,17 @@ public class Package extends Identifiable {
               currentPrice.setMin(currentPrice.getMax());
               order.setStatus(BookingStatus.CONFIRMED);
               order.setConfirmedAt(OffsetDateTime.now());
+              isAcceptSuccessfully.set(true);
             },
             () -> {throw new EntityNotFoundException("PackageOrder", orderUid);}
         );
+
+    if (isAcceptSuccessfully.get()) {
+      setIsActive(false);
+      orders.stream()
+          .filter(orders -> !orders.getUid().equals(orderUid))
+          .forEach(order -> order.setStatus(BookingStatus.CANCELLED));
+    }
   }
 
   public void rejectOrder(UUID orderUid) {
@@ -112,8 +113,6 @@ public class Package extends Identifiable {
   }
 
   public Booking generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
-    setIsActive(false);
-
     return Booking.builder()
         .jobDetail(jobDetail != null ? jobDetail : getJobDetail().clone())
         .talent(talent)
