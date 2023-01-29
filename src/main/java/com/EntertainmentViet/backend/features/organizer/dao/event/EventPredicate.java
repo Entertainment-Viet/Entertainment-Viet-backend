@@ -90,18 +90,21 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
       // Get event occurrenceTime is equal or after start time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not());
+          event.eventDetail.occurrenceEndTime.before(paramDto.getStartTime()).not());
     } else if (paramDto.getStartTime() == null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is equal or before end time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not());
+          event.eventDetail.occurrenceStartTime.after(paramDto.getEndTime()).not());
     } else if (paramDto.getStartTime() != null && paramDto.getEndTime() != null) {
       // Get event occurrenceTime is between start time and end time
       predicate = ExpressionUtils.allOf(
           predicate,
-          event.eventDetail.occurrenceStartTime.before(paramDto.getStartTime()).not(),
-          event.eventDetail.occurrenceEndTime.after(paramDto.getEndTime()).not());
+          event.eventDetail.occurrenceStartTime.between(paramDto.getStartTime(), paramDto.getEndTime())
+              .or(event.eventDetail.occurrenceEndTime.between(paramDto.getStartTime(), paramDto.getEndTime()))
+              .or(Expressions.asDateTime(paramDto.getStartTime()).between(event.eventDetail.occurrenceStartTime, event.eventDetail.occurrenceEndTime)
+                  .or(Expressions.asDateTime(paramDto.getEndTime()).between(event.eventDetail.occurrenceStartTime, event.eventDetail.occurrenceEndTime)))
+      );
     }
     if (paramDto.getCurrency() != null && paramDto.getMaxPrice() != null && paramDto.getMinPrice() == null) {
       predicate = ExpressionUtils.allOf(
