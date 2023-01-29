@@ -1,12 +1,5 @@
 package com.EntertainmentViet.backend.domain.values;
 
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-
 import com.EntertainmentViet.backend.domain.standardTypes.Currency;
 import com.EntertainmentViet.backend.domain.validator.PriceConstraint;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
@@ -16,6 +9,13 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Embeddable
 @Getter
@@ -40,9 +40,10 @@ public class Price implements Serializable {
   private Currency currency;
 
   public Price updateInfo(Price newData) {
-    if (!checkIfNewValueValid(newData)) {
-      return this;
-    }
+    // Disable check min max
+    // if (!checkIfNewValueValid(newData)) {
+    //   return this;
+    // }
 
     if (newData.getMax() != null) {
       if (currency.equals(newData.getCurrency())) {

@@ -41,9 +41,11 @@ public class BookingService implements BookingBoundary {
         }
         var fetchedBooking = fetchedBookingOptional.get();
         FinanceReport financeReport;
-        if (fetchedBooking.getStatus() == BookingStatus.ORGANIZER_PENDING) {
+        if (fetchedBooking.getStatus() == BookingStatus.CONFIRMED || fetchedBooking.getStatus() == BookingStatus.FINISHED) {
             financeReport = FinanceLogic.generateOrganizerBookingReport(List.of(fetchedBooking), configService.getFinance().orElse(null), true);
-        } else if (fetchedBooking.getStatus() == BookingStatus.TALENT_PENDING) {
+        } else if (fetchedBooking.getStatus() == BookingStatus.ORGANIZER_PENDING || fetchedBooking.getStatus() == BookingStatus.ORGANIZER_FINISH) {
+            financeReport = FinanceLogic.generateOrganizerBookingReport(List.of(fetchedBooking), configService.getFinance().orElse(null), true);
+        } else if (fetchedBooking.getStatus() == BookingStatus.TALENT_PENDING || fetchedBooking.getStatus() == BookingStatus.TALENT_FINISH) {
             financeReport = FinanceLogic.generateTalentBookingReport(List.of(fetchedBooking), configService.getFinance().orElse(null), true);
         } else {
             financeReport = FinanceReport.builder().build();

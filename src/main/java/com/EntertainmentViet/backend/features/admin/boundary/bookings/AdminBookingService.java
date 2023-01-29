@@ -71,7 +71,7 @@ public class AdminBookingService implements AdminBookingBoundary {
 
         Booking updatingBooking = bookingOptional.get();
 
-        if (updatingBooking.getIsPaid() != null) {
+        if (updateBookingDto.getIsPaid() != null) {
             updatingBooking.setIsPaid(updateBookingDto.getIsPaid());
         }
         if (updateBookingDto.getFinishProof() != null) {
