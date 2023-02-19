@@ -6,4 +6,7 @@ public interface AppConstant {
   String FINANCE_ORGANIZER_FEE = "organizer-fee";
   String FINANCE_VAT = "vat";
   String FINANCE_PIT = "pit";
+
+  String NOTIFICATION_BASE_TOPIC = "/topic";
+  String NOTIFICATION_LAST_READ_TOPIC = NOTIFICATION_BASE_TOPIC + "/last-read";
 }

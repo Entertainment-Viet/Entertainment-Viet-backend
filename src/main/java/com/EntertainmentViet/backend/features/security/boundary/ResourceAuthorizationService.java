@@ -346,13 +346,14 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET, anyPathAfter(ConfigController.REQUEST_MAPPING_PATH))
             .hasAuthority(ConfigRole.READ_CONFIG.name())
 
+            .antMatchers("/ws/**").permitAll()
             .anyRequest().authenticated());
   }
 
   @Override
   public void ignoreCsrfPaths(CsrfConfigurer<HttpSecurity> csrfConfigurer) {
     csrfConfigurer.ignoringAntMatchers(
-        anyPathAfter(UserController.REQUEST_MAPPING_PATH)
+        anyPathAfter(UserController.REQUEST_MAPPING_PATH), anyPathAfter("/ws/**")
     );
   }
 
