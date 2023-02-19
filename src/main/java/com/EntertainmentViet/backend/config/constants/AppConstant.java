@@ -9,4 +9,5 @@ public interface AppConstant {
 
   String NOTIFICATION_BASE_TOPIC = "/topic";
   String NOTIFICATION_LAST_READ_TOPIC = NOTIFICATION_BASE_TOPIC + "/last-read";
+  String NOTIFICATION_LAST_BOOKING_TOPIC = NOTIFICATION_BASE_TOPIC + "/booking";
 }
