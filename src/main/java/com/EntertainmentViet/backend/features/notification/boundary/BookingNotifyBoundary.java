@@ -1,6 +1,9 @@
 package com.EntertainmentViet.backend.features.notification.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
+import com.EntertainmentViet.backend.domain.entities.notification.BookingNotification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
@@ -12,5 +15,8 @@ public interface BookingNotifyBoundary {
   void sendRejectNotification(UUID sender, UUID receiver, Booking booking);
   void sendCancelNotification(UUID sender, UUID receiver, Booking booking);
   void sendFinishNotification(UUID sender, UUID receiver, Booking booking);
+  void sendNotification(BookingNotification notification);
 
+  Page<BookingNotification> getAllNotification(UUID actorUid, Pageable pageable);
+  void updateIsRead(UUID actorUid, boolean isRead);
 }

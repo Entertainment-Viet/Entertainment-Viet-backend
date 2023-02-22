@@ -9,11 +9,3 @@ CREATE TABLE booking_notification (
     booking_id BIGINT NOT NULL,
     CONSTRAINT pk_booking_notification PRIMARY KEY (id)
 );
-
-DROP TABLE IF EXISTS read_tracking_notification CASCADE;
-CREATE TABLE read_tracking_notification (
-    id BIGINT NOT NULL,
-    user_id UUID NOT NULL,
-    read_until TIMESTAMP WITH TIME ZONE,
-    CONSTRAINT pk_read_tracking_notification PRIMARY KEY (id)
-);

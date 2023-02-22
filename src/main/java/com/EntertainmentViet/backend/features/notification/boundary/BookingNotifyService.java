@@ -6,6 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.notification.BookingNotific
 import com.EntertainmentViet.backend.features.notification.dao.BookingNotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,21 @@ public class BookingNotifyService implements BookingNotifyBoundary {
 
   }
 
+  @Override
+  public Page<BookingNotification> getAllNotification(UUID actorUid, Pageable pageable) {
+    return bookingNotificationRepository.findByOrderByCreatedAtDesc(pageable);
+  }
+
+  @Override
+  public void updateIsRead(UUID actorUid, boolean isRead) {
+    bookingNotificationRepository.updateIsRead(isRead, actorUid);
+  }
+
+  @Override
+  public void sendNotification(BookingNotification notification) {
+    messagingTemplate.convertAndSend(AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, notification);
+  }
+
   private void sendNotificationWithContent(UUID sender, UUID receiver, Booking booking, String content) {
     var notification = BookingNotification.builder()
         .senderUid(sender)
@@ -75,6 +92,6 @@ public class BookingNotifyService implements BookingNotifyBoundary {
         .build();
 
     var savedNotification = bookingNotificationRepository.save(notification);
-    messagingTemplate.convertAndSend(AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, savedNotification);
+    sendNotification(savedNotification);
   }
 }

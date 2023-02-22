@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingC
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
 import com.EntertainmentViet.backend.features.config.api.ConfigController;
+import com.EntertainmentViet.backend.features.notification.api.BookingNotificationController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
@@ -345,6 +346,11 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(ConfigRole.CONFIG_FINANCE.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(ConfigController.REQUEST_MAPPING_PATH))
             .hasAuthority(ConfigRole.READ_CONFIG.name())
+
+            // TODO assign specific role for this
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(BookingNotificationController.REQUEST_MAPPING_PATH)).permitAll()
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(BookingNotificationController.REQUEST_MAPPING_PATH)).permitAll()
+
 
             .antMatchers("/ws/**").permitAll()
             .anyRequest().authenticated());
