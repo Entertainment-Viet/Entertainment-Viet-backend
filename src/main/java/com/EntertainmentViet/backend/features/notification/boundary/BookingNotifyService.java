@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -24,42 +25,48 @@ public class BookingNotifyService implements BookingNotifyBoundary {
   private final BookingNotificationRepository bookingNotificationRepository;
 
   @Override
-  public void sendCreateNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendCreateNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s creates a new booking request(%s) for user #%s",
           sender.toString(), booking.getBookingCode(), receiver.toString()));
   }
 
   @Override
-  public void sendUpdateNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendUpdateNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s update booking(%s)",
             sender.toString(), booking.getBookingCode()));
   }
 
   @Override
-  public void sendAcceptNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendAcceptNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s accept booking request(%s)",
             sender.toString(), booking.getBookingCode()));
   }
 
   @Override
-  public void sendRejectNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendRejectNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s reject booking request(%s)",
             sender.toString(), booking.getBookingCode()));
   }
 
   @Override
-  public void sendCancelNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendCancelNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s cancel booking(%s)",
             sender.toString(), booking.getBookingCode()));
   }
 
   @Override
-  public void sendFinishNotification(UUID sender, UUID receiver, Booking booking) {
+  public void sendFinishNotification(UUID receiver, Booking booking) {
+    var sender = getSenderIdFromToken();
     sendNotificationWithContent(sender, receiver, booking,
         String.format("User #%s confirm booking(%s) is finish",
             sender.toString(), booking.getBookingCode()));
@@ -93,5 +100,9 @@ public class BookingNotifyService implements BookingNotifyBoundary {
 
     var savedNotification = bookingNotificationRepository.save(notification);
     sendNotification(savedNotification);
+  }
+
+  private UUID getSenderIdFromToken() {
+     return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
   }
 }

@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.shoppingcart.ShoppingCartRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.*;
@@ -37,6 +38,8 @@ public class ShoppingCartService implements ShoppingCartBoundary {
     private final BookingRepository bookingRepository;
 
     private final CartItemMapper cartItemMapper;
+
+    private final BookingNotifyBoundary bookingNotifyService;
 
     @Override
     public Page<ReadCartItemDto> findByOrganizerUid(UUID organizerUid, ListCartItemParamDto paramDto, Pageable pageable) {
@@ -69,6 +72,8 @@ public class ShoppingCartService implements ShoppingCartBoundary {
             var talentPackage = packageRepository.findByUid(cartItem.getTalentPackage().getUid()).orElse(null);
             talentPackage.addOrder(booking);
             packageRepository.save(talentPackage);
+
+            bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking);
         }
         organizer.clearCart();
         organizerRepository.save(organizer);

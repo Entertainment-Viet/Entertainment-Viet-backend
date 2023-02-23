@@ -11,6 +11,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
+import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
@@ -40,6 +41,8 @@ public class PackageBookingService implements PackageBookingBoundary {
     private final BookingMapper bookingMapper;
 
     private final JobDetailMapper jobDetailMapper;
+
+    private final BookingNotifyBoundary bookingNotifyService;
 
     @Override
     public boolean addPackageToShoppingCart(UUID talentId, UUID packageId, AddCartItemDto addCartItemDto) {
@@ -98,6 +101,8 @@ public class PackageBookingService implements PackageBookingBoundary {
         Booking createdOrder = packageTalent.generateOrder(organizer, jobDetail, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
         var newBooking = bookingRepository.save(createdOrder);
 
+        bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking);
+
         packageRepository.save(packageTalent);
         return Optional.of(newBooking.getUid());
     }
@@ -114,6 +119,10 @@ public class PackageBookingService implements PackageBookingBoundary {
         }
 
         try {
+            var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
+            bookingNotifyService.sendAcceptNotification(acceptedBooking.getTalent().getUid(), acceptedBooking);
+            bookingNotifyService.sendAcceptNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking);
+
             packageTalent.acceptOrder(bookingId);
             packageRepository.save(packageTalent);
         } catch (EntityNotFoundException ex) {
@@ -135,6 +144,10 @@ public class PackageBookingService implements PackageBookingBoundary {
         }
 
         try {
+            var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
+            bookingNotifyService.sendRejectNotification(acceptedBooking.getTalent().getUid(), acceptedBooking);
+            bookingNotifyService.sendRejectNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking);
+
             packageTalent.rejectOrder(bookingId);
             packageRepository.save(packageTalent);
         } catch (EntityNotFoundException ex) {

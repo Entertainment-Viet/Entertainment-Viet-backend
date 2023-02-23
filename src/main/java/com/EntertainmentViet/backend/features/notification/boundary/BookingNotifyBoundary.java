@@ -9,12 +9,12 @@ import java.util.UUID;
 
 public interface BookingNotifyBoundary {
 
-  void sendCreateNotification(UUID sender, UUID receiver, Booking booking);
-  void sendUpdateNotification(UUID sender, UUID receiver, Booking booking);
-  void sendAcceptNotification(UUID sender, UUID receiver, Booking booking);
-  void sendRejectNotification(UUID sender, UUID receiver, Booking booking);
-  void sendCancelNotification(UUID sender, UUID receiver, Booking booking);
-  void sendFinishNotification(UUID sender, UUID receiver, Booking booking);
+  void sendCreateNotification(UUID receiver, Booking booking);
+  void sendUpdateNotification(UUID receiver, Booking booking);
+  void sendAcceptNotification(UUID receiver, Booking booking);
+  void sendRejectNotification(UUID receiver, Booking booking);
+  void sendCancelNotification(UUID receiver, Booking booking);
+  void sendFinishNotification(UUID receiver, Booking booking);
   void sendNotification(BookingNotification notification);
 
   Page<BookingNotification> getAllNotification(UUID actorUid, Pageable pageable);

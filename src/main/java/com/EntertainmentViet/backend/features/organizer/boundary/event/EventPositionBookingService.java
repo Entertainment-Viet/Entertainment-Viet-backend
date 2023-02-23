@@ -8,9 +8,9 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
-import com.EntertainmentViet.backend.features.booking.dto.jobdetail.JobDetailMapper;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventOpenPositionRepository;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreatePositionApplicantDto;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
@@ -38,7 +38,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
 
   private final BookingMapper bookingMapper;
 
-  private final JobDetailMapper jobDetailMapper;
+  private final BookingNotifyBoundary bookingNotifyService;
 
   @Override
   public Page<ReadBookingDto> findByPositionUid(UUID organizerUid, UUID eventUid, UUID positionUid, ListOrganizerBookingParamDto paramDto, Pageable pageable) {
@@ -81,6 +81,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     }
 
     Booking createdApplicant = talent.applyToEventPosition(openPosition, createPositionApplicantDto.getSuggestedPrice());
+    bookingNotifyService.sendCreateNotification(createdApplicant.getOrganizer().getUid(), createdApplicant);
     var newBooking = bookingRepository.save(createdApplicant);
 
     talentRepository.save(talent);
@@ -102,6 +103,10 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     }
 
     try {
+      var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
+      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant);
+      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant);
+
       openPosition.acceptApplicant(bookingUid);
       eventOpenPositionRepository.save(openPosition);
     } catch (EntityNotFoundException ex) {
@@ -126,6 +131,10 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     }
 
     try {
+      var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
+      bookingNotifyService.sendRejectNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant);
+      bookingNotifyService.sendRejectNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant);
+
       openPosition.rejectApplicant(bookingUid);
       eventOpenPositionRepository.save(openPosition);
     } catch (EntityNotFoundException ex) {
