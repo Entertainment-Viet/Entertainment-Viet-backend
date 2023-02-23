@@ -322,5 +322,11 @@
   },
   {
     "name": "CONFIG_FINANCE"
+  },
+  {
+    "name": "READ_BOOKING_NOTI"
+  },
+  {
+    "name": "UPDATE_BOOKING_NOTI"
   }
 ]

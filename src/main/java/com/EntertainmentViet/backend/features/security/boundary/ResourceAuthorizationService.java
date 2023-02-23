@@ -348,9 +348,13 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(ConfigRole.READ_CONFIG.name())
 
             // TODO assign specific role for this
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(BookingNotificationController.REQUEST_MAPPING_PATH)).permitAll()
-            .mvcMatchers(HttpMethod.GET, anyPathAfter(BookingNotificationController.REQUEST_MAPPING_PATH)).permitAll()
+            .mvcMatchers(HttpMethod.POST, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.READ_PATH))
+            .hasAuthority(NotificationRole.UPDATE_BOOKING_NOTI.name())
+            .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.LIST_PATH))
+            .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
 
+            .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + "/new"))
+            .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
 
             .antMatchers("/ws/**").permitAll()
             .anyRequest().authenticated());

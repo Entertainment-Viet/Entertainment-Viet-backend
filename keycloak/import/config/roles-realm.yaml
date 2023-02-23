@@ -33,7 +33,8 @@
           "READ_CART_ITEM",
           "UPDATE_ORGANIZER_CONFIDENTIAL",
           "READ_SCORE",
-          "BROWSE_EVENT_BOOKING"
+          "BROWSE_EVENT_BOOKING",
+          "READ_BOOKING_NOTI",
         ]
       }
     }
@@ -58,6 +59,7 @@
           "ADD_CART_ITEM",
           "ADD_REVIEW",
           "DELETE_CART_ITEM",
+          "UPDATE_BOOKING_NOTI",
         ]
       }
     }
@@ -80,7 +82,8 @@
           "UPDATE_BOOKING",
           "UPDATE_CART_ITEM",
           "FINISH_BOOKING_ORGANIZER",
-          "UPDATE_ORGANIZER_CONFIDENTIAL"
+          "UPDATE_ORGANIZER_CONFIDENTIAL",
+          "UPDATE_BOOKING_NOTI",
         ]
       }
     }
@@ -128,6 +131,7 @@
           "BROWSE_EVENT",
           "UPDATE_TALENT_CONFIDENTIAL",
           "READ_SCORE",
+          "READ_BOOKING_NOTI",
         ]
       }
     }
@@ -146,6 +150,7 @@
           "ADD_ADVERTISEMENT",
           "DELETE_ADVERTISEMENT",
           "ADD_TALENT_FEEDBACK",
+          "UPDATE_BOOKING_NOTI",
         ]
       }
     }
@@ -166,7 +171,8 @@
           "CANCEL_BOOKING_TALENT",
           "UPDATE_BOOKING",
           "UPDATE_ADVERTISEMENT",
-          "FINISH_BOOKING_TALENT"
+          "FINISH_BOOKING_TALENT",
+          "UPDATE_BOOKING_NOTI",
         ]
       }
     }
@@ -274,7 +280,8 @@
         "backend": [
           "READ_FILE",
           "ADMIN_BROWSE_BOOKING",
-          "ADMIN_READ_BOOKING"
+          "ADMIN_READ_BOOKING",
+          "READ_BOOKING_NOTI"
         ]
       }
     }
@@ -288,7 +295,8 @@
           "UPLOAD_FILE",
           "DELETE_FILE",
           "ADMIN_UPDATE_BOOKING",
-          "ADMIN_UPDATE_BOOKING_PROOF"
+          "ADMIN_UPDATE_BOOKING_PROOF",
+          "UPDATE_BOOKING_NOTI"
         ]
       }
     }

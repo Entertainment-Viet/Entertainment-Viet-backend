@@ -74,7 +74,7 @@ public class AdminBookingController {
       updateBookingDto.setIsPaid(null);
     }
 
-    return  CompletableFuture.completedFuture(adminBookingService.update(adminUid, uid, updateBookingDto)
+    return  CompletableFuture.completedFuture(adminBookingService.update(uid, updateBookingDto)
             .map(newBookingDto -> ResponseEntity
                     .ok()
                     .body(newBookingDto)
