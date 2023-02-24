@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingC
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
 import com.EntertainmentViet.backend.features.config.api.ConfigController;
+import com.EntertainmentViet.backend.features.notification.api.BookingNotificationController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionController;
@@ -346,13 +347,23 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .mvcMatchers(HttpMethod.GET, anyPathAfter(ConfigController.REQUEST_MAPPING_PATH))
             .hasAuthority(ConfigRole.READ_CONFIG.name())
 
+            // TODO assign specific role for this
+            .mvcMatchers(HttpMethod.POST, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.READ_PATH))
+            .hasAuthority(NotificationRole.UPDATE_BOOKING_NOTI.name())
+            .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.LIST_PATH))
+            .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
+
+            .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + "/new"))
+            .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
+
+            .antMatchers("/ws/**").permitAll()
             .anyRequest().authenticated());
   }
 
   @Override
   public void ignoreCsrfPaths(CsrfConfigurer<HttpSecurity> csrfConfigurer) {
     csrfConfigurer.ignoringAntMatchers(
-        anyPathAfter(UserController.REQUEST_MAPPING_PATH)
+        anyPathAfter(UserController.REQUEST_MAPPING_PATH), anyPathAfter("/ws/**")
     );
   }
 

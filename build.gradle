@@ -57,6 +57,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-websocket:${springVersion}"
 
 	// Helper Util
 	implementation 'org.apache.httpcomponents:httpclient'

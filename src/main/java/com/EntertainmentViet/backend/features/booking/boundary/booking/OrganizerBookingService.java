@@ -11,6 +11,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
@@ -37,6 +38,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
     private final ReviewBoundary reviewService;
 
     private final ConfigBoundary configService;
+
+    private final BookingNotifyBoundary bookingNotifyService;
 
     @Override
     public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
@@ -74,6 +77,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return Optional.empty();
         }
 
+        bookingNotifyService.sendCreateNotification(booking.getOrganizer().getUid(), booking);
         return Optional.ofNullable(bookingRepository.save(booking).getUid());
     }
 
@@ -93,6 +97,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
         updatingBooking.getOrganizer().updateBookingInfo(uid, newBookingData);
 
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking);
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 
@@ -108,6 +113,9 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
+            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking);
+            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking);
+
             Organizer organizer = booking.getOrganizer();
             organizer.acceptBooking(bookingId);
             organizerRepository.save(organizer);
@@ -130,6 +138,9 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
+            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking);
+            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking);
+
             Organizer organizer = booking.getOrganizer();
             organizer.rejectBooking(bookingId);
             organizerRepository.save(organizer);
@@ -152,6 +163,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
+            bookingNotifyService.sendFinishNotification(booking.getOrganizer().getUid(), booking);
+
             Organizer organizer = booking.getOrganizer();
             organizer.finishBooking(bookingId);
             organizerRepository.save(organizer);

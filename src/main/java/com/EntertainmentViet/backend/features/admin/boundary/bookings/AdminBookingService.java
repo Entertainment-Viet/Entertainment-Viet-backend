@@ -11,6 +11,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ public class AdminBookingService implements AdminBookingBoundary {
     private final BookingMapper bookingMapper;
 
     private final ConfigBoundary configService;
+
+    private final BookingNotifyBoundary bookingNotifyService;
 
     @Override
     public Optional<ReadBookingDto> findByUid(UUID uid) {
@@ -77,6 +80,9 @@ public class AdminBookingService implements AdminBookingBoundary {
         if (updateBookingDto.getFinishProof() != null) {
             updatingBooking.setFinishProof(updateBookingDto.getFinishProof());
         }
+
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking);
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getTalent().getUid(), updatingBooking);
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 }
