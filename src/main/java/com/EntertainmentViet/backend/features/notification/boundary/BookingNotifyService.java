@@ -84,8 +84,8 @@ public class BookingNotifyService implements BookingNotifyBoundary {
   }
 
   @Override
-  public void sendNotification(BookingNotification notification) {
-    messagingTemplate.convertAndSend(AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, notification);
+  public void sendNotification(UUID receiver, BookingNotification notification) {
+    messagingTemplate.convertAndSendToUser(String.valueOf(receiver), AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, notification);
   }
 
   private void sendNotificationWithContent(UUID sender, UUID receiver, Booking booking, String content) {
@@ -99,7 +99,7 @@ public class BookingNotifyService implements BookingNotifyBoundary {
         .build();
 
     var savedNotification = bookingNotificationRepository.save(notification);
-    sendNotification(savedNotification);
+    sendNotification(receiver, savedNotification);
   }
 
   private UUID getSenderIdFromToken() {

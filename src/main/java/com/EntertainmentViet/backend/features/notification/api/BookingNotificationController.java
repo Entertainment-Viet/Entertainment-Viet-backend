@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.notification.api;
 
-import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.notification.BookingNotification;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -30,12 +29,6 @@ public class BookingNotificationController {
 
   private final BookingNotifyBoundary bookingNotifyService;
 
-  // TODO remove this
-  @GetMapping("/new")
-  @ResponseBody
-  public void updateLastRead(@PathVariable("account_id") UUID account_id) {
-    bookingNotifyService.sendCreateNotification(account_id, Booking.builder().id(123L).build());
-  }
 
   @GetMapping(LIST_PATH)
   @ResponseBody
