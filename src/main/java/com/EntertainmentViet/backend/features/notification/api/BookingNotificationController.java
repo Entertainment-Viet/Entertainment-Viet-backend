@@ -25,6 +25,7 @@ public class BookingNotificationController {
   public static final String REQUEST_MAPPING_PATH = "/notify/{account_id}/booking";
 
   public static final String LIST_PATH = "/list";
+  public static final String COUNT_PATH = "/count";
   public static final String READ_PATH = "/read";
 
   private final BookingNotifyBoundary bookingNotifyService;
@@ -32,9 +33,16 @@ public class BookingNotificationController {
 
   @GetMapping(LIST_PATH)
   @ResponseBody
-  public CompletableFuture<ResponseEntity<CustomPage<BookingNotification>>> getUnreadNotification(@PathVariable("account_id") UUID account_id, Pageable pageable) {
+  public CompletableFuture<ResponseEntity<CustomPage<BookingNotification>>> getAllNotification(@PathVariable("account_id") UUID account_id, Pageable pageable) {
     return CompletableFuture.completedFuture(
         ResponseEntity.ok().body(RestUtils.toLazyLoadPageResponse(bookingNotifyService.getAllNotification(account_id, pageable))));
+  }
+
+  @GetMapping(COUNT_PATH)
+  @ResponseBody
+  public CompletableFuture<ResponseEntity<Integer>> getUnreadNotificationCount(@PathVariable("account_id") UUID account_id) {
+    return CompletableFuture.completedFuture(
+        ResponseEntity.ok().body(bookingNotifyService.countUnreadNotification(account_id)));
   }
 
   @PostMapping(READ_PATH)

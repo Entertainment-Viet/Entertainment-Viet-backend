@@ -18,5 +18,6 @@ public interface BookingNotifyBoundary {
   void sendNotification(UUID receiver, BookingNotification notification);
 
   Page<BookingNotification> getAllNotification(UUID actorUid, Pageable pageable);
+  Integer countUnreadNotification(UUID actorUid);
   void updateIsRead(UUID actorUid, boolean isRead);
 }

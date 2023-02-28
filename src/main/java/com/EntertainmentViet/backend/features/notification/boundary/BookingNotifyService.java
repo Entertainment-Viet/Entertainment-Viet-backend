@@ -75,7 +75,12 @@ public class BookingNotifyService implements BookingNotifyBoundary {
 
   @Override
   public Page<BookingNotification> getAllNotification(UUID actorUid, Pageable pageable) {
-    return bookingNotificationRepository.findByOrderByCreatedAtDesc(pageable);
+    return bookingNotificationRepository.findByRecipientUidOrderByCreatedAtDesc(actorUid, pageable);
+  }
+
+  @Override
+  public Integer countUnreadNotification(UUID actorUid) {
+    return bookingNotificationRepository.countByRecipientUidAndIsRead(actorUid, false);
   }
 
   @Override

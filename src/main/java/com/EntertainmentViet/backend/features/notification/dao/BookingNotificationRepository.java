@@ -16,7 +16,9 @@ import java.util.UUID;
 @Transactional
 public interface BookingNotificationRepository extends PagingAndSortingRepository<BookingNotification, Long> {
 
-  Page<BookingNotification> findByOrderByCreatedAtDesc(Pageable pageable);
+  Page<BookingNotification> findByRecipientUidOrderByCreatedAtDesc(UUID recipientUid, Pageable pageable);
+
+  Integer countByRecipientUidAndIsRead(UUID recipientUid, boolean isRead);
 
   @Modifying
   @Query("UPDATE BookingNotification SET isRead = :read WHERE recipientUid = :uid")
