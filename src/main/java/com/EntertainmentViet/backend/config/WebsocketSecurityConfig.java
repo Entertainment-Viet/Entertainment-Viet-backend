@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.config;
 
-import com.EntertainmentViet.backend.features.security.roles.BookingRole;
+import com.EntertainmentViet.backend.features.security.roles.NotificationRole;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
 import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
@@ -10,7 +10,9 @@ public class WebsocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 
   @Override
   protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-    messages.anyMessage().hasAuthority(BookingRole.READ_BOOKING.name());
+    messages
+        .simpDestMatchers("/user/**/topic/booking").hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
+        .anyMessage().authenticated();
   }
 
   @Override
