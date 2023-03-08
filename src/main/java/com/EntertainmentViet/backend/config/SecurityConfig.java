@@ -52,7 +52,12 @@ public class SecurityConfig {
     return http.build();
   }
 
-  private class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+  @Bean
+  public CustomJwtAuthenticationConverter jwtAuthenticationConverter() {
+    return new CustomJwtAuthenticationConverter(CLIENT_ID);
+  }
+
+  public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
     private final String resourceId;
