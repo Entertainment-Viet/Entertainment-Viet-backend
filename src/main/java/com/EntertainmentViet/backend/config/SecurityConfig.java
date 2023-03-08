@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.config;
 
+import com.EntertainmentViet.backend.config.properties.SecurityProperties;
 import com.EntertainmentViet.backend.features.security.boundary.ResourceAuthorizationBoundary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,8 @@ public class SecurityConfig {
 
   private final ResourceAuthorizationBoundary<HttpSecurity> resourceAuthorizationBoundary;
 
+  private final SecurityProperties securityProperties;
+
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     resourceAuthorizationBoundary.authorizeRequests(http);
@@ -49,7 +52,12 @@ public class SecurityConfig {
     return http.build();
   }
 
-  private class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+  @Bean
+  public CustomJwtAuthenticationConverter jwtAuthenticationConverter() {
+    return new CustomJwtAuthenticationConverter(CLIENT_ID);
+  }
+
+  public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private final JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
     private final String resourceId;
@@ -83,13 +91,13 @@ public class SecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+    configuration.setAllowedOriginPatterns(securityProperties.getAllowedOrigins());
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
     configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+    configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/api/**", configuration);
-    source.registerCorsConfiguration("/auth/**", configuration);
+    source.registerCorsConfiguration("/**", configuration);
     return source;
   }
 }

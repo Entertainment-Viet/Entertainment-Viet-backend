@@ -352,6 +352,8 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(NotificationRole.UPDATE_BOOKING_NOTI.name())
             .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.LIST_PATH))
             .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
+            .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + BookingNotificationController.COUNT_PATH))
+            .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
 
             .mvcMatchers(HttpMethod.GET, ofPath(BookingNotificationController.REQUEST_MAPPING_PATH + "/new"))
             .hasAuthority(NotificationRole.READ_BOOKING_NOTI.name())
