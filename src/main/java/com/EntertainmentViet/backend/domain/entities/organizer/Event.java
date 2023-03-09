@@ -1,14 +1,18 @@
 package com.EntertainmentViet.backend.domain.entities.organizer;
 
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.Searchable;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
 import com.querydsl.core.annotations.QueryInit;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,8 +25,9 @@ import java.util.UUID;
 @Setter
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@TypeDef(name = "list-array",typeClass = ListArrayType.class)
 @Slf4j
-public class Event extends Identifiable implements Advertisable {
+public class Event extends Identifiable implements Advertisable, Searchable {
 
   @Id
   @GeneratedValue
@@ -49,6 +54,15 @@ public class Event extends Identifiable implements Advertisable {
 
   @NotNull
   private Boolean archived;
+
+  @Type(type = "list-array")
+  @Column(
+      name = "hash_tag",
+      columnDefinition = "text[]"
+  )
+  @NotNull
+  private List<String> hashTag;
+
 
   public void addOpenPosition(EventOpenPosition eventOpenPosition) {
     openPositions.add(eventOpenPosition);
@@ -80,7 +94,9 @@ public class Event extends Identifiable implements Advertisable {
     if (newData.getEventDetail() != null) {
       getEventDetail().updateInfo(newData.getEventDetail());
     }
-
+    if (newData.getHashTag() != null) {
+      setHashTag(newData.getHashTag());
+    }
     return this;
   }
 

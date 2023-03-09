@@ -40,4 +40,6 @@ public class ReadEventDto extends IdentifiableDto {
   private Integer openPositionsCount;
 
   private List<String> descriptionImg;
+
+  private List<String> hashTag;
 }

@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @NoArgsConstructor
 @SuperBuilder
@@ -21,4 +22,6 @@ public class CreatedOrganizerDto {
 
   @NotNull
   private String email;
+
+  private List<String> hashTag;
 }

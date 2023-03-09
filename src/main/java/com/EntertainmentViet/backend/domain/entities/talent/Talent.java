@@ -269,6 +269,9 @@ public class Talent extends Users implements Advertisable {
     if (newData.getOfferCategories() != null) {
       setOfferCategories(newData.getOfferCategories());
     }
+    if (newData.getHashTag() != null) {
+      setHashTag(newData.getHashTag());
+    }
     return this;
   }
 

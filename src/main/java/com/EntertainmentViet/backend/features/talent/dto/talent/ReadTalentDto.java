@@ -38,4 +38,6 @@ public class ReadTalentDto extends ReadUserDto {
     private Integer reviewCount;
 
     private Boolean editorChoice;
+
+    private List<String> hashTag;
 }

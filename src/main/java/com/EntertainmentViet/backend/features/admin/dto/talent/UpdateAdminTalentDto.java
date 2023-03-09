@@ -17,4 +17,6 @@ public class UpdateAdminTalentDto {
   private List<PriorityScoreDto> priorityScores;
 
   private Boolean editorChoice;
+
+  private List<String> hashTag;
 }

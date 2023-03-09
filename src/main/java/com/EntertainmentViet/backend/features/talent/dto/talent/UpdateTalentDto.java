@@ -27,4 +27,6 @@ public class UpdateTalentDto {
   private List<String> descriptionImg;
 
   private Boolean editorChoice;
+
+  private List<String> hashTag;
 }

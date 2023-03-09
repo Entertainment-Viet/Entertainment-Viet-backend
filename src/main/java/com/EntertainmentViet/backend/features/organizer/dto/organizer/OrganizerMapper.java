@@ -75,6 +75,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "conversations", ignore = true)
+  @Mapping(target = "hashTag", ignore = true)
   @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.address", source = "address")

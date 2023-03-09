@@ -22,4 +22,6 @@ public class UpdateOrganizerDto {
   private String extensions;
 
   private List<String> descriptionImg;
+
+  private List<String> hashTag;
 }

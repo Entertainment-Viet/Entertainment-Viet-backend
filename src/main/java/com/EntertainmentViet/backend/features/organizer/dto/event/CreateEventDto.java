@@ -36,4 +36,6 @@ public class CreateEventDto {
   private List<String> legalPaper;
 
   private List<String> descriptionImg;
+
+  private List<String> hashTag;
 }
