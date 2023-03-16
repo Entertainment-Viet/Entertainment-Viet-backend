@@ -235,6 +235,15 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
           paramDto.getEditorChoice() ? talent.editorChoice.isTrue() : talent.editorChoice.isFalse()
       );
     }
+
+    if (paramDto.getSearchPattern() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          talent.id.in(
+              JPAExpressions.select(Expressions.template(Long.class, "search_talent({0})", paramDto.getSearchPattern()))
+                  .from(talent))
+      );
+    }
     return predicate;
   }
 

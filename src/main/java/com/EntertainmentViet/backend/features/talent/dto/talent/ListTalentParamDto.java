@@ -32,4 +32,6 @@ public class ListTalentParamDto {
     private Boolean withArchived;
 
     private Boolean editorChoice;
+
+    private String searchPattern;
 }

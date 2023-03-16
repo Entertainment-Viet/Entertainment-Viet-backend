@@ -166,6 +166,16 @@ public class EventPredicate extends IdentifiablePredicate<Event> {
             isArchived(false).and(isOrganizerArchived(false))
       );
     }
+
+    if (paramDto.getSearchPattern() != null) {
+      predicate = ExpressionUtils.allOf(
+          predicate,
+          event.id.in(
+              JPAExpressions.select(Expressions.template(Long.class, "search_event({0})", paramDto.getSearchPattern()))
+                  .from(event))
+      );
+    }
+
     return predicate;
   }
 
