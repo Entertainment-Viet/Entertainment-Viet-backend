@@ -22,4 +22,6 @@ public class ListOrganizerParamDto {
   private UUID locationId;
 
   private Boolean withArchived;
+
+  private String searchPattern;
 }

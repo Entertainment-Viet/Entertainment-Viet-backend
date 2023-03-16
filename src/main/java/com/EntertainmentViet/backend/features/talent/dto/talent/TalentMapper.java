@@ -102,6 +102,7 @@ public abstract class TalentMapper {
     @Mapping(target = "accountType", ignore = true)
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "editorChoice", ignore = true)
+    @Mapping(target = "hashTag", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.address", source = "address")

@@ -30,4 +30,6 @@ public class ReadOrganizerDto extends ReadUserDto {
   private String position;
 
   private List<String> businessPaper;
+
+  private List<String> hashTag;
 }

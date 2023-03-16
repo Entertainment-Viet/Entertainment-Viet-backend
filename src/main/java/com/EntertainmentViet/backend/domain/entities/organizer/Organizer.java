@@ -203,6 +203,9 @@ public class Organizer extends Users {
     if (newData.getShoppingCart() != null) {
       setShoppingCart(newData.getShoppingCart());
     }
+    if (newData.getHashTag() != null) {
+      setHashTag(newData.getHashTag());
+    }
     return this;
   }
 

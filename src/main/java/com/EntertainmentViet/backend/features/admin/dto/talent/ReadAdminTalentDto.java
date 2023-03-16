@@ -30,4 +30,6 @@ public class ReadAdminTalentDto extends ReadUserDto {
   private List<String> citizenPaper;
 
   private Boolean editorChoice;
+
+  private List<String> hashTag;
 }
