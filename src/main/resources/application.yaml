@@ -50,6 +50,7 @@ hibernate:
 security:
   allowed_origins:
     - http://localhost:3000
+    - http://localhost:3005
 
 authentication:
   keycloak:

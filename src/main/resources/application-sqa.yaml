@@ -13,8 +13,10 @@ spring:
 security:
   allowed_origins:
     - http://host.docker.internal:3000
+    - http://host.docker.internal:3005
     - http://localhost:3000
-    - https://heartofshow.com/
+    - http://localhost:3005
+    - https://*.heartofshow.com/
 
 authentication:
   keycloak:
