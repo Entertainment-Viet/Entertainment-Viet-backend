@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ public class OrganizerService implements OrganizerBoundary {
     createdOrganizer.setUid(uid);
     createdOrganizer.setUserState(UserState.GUEST);
     createdOrganizer.setAccountType(AccountType.ORGANIZER);
+    createdOrganizer.setHashTag(new ArrayList<>());
     createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
     createdOrganizer.getOrganizerDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
     createdOrganizer.setArchived(false);

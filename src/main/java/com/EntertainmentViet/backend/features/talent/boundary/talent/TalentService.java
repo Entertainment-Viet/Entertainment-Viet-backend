@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,6 +58,7 @@ public class TalentService implements TalentBoundary {
         createdTalent.setUid(uid);
         createdTalent.setUserState(UserState.GUEST);
         createdTalent.setAccountType(AccountType.TALENT);
+        createdTalent.setHashTag(new ArrayList<>());
         createdTalent.getTalentDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
         createdTalent.getTalentDetail().setTalent(createdTalent);
         createdTalent.setReviewSum(Collections.nCopies(5, 0));
