@@ -107,11 +107,12 @@ public class TalentController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(talentService.updateKyc(kycInfoDto, uid)
-        .map(updatedTalentUid -> ResponseEntity
-            .ok()
-            .body(updatedTalentUid)
-        ).orElse(ResponseEntity.badRequest().build())
-    );
+    var resultUidOptional = talentService.updateKyc(kycInfoDto, uid);
+
+    if (resultUidOptional.isPresent() && talentService.sendVerifyRequest(resultUidOptional.get())) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 }

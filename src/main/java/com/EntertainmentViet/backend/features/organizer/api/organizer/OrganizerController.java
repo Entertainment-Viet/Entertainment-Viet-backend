@@ -1,7 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.api.organizer;
 
-import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
-import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
@@ -14,13 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -97,12 +89,13 @@ public class OrganizerController {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
-    return  CompletableFuture.completedFuture(organizerService.updateKyc(kycInfoDto, uid)
-        .map(updatedOrganizerUid -> ResponseEntity
-            .ok()
-            .body(updatedOrganizerUid)
-        ).orElse(ResponseEntity.badRequest().build())
-    );
+    var resultUidOptional = organizerService.updateKyc(kycInfoDto, uid);
+
+    if (resultUidOptional.isPresent() && organizerService.sendVerifyRequest(resultUidOptional.get())) {
+      return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+    }
+
+    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
   }
 
   @GetMapping(value = "/{uid}" + CASH_PATH)
