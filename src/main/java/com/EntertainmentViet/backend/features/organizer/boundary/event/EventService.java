@@ -191,7 +191,8 @@ public class EventService implements EventBoundary {
       }
     }
     if (paramDto.getStatus() != null) {
-      if (!booking.getStatus().equals(BookingStatus.ofI18nKey(paramDto.getStatus()))) {
+      var matchStatus = paramDto.getStatus().stream().filter(status -> booking.getStatus().equals(BookingStatus.ofI18nKey(status))).toList();
+      if (matchStatus.isEmpty()) {
         return false;
       }
     }

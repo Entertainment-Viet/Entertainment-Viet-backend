@@ -108,9 +108,14 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
       );
     }
     if (paramDto.getStatus() != null) {
+      var statusesPredicate = paramDto.getStatus().stream().reduce(
+          defaultPredicate(), (result, element) -> ExpressionUtils.anyOf(
+              result,
+              booking.status.eq(BookingStatus.ofI18nKey(element))
+          ), ExpressionUtils::anyOf);
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+          statusesPredicate
       );
     }
     if (paramDto.getPaymentType() != null) {
@@ -216,9 +221,14 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
       );
     }
     if (paramDto.getStatus() != null) {
+      var statusesPredicate = paramDto.getStatus().stream().reduce(
+          defaultPredicate(), (result, element) -> ExpressionUtils.anyOf(
+              result,
+              booking.status.eq(BookingStatus.ofI18nKey(element))
+      ), ExpressionUtils::anyOf);
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+          statusesPredicate
       );
     }
     if (paramDto.getPaymentType() != null) {
@@ -294,9 +304,14 @@ public class BookingPredicate extends IdentifiablePredicate<Booking> {
       );
     }
     if (paramDto.getStatus() != null) {
+      var statusesPredicate = paramDto.getStatus().stream().reduce(
+          defaultPredicate(), (result, element) -> ExpressionUtils.anyOf(
+              result,
+              booking.status.eq(BookingStatus.ofI18nKey(element))
+          ), ExpressionUtils::anyOf);
       predicate = ExpressionUtils.allOf(
           predicate,
-          booking.status.eq(BookingStatus.ofI18nKey(paramDto.getStatus()))
+          statusesPredicate
       );
     }
     if (paramDto.getPaymentType() != null) {

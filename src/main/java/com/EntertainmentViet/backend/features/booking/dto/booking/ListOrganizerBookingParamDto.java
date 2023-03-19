@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class ListOrganizerBookingParamDto {
 
   private Boolean paid;
 
-  private String status;
+  private List<String> status;
 
   private String paymentType;
 
