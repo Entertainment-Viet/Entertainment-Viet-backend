@@ -72,7 +72,7 @@ public class TalentBookingService implements TalentBookingBoundary {
             return Optional.empty();
         }
 
-        bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking);
+        bookingNotifyService.sendCreateNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
         return Optional.ofNullable(bookingRepository.save(booking).getUid());
     }
 
@@ -92,7 +92,7 @@ public class TalentBookingService implements TalentBookingBoundary {
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
         updatingBooking.getTalent().updateBookingInfo(uid, newBookingData);
 
-        bookingNotifyService.sendUpdateNotification(updatingBooking.getTalent().getUid(), updatingBooking);
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking.getOrganizer().getDisplayName(), updatingBooking);
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 
@@ -108,8 +108,8 @@ public class TalentBookingService implements TalentBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking);
-            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking);
+            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
             Talent talent = booking.getTalent();
             talent.acceptBooking(bookingId);
@@ -133,8 +133,8 @@ public class TalentBookingService implements TalentBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking);
-            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking);
+            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
             Talent talent = booking.getTalent();
             talent.rejectBooking(bookingId);
@@ -158,7 +158,7 @@ public class TalentBookingService implements TalentBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendFinishNotification(booking.getTalent().getUid(), booking);
+            bookingNotifyService.sendFinishNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
             Talent talent = booking.getTalent();
             talent.finishBooking(bookingId);

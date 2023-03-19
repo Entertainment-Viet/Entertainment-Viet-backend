@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -33,7 +34,7 @@ public class BookingNotificationController {
 
   @GetMapping(LIST_PATH)
   @ResponseBody
-  public CompletableFuture<ResponseEntity<CustomPage<BookingNotification>>> getAllNotification(@PathVariable("account_id") UUID account_id, Pageable pageable) {
+  public CompletableFuture<ResponseEntity<CustomPage<BookingNotification>>> getAllNotification(@PathVariable("account_id") UUID account_id, @ParameterObject Pageable pageable) {
     return CompletableFuture.completedFuture(
         ResponseEntity.ok().body(RestUtils.toLazyLoadPageResponse(bookingNotifyService.getAllNotification(account_id, pageable))));
   }

@@ -81,8 +81,8 @@ public class AdminBookingService implements AdminBookingBoundary {
             updatingBooking.setFinishProof(updateBookingDto.getFinishProof());
         }
 
-        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking);
-        bookingNotifyService.sendUpdateNotification(updatingBooking.getTalent().getUid(), updatingBooking);
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking.getOrganizer().getDisplayName(), updatingBooking);
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getTalent().getUid(), updatingBooking.getTalent().getDisplayName(), updatingBooking);
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 }

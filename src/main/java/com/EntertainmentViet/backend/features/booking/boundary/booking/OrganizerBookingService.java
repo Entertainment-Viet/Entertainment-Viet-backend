@@ -77,7 +77,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return Optional.empty();
         }
 
-        bookingNotifyService.sendCreateNotification(booking.getOrganizer().getUid(), booking);
+        bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
         return Optional.ofNullable(bookingRepository.save(booking).getUid());
     }
 
@@ -97,7 +97,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
         updatingBooking.getOrganizer().updateBookingInfo(uid, newBookingData);
 
-        bookingNotifyService.sendUpdateNotification(updatingBooking.getOrganizer().getUid(), updatingBooking);
+        bookingNotifyService.sendUpdateNotification(updatingBooking.getTalent().getUid(), updatingBooking.getTalent().getDisplayName(), updatingBooking);
         return Optional.ofNullable(bookingRepository.save(updatingBooking).getUid());
     }
 
@@ -113,8 +113,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking);
-            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking);
+            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
             Organizer organizer = booking.getOrganizer();
             organizer.acceptBooking(bookingId);
@@ -138,8 +138,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking);
-            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking);
+            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
             Organizer organizer = booking.getOrganizer();
             organizer.rejectBooking(bookingId);
@@ -163,7 +163,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         }
 
         try {
-            bookingNotifyService.sendFinishNotification(booking.getOrganizer().getUid(), booking);
+            bookingNotifyService.sendFinishNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
             Organizer organizer = booking.getOrganizer();
             organizer.finishBooking(bookingId);

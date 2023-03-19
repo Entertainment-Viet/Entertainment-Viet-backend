@@ -24,7 +24,9 @@ public abstract class AbstractAppNotification {
   private Long id;
 
   private UUID senderUid;
+  private String senderName;
   private UUID recipientUid;
+  private String recipientName;
   private String content;
   private OffsetDateTime createdAt;
   private Boolean isRead;

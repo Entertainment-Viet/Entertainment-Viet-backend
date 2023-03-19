@@ -73,7 +73,7 @@ public class ShoppingCartService implements ShoppingCartBoundary {
             talentPackage.addOrder(booking);
             packageRepository.save(talentPackage);
 
-            bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking);
+            bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
         }
         organizer.clearCart();
         organizerRepository.save(organizer);

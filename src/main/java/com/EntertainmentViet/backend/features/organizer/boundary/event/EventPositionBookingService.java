@@ -81,7 +81,7 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     }
 
     Booking createdApplicant = talent.applyToEventPosition(openPosition, createPositionApplicantDto.getSuggestedPrice());
-    bookingNotifyService.sendCreateNotification(createdApplicant.getOrganizer().getUid(), createdApplicant);
+    bookingNotifyService.sendCreateNotification(createdApplicant.getOrganizer().getUid(), createdApplicant.getOrganizer().getDisplayName(), createdApplicant);
     var newBooking = bookingRepository.save(createdApplicant);
 
     talentRepository.save(talent);
@@ -104,8 +104,8 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
 
     try {
       var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
-      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant);
-      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant);
+      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
+      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
 
       openPosition.acceptApplicant(bookingUid);
       eventOpenPositionRepository.save(openPosition);
@@ -132,8 +132,8 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
 
     try {
       var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
-      bookingNotifyService.sendRejectNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant);
-      bookingNotifyService.sendRejectNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant);
+      bookingNotifyService.sendRejectNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
+      bookingNotifyService.sendRejectNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
 
       openPosition.rejectApplicant(bookingUid);
       eventOpenPositionRepository.save(openPosition);

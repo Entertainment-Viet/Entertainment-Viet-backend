@@ -101,7 +101,7 @@ public class PackageBookingService implements PackageBookingBoundary {
         Booking createdOrder = packageTalent.generateOrder(organizer, jobDetail, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
         var newBooking = bookingRepository.save(createdOrder);
 
-        bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking);
+        bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking.getTalent().getDisplayName(), newBooking);
 
         packageRepository.save(packageTalent);
         return Optional.of(newBooking.getUid());
@@ -120,8 +120,8 @@ public class PackageBookingService implements PackageBookingBoundary {
 
         try {
             var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
-            bookingNotifyService.sendAcceptNotification(acceptedBooking.getTalent().getUid(), acceptedBooking);
-            bookingNotifyService.sendAcceptNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking);
+            bookingNotifyService.sendAcceptNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
+            bookingNotifyService.sendAcceptNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
 
             packageTalent.acceptOrder(bookingId);
             packageRepository.save(packageTalent);
@@ -145,8 +145,8 @@ public class PackageBookingService implements PackageBookingBoundary {
 
         try {
             var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
-            bookingNotifyService.sendRejectNotification(acceptedBooking.getTalent().getUid(), acceptedBooking);
-            bookingNotifyService.sendRejectNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking);
+            bookingNotifyService.sendRejectNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
+            bookingNotifyService.sendRejectNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
 
             packageTalent.rejectOrder(bookingId);
             packageRepository.save(packageTalent);

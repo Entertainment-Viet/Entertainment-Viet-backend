@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,5 +16,5 @@ import javax.persistence.Entity;
 @SuperBuilder
 @Entity
 public class BookingNotification extends AbstractAppNotification {
-  private Long bookingId;
+  private UUID bookingUid;
 }
