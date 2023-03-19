@@ -8,7 +8,7 @@ RETURN QUERY
    FROM account a
 		inner join users u on a.id = u.id
 		inner join talent t on u.id = t.id
-	WHERE a.search_token @@ to_tsquery('english', search_input);
+	WHERE a.search_token @@ to_tsquery('english', CONCAT(search_input, ':*'));
 END
 $function$
 ;
@@ -21,7 +21,7 @@ BEGIN
 RETURN QUERY
    SELECT e.id
    FROM event e
-   WHERE e.search_token @@ to_tsquery('english', search_input);
+   WHERE e.search_token @@ to_tsquery('english', CONCAT(search_input, ':*'));
 END
 $function$
 ;
