@@ -1,8 +1,8 @@
 package com.EntertainmentViet.backend.features.config.boundary;
 
 import com.EntertainmentViet.backend.config.constants.AppConstant;
-import com.EntertainmentViet.backend.domain.entities.config.AppConfig;
-import com.EntertainmentViet.backend.domain.entities.config.FinanceConfig;
+import com.EntertainmentViet.backend.domain.entities.AppConfig;
+import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
 import com.EntertainmentViet.backend.features.config.dao.ConfigRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

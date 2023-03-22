@@ -1,4 +1,4 @@
-package com.EntertainmentViet.backend.domain.entities.config;
+package com.EntertainmentViet.backend.domain.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
