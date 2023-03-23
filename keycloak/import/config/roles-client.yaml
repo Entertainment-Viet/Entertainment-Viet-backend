@@ -328,5 +328,11 @@
   },
   {
     "name": "UPDATE_BOOKING_NOTI"
+  },
+  {
+    "name": "READ_USER_FEE"
+  },
+  {
+    "name": "UPDATE_USER_FEE"
   }
 ]

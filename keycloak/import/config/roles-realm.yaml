@@ -35,6 +35,7 @@
           "READ_SCORE",
           "BROWSE_EVENT_BOOKING",
           "READ_BOOKING_NOTI",
+          "READ_USER_FEE",
         ]
       }
     }
@@ -132,6 +133,7 @@
           "UPDATE_TALENT_CONFIDENTIAL",
           "READ_SCORE",
           "READ_BOOKING_NOTI",
+          "READ_USER_FEE",
         ]
       }
     }
@@ -307,7 +309,8 @@
       "realm": null,
       "client": {
         "backend": [
-          "READ_CONFIG"
+          "READ_CONFIG",
+          "UPDATE_USER_FEE",
         ]
       }
     }
