@@ -159,6 +159,7 @@ public abstract class TalentMapper {
                 .editorChoice(readTalentDto.getEditorChoice())
                 .songs(readTalentDto.getSongs())
                 .rewards(readTalentDto.getRewards())
+                .hashTag(readTalentDto.getHashTag())
                 .build();
         }
         return readTalentDto;
