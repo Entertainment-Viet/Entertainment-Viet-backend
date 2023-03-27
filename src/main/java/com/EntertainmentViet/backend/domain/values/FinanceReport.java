@@ -19,10 +19,11 @@ public class FinanceReport {
   @Builder.Default
   Double total = 0.0;
 
-  public void combineWith(FinanceReport otherReport) {
+  public FinanceReport combineWith(FinanceReport otherReport) {
     setPrice(price + otherReport.getPrice());
     setFee(fee + otherReport.getFee());
     setTax(tax + otherReport.getTax());
     setTotal(total + otherReport.getTotal());
+    return this;
   }
 }

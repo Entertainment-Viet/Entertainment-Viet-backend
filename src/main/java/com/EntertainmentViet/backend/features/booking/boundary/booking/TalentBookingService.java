@@ -9,7 +9,7 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.finance.boundary.FinanceCalculationBoundary;
 import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class TalentBookingService implements TalentBookingBoundary {
 
     private final BookingMapper bookingMapper;
 
-    private final ConfigBoundary configService;
+    private final FinanceCalculationBoundary financeCalculationService;
 
     private final BookingNotifyBoundary bookingNotifyService;
 
@@ -47,7 +47,7 @@ public class TalentBookingService implements TalentBookingBoundary {
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
         var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-        var financeReport = FinanceLogic.generateTalentBookingReport(bookingList, configService.getFinance().orElse(null), false);
+        var financeReport = financeCalculationService.exportTalentBookingReport(bookingList,false);
         return ListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())

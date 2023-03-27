@@ -10,7 +10,7 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.finance.boundary.FinanceCalculationBoundary;
 import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
@@ -37,9 +37,9 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
     private final ReviewBoundary reviewService;
 
-    private final ConfigBoundary configService;
-
     private final BookingNotifyBoundary bookingNotifyService;
+
+    private final FinanceCalculationBoundary financeCalculationService;
 
     @Override
     public ListBookingResponseDto listBooking(boolean isOwnerUser, UUID organizerId, ListOrganizerBookingParamDto paramDto,
@@ -52,7 +52,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
         var dataPage = RestUtils.getPageEntity(dtoList, pageable);
         var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null), false);
+        var financeReport = financeCalculationService.exportOrganizerBookingReport(bookingList, false);
         return ListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())

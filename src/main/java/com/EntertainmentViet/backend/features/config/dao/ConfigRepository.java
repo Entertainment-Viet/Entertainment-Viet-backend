@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.config.dao;
 
-import com.EntertainmentViet.backend.domain.entities.config.AppConfig;
+import com.EntertainmentViet.backend.domain.entities.AppConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

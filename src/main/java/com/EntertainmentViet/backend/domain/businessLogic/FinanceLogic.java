@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.domain.businessLogic;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
-import com.EntertainmentViet.backend.domain.entities.config.FinanceConfig;
+import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.FinanceReport;
@@ -28,49 +28,35 @@ public class FinanceLogic {
         .sum();
   }
 
-  public FinanceReport generateOrganizerBookingReport(Collection<Booking> bookings, FinanceConfig config, boolean containInCompleted) {
+  public FinanceReport generateOrganizerBookingReport(Booking booking, FinanceConfig config, FinanceReport report) {
     if (config == null || !config.ifValid()) {
       log.warn("Can not generate organizer finance report due to invalid config");
     }
 
-    FinanceReport report = FinanceReport.builder().build();
+    // TODO adding currency conversion
+    var grossPrice = booking.getJobDetail().getPrice().getMax();
 
-    for (Booking booking : bookings) {
-      if (checkGenerateReportForBooking(booking, containInCompleted)) {
-        // TODO adding currency conversion
-        var grossPrice = booking.getJobDetail().getPrice().getMax();
-
-        if (booking.getOrganizer().getUserType().equals(UserType.CORPORATION)) {
-          report.combineWith(buildCooperationOrganizerReport(grossPrice, config.getVat(), config.getOrganizerFee()));
-        } else {
-          report.combineWith(buildIndividualOrganizerReport(grossPrice, config.getVat(), config.getOrganizerFee()));
-        }
-      }
+    if (booking.getOrganizer().getUserType().equals(UserType.CORPORATION)) {
+      report.combineWith(buildCooperationOrganizerReport(grossPrice, config.getVat(), config.getOrganizerFee()));
+    } else {
+      report.combineWith(buildIndividualOrganizerReport(grossPrice, config.getVat(), config.getOrganizerFee()));
     }
-
     return report;
   }
 
-  public FinanceReport generateTalentBookingReport(Collection<Booking> bookings, FinanceConfig config, boolean containInCompleted) {
+  public FinanceReport generateTalentBookingReport(Booking booking, FinanceConfig config, FinanceReport report) {
     if (config == null || !config.ifValid()) {
-      log.warn("Can not generate talent finance report due to invalid config");
+      log.warn("Can not generate organizer finance report due to invalid config");
     }
 
-    FinanceReport report = FinanceReport.builder().build();
+    // TODO adding currency conversion
+    var grossPrice = booking.getJobDetail().getPrice().getMin();
 
-    for (Booking booking : bookings) {
-      if (checkGenerateReportForBooking(booking, containInCompleted)) {
-        // TODO adding currency conversion
-        var grossPrice = booking.getJobDetail().getPrice().getMin();
-
-        if (booking.getTalent().getUserType().equals(UserType.CORPORATION)) {
-          report.combineWith(buildCooperationTalentReport(grossPrice, config.getVat(), config.getOrganizerFee()));
-        } else {
-          report.combineWith(buildIndividualTalentReport(grossPrice, config.getPit(), config.getOrganizerFee()));
-        }
-      }
+    if (booking.getTalent().getUserType().equals(UserType.CORPORATION)) {
+      report.combineWith(buildCooperationTalentReport(grossPrice, config.getVat(), config.getTalentFee()));
+    } else {
+      report.combineWith(buildIndividualTalentReport(grossPrice, config.getPit(), config.getTalentFee()));
     }
-
     return report;
   }
 
@@ -78,11 +64,12 @@ public class FinanceLogic {
     var fee = price * feeRate;
     var subTotal = price - fee;
     var tax = subTotal / taxRate - subTotal;
+    var total = subTotal + tax - tax;
     return FinanceReport.builder()
         .price(price)
         .fee(fee)
         .tax(tax)
-        .total(subTotal)
+        .total(total)
         .build();
   }
 
@@ -90,11 +77,12 @@ public class FinanceLogic {
     var fee = price * feeRate;
     var subTotal = price - fee;
     var tax = subTotal * taxRate;
+    var total = subTotal + tax;
     return FinanceReport.builder()
         .price(price)
         .fee(fee)
         .tax(tax)
-        .total(subTotal + tax)
+        .total(total)
         .build();
   }
 
@@ -102,11 +90,12 @@ public class FinanceLogic {
     var fee = price * feeRate;
     var subTotal = price + fee;
     var tax = subTotal * taxRate;
+    var total = subTotal + tax;
     return FinanceReport.builder()
         .price(price)
         .fee(fee)
         .tax(tax)
-        .total(subTotal + tax)
+        .total(total)
         .build();
   }
 

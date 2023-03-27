@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.config.boundary;
 
-import com.EntertainmentViet.backend.domain.entities.config.FinanceConfig;
+import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
 
 import java.util.Optional;
 

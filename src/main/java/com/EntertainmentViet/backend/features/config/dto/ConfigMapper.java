@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.config.dto;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
-import com.EntertainmentViet.backend.domain.entities.config.AppConfig;
+import com.EntertainmentViet.backend.domain.entities.AppConfig;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

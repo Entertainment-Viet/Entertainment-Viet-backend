@@ -3,9 +3,9 @@ package com.EntertainmentViet.backend.features.admin.api;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,9 +31,12 @@ public class UserController {
 
   public static final String REQUEST_MAPPING_PATH = "/users";
 
+  public static final String ORGANIZER_PATH = "/organizers";
+  public static final String TALENT_PATH = "/talents";
+
   private final UserBoundary userService;
 
-  @PostMapping(value = "/organizers",
+  @PostMapping(value = ORGANIZER_PATH,
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<UUID>> createOrganizer(HttpServletRequest request, @RequestBody @Valid CreatedOrganizerDto createdOrganizerDto) {
@@ -51,7 +54,7 @@ public class UserController {
     }
   }
 
-  @PostMapping(value = "/talents",
+  @PostMapping(value = TALENT_PATH,
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public CompletableFuture<ResponseEntity<UUID>> createTalent(HttpServletRequest request, @RequestBody @Valid CreatedTalentDto createdTalentDto) {

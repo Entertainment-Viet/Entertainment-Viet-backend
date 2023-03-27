@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingC
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
 import com.EntertainmentViet.backend.features.config.api.ConfigController;
+import com.EntertainmentViet.backend.features.finance.api.UserDealFeeRateController;
 import com.EntertainmentViet.backend.features.notification.api.BookingNotificationController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventPositionBookingController;
@@ -36,8 +37,16 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
   public void authorizeRequests(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
+            // User fee mapping
+            .mvcMatchers(HttpMethod.GET, anyPathAfter(UserDealFeeRateController.REQUEST_MAPPING_PATH))
+            .hasAuthority(GenericUserRole.READ_USER_FEE.name())
+            .mvcMatchers(HttpMethod.POST, anyPathAfter(UserDealFeeRateController.REQUEST_MAPPING_PATH))
+            .hasAuthority(GenericUserRole.UPDATE_USER_FEE.name())
+
             // User creation mapping
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(UserController.REQUEST_MAPPING_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(UserController.REQUEST_MAPPING_PATH+UserController.ORGANIZER_PATH))
+            .permitAll()
+            .mvcMatchers(HttpMethod.POST, ofPath(UserController.REQUEST_MAPPING_PATH+UserController.TALENT_PATH))
             .permitAll()
 
             // Job offer mapping

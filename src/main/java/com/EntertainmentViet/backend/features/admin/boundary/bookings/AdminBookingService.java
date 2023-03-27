@@ -10,7 +10,7 @@ import com.EntertainmentViet.backend.features.booking.dao.booking.BookingReposit
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.finance.boundary.FinanceCalculationBoundary;
 import com.EntertainmentViet.backend.features.notification.boundary.BookingNotifyBoundary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +30,9 @@ public class AdminBookingService implements AdminBookingBoundary {
 
     private final BookingMapper bookingMapper;
 
-    private final ConfigBoundary configService;
-
     private final BookingNotifyBoundary bookingNotifyService;
+
+    private final FinanceCalculationBoundary financeCalculationService;
 
     @Override
     public Optional<ReadBookingDto> findByUid(UUID uid) {
@@ -54,7 +54,7 @@ public class AdminBookingService implements AdminBookingBoundary {
             .filter(booking -> booking.getStatus().equals(BookingStatus.FINISHED) && booking.getJobDetail().getPrice().checkIfFixedPrice())
             .collect(Collectors.toList());
 
-        var financeReport = FinanceLogic.generateOrganizerBookingReport(finishBooking, configService.getFinance().orElse(null), false);
+        var financeReport = financeCalculationService.exportOrganizerBookingReport(finishBooking, false);
         return AdminListBookingResponseDto.builder()
             .unpaidSum(unpaidSum)
             .price(financeReport.getPrice())

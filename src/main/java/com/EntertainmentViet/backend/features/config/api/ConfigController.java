@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.config.api;
 
-import com.EntertainmentViet.backend.domain.entities.config.FinanceConfig;
+import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
 import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -14,7 +14,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerB
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
-import com.EntertainmentViet.backend.features.config.boundary.ConfigBoundary;
+import com.EntertainmentViet.backend.features.finance.boundary.FinanceCalculationBoundary;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventOpenPositionRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.event.EventRepository;
 import com.EntertainmentViet.backend.features.organizer.dao.organizer.OrganizerRepository;
@@ -47,7 +47,7 @@ public class EventService implements EventBoundary {
 
   private final BookingMapper bookingMapper;
 
-  private final ConfigBoundary configService;
+  private final FinanceCalculationBoundary financeCalculationService;
 
   @Override
   public CustomPage<ReadEventDto> findAll(ListEventParamDto paramDto, Pageable pageable) {
@@ -156,7 +156,7 @@ public class EventService implements EventBoundary {
         .toList();
     var dataPage = RestUtils.getPageEntity(dtoList, pageable);
     var unpaidSum = FinanceLogic.calculateUnpaidSum(bookingList);
-    var financeReport = FinanceLogic.generateOrganizerBookingReport(bookingList, configService.getFinance().orElse(null), false);
+    var financeReport = financeCalculationService.exportOrganizerBookingReport(bookingList,true);
     return ListBookingResponseDto.builder()
         .unpaidSum(unpaidSum)
         .price(financeReport.getPrice())
