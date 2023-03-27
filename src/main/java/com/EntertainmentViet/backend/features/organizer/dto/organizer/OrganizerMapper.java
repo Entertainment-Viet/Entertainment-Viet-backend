@@ -122,6 +122,7 @@ public abstract class OrganizerMapper {
           .extensions(readOrganizerDto.getExtensions())
           .avatar(readOrganizerDto.getAvatar())
           .descriptionImg(readOrganizerDto.getDescriptionImg())
+          .hashTag(readOrganizerDto.getHashTag())
           .build();
     }
     return readOrganizerDto;
