@@ -325,8 +325,12 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             // Category mapping
             .mvcMatchers(HttpMethod.GET , ofPath(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
+            .mvcMatchers(HttpMethod.POST , ofPath(CategoryController.REQUEST_MAPPING_PATH))
+            .hasAuthority(CategoryRole.ADD_CATEGORY.name())
             .mvcMatchers(HttpMethod.GET, anyPathAfter(CategoryController.REQUEST_MAPPING_PATH))
             .hasAuthority(CategoryRole.READ_CATEGORY.name())
+            .mvcMatchers(HttpMethod.DELETE, anyPathAfter(CategoryController.REQUEST_MAPPING_PATH))
+            .hasAuthority(CategoryRole.DELETE_CATEGORY.name())
 
             // Location address mapping
             .mvcMatchers(HttpMethod.GET, ofPath(LocationController.REQUEST_MAPPING_PATH))

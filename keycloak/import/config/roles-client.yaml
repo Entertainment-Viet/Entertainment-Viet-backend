@@ -294,6 +294,12 @@
     "name": "READ_CATEGORY"
   },
   {
+    "name": "ADD_CATEGORY"
+  },
+  {
+    "name": "DELETE_CATEGORY"
+  },
+  {
     "name": "READ_LOCATION"
   },
   {

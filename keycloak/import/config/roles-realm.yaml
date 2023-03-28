@@ -311,6 +311,8 @@
         "backend": [
           "READ_CONFIG",
           "UPDATE_USER_FEE",
+          "ADD_CATEGORY",
+          "DELETE_CATEGORY",
         ]
       }
     }
