@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
-import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
+import com.EntertainmentViet.backend.features.booking.dto.category.ReadCategoryDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ReadScoreRewardListDto;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ReadScoreSongListDto;
@@ -21,7 +21,7 @@ public class ReadTalentDto extends ReadUserDto {
 
     private List<ReadPackageDto> packages;
 
-    private Set<CategoryDto> offerCategories;
+    private Set<ReadCategoryDto> offerCategories;
 
     private List<ReadScoreSongListDto> songs;
 

@@ -23,18 +23,12 @@ public abstract class CategoryMapper {
     @BeanMapping(ignoreUnmappedSourceProperties = {"id"})
     @Mapping(target = "parentName", source = "parent", qualifiedByName = "toParentName")
     @Mapping(target = "parentUid", source = "parent", qualifiedByName = "toParentUid")
-    public abstract CategoryDto toDto(Category category);
+    public abstract ReadCategoryDto toDto(Category category);
 
-    //TODO REMOVE THIS
-    @BeanMapping(ignoreUnmappedSourceProperties = {"parentName"})
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "uid", ignore = true)
     @Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentCategory")
-    public Category toModel(CategoryDto categoryDto) {
-        if (categoryDto == null) {
-            return null;
-        }
-        return categoryRepository.findByUid(categoryDto.getUid()).orElse(null);
-    }
+    public abstract Category toModel(CreateCategoryDto createCategoryDto);
 
     @ToCategory
     public Category toCategory(UUID categoryUid) {

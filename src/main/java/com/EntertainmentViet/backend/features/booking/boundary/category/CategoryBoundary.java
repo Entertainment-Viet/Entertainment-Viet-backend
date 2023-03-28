@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.boundary.category;
 
-import com.EntertainmentViet.backend.features.booking.dto.category.CategoryDto;
+import com.EntertainmentViet.backend.features.booking.dto.category.CreateCategoryDto;
+import com.EntertainmentViet.backend.features.booking.dto.category.ReadCategoryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,11 @@ import java.util.UUID;
 
 public interface CategoryBoundary {
 
-  List<CategoryDto> findAll();
+  List<ReadCategoryDto> findAll();
 
-  Optional<CategoryDto> findByUid(UUID uid);
+  Optional<ReadCategoryDto> findByUid(UUID uid);
+
+  Optional<UUID> create(CreateCategoryDto createCategoryDto);
+
+  boolean delete(UUID categoryUid);
 }
