@@ -51,6 +51,6 @@ public class UserDealFeeRateController {
         .map(userDealFeeRate -> ResponseEntity
             .ok()
             .body(userDealFeeRateMapper.toReadDto(userDealFeeRate))
-        ).orElse(ResponseEntity.notFound().build()));
+        ).orElse(ResponseEntity.badRequest().build()));
   }
 }

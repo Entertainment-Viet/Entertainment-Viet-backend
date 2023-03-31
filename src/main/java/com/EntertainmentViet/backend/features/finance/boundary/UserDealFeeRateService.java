@@ -53,7 +53,7 @@ public class UserDealFeeRateService implements UserDealFeeRateBoundary {
   public Optional<UserDealFeeRate> update(UUID userUid, UserDealFeeRateDto updatedFeeRate) {
     var userDealFeeRateOptional = userDealFeeRateRepository.findByUserUid(userUid);
     if (userDealFeeRateOptional.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(userDealFeeRateRepository.save(userDealFeeRateOptional.get()));
     }
 
     var userDealFeeRate = userDealFeeRateOptional.get();
