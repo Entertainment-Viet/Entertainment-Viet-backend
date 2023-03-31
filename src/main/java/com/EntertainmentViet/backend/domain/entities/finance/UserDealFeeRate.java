@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.finance;
 
-import com.EntertainmentViet.backend.domain.entities.Users;
+import com.EntertainmentViet.backend.domain.entities.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class UserDealFeeRate {
 
   @OneToOne(fetch = FetchType.LAZY)
   @MapsId
-  private Users user;
+  private Account user;
 
   private Double feeRate;
 }

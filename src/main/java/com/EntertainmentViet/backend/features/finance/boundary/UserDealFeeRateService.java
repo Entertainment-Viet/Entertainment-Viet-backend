@@ -2,12 +2,13 @@ package com.EntertainmentViet.backend.features.finance.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
 import com.EntertainmentViet.backend.domain.entities.finance.UserDealFeeRate;
-import com.EntertainmentViet.backend.features.common.dao.UsersRepository;
+import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
 import com.EntertainmentViet.backend.features.finance.dao.UserDealFeeRateRepository;
 import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class UserDealFeeRateService implements UserDealFeeRateBoundary {
 
   private final UserDealFeeRateRepository userDealFeeRateRepository;
 
-  private final UsersRepository usersRepository;
+  private final AccountRepository accountRepository;
 
   @Override
   public FinanceConfig updateConfigOnOrganizerDealFee(Long organizerId, FinanceConfig financeConfig) {
@@ -53,11 +54,12 @@ public class UserDealFeeRateService implements UserDealFeeRateBoundary {
   }
 
   @Override
+  @Transactional
   public Optional<UserDealFeeRate> update(UUID userUid, UserDealFeeRateDto updatedFeeRateDto) {
     var userDealFeeRateOptional = userDealFeeRateRepository.findByUserUid(userUid);
     if (userDealFeeRateOptional.isEmpty()) {
       var userDealFeeRate = UserDealFeeRate.builder()
-          .user(usersRepository.findByUid(userUid).orElse(null))
+          .user(accountRepository.findByUid(userUid).orElse(null))
           .feeRate(updatedFeeRateDto.getFeeRate())
           .build();
       return Optional.of(userDealFeeRateRepository.save(userDealFeeRate));
