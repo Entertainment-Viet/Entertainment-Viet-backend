@@ -35,6 +35,7 @@ public abstract class BookingMapper {
     @Mapping(target = "extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
     public abstract ReadBookingDto toReadDto(Booking booking);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"repeatPattern"})
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

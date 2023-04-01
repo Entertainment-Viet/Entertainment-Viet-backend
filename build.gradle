@@ -34,6 +34,7 @@ ext {
 	commonsIoVersion = "2.11.0"
 	springDocVersion = "1.6.9"
 	gsonVersion = "2.10"
+	cronParserVersion = "3.5"
 }
 
 dependencies {
@@ -68,6 +69,7 @@ dependencies {
 	implementation "org.apache.commons:commons-text:${commonTextVersion}"
 	implementation "commons-io:commons-io:${commonsIoVersion}"
 	implementation "com.google.code.gson:gson:${gsonVersion}"
+	implementation "net.redhogs.cronparser:cron-parser-spring:${cronParserVersion}"
 
 	// Lombok + Mapstruct
 	implementation "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructBindingVersion}"
