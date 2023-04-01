@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 @Getter
 @Setter
@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
     typeClass = PostgreSQLEnumType.class
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class JobDetail implements Serializable {
+public class JobDetail implements Serializable, Cloneable {
 
   @Id
   @GeneratedValue
@@ -76,15 +76,9 @@ public class JobDetail implements Serializable {
   private JsonNode extensions;
 
   public JobDetail clone() {
-    return JobDetail.builder()
+    return this.toBuilder()
         .category(getCategory())
-        .workType(getWorkType())
-        .price(getPrice())
-        .performanceStartTime(getPerformanceStartTime())
-        .performanceEndTime(getPerformanceEndTime())
-        .performanceCount(getPerformanceCount())
         .location(getLocation())
-        .note(getNote())
         .build();
   }
 
