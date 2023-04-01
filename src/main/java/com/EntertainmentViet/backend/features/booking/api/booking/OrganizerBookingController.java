@@ -64,9 +64,9 @@ public class OrganizerBookingController {
     }
 
     return CompletableFuture.completedFuture(organizerBookingService.create(organizerUid, createBookingDto)
-        .map(newBookingUid -> ResponseEntity
-            .created(RestUtils.getCreatedLocationUri(request, newBookingUid.get(0)))
-            .body(newBookingUid)
+        .map(newBookingUidList -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newBookingUidList.get(0)))
+            .body(newBookingUidList)
         )
         .orElse(ResponseEntity.badRequest().build())
     );
