@@ -1,6 +1,6 @@
-package com.EntertainmentViet.backend.features.common.dto;
+package com.EntertainmentViet.backend.domain.values;
 
-import com.EntertainmentViet.backend.features.common.utils.CronExpressionUtils;
+import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,10 +30,10 @@ public class RepeatPattern {
   }
 
   public List<OffsetDateTime> getAllOccurrence() {
-    return CronExpressionUtils.getAllOccurrence(this);
+    return CronExpressionLogic.getAllOccurrence(this);
   }
 
   public String getDescription() {
-    return CronExpressionUtils.getDescription(this);
+    return CronExpressionLogic.getDescription(this);
   }
 }

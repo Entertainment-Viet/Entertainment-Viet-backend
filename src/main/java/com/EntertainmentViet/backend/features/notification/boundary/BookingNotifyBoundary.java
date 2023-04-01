@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.notification.boundary;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.notification.BookingNotification;
-import com.EntertainmentViet.backend.features.common.dto.RepeatPattern;
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

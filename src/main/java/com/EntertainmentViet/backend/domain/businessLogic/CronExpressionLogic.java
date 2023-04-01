@@ -1,6 +1,6 @@
-package com.EntertainmentViet.backend.features.common.utils;
+package com.EntertainmentViet.backend.domain.businessLogic;
 
-import com.EntertainmentViet.backend.features.common.dto.RepeatPattern;
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.redhogs.cronparser.CasingTypeEnum;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @UtilityClass
 @Slf4j
-public class CronExpressionUtils {
+public class CronExpressionLogic {
 
   public static DateTimeFormatter cronDateTimeFormatter;
 

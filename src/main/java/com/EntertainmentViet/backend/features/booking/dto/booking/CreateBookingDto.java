@@ -1,7 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dto.booking;
 
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
-import com.EntertainmentViet.backend.features.common.dto.RepeatPattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
