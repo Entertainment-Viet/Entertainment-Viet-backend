@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.domain.entities.Account;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.notification.BookingNotification;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
+import com.EntertainmentViet.backend.features.common.dto.RepeatPattern;
 import com.EntertainmentViet.backend.features.notification.dao.BookingNotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,32 +31,37 @@ public class BookingNotifyService implements BookingNotifyBoundary {
 
   @Override
   public void sendCreateNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.CREATE);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.CREATE);
+  }
+
+  @Override
+  public void sendCreateRepeatNotification(UUID receiverUid, String receiverName, Booking booking, RepeatPattern repeatPattern) {
+    sendNotificationWithCronExpression(receiverUid, receiverName, booking, ActionType.CREATE, repeatPattern);
   }
 
   @Override
   public void sendUpdateNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.UPDATE);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.UPDATE);
   }
 
   @Override
   public void sendAcceptNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.ACCEPT);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.ACCEPT);
   }
 
   @Override
   public void sendRejectNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.REJECT);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.REJECT);
   }
 
   @Override
   public void sendCancelNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.CANCEL);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.CANCEL);
   }
 
   @Override
   public void sendFinishNotification(UUID receiverUid, String receiverName, Booking booking) {
-    sendNotificationWithContent(receiverUid, receiverName, booking, ActionType.FINISH);
+    sendNotificationWithActionType(receiverUid, receiverName, booking, ActionType.FINISH);
   }
 
   @Override
@@ -75,12 +81,13 @@ public class BookingNotifyService implements BookingNotifyBoundary {
 
   @Override
   public void sendNotification(UUID receiver, BookingNotification notification) {
-    messagingTemplate.convertAndSendToUser(String.valueOf(receiver), AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, notification);
+    var savedNotification = bookingNotificationRepository.save(notification);
+    messagingTemplate.convertAndSendToUser(String.valueOf(receiver), AppConstant.NOTIFICATION_LAST_BOOKING_TOPIC, savedNotification);
   }
 
-  private void sendNotificationWithContent(UUID receiverUid, String receiverName, Booking booking, ActionType actionType) {
+  private void sendNotificationWithActionType(UUID receiverUid, String receiverName, Booking booking, ActionType actionType) {
     var senderUid = getSenderIdFromToken();
-    var senderName = accountRepository.findByUid(senderUid).map(Account::getDisplayName).orElse("");
+    var senderName = getSenderNameFromId(senderUid);
     var content = String.format("User '%s' just %s the booking '%s'",
         senderName, actionType.text, booking.getBookingCode());
 
@@ -95,12 +102,35 @@ public class BookingNotifyService implements BookingNotifyBoundary {
         .isRead(false)
         .build();
 
-    var savedNotification = bookingNotificationRepository.save(notification);
-    sendNotification(receiverUid, savedNotification);
+    sendNotification(receiverUid, notification);
+  }
+
+  private void sendNotificationWithCronExpression(UUID receiverUid, String receiverName, Booking booking, ActionType actionType, RepeatPattern repeatPattern) {
+    var senderUid = getSenderIdFromToken();
+    var senderName = getSenderNameFromId(senderUid);
+    var content = String.format("User '%s' just %s the schedule booking %s",
+        senderName, actionType.text, repeatPattern.getDescription());
+
+    var notification = BookingNotification.builder()
+        .senderUid(senderUid)
+        .senderName(senderName)
+        .recipientUid(receiverUid)
+        .recipientName(receiverName)
+        .bookingUid(booking.getUid())
+        .content(content)
+        .createdAt(OffsetDateTime.now())
+        .isRead(false)
+        .build();
+
+    sendNotification(receiverUid, notification);
   }
 
   private UUID getSenderIdFromToken() {
      return UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+  }
+
+  private String getSenderNameFromId(UUID senderUid) {
+    return accountRepository.findByUid(senderUid).map(Account::getDisplayName).orElse("");
   }
 
   private enum ActionType {
