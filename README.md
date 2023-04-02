@@ -21,6 +21,7 @@ The `keycloak` folder store the automation configuration for keycloak. Refer its
 2. ./gradlew clean bootJar
 3. docker build -t vietentertainment2023/ve-backend:0.1.3 .
 4. docker push vietentertainment2023/ve-backend:0.1.3
+5. Update new version to docker-compose file
 
 ### Deploy to SQA AWS
 1. Using VE-cert.pem to establish connection to AWS EC2
