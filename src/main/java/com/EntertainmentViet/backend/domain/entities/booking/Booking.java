@@ -27,7 +27,7 @@ import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
@@ -132,8 +132,17 @@ public class Booking extends Identifiable implements Auditable, Cloneable {
 
   @Override
   public Booking clone() {
-    return this.toBuilder()
-        .jobDetail(this.getJobDetail().clone())
+    return Booking.builder()
+        .createdAt(OffsetDateTime.now())
+        .isPaid(false)
+        .status(getStatus())
+        .organizer(getOrganizer())
+        .talent(getTalent())
+        .jobDetail(getJobDetail().clone())
+        .talentPackage(getTalentPackage())
+        .paymentType(getPaymentType())
+        .extensions(getExtensions())
+        .isReview(false)
         .build();
   }
 }

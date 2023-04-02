@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
@@ -76,9 +76,15 @@ public class JobDetail implements Serializable, Cloneable {
   private JsonNode extensions;
 
   public JobDetail clone() {
-    return this.toBuilder()
+    return JobDetail.builder()
         .category(getCategory())
+        .workType(getWorkType())
+        .price(getPrice())
+        .performanceStartTime(getPerformanceStartTime())
+        .performanceEndTime(getPerformanceEndTime())
+        .performanceCount(getPerformanceCount())
         .location(getLocation())
+        .note(getNote())
         .build();
   }
 

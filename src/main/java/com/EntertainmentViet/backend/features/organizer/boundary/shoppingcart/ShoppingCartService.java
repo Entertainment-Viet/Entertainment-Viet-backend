@@ -71,9 +71,9 @@ public class ShoppingCartService implements ShoppingCartBoundary {
 
             List<Booking> createdOrders = cartItem.generateBooking(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
             createdOrders.forEach(booking -> {
+                    bookingRepository.save(booking);
                     organizer.addBooking(booking);
                     talentPackage.addOrder(booking);
-                    bookingRepository.save(booking);
             });
             packageRepository.save(talentPackage);
 

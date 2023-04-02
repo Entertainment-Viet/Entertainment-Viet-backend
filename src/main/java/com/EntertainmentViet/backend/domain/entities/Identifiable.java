@@ -15,7 +15,7 @@ import java.util.UUID;
 @MappedSuperclass
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
+@SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @EntityListeners({IdentifiableListener.class})
