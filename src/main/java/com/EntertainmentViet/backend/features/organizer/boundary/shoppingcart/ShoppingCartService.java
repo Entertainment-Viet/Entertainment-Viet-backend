@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,14 +67,25 @@ public class ShoppingCartService implements ShoppingCartBoundary {
         }
 
         for (OrganizerShoppingCart cartItem : organizer.getShoppingCart()) {
-            Booking booking = cartItem.generateBooking(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
-            bookingRepository.save(booking);
-            organizer.addBooking(booking);
             var talentPackage = packageRepository.findByUid(cartItem.getTalentPackage().getUid()).orElse(null);
-            talentPackage.addOrder(booking);
+
+            List<Booking> createdOrders = cartItem.generateBooking(PaymentType.ofI18nKey(chargeCartItemDto.getPaymentType()));
+            createdOrders.forEach(booking -> {
+                    organizer.addBooking(booking);
+                    talentPackage.addOrder(booking);
+                    bookingRepository.save(booking);
+            });
             packageRepository.save(talentPackage);
 
-            bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+            if (createdOrders.isEmpty()) {
+                log.info("There is no occurrence matching repeatPattern when charging cart item: " + cartItem.getUid());
+            } else if (createdOrders.size() == 1) {
+                var newBooking = createdOrders.get(0);
+                bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking.getTalent().getDisplayName(), newBooking);
+            } else {
+                var firstBooking = createdOrders.get(0);
+                bookingNotifyService.sendCreateRepeatNotification(firstBooking.getTalent().getUid(), firstBooking.getTalent().getDisplayName(), firstBooking, talentPackage.getRepeatPattern());
+            }
         }
         organizer.clearCart();
         organizerRepository.save(organizer);

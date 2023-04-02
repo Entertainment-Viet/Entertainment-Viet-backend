@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
@@ -82,7 +83,7 @@ public class PackageBookingService implements PackageBookingBoundary {
 
     @Override
     @Transactional
-    public Optional<UUID> create(UUID talentId, UUID packageId, CreatePackageOrderDto createPackageOrderDto) {
+    public Optional<List<UUID>> create(UUID talentId, UUID packageId, CreatePackageOrderDto createPackageOrderDto) {
         Package packageTalent = packageRepository.findByUid(packageId).orElse(null);
         Organizer organizer = organizerRepository.findByUid(createPackageOrderDto.getOrganizerId()).orElse(null);
         if (!EntityValidationUtils.isOrganizerWithUid(organizer, createPackageOrderDto.getOrganizerId())) {
@@ -98,13 +99,25 @@ public class PackageBookingService implements PackageBookingBoundary {
         }
 
         JobDetail jobDetail = jobDetailMapper.fromCreateDtoToModel(createPackageOrderDto.getJobDetail());
-        Booking createdOrder = packageTalent.generateOrder(organizer, jobDetail, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
-        var newBooking = bookingRepository.save(createdOrder);
+        List<Booking> createdOrders = packageTalent.generateOrder(organizer, jobDetail, PaymentType.ofI18nKey(createPackageOrderDto.getPaymentType()));
 
-        bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking.getTalent().getDisplayName(), newBooking);
-
+        List<UUID> createdUid = createdOrders.stream()
+            .map(bookingRepository::save)
+            .map(Identifiable::getUid)
+            .collect(Collectors.toList());
         packageRepository.save(packageTalent);
-        return Optional.of(newBooking.getUid());
+
+        if (createdOrders.isEmpty()) {
+            log.warn("There is no occurrence matching repeatPattern");
+            return Optional.empty();
+        } else if (createdOrders.size() == 1) {
+            var newBooking = createdOrders.get(0);
+            bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking.getTalent().getDisplayName(), newBooking);
+        } else {
+            var firstBooking = createdOrders.get(0);
+            bookingNotifyService.sendCreateRepeatNotification(firstBooking.getTalent().getUid(), firstBooking.getTalent().getDisplayName(), firstBooking, packageTalent.getRepeatPattern());
+        }
+        return Optional.of(createdUid);
     }
 
     @Override

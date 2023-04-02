@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
+import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
@@ -26,6 +27,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -130,8 +132,8 @@ public class Package extends Identifiable {
         );
   }
 
-  public Booking generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
-    return Booking.builder()
+  public List<Booking> generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
+    var booking = Booking.builder()
         .jobDetail(jobDetail != null ? jobDetail : getJobDetail().clone())
         .talent(talent)
         .organizer(organizer)
@@ -141,6 +143,14 @@ public class Package extends Identifiable {
         .isPaid(false)
         .isReview(false)
         .build();
+    if (packageType == PackageType.ONCE) {
+      return List.of(booking);
+    } else if (packageType == PackageType.RECURRING) {
+      return CronExpressionLogic.generateBookingList(booking, repeatPattern);
+    } else {
+      log.error("Undefine package type");
+      throw new IllegalStateException();
+    }
   }
 
   public Package updateInfo(Package newData) {

@@ -12,6 +12,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @SuperBuilder
 @NoArgsConstructor
@@ -50,7 +51,7 @@ public class OrganizerShoppingCart extends Identifiable {
     return true;
   }
 
-  public Booking generateBooking(PaymentType paymentType) {
+  public List<Booking> generateBooking(PaymentType paymentType) {
     JobDetail jobDetail = talentPackage.getJobDetail().clone();
     jobDetail.getPrice().setMax(price);
     jobDetail.setLocation(organizer.getOrganizerDetail().getAddress());

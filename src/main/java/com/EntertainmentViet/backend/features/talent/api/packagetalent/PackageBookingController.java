@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -70,14 +71,14 @@ public class PackageBookingController {
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public CompletableFuture<ResponseEntity<UUID>> orderPackage(JwtAuthenticationToken token, HttpServletRequest request,
-                                                              @PathVariable("talent_uid") UUID talentUid,
-                                                              @PathVariable("package_uid") UUID packageUid,
-                                                              @RequestBody @Valid CreatePackageOrderDto createPackageOrderDto) {
+  public CompletableFuture<ResponseEntity<List<UUID>>> orderPackage(JwtAuthenticationToken token, HttpServletRequest request,
+                                                                    @PathVariable("talent_uid") UUID talentUid,
+                                                                    @PathVariable("package_uid") UUID packageUid,
+                                                                    @RequestBody @Valid CreatePackageOrderDto createPackageOrderDto) {
     return CompletableFuture.completedFuture(packageBookingService.create(talentUid, packageUid, createPackageOrderDto)
-        .map(newBookingUid -> ResponseEntity
-            .created(RestUtils.getCreatedLocationUri(request, newBookingUid))
-            .body(newBookingUid)
+        .map(newBookingUidList -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newBookingUidList.get(0)))
+            .body(newBookingUidList)
         )
         .orElse(ResponseEntity.badRequest().build())
     );
