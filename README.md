@@ -22,28 +22,14 @@ The `keycloak` folder store the automation configuration for keycloak. Refer its
 3. docker build -t vietentertainment2023/ve-backend:0.1.3 .
 4. docker push vietentertainment2023/ve-backend:0.1.3
 
-### Deploy to SQA heroku 
-1. Login to heroku: `heroku login`
-2. Connect to app on heroku: ` heroku git:remote boiling-shore-81192`
-3. Commit all changes: `git commit -am "message"`
-4. Deploy changes to SQA: `git push heroku main`
-
-
-#### Some helpful command with heroku
-* Access to database: `heroku pg:psql`
-* Check status of app: `heroku ps`
-* Restart the app: `heroku restart`
-* Check app environment variable: `heroku config` 
-* Check app logs: `heroku logs --tail`
-* Clear database: `heroku pg:reset DATABASE --confirm <app_name>`
-
-### Access to backend database through db client
-1. Go to Heroku App dashboard
-2. Click on the Heroku Postgres Addon
-3. Go To Settings
-4. Click on Credentials (this information can change dynamically, make sure check the data again before connect)
-5. Copy database information for connection
-
+### Deploy to SQA AWS
+1. Using VE-cert.pem to establish connection to AWS EC2
+2. Login as `ubuntu`
+3. Active root account: `sudo su`
+4. Go to backend directory: `cd /home/ubuntu/Entertainment-Viet-backend`
+5. Update latest code: `git pull`
+6. Enter passpharse as `ve`
+7. Run new version of backend: `docker-compose -f docker-compose.sqa.yaml up -d`
 
 ## Development ##
 
