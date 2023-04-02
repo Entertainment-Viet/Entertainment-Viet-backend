@@ -2,8 +2,6 @@ package com.EntertainmentViet.backend.features.admin.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
@@ -80,21 +78,6 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "talentDetail", ignore = true)
   @Mapping(target = "offerCategories", ignore = true)
   public abstract Talent toModel(UpdateAdminTalentDto updateAdminTalentDto);
-
-  @Named("toUserStateKey")
-  public String toUserStateKey(UserState userState) {
-    return userState != null ? userState.i18nKey : null;
-  }
-
-  @Named("toUserTypeKey")
-  public String toUserTypeKey(UserType userType) {
-    return userType != null ? userType.i18nKey : null;
-  }
-
-  @Named("toUserType")
-  public UserType toUserType(String i18nKey) {
-    return UserType.ofI18nKey(i18nKey);
-  }
 
   @Named("toOfferCategories")
   public Set<Category> toOfferCategories(List<UUID> offerCategoryUidList) {

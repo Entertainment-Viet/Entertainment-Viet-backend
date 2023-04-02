@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.dto.booking;
 
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.CreateJobDetailDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,4 +32,6 @@ public class CreateBookingDto {
     private List<String> finishProof;
 
     private String extensions;
+
+    private RepeatPattern repeatPattern;
 }

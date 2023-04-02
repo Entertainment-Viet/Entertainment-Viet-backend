@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.domain.entities.talent;
 
+import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
@@ -7,20 +8,26 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PackageType;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.querydsl.core.annotations.QueryInit;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,6 +39,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Slf4j
+@TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType.class
+)
 public class Package extends Identifiable {
 
   @Id
@@ -65,6 +76,15 @@ public class Package extends Identifiable {
 
   @NotNull
   private Boolean archived;
+
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "package_type")
+  @Type( type = "pgsql_enum" )
+  private PackageType packageType;
+
+  @Embedded
+  @QueryInit("*.*")
+  private RepeatPattern repeatPattern;
 
   public void addOrder(Booking order) {
     orders.add(order);
@@ -112,8 +132,8 @@ public class Package extends Identifiable {
         );
   }
 
-  public Booking generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
-    return Booking.builder()
+  public List<Booking> generateOrder(Organizer organizer, JobDetail jobDetail, PaymentType paymentType) {
+    var booking = Booking.builder()
         .jobDetail(jobDetail != null ? jobDetail : getJobDetail().clone())
         .talent(talent)
         .organizer(organizer)
@@ -123,6 +143,14 @@ public class Package extends Identifiable {
         .isPaid(false)
         .isReview(false)
         .build();
+    if (packageType == PackageType.ONCE) {
+      return List.of(booking);
+    } else if (packageType == PackageType.RECURRING) {
+      return CronExpressionLogic.generateBookingList(booking, repeatPattern);
+    } else {
+      log.error("Undefine package type");
+      throw new IllegalStateException();
+    }
   }
 
   public Package updateInfo(Package newData) {
@@ -134,6 +162,13 @@ public class Package extends Identifiable {
     }
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
+    }
+    if (newData.getRepeatPattern() != null) {
+      setRepeatPattern(newData.getRepeatPattern());
+      setPackageType(PackageType.RECURRING);
+    } else {
+      setRepeatPattern(null);
+      setPackageType(PackageType.ONCE);
     }
     return this;
   }

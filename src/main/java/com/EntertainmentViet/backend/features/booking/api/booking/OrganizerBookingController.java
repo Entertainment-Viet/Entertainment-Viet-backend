@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -53,9 +54,9 @@ public class OrganizerBookingController {
   @PostMapping(
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public CompletableFuture<ResponseEntity<UUID>> create(JwtAuthenticationToken token, HttpServletRequest request, 
-                                                        @PathVariable("organizer_uid") UUID organizerUid,
-                                                        @RequestBody @Valid CreateBookingDto createBookingDto) {
+  public CompletableFuture<ResponseEntity<List<UUID>>> create(JwtAuthenticationToken token, HttpServletRequest request,
+                                                              @PathVariable("organizer_uid") UUID organizerUid,
+                                                              @RequestBody @Valid CreateBookingDto createBookingDto) {
 
     if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
@@ -63,9 +64,9 @@ public class OrganizerBookingController {
     }
 
     return CompletableFuture.completedFuture(organizerBookingService.create(organizerUid, createBookingDto)
-        .map(newBookingUid -> ResponseEntity
-            .created(RestUtils.getCreatedLocationUri(request, newBookingUid))
-            .body(newBookingUid)
+        .map(newBookingUidList -> ResponseEntity
+            .created(RestUtils.getCreatedLocationUri(request, newBookingUidList.get(0)))
+            .body(newBookingUidList)
         )
         .orElse(ResponseEntity.badRequest().build())
     );

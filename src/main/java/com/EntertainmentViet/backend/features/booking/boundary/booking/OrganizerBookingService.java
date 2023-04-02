@@ -1,6 +1,8 @@
 package com.EntertainmentViet.backend.features.booking.boundary.booking;
 
+import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
 import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
+import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
@@ -21,8 +23,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,7 +69,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
     @Override
     @Transactional
-    public Optional<UUID> create(UUID organizerUid, CreateBookingDto createBookingDto) {
+    public Optional<List<UUID>> create(UUID organizerUid, CreateBookingDto createBookingDto) {
         Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
         booking.setStatus(BookingStatus.TALENT_PENDING);
 
@@ -77,8 +81,23 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return Optional.empty();
         }
 
-        bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
-        return Optional.ofNullable(bookingRepository.save(booking).getUid());
+        if (createBookingDto.getRepeatPattern() == null) {
+            bookingNotifyService.sendCreateNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+            return Optional.of(List.of(bookingRepository.save(booking).getUid()));
+        } else {
+            List<UUID> createdUid = CronExpressionLogic.generateBookingList(booking, createBookingDto.getRepeatPattern())
+                .stream()
+                .map(bookingRepository::save)
+                .map(Identifiable::getUid)
+                .collect(Collectors.toList());
+            bookingNotifyService.sendCreateRepeatNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking, createBookingDto.getRepeatPattern());
+            if (createdUid.isEmpty()) {
+                log.warn("There is no occurrence matching repeatPattern");
+                return Optional.empty();
+            } else {
+                return Optional.of(createdUid);
+            }
+        }
     }
 
     @Override

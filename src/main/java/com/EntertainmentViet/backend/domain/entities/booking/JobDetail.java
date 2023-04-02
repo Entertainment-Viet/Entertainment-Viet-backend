@@ -28,7 +28,7 @@ import java.time.OffsetDateTime;
     typeClass = PostgreSQLEnumType.class
 )
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-public class JobDetail implements Serializable {
+public class JobDetail implements Serializable, Cloneable {
 
   @Id
   @GeneratedValue

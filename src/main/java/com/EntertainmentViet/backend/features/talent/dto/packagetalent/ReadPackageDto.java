@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.packagetalent;
 
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import com.EntertainmentViet.backend.features.booking.dto.jobdetail.ReadJobDetailDto;
 import com.EntertainmentViet.backend.features.common.dto.IdentifiableDto;
 import lombok.Getter;
@@ -26,4 +27,8 @@ public class ReadPackageDto extends IdentifiableDto {
   private ReadJobDetailDto jobDetail;
 
   private Integer orderNum;
+
+  private String packageType;
+
+  private RepeatPattern repeatPattern;
 }

@@ -40,7 +40,7 @@ import java.util.List;
 @TypeDef(name = "list-array",typeClass = ListArrayType.class)
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @EntityListeners({AuditableListener.class, BookingCodeListener.class})
-public class Booking extends Identifiable implements Auditable {
+public class Booking extends Identifiable implements Auditable, Cloneable {
 
   @Id
   @GeneratedValue
@@ -128,5 +128,21 @@ public class Booking extends Identifiable implements Auditable {
 
   public boolean checkIfConfirmed() {
     return !status.equals(BookingStatus.TALENT_PENDING) && !status.equals(BookingStatus.ORGANIZER_PENDING);
+  }
+
+  @Override
+  public Booking clone() {
+    return Booking.builder()
+        .createdAt(OffsetDateTime.now())
+        .isPaid(false)
+        .status(getStatus())
+        .organizer(getOrganizer())
+        .talent(getTalent())
+        .jobDetail(getJobDetail().clone())
+        .talentPackage(getTalentPackage())
+        .paymentType(getPaymentType())
+        .extensions(getExtensions())
+        .isReview(false)
+        .build();
   }
 }
