@@ -7,15 +7,20 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.booking.JobDetail_;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
+import com.EntertainmentViet.backend.domain.standardTypes.PackageType;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
+import com.EntertainmentViet.backend.domain.values.RepeatPattern;
 import com.EntertainmentViet.backend.exception.EntityNotFoundException;
 import com.querydsl.core.annotations.QueryInit;
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,6 +37,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Entity
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 @Slf4j
+@TypeDef(
+    name = "pgsql_enum",
+    typeClass = PostgreSQLEnumType.class
+)
 public class Package extends Identifiable {
 
   @Id
@@ -65,6 +74,15 @@ public class Package extends Identifiable {
 
   @NotNull
   private Boolean archived;
+
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "package_type")
+  @Type( type = "pgsql_enum" )
+  private PackageType packageType;
+
+  @Embedded
+  @QueryInit("*.*")
+  private RepeatPattern repeatPattern;
 
   public void addOrder(Booking order) {
     orders.add(order);
@@ -134,6 +152,13 @@ public class Package extends Identifiable {
     }
     if (newData.getJobDetail() != null) {
       jobDetail.updateInfo(newData.getJobDetail());
+    }
+    if (newData.getRepeatPattern() != null) {
+      setRepeatPattern(newData.getRepeatPattern());
+      setPackageType(PackageType.RECURRING);
+    } else {
+      setRepeatPattern(null);
+      setPackageType(PackageType.ONCE);
     }
     return this;
   }

@@ -1,17 +1,17 @@
 package com.EntertainmentViet.backend.domain.values;
 
 import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Embeddable;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Embeddable
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
 public class RepeatPattern {
 
