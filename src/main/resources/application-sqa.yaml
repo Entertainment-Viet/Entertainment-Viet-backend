@@ -16,7 +16,7 @@ security:
     - http://host.docker.internal:3005
     - http://localhost:3000
     - http://localhost:3005
-    - https://*.heartofshow.com/
+    - https://heartofshow.com/
 
 authentication:
   keycloak:
