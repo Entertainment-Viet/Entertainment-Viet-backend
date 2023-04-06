@@ -17,6 +17,7 @@ security:
     - http://localhost:3000
     - http://localhost:3005
     - https://heartofshow.com/
+    - https://cms.heartofshow.com/
 
 authentication:
   keycloak:
