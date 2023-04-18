@@ -42,6 +42,21 @@ spring:
     multipart:
       max-request-size: 5MB
       max-file-size: 5MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 13401@student.vgu.edu.vn
+    password: $h9uXn5c
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  freemarker:
+    template-loader-path: classpath:/templates
+    suffix: .ftlh
+
 
 hibernate:
   hbm2ddl:

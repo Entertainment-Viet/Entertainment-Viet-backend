@@ -16,7 +16,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +30,8 @@ public class KeycloakService implements KeycloakBoundary {
   private final AuthenticationProperties authenticationProperties;
 
   private final RestTemplate keycloakRestTemplate;
+
+  private final String CUSTOM_ACTION_TOKEN_PATH = "/custom-action-tokens/action-tokens";
 
   public KeycloakService(AuthenticationProperties authenticationProperties, RestTemplate keycloakRestTemplate) {
     this.authenticationProperties = authenticationProperties;
@@ -129,7 +133,7 @@ public class KeycloakService implements KeycloakBoundary {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-    MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
     map.add("grant_type", "password");
     map.add("username", loginInfoDto.getUsername());
     map.add("password", loginInfoDto.getPassword());
@@ -145,6 +149,37 @@ public class KeycloakService implements KeycloakBoundary {
             "Please check authentication.keycloak.adminUsername and authentication.keycloak.adminPassword properties");
       } else {
         log.error("Can not request to keycloak server ", ex);
+      }
+    }
+
+    return Optional.empty();
+  }
+
+  public Optional<String> getEmailToken(UUID userUid, EMAIL_ACTION action, String redirectUrl) {
+    String emailTokenUrl =  String.format("/realms/%s%s",
+        authenticationProperties.getKeycloak().getRealm(), CUSTOM_ACTION_TOKEN_PATH);
+
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("userId", userUid.toString());
+    params.add("redirectUri", redirectUrl);
+    params.add("clientId", authenticationProperties.getKeycloak().getResource());
+    params.add("action", action.name());
+
+    URI url = UriComponentsBuilder.fromUri(keycloakRestTemplate.getUriTemplateHandler().expand(emailTokenUrl))
+        .queryParams(params)
+        .build()
+        .toUri();
+
+    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(new HttpHeaders());
+
+    try {
+      return Optional.ofNullable(keycloakRestTemplate.postForObject(url, request, String.class));
+    } catch (HttpStatusCodeException ex) {
+      if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+        log.error("Can not authorized to keycloak server. " +
+            "Please check authentication.keycloak.adminUsername and authentication.keycloak.adminPassword properties");
+      } else {
+        log.error("Can not get email token from keycloak server ", ex);
       }
     }
 
