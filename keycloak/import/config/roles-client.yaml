@@ -340,5 +340,11 @@
   },
   {
     "name": "UPDATE_USER_FEE"
+  },
+  {
+    "name": "VERIFY_EMAIL"
+  },
+  {
+    "name": "RESET_PASSWORD"
   }
 ]
