@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
 import com.EntertainmentViet.backend.features.email.dto.EmailDetail;
+import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -42,18 +44,20 @@ public class EmailService implements EmailBoundary {
 
   private final AccountRepository accountRepository;
 
+  private final KeycloakBoundary keycloakService;
+
   private final String VERIFICATION_TEMPLATE_EMAIL_PATH = "emails/verificationEmail.ftlh";
 
   private final String DEFAULT_SENDER = "noreply@heartofshow.com";
 
   @Override
   @Async
-  public void sendVerificationEmail(UUID uid, String token) {
+  public void sendVerificationEmail(UUID uid, String baseUrl, String redirectUrl) {
     var recipientAccount = accountRepository.findByUid(uid);
     if (recipientAccount.isEmpty()) {
       log.error("Can not find email recipient with uuid: " + uid);
+      return;
     }
-
 
     EmailDetail emailDetail = EmailDetail.builder()
         .sender(DEFAULT_SENDER)
@@ -62,10 +66,13 @@ public class EmailService implements EmailBoundary {
         .contentTemplatePath(VERIFICATION_TEMPLATE_EMAIL_PATH)
         .build();
 
+    var token = keycloakService.getEmailToken(uid, KeycloakBoundary.EMAIL_ACTION.VERIFY_EMAIL, redirectUrl).orElse("");
+    String url = UriComponentsBuilder
+        .fromHttpUrl(baseUrl)
+        .queryParam("key", token)
+        .toUriString();
+    emailDetail.setVerificationUrl(url);
     emailDetail.setRecipientName(recipientAccount.get().getDisplayName());
-    String baseUrl = String.format("%s/realms/%s/login-actions/action-token",
-        authenticationProperties.getKeycloak().getServerUrl(), authenticationProperties.getKeycloak().getRealm());
-    emailDetail.buildVerificationUrl(baseUrl, token, authenticationProperties.getKeycloak().getResource());
 
     try {
       sendEmail(emailDetail);
@@ -78,13 +85,22 @@ public class EmailService implements EmailBoundary {
     }
   }
 
+  @Override
+  public void processVerificationEmail(String token) {
+    try {
+      keycloakService.triggerEmailVerification(token);
+    } catch (IOException e) {
+      log.error("Can not processing email verification from token: " + token);
+    }
+  }
+
   private void sendEmail(EmailDetail emailDetail) throws MessagingException, IOException, TemplateException {
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message,
         MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
         StandardCharsets.UTF_8.name());
 
-    mimeMessageHelper.setFrom(emailDetail.getSender());
+    message.setFrom(emailDetail.getSender());
     mimeMessageHelper.setTo(emailDetail.getRecipient());
     mimeMessageHelper.setSubject(emailDetail.getSubject());
 

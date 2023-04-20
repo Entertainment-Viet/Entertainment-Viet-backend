@@ -10,6 +10,7 @@
       <p>Hi ${recipientName},</p>
       <br />
       <p>To continue creating your new VietEntertainment account, please verify your email address by clicking the button below:
+      <br />
           <a href="${verificationUrl}">
               <button >
                   Click Here

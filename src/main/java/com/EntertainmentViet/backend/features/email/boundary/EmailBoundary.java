@@ -4,5 +4,7 @@ import java.util.UUID;
 
 public interface EmailBoundary {
 
-  void sendVerificationEmail(UUID uid, String token);
+  void sendVerificationEmail(UUID uid, String baseUrl, String redirectUrl);
+
+  void processVerificationEmail(String token);
 }

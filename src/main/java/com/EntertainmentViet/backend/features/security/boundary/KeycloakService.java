@@ -9,6 +9,10 @@ import com.EntertainmentViet.backend.features.security.dto.GroupInfoDto;
 import com.EntertainmentViet.backend.features.security.dto.LoginInfoDto;
 import com.EntertainmentViet.backend.features.security.dto.TokenDto;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -16,8 +20,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +38,8 @@ public class KeycloakService implements KeycloakBoundary {
   private final RestTemplate keycloakRestTemplate;
 
   private final String CUSTOM_ACTION_TOKEN_PATH = "/custom-action-tokens/action-tokens";
+
+  private final String ACTION_TOKEN_PATH = "/login-actions/action-token";
 
   public KeycloakService(AuthenticationProperties authenticationProperties, RestTemplate keycloakRestTemplate) {
     this.authenticationProperties = authenticationProperties;
@@ -90,6 +98,48 @@ public class KeycloakService implements KeycloakBoundary {
       }
     }
     return false;
+  }
+
+  @Override
+  public void triggerEmailVerification(String token) throws IOException {
+    String baseUrl = String.format("/realms/%s%s",
+        authenticationProperties.getKeycloak().getRealm(), ACTION_TOKEN_PATH);
+
+    // Send first request to acquire auth session
+    String emailVerificationInitialUrl = UriComponentsBuilder.fromUri(keycloakRestTemplate.getUriTemplateHandler().expand(baseUrl))
+        .queryParam("key", token)
+        .build()
+        .toUriString();
+
+    Connection.Response res = Jsoup.connect(emailVerificationInitialUrl)
+        .method(Connection.Method.GET)
+        .ignoreHttpErrors(true)
+        .execute();
+
+    Document doc = res.parse();
+    Element result = doc.select("a[href*=auth/realms/ve-sso/login-actions/action-token]").first();
+    String authId = res.cookie("AUTH_SESSION_ID_LEGACY");
+    String link = result.attr("href");
+    UriComponents uriComponents = UriComponentsBuilder.fromUriString(link).build();
+    var queryMap = uriComponents.getQueryParams().toSingleValueMap();
+
+    // Send second request to actually do the email verification
+    MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("key", queryMap.get("key"));
+    params.add("client_id", queryMap.get("client_id"));
+    params.add("tab_id", queryMap.get("tab_id"));
+    params.add("AUTH_SESSION_ID", authId);
+
+    var emailVerifyProcessUrl = UriComponentsBuilder.fromUri(keycloakRestTemplate.getUriTemplateHandler().expand(baseUrl))
+        .queryParams(params)
+        .build()
+        .toUriString();
+
+    Jsoup.connect(emailVerifyProcessUrl)
+        .cookies(res.cookies())
+        .method(Connection.Method.GET)
+        .ignoreHttpErrors(true)
+        .execute();
   }
 
   private void setupGroupsInfoConstant() {

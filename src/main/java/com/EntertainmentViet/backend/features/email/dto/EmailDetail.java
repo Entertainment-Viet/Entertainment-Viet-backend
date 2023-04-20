@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,16 +21,6 @@ public class EmailDetail {
   @Builder.Default
   private Map<String, Object> context = new HashMap<>();
 
-  public void buildVerificationUrl(String baseURL, String token, String client) {
-    String url = UriComponentsBuilder
-        .fromHttpUrl(baseURL)
-        .queryParam("key", token)
-        .queryParam("client_id", client)
-        .toUriString();
-
-    this.addContext("verificationUrl", url);
-  }
-
   public void addContext(String key, Object value) {
     if (key != null) {
       context.put(key, value);
@@ -40,5 +29,9 @@ public class EmailDetail {
 
   public void setRecipientName(String recipientName) {
     addContext("recipientName", recipientName);
+  }
+
+  public void setVerificationUrl(String url) {
+    addContext("verificationUrl", url);
   }
 }
