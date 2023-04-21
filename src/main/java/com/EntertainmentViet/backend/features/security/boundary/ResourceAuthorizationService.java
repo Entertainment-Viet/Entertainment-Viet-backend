@@ -7,8 +7,8 @@ import com.EntertainmentViet.backend.features.booking.api.booking.TalentBookingC
 import com.EntertainmentViet.backend.features.booking.api.category.CategoryController;
 import com.EntertainmentViet.backend.features.booking.api.location.LocationController;
 import com.EntertainmentViet.backend.features.config.api.ConfigController;
+import com.EntertainmentViet.backend.features.email.api.EmailController;
 import com.EntertainmentViet.backend.features.email.api.EmailProcessController;
-import com.EntertainmentViet.backend.features.email.api.VerificationEmailController;
 import com.EntertainmentViet.backend.features.finance.api.UserDealFeeRateController;
 import com.EntertainmentViet.backend.features.notification.api.BookingNotificationController;
 import com.EntertainmentViet.backend.features.organizer.api.event.EventController;
@@ -341,9 +341,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(LocationAddressRole.READ_LOCATION.name())
 
             // Email mapping
-            .mvcMatchers(HttpMethod.GET, ofPath(VerificationEmailController.REQUEST_MAPPING_PATH+VerificationEmailController.VERIFICATION_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(EmailController.REQUEST_MAPPING_PATH+ EmailController.VERIFICATION_PATH))
             .hasAuthority(EmailRole.VERIFY_EMAIL.name())
-            .mvcMatchers(HttpMethod.GET, ofPath(VerificationEmailController.REQUEST_MAPPING_PATH+VerificationEmailController.RESET_PASSWORD_PATH))
+            .mvcMatchers(HttpMethod.GET, ofPath(EmailController.REQUEST_MAPPING_PATH+ EmailController.RESET_PASSWORD_PATH))
             .hasAuthority(EmailRole.RESET_PASSWORD.name())
 
             .mvcMatchers(HttpMethod.GET, ofPath(EmailProcessController.REQUEST_MAPPING_PATH+ EmailProcessController.VERIFICATION_PATH))
@@ -392,7 +392,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
   public void ignoreCsrfPaths(CsrfConfigurer<HttpSecurity> csrfConfigurer) {
     csrfConfigurer.ignoringAntMatchers(
         anyPathAfter(UserController.REQUEST_MAPPING_PATH),
-        anyPathAfter(VerificationEmailController.REQUEST_MAPPING_PATH),
+        anyPathAfter(EmailController.REQUEST_MAPPING_PATH),
         anyPathAfter("/ws/**")
     );
   }

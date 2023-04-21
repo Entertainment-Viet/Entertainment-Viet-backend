@@ -21,9 +21,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 @Async
 @Validated
-@RequestMapping(path = VerificationEmailController.REQUEST_MAPPING_PATH)
+@RequestMapping(path = EmailController.REQUEST_MAPPING_PATH)
 @Slf4j
-public class VerificationEmailController {
+public class EmailController {
 
   public static final String REQUEST_MAPPING_PATH = "/email/{uid}";
 
