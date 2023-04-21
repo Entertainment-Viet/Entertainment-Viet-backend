@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.shoppingcart.AddCartItemDto;
 import com.EntertainmentViet.backend.features.talent.boundary.packagetalent.PackageBookingBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.CreatePackageOrderDto;
@@ -44,7 +45,7 @@ public class PackageBookingController {
                                                                                    @PathVariable("package_uid") UUID packageUid,
                                                                                    @ParameterObject Pageable pageable) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -90,7 +91,7 @@ public class PackageBookingController {
                                                                @PathVariable("package_uid") UUID packageUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -107,7 +108,7 @@ public class PackageBookingController {
                                                                @PathVariable("package_uid") UUID packageUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

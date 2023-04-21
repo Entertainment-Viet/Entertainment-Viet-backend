@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.organizer;
 
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
@@ -36,7 +36,7 @@ public class OrganizerController {
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadOrganizerDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-    boolean isOwnerUser = uid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token,"ROOT");
+    boolean isOwnerUser = uid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token,"ROOT");
 
     return CompletableFuture.completedFuture(organizerService.findByUid(uid, isOwnerUser)
         .map(organizerDto -> ResponseEntity
@@ -50,7 +50,7 @@ public class OrganizerController {
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> sendVerifyRequest(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -67,7 +67,7 @@ public class OrganizerController {
   public CompletableFuture<ResponseEntity<UUID>> updateById(JwtAuthenticationToken token,
                                                             @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateOrganizerDto updateOrganizerDto) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -84,7 +84,7 @@ public class OrganizerController {
   public CompletableFuture<ResponseEntity<UUID>> updateKycInfo(JwtAuthenticationToken token,
                                                                @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateOrganizerKycInfoDto kycInfoDto) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

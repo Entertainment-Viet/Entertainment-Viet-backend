@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBo
 import com.EntertainmentViet.backend.features.booking.boundary.booking.OrganizerBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ public class OrganizerBookingController {
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<DetailBookingResponseDto>> findByUid(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
-    boolean isOwnerUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token,"ROOT");
+    boolean isOwnerUser = organizerUid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token,"ROOT");
     return CompletableFuture.completedFuture(bookingService.findByUid(isOwnerUser, organizerUid, uid)
         .map(bookingDto -> ResponseEntity
             .ok()
@@ -58,7 +59,7 @@ public class OrganizerBookingController {
                                                               @PathVariable("organizer_uid") UUID organizerUid,
                                                               @RequestBody @Valid CreateBookingDto createBookingDto) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -81,7 +82,7 @@ public class OrganizerBookingController {
                                                         @PathVariable("organizer_uid") UUID organizerUid,
                                                         @RequestBody @Valid UpdateBookingDto updateBookingDto) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -100,7 +101,7 @@ public class OrganizerBookingController {
                                                                                @PathVariable("organizer_uid") UUID organizerUid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListOrganizerBookingParamDto paramDto) {
-    boolean isOwnerUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = organizerUid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
         organizerBookingService.listBooking(isOwnerUser, organizerUid, paramDto, pageable)
     ));
@@ -111,7 +112,7 @@ public class OrganizerBookingController {
                                                                @PathVariable("organizer_uid") UUID organizerUid, 
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -127,7 +128,7 @@ public class OrganizerBookingController {
                                                                @PathVariable("organizer_uid") UUID organizerUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -143,7 +144,7 @@ public class OrganizerBookingController {
                                                                            @PathVariable("organizer_uid") UUID organizerUid,
                                                                            @PathVariable("uid") UUID bookingUid,
                                                                            @RequestBody @Valid CreateReviewDto reviewDto) {
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

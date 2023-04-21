@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.email.api;
 
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.boundary.EmailBoundary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -31,6 +32,6 @@ public class EmailProcessController {
   public void sendVerificationEmail(@RequestParam(name = "key") String token, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletResponse response) throws IOException {
     emailService.processVerificationEmail(token);
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-    response.setHeader("Location", redirectUrl);
+    response.setHeader("Location", TokenUtils.getRedirectUrl(token));
   }
 }

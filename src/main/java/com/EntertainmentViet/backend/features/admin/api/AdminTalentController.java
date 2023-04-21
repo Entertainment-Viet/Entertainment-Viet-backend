@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.features.admin.boundary.talent.AdminTalentB
 import com.EntertainmentViet.backend.features.admin.dto.talent.UpdateAdminTalentDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class AdminTalentController {
                                                                     @PathVariable("admin_uid") UUID adminUid,
                                                                     @PathVariable("uid") UUID uid) {
 
-    if (!adminUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!adminUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of admin with uid '%s'",
           adminUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -77,7 +77,7 @@ public class AdminTalentController {
       @PathVariable("uid") UUID uid,
       @RequestBody @Valid UpdateAdminTalentDto updateAdminTalentDto) {
 
-    if (!adminUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!adminUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of admin with uid '%s'",
           adminUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());

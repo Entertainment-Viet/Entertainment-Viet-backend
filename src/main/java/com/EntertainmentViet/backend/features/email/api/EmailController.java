@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.email.api;
 
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.boundary.EmailBoundary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class EmailController {
 
   @GetMapping(VERIFICATION_PATH)
   public CompletableFuture<ResponseEntity<Void>> sendVerificationEmail(JwtAuthenticationToken token, @PathVariable("uid") UUID uid, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletRequest request) {
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to trigger sending email for user with uid '%s'",
           uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());

@@ -4,6 +4,7 @@ import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBo
 import com.EntertainmentViet.backend.features.booking.boundary.booking.TalentBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.ReviewBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreateReviewDto;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class TalentBookingController {
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<DetailBookingResponseDto>> findByUid(JwtAuthenticationToken token,
                                                                                @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
-    boolean isOwnerUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = talentUid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(bookingService.findByUid(isOwnerUser, talentUid, uid)
             .map(bookingDto -> ResponseEntity
                     .ok()
@@ -60,7 +61,7 @@ public class TalentBookingController {
                                                               @PathVariable("talent_uid") UUID talentUid,
                                                               @RequestBody @Valid CreateBookingDto createBookingDto) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -82,7 +83,7 @@ public class TalentBookingController {
                                                         @PathVariable("talent_uid") UUID talentUid,
                                                         @RequestBody @Valid UpdateBookingDto updateBookingDto) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -101,7 +102,7 @@ public class TalentBookingController {
                                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListTalentBookingParamDto paramDto) {
-    boolean isOwnerUser = talentUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = talentUid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
         talentBookingService.listBooking(isOwnerUser, talentUid, paramDto, pageable)
     ));
@@ -112,7 +113,7 @@ public class TalentBookingController {
                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -128,7 +129,7 @@ public class TalentBookingController {
                                                                @PathVariable("talent_uid") UUID talentUid,
                                                                @PathVariable("uid") UUID bookingUid) {
 
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -144,7 +145,7 @@ public class TalentBookingController {
                                                                            @PathVariable("talent_uid") UUID talentUid,
                                                                            @PathVariable("uid") UUID bookingUid,
                                                                            @RequestBody @Valid CreateReviewDto reviewDto) {
-    if (!talentUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
