@@ -46,4 +46,16 @@ public class TokenUtils {
       return "";
     }
   }
+
+  public UUID getUid(String rawToken) {
+    try {
+      var rawPayload = JWSObject.parse(rawToken).getPayload().toString();
+      var payloadJson = objectMapper.readTree(rawPayload);
+      var redirectUrl = payloadJson.get("sub");
+      return UUID.fromString(redirectUrl.toString().replace("\"", ""));
+    } catch (JsonProcessingException | ParseException e) {
+      log.error("Can not getting redirectUrl from token: " + rawToken);
+      return null;
+    }
+  }
 }

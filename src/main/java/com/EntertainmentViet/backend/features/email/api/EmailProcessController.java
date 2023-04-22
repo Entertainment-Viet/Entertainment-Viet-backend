@@ -2,15 +2,18 @@ package com.EntertainmentViet.backend.features.email.api;
 
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.boundary.EmailBoundary;
+import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
@@ -29,9 +32,17 @@ public class EmailProcessController {
   private final EmailBoundary emailService;
 
   @GetMapping(VERIFICATION_PATH)
-  public void sendVerificationEmail(@RequestParam(name = "key") String token, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletResponse response) throws IOException {
-    emailService.processVerificationEmail(token);
+  public void processVerificationEmail(@RequestParam(name = "key") String keyToken, HttpServletResponse response) throws IOException {
+    emailService.processVerificationEmail(keyToken);
     response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-    response.setHeader("Location", TokenUtils.getRedirectUrl(token));
+    response.setHeader("Location", TokenUtils.getRedirectUrl(keyToken));
+  }
+
+  @GetMapping(RESET_PASSWORD_PATH)
+  public void processResetPasswordEmail(@RequestParam(name = "key") String keyToken, HttpServletResponse response,
+                                        @RequestBody @Valid CredentialDto credentialDto) throws IOException {
+    emailService.processResetPasswordEmail(keyToken, credentialDto);
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setHeader("Location", TokenUtils.getRedirectUrl(keyToken));
   }
 }

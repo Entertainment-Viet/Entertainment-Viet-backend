@@ -5,9 +5,12 @@ import com.EntertainmentViet.backend.config.properties.EmailProperties;
 import com.EntertainmentViet.backend.domain.entities.Account;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
+import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.email.dto.EmailDetail;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
+import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +51,8 @@ public class EmailService implements EmailBoundary {
 
   private final String VERIFICATION_TEMPLATE_EMAIL_PATH = "emails/verificationEmail.ftlh";
 
+  private final String RESET_PASSWORD_TEMPLATE_EMAIL_PATH = "emails/resetPasswordEmail.ftlh";
+
   private final String DEFAULT_SENDER = "noreply@heartofshow.com";
 
   @Override
@@ -66,10 +71,11 @@ public class EmailService implements EmailBoundary {
         .contentTemplatePath(VERIFICATION_TEMPLATE_EMAIL_PATH)
         .build();
 
-    var token = keycloakService.getEmailToken(uid, KeycloakBoundary.EMAIL_ACTION.VERIFY_EMAIL, redirectUrl).orElse("");
+    var token = keycloakService.getEmailToken(uid, EMAIL_ACTION.VERIFY_EMAIL, redirectUrl).orElse("");
     String url = UriComponentsBuilder
         .fromHttpUrl(baseUrl)
         .queryParam("key", token)
+        .queryParam("redirectUrl", redirectUrl)
         .toUriString();
     emailDetail.setVerificationUrl(url);
     emailDetail.setRecipientName(recipientAccount.get().getDisplayName());
@@ -86,11 +92,57 @@ public class EmailService implements EmailBoundary {
   }
 
   @Override
+  public void sendResetPasswordEmail(UUID uid, String baseUrl, String redirectUrl) {
+    var recipientAccount = accountRepository.findByUid(uid);
+    if (recipientAccount.isEmpty()) {
+      log.error("Can not find email recipient with uuid: " + uid);
+      return;
+    }
+
+    EmailDetail emailDetail = EmailDetail.builder()
+        .sender(DEFAULT_SENDER)
+        .recipient(getRecipientEmail(recipientAccount.get()))
+        .subject("Reset Password")
+        .contentTemplatePath(RESET_PASSWORD_TEMPLATE_EMAIL_PATH)
+        .build();
+
+    var token = keycloakService.getEmailToken(uid, EMAIL_ACTION.UPDATE_PASSWORD, redirectUrl).orElse("");
+    String url = UriComponentsBuilder
+        .fromHttpUrl(baseUrl)
+        .queryParam("key", token)
+        .queryParam("redirectUrl", redirectUrl)
+        .toUriString();
+    emailDetail.setVerificationUrl(url);
+    emailDetail.setRecipientName(recipientAccount.get().getDisplayName());
+
+    try {
+      sendEmail(emailDetail);
+    } catch (MessagingException e) {
+      log.error("Multiple part HTML email is not supporting");
+    } catch (IOException e) {
+      log.error("Can not get email template from path: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH);
+    } catch (TemplateException e) {
+      log.error("Can not get parse email template at: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH);
+    }
+  }
+
+  @Override
   public void processVerificationEmail(String token) {
     try {
       keycloakService.triggerEmailVerification(token);
     } catch (IOException e) {
       log.error("Can not processing email verification from token: " + token);
+    }
+  }
+
+  @Override
+  public void processResetPasswordEmail(String token, CredentialDto credentialDto) {
+    try {
+      keycloakService.triggerPasswordReset(token, credentialDto);
+    } catch (IOException e) {
+      log.error("Can not processing password reset from token: " + token);
+    } catch (KeycloakUnauthorizedException e) {
+      log.error("Can not verify talent account in keycloak server", e);
     }
   }
 

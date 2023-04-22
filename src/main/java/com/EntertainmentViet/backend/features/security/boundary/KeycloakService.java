@@ -4,15 +4,15 @@ import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.config.properties.AuthenticationProperties;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
-import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
-import com.EntertainmentViet.backend.features.security.dto.GroupInfoDto;
-import com.EntertainmentViet.backend.features.security.dto.LoginInfoDto;
-import com.EntertainmentViet.backend.features.security.dto.TokenDto;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
+import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
+import com.EntertainmentViet.backend.features.security.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -116,6 +116,10 @@ public class KeycloakService implements KeycloakBoundary {
         .ignoreHttpErrors(true)
         .execute();
 
+    if (!checkResponseIsValid(res, EMAIL_ACTION.VERIFY_EMAIL)) {
+      log.error("Provide token is invalid when processing email verification");
+      return;
+    }
     Document doc = res.parse();
     Element result = doc.select("a[href*=auth/realms/ve-sso/login-actions/action-token]").first();
     String authId = res.cookie("AUTH_SESSION_ID_LEGACY");
@@ -140,6 +144,68 @@ public class KeycloakService implements KeycloakBoundary {
         .method(Connection.Method.GET)
         .ignoreHttpErrors(true)
         .execute();
+  }
+
+  @Override
+  public void triggerPasswordReset(String token, CredentialDto credentialDto) throws IOException, KeycloakUnauthorizedException {
+    String baseUrl = String.format("/realms/%s%s",
+        authenticationProperties.getKeycloak().getRealm(), ACTION_TOKEN_PATH);
+
+    // Send first request to acquire auth session
+    String emailVerificationInitialUrl = UriComponentsBuilder.fromUri(keycloakRestTemplate.getUriTemplateHandler().expand(baseUrl))
+        .queryParam("key", token)
+        .build()
+        .toUriString();
+
+    Connection.Response res = Jsoup.connect(emailVerificationInitialUrl)
+        .method(Connection.Method.GET)
+        .ignoreHttpErrors(true)
+        .execute();
+
+    if (!checkResponseIsValid(res, EMAIL_ACTION.UPDATE_PASSWORD)) {
+      log.error("Provide token is invalid when processing email verification");
+      return;
+    }
+
+    var userUid = TokenUtils.getUid(token);
+    if (userUid == null) {
+      log.error("Can not find user uid in key token");
+      return;
+    }
+
+    String resetPassUrl = String.format("/admin/realms/%s/users/%s/reset-password",
+        authenticationProperties.getKeycloak().getRealm(), userUid);
+    String adminToken = getAdminToken();
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(adminToken);
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpEntity<CredentialDto> request = new HttpEntity<>(credentialDto, headers);
+
+    try {
+      keycloakRestTemplate.exchange(resetPassUrl, HttpMethod.PUT, request, Void.class);
+    } catch (HttpStatusCodeException ex) {
+      if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+        throw new KeycloakUnauthorizedException();
+      } else {
+        log.error("Can not request to keycloak server ", ex);
+      }
+    }
+  }
+
+  private boolean checkResponseIsValid(Connection.Response res, EMAIL_ACTION email_action) {
+    if (res.statusCode() != 200) {
+      return false;
+    }
+
+    Document doc = null;
+    try {
+      doc = res.parse();
+    } catch (IOException e) {
+      return false;
+    }
+    Elements results = doc.select(String.format(":containsOwn(%s)", email_action.text));
+    return !results.isEmpty();
   }
 
   private void setupGroupsInfoConstant() {

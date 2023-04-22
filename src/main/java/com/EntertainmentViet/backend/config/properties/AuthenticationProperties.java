@@ -24,5 +24,6 @@ public class AuthenticationProperties {
     private String resource;
     private String adminUsername;
     private String adminPassword;
+    private String resetPasswordUrl;
   }
 }

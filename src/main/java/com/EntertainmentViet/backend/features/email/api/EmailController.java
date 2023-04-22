@@ -45,10 +45,26 @@ public class EmailController {
 
     String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
         .replacePath(servletContext.getContextPath() + EmailProcessController.REQUEST_MAPPING_PATH + EmailProcessController.VERIFICATION_PATH)
-        .queryParam("redirectUrl", redirectUrl)
         .build()
         .toUriString();
     emailService.sendVerificationEmail(uid, baseUrl, redirectUrl);
+    return CompletableFuture.completedFuture(ResponseEntity.ok().build());
+  }
+
+  @GetMapping(RESET_PASSWORD_PATH)
+  public CompletableFuture<ResponseEntity<Void>> sendResetPassEmail(JwtAuthenticationToken token, @PathVariable("uid") UUID uid, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletRequest request) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
+      log.warn(String.format("The token don't have enough access right to trigger sending email for user with uid '%s'",
+          uid));
+      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+        .replacePath(servletContext.getContextPath() + EmailProcessController.REQUEST_MAPPING_PATH + EmailProcessController.RESET_PASSWORD_PATH)
+        .queryParam("redirectUrl", redirectUrl)
+        .build()
+        .toUriString();
+    emailService.sendResetPasswordEmail(uid, baseUrl, redirectUrl);
     return CompletableFuture.completedFuture(ResponseEntity.ok().build());
   }
 }

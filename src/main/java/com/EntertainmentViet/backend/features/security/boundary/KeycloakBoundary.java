@@ -2,7 +2,9 @@ package com.EntertainmentViet.backend.features.security.boundary;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
+import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
+import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -18,9 +20,6 @@ public interface KeycloakBoundary {
 
   void triggerEmailVerification(String token) throws IOException;
 
-  enum EMAIL_ACTION {
-    UPDATE_PASSWORD,
-    VERIFY_EMAIL,
-    ;
-  }
+  void triggerPasswordReset(String token, CredentialDto credentialDto) throws IOException, KeycloakUnauthorizedException;
+
 }
