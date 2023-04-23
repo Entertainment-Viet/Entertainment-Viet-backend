@@ -45,8 +45,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: 13401@student.vgu.edu.vn
-    password: $h9uXn5c
+    username: no.reply.vietentertainment@gmail.com
+    password: pkpiqstjhyhvrdfd
     properties:
       mail:
         smtp:
@@ -74,7 +74,7 @@ authentication:
     serverUrl: http://keycloak:8080/auth
     adminUsername: ssoadmin
     adminPassword: ssoadmin  # TODO try to use keystore to hide this
-    resetPasswordUrl: http://localhost:3000/
+    resetPasswordUrl: http://localhost:3000/reset-password
 
 springdoc:
   swagger-ui:

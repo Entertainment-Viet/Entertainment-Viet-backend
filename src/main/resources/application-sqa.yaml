@@ -22,4 +22,4 @@ security:
 authentication:
   keycloak:
     serverUrl: https://auth.heartofshow.com/auth
-    resetPasswordUrl: https://heartofshow.com/
+    resetPasswordUrl: https://heartofshow.com/reset-password
