@@ -342,9 +342,9 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
 
             // Email mapping
             .mvcMatchers(HttpMethod.GET, ofPath(EmailController.REQUEST_MAPPING_PATH+ EmailController.VERIFICATION_PATH))
-            .hasAuthority(EmailRole.VERIFY_EMAIL.name())
+            .permitAll()
             .mvcMatchers(HttpMethod.GET, ofPath(EmailController.REQUEST_MAPPING_PATH+ EmailController.RESET_PASSWORD_PATH))
-            .hasAuthority(EmailRole.RESET_PASSWORD.name())
+            .permitAll()
 
             .mvcMatchers(HttpMethod.GET, ofPath(EmailProcessController.REQUEST_MAPPING_PATH+ EmailProcessController.VERIFICATION_PATH))
             .permitAll()
