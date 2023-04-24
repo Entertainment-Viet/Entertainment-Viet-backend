@@ -17,7 +17,7 @@ services:
       - internal-network
     restart: on-failure:10
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0
+    image: vietentertainment2023/ve-keycloak:1.1.0
     environment:
       KEYCLOAK_ADMIN: keycloak
       KEYCLOAK_ADMIN_PASSWORD: keycloak
