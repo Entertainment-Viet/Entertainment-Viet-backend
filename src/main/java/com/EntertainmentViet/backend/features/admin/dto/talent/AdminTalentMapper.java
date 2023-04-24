@@ -45,7 +45,6 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "userState", source = "userState", qualifiedBy = StandardTypeMapper.ToUserStateKey.class)
   @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserTypeKey.class)
   @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
-  @Mapping(target = "email", source = "talentDetail.email")
   @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
   @Mapping(target = "address", source = "talentDetail.address")
   @Mapping(target = "taxId", source = "talentDetail.taxId")
@@ -77,6 +76,7 @@ public abstract class AdminTalentMapper {
   @Mapping(target = "displayName", ignore = true)
   @Mapping(target = "talentDetail", ignore = true)
   @Mapping(target = "offerCategories", ignore = true)
+  @Mapping(target = "email", ignore = true)
   public abstract Talent toModel(UpdateAdminTalentDto updateAdminTalentDto);
 
   @Named("toOfferCategories")

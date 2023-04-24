@@ -27,7 +27,6 @@ public abstract class OrganizerMapper {
   @Mapping(target = "userState", source = "userState", qualifiedBy = StandardTypeMapper.ToUserStateKey.class)
   @Mapping(target = "extensions", source = "organizerDetail.extensions", qualifiedBy = ExtensionsMapper.ToJson.class)
   @Mapping(target = "phoneNumber", source = "organizerDetail.phoneNumber")
-  @Mapping(target = "email", source = "organizerDetail.email")
   @Mapping(target = "address", source = "organizerDetail.address")
   @Mapping(target = "taxId", source = "organizerDetail.taxId")
   @Mapping(target = "bankAccountNumber", source = "organizerDetail.bankAccountNumber")
@@ -57,6 +56,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "conversations", ignore = true)
+  @Mapping(target = "email", ignore = true)
   @Mapping(target = "organizerDetail.avatar", source = "avatar")
   @Mapping(target = "organizerDetail.descriptionImg", source = "descriptionImg")
   @Mapping(target = "organizerDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
@@ -76,6 +76,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "accountType", ignore = true)
   @Mapping(target = "conversations", ignore = true)
   @Mapping(target = "hashTag", ignore = true)
+  @Mapping(target = "email", ignore = true)
   @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
   @Mapping(target = "organizerDetail.phoneNumber", source = "phoneNumber")
   @Mapping(target = "organizerDetail.address", source = "address")
@@ -103,8 +104,8 @@ public abstract class OrganizerMapper {
   @Mapping(target = "userType", ignore = true)
   @Mapping(target = "archived", ignore = true)
   @Mapping(target = "conversations", ignore = true)
+  @Mapping(target = "organizerDetail", ignore = true)
   @Mapping(target = "displayName", source = "username")
-  @Mapping(target = "organizerDetail.email", source = "email")
   public abstract Organizer fromCreateDtoToModel(CreatedOrganizerDto createdOrganizerDto);
 
   // Only return non-confidential detail if token have enough permission

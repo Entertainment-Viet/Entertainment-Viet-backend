@@ -54,7 +54,6 @@ public abstract class UserDetail {
   // KYC data
   private String phoneNumber;
 
-  private String email;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "location_id", referencedColumnName = Location_.ID)
@@ -91,9 +90,6 @@ public abstract class UserDetail {
     if (newData.getPhoneNumber() != null) {
       setPhoneNumber(newData.getPhoneNumber());
     }
-    if (newData.getEmail() != null) {
-      setEmail(newData.getEmail());
-    }
     if (newData.getAddress() != null) {
       setAddress(newData.getAddress());
     }
@@ -118,9 +114,6 @@ public abstract class UserDetail {
 
   public boolean isAllKycFilled() {
     if (phoneNumber == null) {
-      return false;
-    }
-    if (email == null) {
       return false;
     }
     if (address == null) {

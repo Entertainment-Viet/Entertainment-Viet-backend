@@ -58,4 +58,5 @@ public abstract class Account extends Identifiable implements Searchable {
   @NotNull
   private List<String> hashTag;
 
+  private String email;
 }

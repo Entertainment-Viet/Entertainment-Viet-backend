@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
   Optional<Account> findByUid(UUID uid);
+
+  Optional<Account> findByEmail(String email);
 }

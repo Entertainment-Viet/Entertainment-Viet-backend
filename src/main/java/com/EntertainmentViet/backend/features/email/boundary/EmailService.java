@@ -9,6 +9,7 @@ import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
 import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.email.dto.EmailDetail;
+import com.EntertainmentViet.backend.features.email.dto.ResetEmailDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import freemarker.template.Template;
@@ -91,10 +92,11 @@ public class EmailService implements EmailBoundary {
   }
 
   @Override
-  public void sendResetPasswordEmail(UUID uid, String baseUrl, String redirectUrl) {
-    var recipientAccount = accountRepository.findByUid(uid);
+  public void sendResetPasswordEmail(ResetEmailDto resetEmailDto, String baseUrl, String redirectUrl) {
+    var recipientEmail = resetEmailDto.getEmail();
+    var recipientAccount = accountRepository.findByEmail(resetEmailDto.getEmail());
     if (recipientAccount.isEmpty()) {
-      log.error("Can not find email recipient with uuid: " + uid);
+      log.error("Can not find recipient with email: " + recipientEmail);
       return;
     }
 
@@ -105,7 +107,7 @@ public class EmailService implements EmailBoundary {
         .contentTemplatePath(RESET_PASSWORD_TEMPLATE_EMAIL_PATH)
         .build();
 
-    var token = keycloakService.getEmailToken(uid, EMAIL_ACTION.UPDATE_PASSWORD, redirectUrl).orElse("");
+    var token = keycloakService.getEmailToken(recipientAccount.get().getUid(), EMAIL_ACTION.UPDATE_PASSWORD, redirectUrl).orElse("");
     String url = UriComponentsBuilder
         .fromHttpUrl(baseUrl)
         .queryParam("key", token)
@@ -169,10 +171,8 @@ public class EmailService implements EmailBoundary {
   }
 
   private String getRecipientEmail(Account account) {
-    if (account instanceof Organizer) {
-      return ((Organizer) account).getOrganizerDetail().getEmail();
-    } else if (account instanceof Talent) {
-      return ((Talent) account).getTalentDetail().getEmail();
+    if (account instanceof Organizer || account instanceof Talent) {
+      return account.getEmail();
     } else {
       log.error("Can not detect the user type of recipient with uid " + account.getUid());
       return "";

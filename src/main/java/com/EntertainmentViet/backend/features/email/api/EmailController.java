@@ -1,7 +1,9 @@
 package com.EntertainmentViet.backend.features.email.api;
 
+import com.EntertainmentViet.backend.config.properties.AuthenticationProperties;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.boundary.EmailBoundary;
+import com.EntertainmentViet.backend.features.email.dto.ResetEmailDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -11,9 +13,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -25,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class EmailController {
 
-  public static final String REQUEST_MAPPING_PATH = "/email/{uid}";
+  public static final String REQUEST_MAPPING_PATH = "/email";
 
   public static final String VERIFICATION_PATH = "/verification";
 
@@ -35,7 +39,9 @@ public class EmailController {
 
   private final ServletContext servletContext;
 
-  @GetMapping(VERIFICATION_PATH)
+  private final AuthenticationProperties authenticationProperties;
+
+  @PostMapping(VERIFICATION_PATH + "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> sendVerificationEmail(JwtAuthenticationToken token, @PathVariable("uid") UUID uid, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletRequest request) {
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to trigger sending email for user with uid '%s'",
@@ -51,20 +57,13 @@ public class EmailController {
     return CompletableFuture.completedFuture(ResponseEntity.ok().build());
   }
 
-  @GetMapping(RESET_PASSWORD_PATH)
-  public CompletableFuture<ResponseEntity<Void>> sendResetPassEmail(JwtAuthenticationToken token, @PathVariable("uid") UUID uid, @RequestParam(name = "redirectUrl") String redirectUrl, HttpServletRequest request) {
-    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to trigger sending email for user with uid '%s'",
-          uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
-    }
-
-    String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
-        .replacePath(servletContext.getContextPath() + EmailProcessController.REQUEST_MAPPING_PATH + EmailProcessController.RESET_PASSWORD_PATH)
-        .queryParam("redirectUrl", redirectUrl)
+  @PostMapping(RESET_PASSWORD_PATH)
+  public CompletableFuture<ResponseEntity<Void>> sendResetPassEmail(JwtAuthenticationToken token, @RequestParam(name = "redirectUrl") String redirectUrl,
+                                                                    @RequestBody @Valid ResetEmailDto resetEmailDto) {
+    String baseUrl = UriComponentsBuilder.fromUriString(authenticationProperties.getKeycloak().getResetPasswordUrl())
         .build()
         .toUriString();
-    emailService.sendResetPasswordEmail(uid, baseUrl, redirectUrl);
+    emailService.sendResetPasswordEmail(resetEmailDto, baseUrl, redirectUrl);
     return CompletableFuture.completedFuture(ResponseEntity.ok().build());
   }
 }

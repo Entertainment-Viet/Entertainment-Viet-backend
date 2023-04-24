@@ -44,7 +44,6 @@ public abstract class TalentMapper {
     @Mapping(target = "userState", source = "userState", qualifiedBy = StandardTypeMapper.ToUserStateKey.class)
     @Mapping(target = "bio", source = "talentDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
     @Mapping(target = "phoneNumber", source = "talentDetail.phoneNumber")
-    @Mapping(target = "email", source = "talentDetail.email")
     @Mapping(target = "address", source = "talentDetail.address")
     @Mapping(target = "taxId", source = "talentDetail.taxId")
     @Mapping(target = "bankAccountNumber", source = "talentDetail.bankAccountNumber")
@@ -79,6 +78,7 @@ public abstract class TalentMapper {
     @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "archived", ignore = true)
     @Mapping(target = "conversations", ignore = true)
+    @Mapping(target = "email", ignore = true)
     @Mapping(target = "talentDetail.avatar", source = "avatar")
     @Mapping(target = "talentDetail.descriptionImg", source = "descriptionImg")
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
@@ -103,6 +103,7 @@ public abstract class TalentMapper {
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "editorChoice", ignore = true)
     @Mapping(target = "hashTag", ignore = true)
+    @Mapping(target = "email", ignore = true)
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserType.class)
     @Mapping(target = "talentDetail.phoneNumber", source = "phoneNumber")
     @Mapping(target = "talentDetail.address", source = "address")
@@ -134,8 +135,8 @@ public abstract class TalentMapper {
     @Mapping(target = "priorityScores", ignore = true)
     @Mapping(target = "conversations", ignore = true)
     @Mapping(target = "editorChoice", ignore = true)
+    @Mapping(target = "talentDetail", ignore = true)
     @Mapping(target = "displayName", source = "username")
-    @Mapping(target = "talentDetail.email", source = "email")
     public abstract Talent fromCreateDtoToModel(CreatedTalentDto createdTalentDto);
 
     // Only return non-confidential detail if token have enough permission

@@ -6,10 +6,7 @@ import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -36,7 +33,7 @@ public class EmailProcessController {
     response.setHeader("Location", TokenUtils.getRedirectUrl(keyToken));
   }
 
-  @GetMapping(RESET_PASSWORD_PATH)
+  @PostMapping(RESET_PASSWORD_PATH)
   public void processResetPasswordEmail(@RequestParam(name = "key") String keyToken, HttpServletResponse response,
                                         @RequestBody @Valid CredentialDto credentialDto) throws IOException {
     emailService.processResetPasswordEmail(keyToken, credentialDto);
