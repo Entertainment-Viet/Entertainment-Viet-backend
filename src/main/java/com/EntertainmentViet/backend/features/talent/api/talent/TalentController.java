@@ -2,7 +2,7 @@ package com.EntertainmentViet.backend.features.talent.api.talent;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ListTalentParamDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.ReadTalentDto;
@@ -53,7 +53,7 @@ public class TalentController {
 
   @GetMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<ReadTalentDto>> findByUid(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
-    boolean isOwnerUser = uid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = uid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token, "ROOT");
 
     return CompletableFuture.completedFuture(talentService.findByUid(uid, isOwnerUser)
             .map( talentDto -> ResponseEntity
@@ -66,7 +66,7 @@ public class TalentController {
   @PostMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<UUID>> sendVerifyRequest(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -85,7 +85,7 @@ public class TalentController {
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, HttpServletRequest request,
                                                         @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentDto updateTalentDto) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -102,7 +102,7 @@ public class TalentController {
   public CompletableFuture<ResponseEntity<UUID>> updateKyc(JwtAuthenticationToken token, HttpServletRequest request,
                                                         @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentKycInfoDto kycInfoDto) {
 
-    if (!uid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

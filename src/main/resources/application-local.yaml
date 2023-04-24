@@ -18,3 +18,4 @@ security:
 authentication:
   keycloak:
     serverUrl: http://keycloak:8080/auth
+    resetPasswordUrl: http://localhost:3000/reset-password

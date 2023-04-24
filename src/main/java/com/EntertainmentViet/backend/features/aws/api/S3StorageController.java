@@ -2,10 +2,9 @@ package com.EntertainmentViet.backend.features.aws.api;
 
 import com.EntertainmentViet.backend.features.aws.boundary.S3StorageBoundary;
 import com.EntertainmentViet.backend.features.common.utils.FileUtils;
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,7 @@ public class S3StorageController {
                                             @RequestParam("public") Boolean isPublic,
                                             @RequestParam("file") MultipartFile file) {
     String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-    UUID ownerId = RestUtils.getUidFromToken(token);
+    UUID ownerId = TokenUtils.getUid(token);
     String fileCode = FileUtils.generateFileCode(ownerId, isPublic, fileExtension);
 
     if (s3StorageService.uploadFile(fileCode, file)) {
@@ -44,7 +43,7 @@ public class S3StorageController {
 
   @GetMapping("/{fileCode}")
   public CompletableFuture<ResponseEntity<byte[]>> getFile(JwtAuthenticationToken token, @PathVariable("fileCode") String fileCode) throws IOException {
-    UUID ownerId = RestUtils.getUidFromToken(token);
+    UUID ownerId = TokenUtils.getUid(token);
     boolean isAccessible = FileUtils.checkIfFileAccessible(fileCode, ownerId);
     if (!isAccessible) {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
@@ -58,7 +57,7 @@ public class S3StorageController {
 
   @DeleteMapping("/{fileCode}")
   public CompletableFuture<ResponseEntity<Boolean>> removeFile(JwtAuthenticationToken token, @PathVariable("fileCode") String fileCode) {
-    UUID ownerId = RestUtils.getUidFromToken(token);
+    UUID ownerId = TokenUtils.getUid(token);
     boolean isAccessible = FileUtils.checkIfFileAccessible(fileCode, ownerId);
     if (!isAccessible) {
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());

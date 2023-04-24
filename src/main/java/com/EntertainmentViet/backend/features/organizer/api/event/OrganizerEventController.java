@@ -5,6 +5,7 @@ import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerB
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
@@ -60,7 +61,7 @@ public class OrganizerEventController {
   public CompletableFuture<ResponseEntity<UUID>> create(JwtAuthenticationToken token, HttpServletRequest request,
                                                         @PathVariable("organizer_uid") UUID organizerUid,
                                                         @RequestBody @Valid CreateEventDto createEventDto) {
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -93,7 +94,7 @@ public class OrganizerEventController {
   public CompletableFuture<ResponseEntity<UUID>> update(JwtAuthenticationToken token, @RequestBody @Valid UpdateEventDto updateEventDto,
                                                         @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -110,7 +111,7 @@ public class OrganizerEventController {
   @DeleteMapping(value = "/{uid}")
   public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -127,7 +128,7 @@ public class OrganizerEventController {
                                                                                @PathVariable("uid") UUID uid,
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListOrganizerBookingParamDto paramDto) {
-    boolean isOwnerUser = organizerUid.equals(RestUtils.getUidFromToken(token)) || RestUtils.isTokenContainPermissions(token, "ROOT");
+    boolean isOwnerUser = organizerUid.equals(TokenUtils.getUid(token)) || TokenUtils.isTokenContainPermissions(token, "ROOT");
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(
         eventService.listBooking(isOwnerUser, organizerUid, paramDto, pageable)
     ));

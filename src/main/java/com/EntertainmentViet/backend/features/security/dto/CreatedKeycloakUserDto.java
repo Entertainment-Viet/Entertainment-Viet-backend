@@ -28,17 +28,4 @@ public class CreatedKeycloakUserDto {
 
   private List<String> groups;
 
-  @NoArgsConstructor
-  @Getter
-  @Setter
-  @SuperBuilder
-  public static class CredentialDto {
-    @Builder.Default
-    private String type = "password";
-
-    @Builder.Default
-    private Boolean temporary = false;
-
-    private String value;
-  }
 }

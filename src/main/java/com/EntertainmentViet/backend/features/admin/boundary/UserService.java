@@ -3,17 +3,17 @@ package com.EntertainmentViet.backend.features.admin.boundary;
 import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
-import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
-import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CreatedKeycloakUserDto;
+import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import com.EntertainmentViet.backend.features.talent.boundary.talent.TalentBoundary;
-import com.EntertainmentViet.backend.features.talent.dto.talent.UpdateTalentDto;
+import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +36,7 @@ public class UserService implements UserBoundary {
     var keycloakUserDto = CreatedKeycloakUserDto.builder()
         .username(createdOrganizerDto.getUsername())
         .email(createdOrganizerDto.getEmail())
-        .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdOrganizerDto.getPassword()).build()))
+        .credentials(List.of(CredentialDto.builder().value(createdOrganizerDto.getPassword()).build()))
         .groups(List.of("GUEST_ORGANIZER"))
         .build();
 
@@ -56,7 +56,7 @@ public class UserService implements UserBoundary {
     var keycloakUserDto = CreatedKeycloakUserDto.builder()
         .username(createdTalentDto.getUsername())
         .email(createdTalentDto.getEmail())
-        .credentials(List.of(CreatedKeycloakUserDto.CredentialDto.builder().value(createdTalentDto.getPassword()).build()))
+        .credentials(List.of(CredentialDto.builder().value(createdTalentDto.getPassword()).build()))
         .groups(List.of("GUEST_TALENT"))
         .build();
 

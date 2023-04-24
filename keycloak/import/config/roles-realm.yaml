@@ -36,6 +36,8 @@
           "BROWSE_EVENT_BOOKING",
           "READ_BOOKING_NOTI",
           "READ_USER_FEE",
+          "VERIFY_EMAIL",
+          "RESET_PASSWORD",
         ]
       }
     }
@@ -134,6 +136,8 @@
           "READ_SCORE",
           "READ_BOOKING_NOTI",
           "READ_USER_FEE",
+          "VERIFY_EMAIL",
+          "RESET_PASSWORD",
         ]
       }
     }

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.api.event;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventOpenPositionBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.event.CreateEventOpenPositionDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventPositionParamDto;
@@ -56,7 +57,7 @@ public class EventPositionController {
                                                         @PathVariable("event_uid") UUID eventUid,
                                                         @RequestBody @Valid CreateEventOpenPositionDto createEventOpenPositionDto) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -94,7 +95,7 @@ public class EventPositionController {
                                                         @PathVariable("event_uid") UUID eventUid,
                                                         @RequestBody @Valid UpdateEventOpenPositionDto updateEventOpenPositionDto) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
@@ -114,7 +115,7 @@ public class EventPositionController {
                                                         @PathVariable("event_uid") UUID eventUid,
                                                         @PathVariable("uid") UUID uid) {
 
-    if (!organizerUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", organizerUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }

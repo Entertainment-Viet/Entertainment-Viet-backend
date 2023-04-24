@@ -2,23 +2,17 @@ package com.EntertainmentViet.backend.features.common.utils;
 
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class RestUtils {
@@ -49,22 +43,6 @@ public class RestUtils {
         .path("/{id}")
         .buildAndExpand(id.toString())
         .toUri();
-  }
-
-  public UUID getUidFromToken(JwtAuthenticationToken token) {
-    String rawUid = token.getToken().getClaim("sub");
-    return UUID.fromString(rawUid);
-  }
-
-  public boolean isTokenContainPermissions(JwtAuthenticationToken token, String... permissions) {
-    var permissionList = token.getAuthorities().stream()
-        .map(GrantedAuthority::getAuthority)
-        .collect(Collectors.toList());
-
-    var missingPermissionsCount = Arrays.stream(permissions)
-        .filter(permission -> !permissionList.contains(permission))
-        .count();
-    return missingPermissionsCount == 0;
   }
 
   public PagingOffset getPagingOffer(List list, Pageable pageable) {

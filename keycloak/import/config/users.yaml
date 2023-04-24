@@ -1,5 +1,7 @@
 {
   "username": "root",
+  "email": "root@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ADMIN_READ_BOOKING_ACCESS",
@@ -34,6 +36,8 @@
 },
 {
   "username": "office_admin",
+  "email": "office_admin@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ADMIN_ARCHIVE_ORGANIZER_ACCESS",
@@ -54,6 +58,8 @@
 },
 {
   "username": "bd_admin",
+  "email": "bd_admin@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ADMIN_READ_BOOKING_ACCESS",
@@ -71,6 +77,8 @@
 },
 {
   "username": "finance_admin",
+  "email": "finance_admin@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ADMIN_READ_BOOKING_ACCESS",
@@ -88,6 +96,8 @@
 },
 {
   "username": "organizer",
+  "email": "organizer@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ORGANIZER_MODIFY_ACCESS",
@@ -104,6 +114,8 @@
 },
 {
   "username": "guest_organizer",
+  "email": "guest_organizer@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "ORGANIZER_READ_ACCESS"
@@ -117,6 +129,8 @@
 },
 {
   "username": "guest_talent",
+  "email": "guest_talent@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "TALENT_READ_ACCESS"
@@ -130,6 +144,8 @@
 },
 {
   "username": "talent",
+  "email": "talent@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "realmRoles": [
     "TALENT_MODIFY_ACCESS",
@@ -146,6 +162,8 @@
 },
 {
   "username": "ssoadmin",
+  "email": "ssoadmin@vietentertainment.com",
+  "emailVerified": true,
   "enabled": true,
   "clientRoles": {
     "realm-management": [

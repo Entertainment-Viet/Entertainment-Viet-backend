@@ -1,6 +1,6 @@
 package com.EntertainmentViet.backend.features.finance.api;
 
-import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.finance.boundary.UserDealFeeRateBoundary;
 import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateDto;
 import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateMapper;
@@ -33,7 +33,7 @@ public class UserDealFeeRateController {
 
   @GetMapping
   public CompletableFuture<ResponseEntity<UserDealFeeRateDto>> findByUid(JwtAuthenticationToken token, @PathVariable("user_uid") UUID userUid) {
-    if (!userUid.equals(RestUtils.getUidFromToken(token)) && !RestUtils.isTokenContainPermissions(token, "ROOT")) {
+    if (!userUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
       log.warn(String.format("The token don't have enough access right to update fee for user with uid '%s'", userUid));
       return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
