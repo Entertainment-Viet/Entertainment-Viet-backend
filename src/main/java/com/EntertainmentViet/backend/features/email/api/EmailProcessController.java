@@ -4,7 +4,6 @@ import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.boundary.EmailBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,6 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
-@Async
 @Validated
 @RequestMapping(path = EmailProcessController.REQUEST_MAPPING_PATH)
 public class EmailProcessController {
@@ -34,7 +32,7 @@ public class EmailProcessController {
   @GetMapping(VERIFICATION_PATH)
   public void processVerificationEmail(@RequestParam(name = "key") String keyToken, HttpServletResponse response) throws IOException {
     emailService.processVerificationEmail(keyToken);
-    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+    response.setStatus(HttpServletResponse.SC_SEE_OTHER);
     response.setHeader("Location", TokenUtils.getRedirectUrl(keyToken));
   }
 

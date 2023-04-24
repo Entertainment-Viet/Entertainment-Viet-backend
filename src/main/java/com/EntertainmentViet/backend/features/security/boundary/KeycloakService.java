@@ -116,11 +116,18 @@ public class KeycloakService implements KeycloakBoundary {
         .ignoreHttpErrors(true)
         .execute();
 
-    if (!checkResponseIsValid(res, EMAIL_ACTION.VERIFY_EMAIL)) {
+    if (res.statusCode() != 200) {
       log.error("Provide token is invalid when processing email verification");
       return;
     }
     Document doc = res.parse();
+
+    Elements results = doc.select(String.format(":containsOwn(%s)", EMAIL_ACTION.VERIFY_EMAIL.text));
+    if (results.isEmpty()) {
+      log.error("Invalid response from keycloak server when requesting email verification");
+      return;
+    }
+
     Element result = doc.select("a[href*=auth/realms/ve-sso/login-actions/action-token]").first();
     String authId = res.cookie("AUTH_SESSION_ID_LEGACY");
     String link = result.attr("href");
@@ -162,8 +169,15 @@ public class KeycloakService implements KeycloakBoundary {
         .ignoreHttpErrors(true)
         .execute();
 
-    if (!checkResponseIsValid(res, EMAIL_ACTION.UPDATE_PASSWORD)) {
-      log.error("Provide token is invalid when processing email verification");
+    if (res.statusCode() != 200) {
+      log.error("Provide token is invalid when processing reset password");
+      return;
+    }
+    Document doc = res.parse();
+
+    Elements results = doc.select(String.format(":containsOwn(%s)", EMAIL_ACTION.UPDATE_PASSWORD.text));
+    if (results.isEmpty()) {
+      log.error("Invalid response from keycloak server when requesting password reset");
       return;
     }
 

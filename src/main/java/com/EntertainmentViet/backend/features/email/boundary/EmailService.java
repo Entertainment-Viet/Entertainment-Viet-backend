@@ -75,7 +75,6 @@ public class EmailService implements EmailBoundary {
     String url = UriComponentsBuilder
         .fromHttpUrl(baseUrl)
         .queryParam("key", token)
-        .queryParam("redirectUrl", redirectUrl)
         .toUriString();
     emailDetail.setVerificationUrl(url);
     emailDetail.setRecipientName(recipientAccount.get().getDisplayName());
@@ -110,7 +109,6 @@ public class EmailService implements EmailBoundary {
     String url = UriComponentsBuilder
         .fromHttpUrl(baseUrl)
         .queryParam("key", token)
-        .queryParam("redirectUrl", redirectUrl)
         .toUriString();
     emailDetail.setVerificationUrl(url);
     emailDetail.setRecipientName(recipientAccount.get().getDisplayName());
