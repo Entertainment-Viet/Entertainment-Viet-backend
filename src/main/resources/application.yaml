@@ -15,8 +15,8 @@ spring:
 #      ddl-auto: update
     properties:
       hibernate:
-#        show_sql: true
-#        format_sql: true
+        show_sql: true
+        format_sql: true
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
         metadata_builder_contributor: com.EntertainmentViet.backend.config.db.SqlFunctionMetadataBuilderContributor
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
@@ -105,9 +105,9 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-#    org:
-#      hibernate:
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: TRACE
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

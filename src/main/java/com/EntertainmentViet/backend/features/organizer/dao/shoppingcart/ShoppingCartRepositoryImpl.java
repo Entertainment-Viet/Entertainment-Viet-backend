@@ -1,6 +1,5 @@
 package com.EntertainmentViet.backend.features.organizer.dao.shoppingcart;
 
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.entities.organizer.QOrganizerShoppingCart;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
@@ -44,7 +43,7 @@ public class ShoppingCartRepositoryImpl extends BaseRepositoryImpl<OrganizerShop
             shoppingCartPredicate.belongToOrganizer(uid),
         shoppingCartPredicate.fromParams(paramDto)
         ))
-        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .orderBy(getSortedColumn(pageable.getSort(), OrganizerShoppingCart.class))
         .fetch();
   }
 }

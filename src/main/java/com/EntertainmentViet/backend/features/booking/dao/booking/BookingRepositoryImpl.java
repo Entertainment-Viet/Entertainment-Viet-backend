@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.booking.dao.booking;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.QBooking;
-import com.EntertainmentViet.backend.domain.entities.organizer.JobOffer;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListEventBookingParamDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
@@ -46,7 +45,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
         .where(ExpressionUtils.allOf(
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.fromParams(paramDto)))
-        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Booking.class))
         .fetch();
   }
 
@@ -57,7 +56,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToOrganizer(organizerId),
             bookingPredicate.fromOrganizerParams(paramDto)))
-        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Booking.class))
         .fetch();
   }
 
@@ -68,7 +67,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToTalent(talentId),
             bookingPredicate.fromTalentParams(paramDto)))
-        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Booking.class))
         .fetch();
   }
 
@@ -79,7 +78,7 @@ public class BookingRepositoryImpl extends BaseRepositoryImpl<Booking, Long> imp
             bookingPredicate.joinAll(queryFactory),
             bookingPredicate.belongToEvent(eventId),
             bookingPredicate.fromEventParams(paramDto)))
-        .orderBy(getSortedColumn(pageable.getSort(), JobOffer.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Booking.class))
         .fetch();
   }
 }

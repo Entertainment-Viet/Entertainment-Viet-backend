@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.talent.dao.talent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.QReview;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.querydsl.core.types.ExpressionUtils;
 import org.springframework.data.domain.Page;
@@ -46,7 +45,7 @@ public class ReviewRepositoryImpl extends BaseRepositoryImpl<Review, Long> imple
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .orderBy(review.createdAt.desc())
-        .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Review.class))
         .fetch())
         .orElse(Collections.emptyList());
 

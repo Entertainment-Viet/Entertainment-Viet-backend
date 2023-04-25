@@ -20,6 +20,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Component
@@ -168,7 +169,11 @@ public class PackagePredicate extends IdentifiablePredicate<Package> {
     return talentPackage.archived.eq(archived);
   }
 
-      public BooleanExpression isTalentArchived(boolean archived) {
-        return talentPackage.talent.archived.eq(archived);
-      }
+  public BooleanExpression isTalentArchived(boolean archived) {
+    return talentPackage.talent.archived.eq(archived);
+  }
+
+  public BooleanExpression afterCurrentDay() {
+    return talentPackage.jobDetail.performanceStartTime.after(OffsetDateTime.now());
+  }
 }

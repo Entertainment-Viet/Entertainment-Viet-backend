@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.organizer.dao.event;
 
 import com.EntertainmentViet.backend.domain.entities.organizer.Event;
 import com.EntertainmentViet.backend.domain.entities.organizer.QEvent;
-import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.features.common.dao.BaseRepositoryImpl;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ListEventParamDto;
 import com.querydsl.core.types.ExpressionUtils;
@@ -44,11 +43,12 @@ public class EventRepositoryImpl extends BaseRepositoryImpl<Event, Long> impleme
     var eventList = Optional.ofNullable(queryFactory.selectFrom(event)
         .where(ExpressionUtils.allOf(
             eventPredicate.joinAll(queryFactory),
-            eventPredicate.fromParams(paramDto)),
+            eventPredicate.fromParams(paramDto),
             eventPredicate.afterCurrentDay())
+        )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
-        .orderBy(getSortedColumn(pageable.getSort(), Talent.class))
+        .orderBy(getSortedColumn(pageable.getSort(), Event.class))
         .fetch())
         .orElse(Collections.emptyList());
 
