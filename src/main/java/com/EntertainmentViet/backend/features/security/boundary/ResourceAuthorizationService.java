@@ -393,6 +393,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
     csrfConfigurer.ignoringAntMatchers(
         anyPathAfter(UserController.REQUEST_MAPPING_PATH),
         anyPathAfter(EmailController.REQUEST_MAPPING_PATH),
+        anyPathAfter(EmailProcessController.REQUEST_MAPPING_PATH),
         anyPathAfter("/ws/**")
     );
   }
