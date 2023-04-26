@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.boundary.organizer;
 
 import com.EntertainmentViet.backend.config.properties.StaticResourceProperties;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerDetail;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -42,6 +43,7 @@ public class OrganizerService implements OrganizerBoundary {
     createdOrganizer.setUserState(UserState.GUEST);
     createdOrganizer.setAccountType(AccountType.ORGANIZER);
     createdOrganizer.setHashTag(new ArrayList<>());
+    createdOrganizer.setOrganizerDetail(OrganizerDetail.builder().organizer(createdOrganizer).build());
     createdOrganizer.getOrganizerDetail().setOrganizer(createdOrganizer);
     createdOrganizer.getOrganizerDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
     createdOrganizer.setArchived(false);

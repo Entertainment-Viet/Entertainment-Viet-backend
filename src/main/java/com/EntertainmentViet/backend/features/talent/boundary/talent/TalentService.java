@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.config.properties.StaticResourceProperties;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -59,6 +60,7 @@ public class TalentService implements TalentBoundary {
         createdTalent.setUserState(UserState.GUEST);
         createdTalent.setAccountType(AccountType.TALENT);
         createdTalent.setHashTag(new ArrayList<>());
+        createdTalent.setTalentDetail(TalentDetail.builder().talent(createdTalent).build());
         createdTalent.getTalentDetail().setAvatar(staticResourceProperties.getDefaultAvatar());
         createdTalent.getTalentDetail().setTalent(createdTalent);
         createdTalent.setReviewSum(Collections.nCopies(5, 0));
