@@ -341,7 +341,7 @@ public class ResourceAuthorizationService implements ResourceAuthorizationBounda
             .hasAuthority(LocationAddressRole.READ_LOCATION.name())
 
             // Email mapping
-            .mvcMatchers(HttpMethod.POST, anyPathAfter(EmailController.REQUEST_MAPPING_PATH + EmailController.VERIFICATION_PATH))
+            .mvcMatchers(HttpMethod.POST, ofPath(EmailController.REQUEST_MAPPING_PATH + EmailController.VERIFICATION_PATH))
             .permitAll()
             .mvcMatchers(HttpMethod.POST, ofPath(EmailController.REQUEST_MAPPING_PATH + EmailController.RESET_PASSWORD_PATH))
             .permitAll()

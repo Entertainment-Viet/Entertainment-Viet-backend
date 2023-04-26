@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Getter
 @Setter
-public class ResetEmailDto {
+public class ResetPassEmailDto {
   private String email;
 }

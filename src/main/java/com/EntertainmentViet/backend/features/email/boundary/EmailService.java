@@ -9,7 +9,7 @@ import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
 import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.email.dto.EmailDetail;
-import com.EntertainmentViet.backend.features.email.dto.ResetEmailDto;
+import com.EntertainmentViet.backend.features.email.dto.ResetPassEmailDto;
 import com.EntertainmentViet.backend.features.security.boundary.KeycloakBoundary;
 import com.EntertainmentViet.backend.features.security.dto.CredentialDto;
 import freemarker.template.Template;
@@ -92,9 +92,9 @@ public class EmailService implements EmailBoundary {
   }
 
   @Override
-  public void sendResetPasswordEmail(ResetEmailDto resetEmailDto, String baseUrl, String redirectUrl) {
-    var recipientEmail = resetEmailDto.getEmail();
-    var recipientAccount = accountRepository.findByEmail(resetEmailDto.getEmail());
+  public void sendResetPasswordEmail(ResetPassEmailDto resetPassEmailDto, String baseUrl, String redirectUrl) {
+    var recipientEmail = resetPassEmailDto.getEmail();
+    var recipientAccount = accountRepository.findByEmail(resetPassEmailDto.getEmail());
     if (recipientAccount.isEmpty()) {
       log.error("Can not find recipient with email: " + recipientEmail);
       return;
