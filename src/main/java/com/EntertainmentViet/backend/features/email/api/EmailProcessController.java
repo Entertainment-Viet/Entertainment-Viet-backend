@@ -29,7 +29,7 @@ public class EmailProcessController {
   @GetMapping(VERIFICATION_PATH)
   public void processVerificationEmail(@RequestParam(name = "key") String keyToken, HttpServletResponse response) throws IOException {
     emailService.processVerificationEmail(keyToken);
-    response.setStatus(HttpServletResponse.SC_SEE_OTHER);
+    response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
     response.setHeader("Location", TokenUtils.getRedirectUrl(keyToken));
   }
 

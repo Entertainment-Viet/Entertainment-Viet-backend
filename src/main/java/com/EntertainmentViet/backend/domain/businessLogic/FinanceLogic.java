@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserType;
 import com.EntertainmentViet.backend.domain.values.FinanceReport;
 import com.EntertainmentViet.backend.domain.values.Price;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +31,7 @@ public class FinanceLogic {
 
   public FinanceReport generateOrganizerBookingReport(Booking booking, FinanceConfig config, FinanceReport report) {
     if (config == null || !config.ifValid()) {
-      log.warn("Can not generate organizer finance report due to invalid config");
+      throw new WrongSystemConfigurationException("Can not generate organizer finance report due to invalid config");
     }
 
     // TODO adding currency conversion
@@ -46,7 +47,7 @@ public class FinanceLogic {
 
   public FinanceReport generateTalentBookingReport(Booking booking, FinanceConfig config, FinanceReport report) {
     if (config == null || !config.ifValid()) {
-      log.warn("Can not generate organizer finance report due to invalid config");
+      throw new WrongSystemConfigurationException("Can not generate organizer finance report due to invalid config");
     }
 
     // TODO adding currency conversion

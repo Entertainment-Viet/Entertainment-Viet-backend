@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.domain.businessLogic;
 
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.values.RepeatPattern;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import net.redhogs.cronparser.CasingTypeEnum;
@@ -38,8 +39,7 @@ public class CronExpressionLogic {
     List<OffsetDateTime> occurrences = new ArrayList<>();
 
     if (!repeatPattern.isValid()) {
-      log.error("The repeatPattern is not valid");
-      return occurrences;
+      throw new InconsistentEntityStateException("The repeatPattern is not valid");
     }
 
     try {
@@ -50,8 +50,7 @@ public class CronExpressionLogic {
         nextOccur = cronExpression.next(nextOccur);
       }
     } catch (IllegalArgumentException e) {
-      log.error(String.format("The cronExpression %s is invalid", repeatPattern.getCronExpression()));
-      throw new RuntimeException(e);
+      throw new InconsistentEntityStateException(String.format("The cronExpression %s is invalid", repeatPattern.getCronExpression()));
     }
     return occurrences;
   }
@@ -62,7 +61,7 @@ public class CronExpressionLogic {
       return String.format("from %s to %s, %s",
           repeatPattern.getStartPeriod().format(cronDateTimeFormatter), repeatPattern.getEndPeriod().format(cronDateTimeFormatter), cronDescription);
     } catch (ParseException e) {
-      throw new RuntimeException(e);
+      throw new InconsistentEntityStateException("Can not get parse repeatPattern: "+repeatPattern.getCronExpression());
     }
   }
 

@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.admin.api;
 
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.admin.boundary.bookings.AdminBookingBoundary;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingParamDto;
 import com.EntertainmentViet.backend.features.admin.dto.bookings.AdminListBookingResponseDto;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -63,8 +63,7 @@ public class AdminBookingController {
                                                         @RequestBody @Valid AdminUpdateBookingDto updateBookingDto) {
 
     if (!adminUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information with uid '%s'", adminUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information with uid '%s'", adminUid));
     }
 
     if (!SecurityUtils.hasRole(AdminRole.ADMIN_UPDATE_BOOKING_PROOF.name())) {

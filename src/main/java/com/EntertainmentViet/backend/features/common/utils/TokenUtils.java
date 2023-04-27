@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.common.utils;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWSObject;
@@ -42,8 +43,7 @@ public class TokenUtils {
       var redirectUrl = payloadJson.get("reduri");
       return redirectUrl.toString().replace("\"", "");
     } catch (JsonProcessingException | ParseException e) {
-      log.error("Can not getting redirectUrl from token: " + rawToken);
-      return "";
+      throw new InvalidInputException("Can not getting redirectUrl from token: " + rawToken);
     }
   }
 
@@ -54,8 +54,7 @@ public class TokenUtils {
       var redirectUrl = payloadJson.get("sub");
       return UUID.fromString(redirectUrl.toString().replace("\"", ""));
     } catch (JsonProcessingException | ParseException e) {
-      log.error("Can not getting redirectUrl from token: " + rawToken);
-      return null;
+      throw new InvalidInputException("Can not getting redirectUrl from token: " + rawToken);
     }
   }
 }

@@ -103,8 +103,7 @@ public class EventOpenPosition extends Identifiable {
                 applicant.setStatus(BookingStatus.CONFIRMED);
                 applicant.setConfirmedAt(OffsetDateTime.now());
               } else {
-                log.warn(String.format("Can not accept applicant with uid '%s' due to out of slot", applicantUid));
-                throw new InconsistentEntityStateException();
+                throw new InconsistentEntityStateException(String.format("Can not accept applicant with uid '%s' due to out of slot", applicantUid));
               }
             },
             () -> {

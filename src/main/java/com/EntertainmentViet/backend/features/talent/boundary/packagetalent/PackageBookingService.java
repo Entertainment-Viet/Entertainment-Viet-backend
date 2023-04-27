@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
@@ -108,8 +108,7 @@ public class PackageBookingService implements PackageBookingBoundary {
         packageRepository.save(packageTalent);
 
         if (createdOrders.isEmpty()) {
-            log.warn("There is no occurrence matching repeatPattern");
-            return Optional.empty();
+            throw new InvalidInputException("There is no occurrence matching repeatPattern");
         } else if (createdOrders.size() == 1) {
             var newBooking = createdOrders.get(0);
             bookingNotifyService.sendCreateNotification(newBooking.getTalent().getUid(), newBooking.getTalent().getDisplayName(), newBooking);
@@ -131,17 +130,12 @@ public class PackageBookingService implements PackageBookingBoundary {
             return false;
         }
 
-        try {
-            var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
-            bookingNotifyService.sendAcceptNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
-            bookingNotifyService.sendAcceptNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
+        var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
+        bookingNotifyService.sendAcceptNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
+        bookingNotifyService.sendAcceptNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
 
-            packageTalent.acceptOrder(bookingId);
-            packageRepository.save(packageTalent);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        packageTalent.acceptOrder(bookingId);
+        packageRepository.save(packageTalent);
         return true;
     }
 
@@ -156,17 +150,12 @@ public class PackageBookingService implements PackageBookingBoundary {
             return false;
         }
 
-        try {
-            var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
-            bookingNotifyService.sendRejectNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
-            bookingNotifyService.sendRejectNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
+        var acceptedBooking = packageTalent.getOrders().stream().filter(booking -> booking.getUid().equals(bookingId)).findAny().orElse(null);
+        bookingNotifyService.sendRejectNotification(acceptedBooking.getTalent().getUid(), acceptedBooking.getTalent().getDisplayName(), acceptedBooking);
+        bookingNotifyService.sendRejectNotification(acceptedBooking.getOrganizer().getUid(), acceptedBooking.getOrganizer().getDisplayName(), acceptedBooking);
 
-            packageTalent.rejectOrder(bookingId);
-            packageRepository.save(packageTalent);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        packageTalent.rejectOrder(bookingId);
+        packageRepository.save(packageTalent);
         return true;
     }
 }

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.talent.boundary.packagetalent;
 
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.talent.dao.packagetalent.PackageRepository;
@@ -64,8 +65,7 @@ public class PackageService implements PackageBoundary {
             return Optional.empty();
         }
         if (aPackage.getJobDetail() == null || aPackage.getJobDetail().getCategory() == null) {
-            log.warn(String.format("Can not create new package for talent with id '%s'", talentId));
-            return Optional.empty();
+            throw new InvalidInputException(String.format("JobDetail is invalid. Can not create new package for talent with id '%s'", talentId));
         }
 
         return Optional.ofNullable(packageRepository.save(aPackage).getUid());

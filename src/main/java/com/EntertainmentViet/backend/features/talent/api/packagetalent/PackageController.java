@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.api.packagetalent;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -43,8 +45,7 @@ public class PackageController {
                                                                                @ParameterObject Pageable pageable,
                                                                                @ParameterObject ListPackageParamDto paramDto) {
     if (QueryParamsUtils.isInvalidParams(paramDto)) {
-      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
-      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+      throw new InvalidInputException(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
     }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
         packageService.findByTalentUid(talentUid, paramDto, pageable)
@@ -70,8 +71,7 @@ public class PackageController {
                                                         @PathVariable("talent_uid") UUID talentUid) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     return  CompletableFuture.completedFuture(packageService.create(createPackageDto, talentUid)
@@ -91,8 +91,7 @@ public class PackageController {
                                                         @PathVariable("talent_uid") UUID talentUid, @PathVariable("uid") UUID uid) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     return  CompletableFuture.completedFuture(packageService.update(updatePackageDto, talentUid, uid)
@@ -109,8 +108,7 @@ public class PackageController {
                                            @PathVariable("uid") UUID uid, @PathVariable("talent_uid") UUID talentUid) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     if (packageService.delete(uid, talentUid)) {

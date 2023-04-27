@@ -4,7 +4,8 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -57,8 +58,7 @@ public class ShoppingCartService implements ShoppingCartBoundary {
         var organizerOptional = organizerRepository.findByUid(organizerUid);
 
         if (organizerOptional.isEmpty()) {
-            log.warn(String.format("There was an invalid cart in shopping cart of organizer with uid '%s'", organizerUid));
-            return false;
+            throw new InconsistentEntityStateException(String.format("Can not find any organizer with uid '%s'", organizerUid));
         }
 
         Organizer organizer = organizerOptional.get();
@@ -97,18 +97,12 @@ public class ShoppingCartService implements ShoppingCartBoundary {
         var organizerOptional = organizerRepository.findByUid(organizerUid);
 
         if (organizerOptional.isEmpty()) {
-            log.warn(String.format("There was an invalid cart in shopping cart of organizer with uid '%s'", organizerUid));
-            return false;
+            throw new InvalidInputException(String.format("Can not find any organizer with uid '%s'", organizerUid));
         }
 
-        try {
-            Organizer organizer = organizerOptional.get();
-            organizer.clearCart();
-            organizerRepository.save(organizer);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Organizer organizer = organizerOptional.get();
+        organizer.clearCart();
+        organizerRepository.save(organizer);
         return true;
     }
 

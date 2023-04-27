@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.config.boundary;
 import com.EntertainmentViet.backend.config.constants.AppConstant;
 import com.EntertainmentViet.backend.domain.entities.AppConfig;
 import com.EntertainmentViet.backend.domain.entities.finance.FinanceConfig;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.EntertainmentViet.backend.features.config.dao.ConfigRepository;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -34,8 +35,7 @@ public class ConfigService implements ConfigBoundary {
       return Optional.of(financeConfigValue);
     }
     catch (JsonSyntaxException jsonSyntaxException) {
-      log.error("The finance appConfig in db not in the correct format");
-      return Optional.empty();
+      throw new WrongSystemConfigurationException("The finance config is not in the correct format", jsonSyntaxException);
     }
   }
 

@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.domain.entities.organizer;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.Searchable;
 import com.EntertainmentViet.backend.domain.entities.advertisement.Advertisable;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.EqualsAndHashCode;
@@ -80,7 +81,7 @@ public class Event extends Identifiable implements Advertisable, Searchable {
         .findAny()
         .ifPresentOrElse(
             position -> position.updateInfo(eventOpenPosition),
-            () -> log.warn(String.format("Can not update information of openPosition with uid '%s'", positionUid))
+            () -> {throw new InconsistentEntityStateException(String.format("Can not update information of openPosition with uid '%s'", positionUid));}
         );
   }
 

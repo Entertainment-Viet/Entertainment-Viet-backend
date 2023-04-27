@@ -1,6 +1,8 @@
 package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerService;
@@ -41,10 +43,9 @@ public class AdminOrganizerController {
         return CompletableFuture.completedFuture(ResponseEntity.ok().build());
       }
     } catch (KeycloakUnauthorizedException ex) {
-      log.error("Can not verify organizer account in keycloak server", ex);
+      throw new WrongSystemConfigurationException("Can not verify organizer account in keycloak server", ex);
     }
-    log.warn(String.format("Can not verify organizer account with id '%s'", uid));
-    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    throw new InvalidInputException(String.format("Can not verify organizer account with id '%s'", uid));
   }
 
   @GetMapping()

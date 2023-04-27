@@ -3,7 +3,6 @@ package com.EntertainmentViet.backend.features.organizer.boundary.event;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
@@ -101,18 +100,13 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
     if (!EntityValidationUtils.isEventBelongToOrganizerWithUid(openPosition.getEvent(), organizerUid)) {
       return false;
     }
+    var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
+    bookingNotifyService.sendAcceptNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
+    bookingNotifyService.sendAcceptNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
 
-    try {
-      var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
-      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
-      bookingNotifyService.sendAcceptNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
+    openPosition.acceptApplicant(bookingUid);
+    eventOpenPositionRepository.save(openPosition);
 
-      openPosition.acceptApplicant(bookingUid);
-      eventOpenPositionRepository.save(openPosition);
-    } catch (EntityNotFoundException ex) {
-      log.warn(ex.getMessage());
-      return false;
-    }
     return true;
   }
 
@@ -130,17 +124,12 @@ public class EventPositionBookingService implements EventPositionBookingBoundary
       return false;
     }
 
-    try {
-      var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
-      bookingNotifyService.sendRejectNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
-      bookingNotifyService.sendRejectNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
+    var acceptedApplicant = openPosition.getApplicants().stream().filter(booking -> booking.getUid().equals(bookingUid)).findAny().orElse(null);
+    bookingNotifyService.sendRejectNotification(acceptedApplicant.getOrganizer().getUid(), acceptedApplicant.getOrganizer().getDisplayName(), acceptedApplicant);
+    bookingNotifyService.sendRejectNotification(acceptedApplicant.getTalent().getUid(), acceptedApplicant.getTalent().getDisplayName(), acceptedApplicant);
 
-      openPosition.rejectApplicant(bookingUid);
-      eventOpenPositionRepository.save(openPosition);
-    } catch (EntityNotFoundException ex) {
-      log.warn(ex.getMessage());
-      return false;
-    }
+    openPosition.rejectApplicant(bookingUid);
+    eventOpenPositionRepository.save(openPosition);
     return true;
   }
 }

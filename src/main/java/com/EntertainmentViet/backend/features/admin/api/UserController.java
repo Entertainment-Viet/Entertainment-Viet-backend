@@ -2,13 +2,15 @@ package com.EntertainmentViet.backend.features.admin.api;
 
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.SystemUnavailableException;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.EntertainmentViet.backend.features.admin.boundary.UserBoundary;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.CreatedOrganizerDto;
 import com.EntertainmentViet.backend.features.talent.dto.talent.CreatedTalentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -48,9 +50,10 @@ public class UserController {
           )
           .orElse(ResponseEntity.badRequest().build())
       );
-    } catch (KeycloakUnauthorizedException | KeycloakUserConflictException ex) {
-      log.error("Can not create organizer", ex);
-      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    } catch (KeycloakUnauthorizedException ex) {
+      throw new WrongSystemConfigurationException("Can not create organizer", ex);
+    } catch (KeycloakUserConflictException ex) {
+      throw new InvalidInputException("Same organizer already exists. Please provide different username and email");
     }
   }
 
@@ -67,11 +70,9 @@ public class UserController {
           .orElse(ResponseEntity.badRequest().build())
       );
     } catch (KeycloakUserConflictException ex) {
-      log.error("Can not create organizer due to username conflict", ex);
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.CONFLICT).build());
+      throw new InvalidInputException("Same talent already exists. Please provide different username and email");
     } catch (KeycloakUnauthorizedException ex) {
-      log.error("Keycloak server unreachable", ex);
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.BAD_GATEWAY).build());
+      throw new SystemUnavailableException("Keycloak server unreachable", ex);
     }
   }
 

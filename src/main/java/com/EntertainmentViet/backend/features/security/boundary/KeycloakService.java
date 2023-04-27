@@ -4,6 +4,9 @@ import com.EntertainmentViet.backend.config.constants.KeycloakConstant;
 import com.EntertainmentViet.backend.config.properties.AuthenticationProperties;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
 import com.EntertainmentViet.backend.exception.KeycloakUserConflictException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.SystemUnavailableException;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.security.dto.*;
@@ -70,11 +73,9 @@ public class KeycloakService implements KeycloakBoundary {
       } else if (ex.getStatusCode().equals(HttpStatus.CONFLICT)) {
         throw new KeycloakUserConflictException(userDto.getUsername());
       } else {
-        log.error("Can not request to keycloak server ", ex);
+        throw new SystemUnavailableException("Can not request to keycloak server ", ex);
       }
     }
-
-    return Optional.empty();
   }
 
   @Override
@@ -95,9 +96,9 @@ public class KeycloakService implements KeycloakBoundary {
         throw new KeycloakUnauthorizedException();
       } else {
         log.error("Can not request to keycloak server ", ex);
+        throw new SystemUnavailableException("Identity provider is not responding");
       }
     }
-    return false;
   }
 
   @Override
@@ -117,15 +118,13 @@ public class KeycloakService implements KeycloakBoundary {
         .execute();
 
     if (res.statusCode() != 200) {
-      log.error("Provide token is invalid when processing email verification");
-      return;
+      throw new InvalidInputException("Provide token is invalid when processing email verification");
     }
     Document doc = res.parse();
 
     Elements results = doc.select(String.format(":containsOwn(%s)", EMAIL_ACTION.VERIFY_EMAIL.text));
     if (results.isEmpty()) {
-      log.error("Invalid response from keycloak server when requesting email verification");
-      return;
+      throw new InvalidInputException("Can not get response from keycloak server when requesting email verification due to invalid token");
     }
 
     Element result = doc.select("a[href*=auth/realms/ve-sso/login-actions/action-token]").first();
@@ -170,21 +169,18 @@ public class KeycloakService implements KeycloakBoundary {
         .execute();
 
     if (res.statusCode() != 200) {
-      log.error("Provide token is invalid when processing reset password");
-      return;
+      throw new InvalidInputException("Provide token is invalid when processing reset password");
     }
     Document doc = res.parse();
 
     Elements results = doc.select(String.format(":containsOwn(%s)", EMAIL_ACTION.UPDATE_PASSWORD.text));
     if (results.isEmpty()) {
-      log.error("Invalid response from keycloak server when requesting password reset");
-      return;
+      throw new InvalidInputException("Can not get response from keycloak server when requesting password reset due to invalid token");
     }
 
     var userUid = TokenUtils.getUid(token);
     if (userUid == null) {
-      log.error("Can not find user uid in key token");
-      return;
+      throw new InvalidInputException("Can not find user uid in key token");
     }
 
     String resetPassUrl = String.format("/admin/realms/%s/users/%s/reset-password",
@@ -202,7 +198,7 @@ public class KeycloakService implements KeycloakBoundary {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
         throw new KeycloakUnauthorizedException();
       } else {
-        log.error("Can not request to keycloak server ", ex);
+        throw new SystemUnavailableException("Can not request to keycloak server ", ex);
       }
     }
   }
@@ -240,9 +236,9 @@ public class KeycloakService implements KeycloakBoundary {
       }
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
-        log.error("Can not setup KeycloakConstant due to unauthorized", new KeycloakUnauthorizedException());
+        throw new WrongSystemConfigurationException("Can not setup KeycloakConstant due to unauthorized", new KeycloakUnauthorizedException());
       } else {
-        log.error("Can not request to keycloak server ", ex);
+        throw new SystemUnavailableException("Can not request to keycloak server ", ex);
       }
     }
   }
@@ -275,14 +271,12 @@ public class KeycloakService implements KeycloakBoundary {
       return Optional.ofNullable(keycloakRestTemplate.postForObject(loginUrl, request, TokenDto.class));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
-        log.error("Can not authorized to keycloak server. " +
+        throw new WrongSystemConfigurationException("Can not authorized to keycloak server. " +
             "Please check authentication.keycloak.adminUsername and authentication.keycloak.adminPassword properties");
       } else {
-        log.error("Can not request to keycloak server ", ex);
+        throw new SystemUnavailableException("Can not request to keycloak server ", ex);
       }
     }
-
-    return Optional.empty();
   }
 
   public Optional<String> getEmailToken(UUID userUid, EMAIL_ACTION action, String redirectUrl) {
@@ -306,13 +300,11 @@ public class KeycloakService implements KeycloakBoundary {
       return Optional.ofNullable(keycloakRestTemplate.postForObject(url, request, String.class));
     } catch (HttpStatusCodeException ex) {
       if (ex.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
-        log.error("Can not authorized to keycloak server. " +
+        throw new WrongSystemConfigurationException("Can not authorized to keycloak server. " +
             "Please check authentication.keycloak.adminUsername and authentication.keycloak.adminPassword properties");
       } else {
-        log.error("Can not get email token from keycloak server ", ex);
+        throw new SystemUnavailableException("Can not get email token from keycloak server ", ex);
       }
     }
-
-    return Optional.empty();
   }
 }

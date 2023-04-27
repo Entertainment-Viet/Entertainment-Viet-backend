@@ -4,7 +4,7 @@ import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -71,8 +71,7 @@ public class TalentBookingService implements TalentBookingBoundary {
             return Optional.empty();
         }
         if (!talentUid.equals(booking.getTalent().getUid())) {
-            log.warn(String.format("Inconsistent input when creating a booking for talent '%s'", talentUid));
-            return Optional.empty();
+            throw new InvalidInputException(String.format("Inconsistent input when creating a booking for talent '%s'", talentUid));
         }
 
         if (createBookingDto.getRepeatPattern() == null) {
@@ -109,8 +108,7 @@ public class TalentBookingService implements TalentBookingBoundary {
 
         Booking updatingBooking = bookingOptional.get();
         if (!talentUid.equals(updatingBooking.getTalent().getUid())) {
-            log.warn(String.format("Can not find booking with id '%s' belong to talent with id '%s'", uid, talentUid));
-            return Optional.empty();
+            throw new InvalidInputException(String.format("Can not find booking with id '%s' belong to talent with id '%s'", uid, talentUid));
         }
 
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
@@ -131,17 +129,12 @@ public class TalentBookingService implements TalentBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
-            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+        bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+        bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
-            Talent talent = booking.getTalent();
-            talent.acceptBooking(bookingId);
-            talentRepository.save(talent);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Talent talent = booking.getTalent();
+        talent.acceptBooking(bookingId);
+        talentRepository.save(talent);
         return true;
     }
 
@@ -156,17 +149,12 @@ public class TalentBookingService implements TalentBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
-            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+        bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+        bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
-            Talent talent = booking.getTalent();
-            talent.rejectBooking(bookingId);
-            talentRepository.save(talent);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Talent talent = booking.getTalent();
+        talent.rejectBooking(bookingId);
+        talentRepository.save(talent);
         return true;
     }
 
@@ -181,16 +169,11 @@ public class TalentBookingService implements TalentBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendFinishNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+        bookingNotifyService.sendFinishNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
 
-            Talent talent = booking.getTalent();
-            talent.finishBooking(bookingId);
-            talentRepository.save(talent);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Talent talent = booking.getTalent();
+        talent.finishBooking(bookingId);
+        talentRepository.save(talent);
         return true;
     }
 }
