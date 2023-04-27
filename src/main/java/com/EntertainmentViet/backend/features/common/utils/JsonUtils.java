@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.common.utils;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,9 +20,8 @@ public class JsonUtils {
     try {
       return mapper.readTree(jsonString);
     } catch (JsonProcessingException e) {
-      log.error(String.format("Can not deserialize json: %s", jsonString));
+      throw new InvalidInputException(String.format("Can not deserialize json: %s", jsonString));
     }
-    return null;
   }
 
   public String nodeToJson(JsonNode node) {

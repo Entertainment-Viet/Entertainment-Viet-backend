@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.api.organizer;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.organizer.OrganizerBoundary;
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.ReadOrganizerDto;
@@ -7,7 +9,6 @@ import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrga
 import com.EntertainmentViet.backend.features.organizer.dto.organizer.UpdateOrganizerKycInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -51,16 +52,14 @@ public class OrganizerController {
   public CompletableFuture<ResponseEntity<UUID>> sendVerifyRequest(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
     }
 
     if (organizerService.sendVerifyRequest(uid)) {
       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
 
-    log.warn(String.format("Can not verify organizer account with id '%s'", uid));
-    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    throw new InvalidInputException(String.format("Can not verify organizer account with id '%s'", uid));
   }
 
   @PutMapping(value = "/{uid}")
@@ -68,8 +67,7 @@ public class OrganizerController {
                                                             @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateOrganizerDto updateOrganizerDto) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
     }
 
     return  CompletableFuture.completedFuture(organizerService.update(updateOrganizerDto, uid)
@@ -85,8 +83,7 @@ public class OrganizerController {
                                                                @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateOrganizerKycInfoDto kycInfoDto) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of organizer with uid '%s'", uid));
     }
 
     var resultUidOptional = organizerService.updateKyc(kycInfoDto, uid);

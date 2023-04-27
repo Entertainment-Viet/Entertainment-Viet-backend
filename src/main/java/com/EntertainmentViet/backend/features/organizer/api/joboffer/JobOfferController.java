@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.joboffer;
 
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -43,8 +43,7 @@ public class JobOfferController {
                                                                                            @ParameterObject ListJobOfferParamDto paramDto) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
@@ -58,8 +57,7 @@ public class JobOfferController {
                                                                       @PathVariable("uid") UUID uid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(jobOfferService.findByOrganizerUidAndUid(organizerUid, uid)
@@ -78,8 +76,7 @@ public class JobOfferController {
                                                         @PathVariable("organizer_uid") UUID organizerUid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(jobOfferService.create(createJobOfferDto, organizerUid)
@@ -98,8 +95,7 @@ public class JobOfferController {
                                                         @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(jobOfferService.update(updateJobOfferDto, organizerUid, uid)
@@ -115,8 +111,7 @@ public class JobOfferController {
   public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     if (jobOfferService.delete(uid, organizerUid)) {

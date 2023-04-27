@@ -6,6 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.Account;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.exception.KeycloakUnauthorizedException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.EntertainmentViet.backend.features.common.dao.AccountRepository;
 import com.EntertainmentViet.backend.features.email.EMAIL_ACTION;
 import com.EntertainmentViet.backend.features.email.dto.EmailDetail;
@@ -61,8 +63,7 @@ public class EmailService implements EmailBoundary {
   public void sendVerificationEmail(UUID uid, String baseUrl, String redirectUrl) {
     var recipientAccount = accountRepository.findByUid(uid);
     if (recipientAccount.isEmpty()) {
-      log.error("Can not find email recipient with uuid: " + uid);
-      return;
+      throw new InvalidInputException("Can not find email recipient with uuid: " + uid);
     }
 
     EmailDetail emailDetail = EmailDetail.builder()
@@ -83,11 +84,11 @@ public class EmailService implements EmailBoundary {
     try {
       sendEmail(emailDetail);
     } catch (MessagingException e) {
-      log.error("Multiple part HTML email is not supporting");
+      throw new WrongSystemConfigurationException("Multiple part HTML email is not supporting", e);
     } catch (IOException e) {
-      log.error("Can not get email template from path: " + VERIFICATION_TEMPLATE_EMAIL_PATH);
+      throw new WrongSystemConfigurationException("Can not get email template from path: " + VERIFICATION_TEMPLATE_EMAIL_PATH, e);
     } catch (TemplateException e) {
-      log.error("Can not get parse email template at: " + VERIFICATION_TEMPLATE_EMAIL_PATH);
+      throw new WrongSystemConfigurationException("Can not get parse email template at: " + VERIFICATION_TEMPLATE_EMAIL_PATH, e);
     }
   }
 
@@ -96,8 +97,7 @@ public class EmailService implements EmailBoundary {
     var recipientEmail = resetPassEmailDto.getEmail();
     var recipientAccount = accountRepository.findByEmail(resetPassEmailDto.getEmail());
     if (recipientAccount.isEmpty()) {
-      log.error("Can not find recipient with email: " + recipientEmail);
-      return;
+      throw new InvalidInputException("Can not find recipient with email: " + recipientEmail);
     }
 
     EmailDetail emailDetail = EmailDetail.builder()
@@ -118,11 +118,11 @@ public class EmailService implements EmailBoundary {
     try {
       sendEmail(emailDetail);
     } catch (MessagingException e) {
-      log.error("Multiple part HTML email is not supporting");
+      throw new WrongSystemConfigurationException("Multiple part HTML email is not supporting", e);
     } catch (IOException e) {
-      log.error("Can not get email template from path: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH);
+      throw new WrongSystemConfigurationException("Can not get email template from path: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH, e);
     } catch (TemplateException e) {
-      log.error("Can not get parse email template at: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH);
+      throw new WrongSystemConfigurationException("Can not get parse email template at: " + RESET_PASSWORD_TEMPLATE_EMAIL_PATH, e);
     }
   }
 
@@ -131,7 +131,7 @@ public class EmailService implements EmailBoundary {
     try {
       keycloakService.triggerEmailVerification(token);
     } catch (IOException e) {
-      log.error("Can not processing email verification from token: " + token);
+      throw new InvalidInputException("Can not processing email verification from token: " + token);
     }
   }
 
@@ -140,9 +140,9 @@ public class EmailService implements EmailBoundary {
     try {
       keycloakService.triggerPasswordReset(token, credentialDto);
     } catch (IOException e) {
-      log.error("Can not processing password reset from token: " + token);
+      throw new InvalidInputException("Can not processing password reset from token: " + token);
     } catch (KeycloakUnauthorizedException e) {
-      log.error("Can not verify talent account in keycloak server", e);
+      throw new WrongSystemConfigurationException("Can not verify talent account in keycloak server", e);
     }
   }
 
@@ -174,8 +174,7 @@ public class EmailService implements EmailBoundary {
     if (account instanceof Organizer || account instanceof Talent) {
       return account.getEmail();
     } else {
-      log.error("Can not detect the user type of recipient with uid " + account.getUid());
-      return "";
+      throw new InvalidInputException("Can not detect the user type of recipient with uid " + account.getUid());
     }
   }
 }

@@ -6,8 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.exception.InconsistentDataException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -77,8 +77,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return Optional.empty();
         }
         if (!organizerUid.equals(booking.getOrganizer().getUid())) {
-            log.warn(String.format("Inconsistent input when creating a booking for organizer '%s'", organizerUid));
-            return Optional.empty();
+            throw new InvalidInputException(String.format("Inconsistent input when creating a booking for organizer '%s'", organizerUid));
         }
 
         if (createBookingDto.getRepeatPattern() == null) {
@@ -92,8 +91,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
                 .collect(Collectors.toList());
             bookingNotifyService.sendCreateRepeatNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking, createBookingDto.getRepeatPattern());
             if (createdUid.isEmpty()) {
-                log.warn("There is no occurrence matching repeatPattern");
-                return Optional.empty();
+                throw new InvalidInputException("There is no occurrence matching repeatPattern");
             } else {
                 return Optional.of(createdUid);
             }
@@ -109,8 +107,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
 
         Booking updatingBooking = bookingOptional.get();
         if (!organizerUid.equals(updatingBooking.getOrganizer().getUid())) {
-            log.warn(String.format("Can not find booking with id '%s' belong to organizer with id '%s'", uid, organizerUid));
-            return Optional.empty();
+            throw new InvalidInputException(String.format("Can not find booking with id '%s' belong to organizer with id '%s'", uid, organizerUid));
         }
 
         var newBookingData = bookingMapper.fromUpdateDtoToModel(updateBookingDto);
@@ -131,17 +128,12 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
-            bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+        bookingNotifyService.sendAcceptNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+        bookingNotifyService.sendAcceptNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
-            Organizer organizer = booking.getOrganizer();
-            organizer.acceptBooking(bookingId);
-            organizerRepository.save(organizer);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Organizer organizer = booking.getOrganizer();
+        organizer.acceptBooking(bookingId);
+        organizerRepository.save(organizer);
         return true;
     }
 
@@ -156,17 +148,12 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
-            bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+        bookingNotifyService.sendRejectNotification(booking.getOrganizer().getUid(), booking.getOrganizer().getDisplayName(), booking);
+        bookingNotifyService.sendRejectNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
-            Organizer organizer = booking.getOrganizer();
-            organizer.rejectBooking(bookingId);
-            organizerRepository.save(organizer);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Organizer organizer = booking.getOrganizer();
+        organizer.rejectBooking(bookingId);
+        organizerRepository.save(organizer);
         return true;
     }
 
@@ -181,20 +168,15 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             return false;
         }
 
-        try {
-            bookingNotifyService.sendFinishNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
+        bookingNotifyService.sendFinishNotification(booking.getTalent().getUid(), booking.getTalent().getDisplayName(), booking);
 
-            Organizer organizer = booking.getOrganizer();
-            organizer.finishBooking(bookingId);
-            organizerRepository.save(organizer);
-        } catch (EntityNotFoundException ex) {
-            log.warn(ex.getMessage());
-            return false;
-        }
+        Organizer organizer = booking.getOrganizer();
+        organizer.finishBooking(bookingId);
+        organizerRepository.save(organizer);
         return true;
     }
 
-    @Transactional(rollbackFor = {InconsistentDataException.class})
+    @Transactional(rollbackFor = {InconsistentEntityStateException.class})
     public Optional<UUID> finishBooingAndReview(CreateReviewDto reviewDto, UUID organizerUid, UUID bookingUid) {
         Optional<UUID> result;
         if (!finishBooking(organizerUid, bookingUid)) {
@@ -203,7 +185,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             result = reviewService.addReviewToBooking(reviewDto, bookingUid);
         }
         if (result.isEmpty()) {
-            throw new InconsistentDataException();
+            log.error("Rollback database operation");
+            throw new InconsistentEntityStateException();
         }
         return  result;
     }

@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.domain.businessLogic;
 
 import com.EntertainmentViet.backend.domain.entities.talent.PriorityScore;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -59,8 +60,7 @@ public class ScoreSystemLogic {
       // Update for Reward List
       else {
         if (score.getScoreType() == null) {
-          log.error(String.format("Can not find score type for achievement %s of talent with uid '%s'", score.getAchievement(), talent.getUid()));
-          return;
+          throw new InconsistentEntityStateException(String.format("Can not find score type for achievement %s of talent with uid '%s'", score.getAchievement(), talent.getUid()));
         }
         var existReward = scoreTypeIdToExistRewards.get(score.getScoreType().getId());
         // If Reward didn't exist yet

@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.talent.api.talent;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
@@ -12,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -45,8 +46,7 @@ public class TalentController {
   public CompletableFuture<ResponseEntity<CustomPage<ReadTalentDto>>> findAll(@ParameterObject Pageable pageable,
                                                                               @ParameterObject ListTalentParamDto paramDto) {
     if (QueryParamsUtils.isInvalidParams(paramDto)) {
-      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
-      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+      throw new InvalidInputException(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
     }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(talentService.findAll(paramDto, pageable)));
   }
@@ -67,15 +67,13 @@ public class TalentController {
   public CompletableFuture<ResponseEntity<UUID>> sendVerifyRequest(JwtAuthenticationToken token, @PathVariable("uid") UUID uid) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
     }
 
     if (talentService.sendVerifyRequest(uid)) {
       return CompletableFuture.completedFuture(ResponseEntity.ok().build());
     }
-    log.warn(String.format("Can not verify talent account with id '%s'", uid));
-    return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+    throw new InvalidInputException(String.format("Can not verify talent account with id '%s'", uid));
   }
 
   @PutMapping(
@@ -86,8 +84,7 @@ public class TalentController {
                                                         @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentDto updateTalentDto) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
     }
 
     return  CompletableFuture.completedFuture(talentService.update(updateTalentDto, uid)
@@ -103,8 +100,7 @@ public class TalentController {
                                                         @PathVariable("uid") UUID uid, @RequestBody @Valid UpdateTalentKycInfoDto kycInfoDto) {
 
     if (!uid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", uid));
     }
 
     var resultUidOptional = talentService.updateKyc(kycInfoDto, uid);

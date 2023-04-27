@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.features.talent.boundary.talent;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Review;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
@@ -73,8 +74,7 @@ public class ReviewService implements ReviewBoundary {
   @Override
   public Optional<UUID> create(CreateReviewDto reviewDto, UUID talentUid) {
     if (!reviewDto.getTalentId().equals(talentUid)) {
-      log.warn(String.format("Inconsistent between url and request object '%s' != '%s'", reviewDto.getTalentId(), talentUid));
-      return Optional.empty();
+      throw new InvalidInputException(String.format("Inconsistent between url and request object '%s' != '%s'", reviewDto.getTalentId(), talentUid));
     }
 
     Review review = reviewMapper.fromCreateToModel(reviewDto);
@@ -84,8 +84,7 @@ public class ReviewService implements ReviewBoundary {
       return Optional.empty();
     }
     if (review.getOrganizer() == null) {
-      log.warn(String.format("Can not find organizer with id '%s' that making the review for talent at id '%s'", reviewDto.getOrganizerId(), talentUid));
-      return Optional.empty();
+      throw new InvalidInputException(String.format("Can not find organizer with id '%s' that making the review for talent at id '%s'", reviewDto.getOrganizerId(), talentUid));
     }
 
     talent.addReview(review);

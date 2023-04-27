@@ -1,5 +1,7 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListBookingResponseDto;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ListOrganizerBookingParamDto;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
@@ -15,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -47,8 +48,7 @@ public class OrganizerEventController {
                                                                                         @ParameterObject Pageable pageable,
                                                                                         @ParameterObject ListEventParamDto paramDto) {
     if (QueryParamsUtils.isInvalidParams(paramDto)) {
-      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
-      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+      throw new InvalidInputException(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
     }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(RestUtils.toPageResponse(
         eventService.findByOrganizerUid(organizerUid, paramDto, pageable)
@@ -62,8 +62,7 @@ public class OrganizerEventController {
                                                         @PathVariable("organizer_uid") UUID organizerUid,
                                                         @RequestBody @Valid CreateEventDto createEventDto) {
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(eventService.create(createEventDto, organizerUid)
@@ -95,8 +94,7 @@ public class OrganizerEventController {
                                                         @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     return CompletableFuture.completedFuture(eventService.update(updateEventDto, organizerUid, uid)
@@ -112,8 +110,7 @@ public class OrganizerEventController {
   public CompletableFuture<ResponseEntity<Void>> delete(JwtAuthenticationToken token, @PathVariable("organizer_uid") UUID organizerUid, @PathVariable("uid") UUID uid) {
 
     if (!organizerUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to get information of organizer with uid '%s'", organizerUid));
     }
 
     if (eventService.delete(uid, organizerUid)) {

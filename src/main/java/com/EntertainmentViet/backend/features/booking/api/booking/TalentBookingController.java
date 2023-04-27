@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.api.booking;
 
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.BookingBoundary;
 import com.EntertainmentViet.backend.features.booking.boundary.booking.TalentBookingBoundary;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -62,8 +62,7 @@ public class TalentBookingController {
                                                               @RequestBody @Valid CreateBookingDto createBookingDto) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     return  CompletableFuture.completedFuture(talentBookingService.create(talentUid, createBookingDto)
@@ -84,8 +83,7 @@ public class TalentBookingController {
                                                         @RequestBody @Valid UpdateBookingDto updateBookingDto) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     return  CompletableFuture.completedFuture(talentBookingService.update(talentUid, uid, updateBookingDto)
@@ -114,8 +112,7 @@ public class TalentBookingController {
                                                                @PathVariable("uid") UUID bookingUid) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     if (talentBookingService.acceptBooking(talentUid, bookingUid)) {
@@ -130,8 +127,7 @@ public class TalentBookingController {
                                                                @PathVariable("uid") UUID bookingUid) {
 
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     if (talentBookingService.rejectBooking(talentUid, bookingUid)) {
@@ -146,8 +142,7 @@ public class TalentBookingController {
                                                                            @PathVariable("uid") UUID bookingUid,
                                                                            @RequestBody @Valid CreateReviewDto reviewDto) {
     if (!talentUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update information of talent with uid '%s'", talentUid));
     }
 
     if (talentBookingService.finishBooking(talentUid, bookingUid)) {

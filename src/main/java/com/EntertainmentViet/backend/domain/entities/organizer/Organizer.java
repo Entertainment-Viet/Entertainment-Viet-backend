@@ -6,7 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.querydsl.core.annotations.QueryInit;
@@ -164,8 +165,7 @@ public class Organizer extends Users {
         .filter(Predicate.not(OrganizerShoppingCart::checkValidCartItem))
         .collect(Collectors.toList());
     if (invalidPackage.size() != 0) {
-      log.warn("Exist invalid cart item in shopping cart");
-      return false;
+      throw new InconsistentEntityStateException("Exist invalid cart item in shopping cart");
     }
     return true;
   }
@@ -226,12 +226,10 @@ public class Organizer extends Users {
   @Override
   protected boolean checkIfUserVerifiable() {
     if (getUserType() == null) {
-      log.warn(String.format("The organizer with uid '%s' do not have userType yet", getUid()));
-      return false;
+      throw new InconsistentEntityStateException(String.format("The organizer with uid '%s' do not have userType yet", getUid()));
     }
     if (!organizerDetail.isAllKycFilled()) {
-      log.warn(String.format("The organizer with uid '%s' have not filled all kyc information yet", getUid()));
-      return false;
+      throw new InconsistentEntityStateException(String.format("The organizer with uid '%s' have not filled all kyc information yet", getUid()));
     }
 
     return true;

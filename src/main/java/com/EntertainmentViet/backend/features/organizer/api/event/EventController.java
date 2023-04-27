@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.organizer.api.event;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.QueryParamsUtils;
 import com.EntertainmentViet.backend.features.organizer.boundary.event.EventBoundary;
@@ -37,8 +38,7 @@ public class EventController {
   public CompletableFuture<ResponseEntity<CustomPage<ReadEventDto>>> findAll(@ParameterObject Pageable pageable,
                                                                              @ParameterObject ListEventParamDto paramDto) {
     if (QueryParamsUtils.isInvalidParams(paramDto)) {
-      log.warn(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
-      return CompletableFuture.completedFuture(ResponseEntity.badRequest().build());
+      throw new InvalidInputException(String.format("Currency is not provided '%s'", paramDto.getCurrency()));
     }
     return CompletableFuture.completedFuture(ResponseEntity.ok().body(eventService.findAll(paramDto, pageable)));
   }

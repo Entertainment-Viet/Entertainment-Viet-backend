@@ -1,7 +1,8 @@
 package com.EntertainmentViet.backend.features.aws.boundary;
 
 import com.EntertainmentViet.backend.config.properties.AwsProperties;
-import com.EntertainmentViet.backend.features.common.utils.FileUtils;
+import com.EntertainmentViet.backend.exception.rest.SystemUnavailableException;
+import com.EntertainmentViet.backend.exception.rest.WrongSystemConfigurationException;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -35,16 +35,14 @@ public class S3StorageService implements S3StorageBoundary {
       log.info(String.format("File %s uploaded" ,fileCode));
       return true;
     } catch (IOException ioe) {
-      log.error("IOException: " + ioe.getMessage());
+      throw new WrongSystemConfigurationException(String.format("Can not upload file %s to cloud", fileCode), ioe);
     } catch (AmazonServiceException serviceException) {
-      log.info("AmazonServiceException: "+ serviceException.getMessage());
-      throw serviceException;
+      log.info("AmazonServiceException happened. File not uploaded: " + fileCode);
+      throw new SystemUnavailableException("Can not connect to cloud service", serviceException);
     } catch (AmazonClientException clientException) {
-      log.info("AmazonClientException Message: " + clientException.getMessage());
-      throw clientException;
+      log.info("AmazonClientException happened. File not uploaded: " + fileCode);
+      throw new SystemUnavailableException("Can not connect to cloud service", clientException);
     }
-    log.info("File not uploaded: " + fileCode);
-    return false;
   }
 
   @Override

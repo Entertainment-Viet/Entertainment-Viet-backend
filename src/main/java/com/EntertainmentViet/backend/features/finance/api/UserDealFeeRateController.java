@@ -1,12 +1,12 @@
 package com.EntertainmentViet.backend.features.finance.api;
 
+import com.EntertainmentViet.backend.exception.rest.UnauthorizedTokenException;
 import com.EntertainmentViet.backend.features.common.utils.TokenUtils;
 import com.EntertainmentViet.backend.features.finance.boundary.UserDealFeeRateBoundary;
 import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateDto;
 import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -34,8 +34,7 @@ public class UserDealFeeRateController {
   @GetMapping
   public CompletableFuture<ResponseEntity<UserDealFeeRateDto>> findByUid(JwtAuthenticationToken token, @PathVariable("user_uid") UUID userUid) {
     if (!userUid.equals(TokenUtils.getUid(token)) && !TokenUtils.isTokenContainPermissions(token, "ROOT")) {
-      log.warn(String.format("The token don't have enough access right to update fee for user with uid '%s'", userUid));
-      return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+      throw new UnauthorizedTokenException(String.format("The token don't have enough access right to update fee for user with uid '%s'", userUid));
     }
 
     return CompletableFuture.completedFuture(userDealFeeRateService.findByUid(userUid)

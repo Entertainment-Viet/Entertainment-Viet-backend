@@ -11,7 +11,8 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.querydsl.core.annotations.QueryInit;
@@ -310,12 +311,10 @@ public class Talent extends Users implements Advertisable {
   @Override
   protected boolean checkIfUserVerifiable() {
     if (getUserType() == null) {
-      log.warn(String.format("The talent with uid '%s' do not have userType yet", getUid()));
-      return false;
+      throw new InconsistentEntityStateException(String.format("The talent with uid '%s' do not have userType yet", getUid()));
     }
     if (!talentDetail.isAllKycFilled()) {
-      log.warn(String.format("The talent with uid '%s' have not filled all kyc information yet", getUid()));
-      return false;
+      throw new InconsistentEntityStateException(String.format("The talent with uid '%s' have not filled all kyc information yet", getUid()));
     }
 
     return true;

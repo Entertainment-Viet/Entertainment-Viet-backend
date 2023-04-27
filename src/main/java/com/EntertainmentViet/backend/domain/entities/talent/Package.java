@@ -11,7 +11,8 @@ import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PackageType;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
 import com.EntertainmentViet.backend.domain.values.RepeatPattern;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
@@ -148,8 +149,7 @@ public class Package extends Identifiable {
     } else if (packageType == PackageType.RECURRING) {
       return CronExpressionLogic.generateBookingList(booking, repeatPattern);
     } else {
-      log.error("Undefine package type");
-      throw new IllegalStateException();
+      throw new InconsistentEntityStateException("Undefine package type");
     }
   }
 

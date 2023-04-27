@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.booking.boundary.category;
 
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
 import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CreateCategoryDto;
@@ -36,9 +37,8 @@ public class CategoryService implements CategoryBoundary {
   public Optional<UUID> create(CreateCategoryDto createCategoryDto) {
     var newCategory = categoryMapper.toModel(createCategoryDto);
     if (newCategory.getParent() == null && createCategoryDto.getParentUid() != null) {
-      log.error(String.format("Can not find corresponding parent category with uid %s when creating new child category",
+      throw new InvalidInputException(String.format("Can not find corresponding parent category with uid %s when creating new child category",
           createCategoryDto.getParentUid()));
-      return Optional.empty();
     }
 
     return Optional.ofNullable(categoryRepository.save(newCategory).getUid());
