@@ -11,7 +11,7 @@ import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.querydsl.core.annotations.QueryInit;

@@ -6,8 +6,8 @@ import com.EntertainmentViet.backend.domain.entities.Identifiable;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.exception.InconsistentDataException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
@@ -194,7 +194,7 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
         return true;
     }
 
-    @Transactional(rollbackFor = {InconsistentDataException.class})
+    @Transactional(rollbackFor = {InconsistentEntityStateException.class})
     public Optional<UUID> finishBooingAndReview(CreateReviewDto reviewDto, UUID organizerUid, UUID bookingUid) {
         Optional<UUID> result;
         if (!finishBooking(organizerUid, bookingUid)) {
@@ -203,7 +203,8 @@ public class OrganizerBookingService implements OrganizerBookingBoundary {
             result = reviewService.addReviewToBooking(reviewDto, bookingUid);
         }
         if (result.isEmpty()) {
-            throw new InconsistentDataException();
+            log.error("Rollback database operation");
+            throw new InconsistentEntityStateException();
         }
         return  result;
     }

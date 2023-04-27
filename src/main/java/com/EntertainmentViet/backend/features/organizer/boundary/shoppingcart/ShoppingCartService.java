@@ -4,7 +4,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.organizer.OrganizerShoppingCart;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;

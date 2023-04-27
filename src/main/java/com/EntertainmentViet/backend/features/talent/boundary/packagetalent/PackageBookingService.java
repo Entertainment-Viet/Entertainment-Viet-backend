@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.booking.JobDetail;
 import com.EntertainmentViet.backend.domain.entities.organizer.Organizer;
 import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;

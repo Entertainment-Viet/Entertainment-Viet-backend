@@ -4,7 +4,7 @@ import com.EntertainmentViet.backend.domain.businessLogic.FinanceLogic;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.booking.dao.booking.BookingRepository;
 import com.EntertainmentViet.backend.features.booking.dto.booking.*;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;

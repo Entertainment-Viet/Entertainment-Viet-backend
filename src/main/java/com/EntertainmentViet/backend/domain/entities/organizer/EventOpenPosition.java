@@ -5,8 +5,8 @@ import com.EntertainmentViet.backend.domain.entities.booking.Booking;
 import com.EntertainmentViet.backend.domain.entities.booking.Booking_;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.PaymentType;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
-import com.EntertainmentViet.backend.exception.InconsistentDataException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
 import com.querydsl.core.annotations.QueryInit;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.EqualsAndHashCode;
@@ -104,7 +104,7 @@ public class EventOpenPosition extends Identifiable {
                 applicant.setConfirmedAt(OffsetDateTime.now());
               } else {
                 log.warn(String.format("Can not accept applicant with uid '%s' due to out of slot", applicantUid));
-                throw new InconsistentDataException();
+                throw new InconsistentEntityStateException();
               }
             },
             () -> {

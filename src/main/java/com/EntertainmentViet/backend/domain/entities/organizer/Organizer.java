@@ -6,7 +6,7 @@ import com.EntertainmentViet.backend.domain.entities.talent.Package;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
-import com.EntertainmentViet.backend.exception.EntityNotFoundException;
+import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.features.common.utils.SecurityUtils;
 import com.EntertainmentViet.backend.features.security.roles.PaymentRole;
 import com.querydsl.core.annotations.QueryInit;
