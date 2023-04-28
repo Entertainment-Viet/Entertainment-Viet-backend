@@ -1,5 +1,6 @@
 package com.EntertainmentViet.backend.features.talent.dto.talent;
 
+import com.EntertainmentViet.backend.domain.entities.finance.UserDealFeeRate;
 import com.EntertainmentViet.backend.features.booking.dto.category.ReadCategoryDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ReadScoreRewardListDto;
@@ -40,4 +41,6 @@ public class ReadTalentDto extends ReadUserDto {
     private Boolean editorChoice;
 
     private List<String> hashTag;
+
+    private UserDealFeeRate organizerFeeRate;
 }
