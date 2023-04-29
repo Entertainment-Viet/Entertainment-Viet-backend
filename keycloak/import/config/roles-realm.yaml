@@ -5,6 +5,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPDATE_ORGANIZER",
           "READ_FILE",
           "UPLOAD_FILE",
           "VERIFY_ORGANIZER",
@@ -109,6 +110,7 @@
       "realm": null,
       "client": {
         "backend": [
+          "UPDATE_TALENT",
           "READ_FILE",
           "UPLOAD_FILE",
           "VERIFY_TALENT",

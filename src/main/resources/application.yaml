@@ -15,8 +15,8 @@ spring:
 #      ddl-auto: update
     properties:
       hibernate:
-#        show_sql: true
-#        format_sql: true
+        show_sql: true
+        format_sql: true
         dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
         metadata_builder_contributor: com.EntertainmentViet.backend.config.db.SqlFunctionMetadataBuilderContributor
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
@@ -40,8 +40,8 @@ spring:
       ADJUST_DATES_TO_CONTEXT_TIME_ZONE: false
   servlet:
     multipart:
-      max-request-size: 5MB
-      max-file-size: 5MB
+      max-request-size: 50MB
+      max-file-size: 50MB
   mail:
     host: smtp.gmail.com
     port: 587
@@ -105,9 +105,9 @@ logging:
       amazonaws:
         util:
           EC2MetadataUtils: error
-#    org:
-#      hibernate:
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: TRACE
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE

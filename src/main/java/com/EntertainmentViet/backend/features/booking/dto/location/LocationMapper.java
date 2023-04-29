@@ -1,23 +1,20 @@
 package com.EntertainmentViet.backend.features.booking.dto.location;
 
+import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.values.Location;
+import com.EntertainmentViet.backend.exception.rest.InvalidInputException;
+import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
+import com.EntertainmentViet.backend.features.booking.dao.location.LocationTypeRepository;
+import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Geometry;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.UUID;
-
-import com.EntertainmentViet.backend.config.MappingConfig;
-import com.EntertainmentViet.backend.domain.values.Location;
-import com.EntertainmentViet.backend.features.booking.dao.location.LocationRepository;
-import com.EntertainmentViet.backend.features.booking.dao.location.LocationTypeRepository;
-import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Geometry;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.Qualifier;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(uses = {
 				LocationTypeMapper.class
@@ -50,6 +47,11 @@ public abstract class LocationMapper {
 	public Location fromInputToModel(InputLocationDto locationDto) {
 		if (locationDto == null) {
 			return null;
+		}
+
+		if (locationDto.getAddress() == null || locationDto.getAddress().isBlank()) {
+			return locationRepository.findByUid(locationDto.getParentId())
+					.orElseThrow(() -> new InvalidInputException("Can not find location with uid: "+ locationDto.getParentId()));
 		}
 
 		return Location.builder()

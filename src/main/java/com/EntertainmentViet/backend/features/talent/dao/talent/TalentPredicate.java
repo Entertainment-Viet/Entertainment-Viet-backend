@@ -30,6 +30,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
   private final QReview review = QReview.review;
   private final QBooking booking = QBooking.booking;
   private final QJobDetail jobDetail = QJobDetail.jobDetail;
+  private final QTalentCategory talentCategory = QTalentCategory.talentCategory;
   private final QCategory category = QCategory.category;
   private final QCategory parentCategory = new QCategory("parentCategory");
   private final QPackage aPackage = QPackage.package$;
@@ -88,7 +89,8 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
 
     // join offerCategories
     talents = queryFactory.selectFrom(talent).distinct()
-            .leftJoin(talent.offerCategories, category).fetchJoin()
+            .leftJoin(talent.offerCategories, talentCategory).fetchJoin()
+            .leftJoin(talentCategory.category, category).fetchJoin()
             .leftJoin(category.parent).fetchJoin()
             .where(talent.in(talents))
             .fetch();
@@ -119,7 +121,7 @@ public class TalentPredicate extends IdentifiablePredicate<Talent> {
     if (paramDto.getCategory() != null) {
       predicate = ExpressionUtils.allOf(
               predicate,
-              talent.offerCategories.any().in(JPAExpressions.selectFrom(category).where(category.uid.eq(paramDto.getCategory())))
+              talent.offerCategories.any().category.in(JPAExpressions.selectFrom(category).where(category.uid.eq(paramDto.getCategory())))
       );
     }
 

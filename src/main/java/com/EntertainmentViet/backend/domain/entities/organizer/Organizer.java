@@ -48,6 +48,7 @@ public class Organizer extends Users {
   private List<Booking> bookings;
 
   @OneToMany(mappedBy = OrganizerShoppingCart_.ORGANIZER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private Set<OrganizerShoppingCart> shoppingCart;
 
   @OneToOne(mappedBy = OrganizerDetail_.ORGANIZER, cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)

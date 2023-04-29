@@ -2,7 +2,6 @@ package com.EntertainmentViet.backend.features.talent.dto.talent;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
 import com.EntertainmentViet.backend.domain.entities.talent.Talent;
-import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.booking.dto.booking.BookingMapper;
 import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.booking.dto.location.LocationMapper;
@@ -10,18 +9,13 @@ import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.StandardTypeMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
+import com.EntertainmentViet.backend.features.talent.dao.talent.TalentCategoryRepository;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(uses = {
         ExtensionsMapper.class,
@@ -39,6 +33,9 @@ public abstract class TalentMapper {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private TalentCategoryRepository talentCategoryRepository;
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"id", "bookings", "reviews", "reviewSum", "finalScore", "conversations"})
     @Mapping(target = "userState", source = "userState", qualifiedBy = StandardTypeMapper.ToUserStateKey.class)
@@ -64,6 +61,7 @@ public abstract class TalentMapper {
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserTypeKey.class)
     public abstract ReadTalentDto toDto(Talent talent);
 
+    @BeanMapping(ignoreUnmappedSourceProperties = {"offerCategories"})
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "reviews", ignore = true)
@@ -83,7 +81,7 @@ public abstract class TalentMapper {
     @Mapping(target = "talentDetail.descriptionImg", source = "descriptionImg")
     @Mapping(target = "talentDetail.extensions", source = "extensions", qualifiedBy = ExtensionsMapper.ToNode.class)
     @Mapping(target = "talentDetail.bio", source = "bio", qualifiedBy = UserInputTextMapper.ToUserInputTextObject.class)
-    @Mapping(target = "offerCategories", source = "offerCategories", qualifiedByName = "toOfferCategories")
+    @Mapping(target = "offerCategories", ignore = true)
     public abstract Talent fromUpdateDtoToModel(UpdateTalentDto updateTalentDto);
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"songs", "rewards"})
@@ -166,16 +164,16 @@ public abstract class TalentMapper {
         return readTalentDto;
     }
 
-    @Named("toOfferCategories")
-    public Set<Category> toOfferCategories(List<UUID> offerCategoryUidList) {
-        if (offerCategoryUidList == null) {
-            return Collections.emptySet();
-        }
-
-        return offerCategoryUidList.stream()
-                .map(uuid -> categoryMapper.toCategory(uuid))
-                .collect(Collectors.toSet());
-    }
+//    @Named("toOfferCategories")
+//    public Set<TalentCategory> toOfferCategories(List<UUID> offerCategoryUidList) {
+//        if (offerCategoryUidList == null) {
+//            return Collections.emptySet();
+//        }
+//
+//        var a = offerCategoryUidList.stream()
+//                .map(uuid -> categoryMapper.toCategory(uuid))
+////                .collect(Collectors.toSet());
+//    }
 
     @Named("toAvgReviewRate")
     public Double toAvgReviewRate(Talent talent) {

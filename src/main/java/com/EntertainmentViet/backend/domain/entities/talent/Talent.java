@@ -9,7 +9,6 @@ import com.EntertainmentViet.backend.domain.entities.organizer.EventOpenPosition
 import com.EntertainmentViet.backend.domain.standardTypes.BookingStatus;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
 import com.EntertainmentViet.backend.domain.values.Category;
-import com.EntertainmentViet.backend.domain.values.Category_;
 import com.EntertainmentViet.backend.domain.values.Price;
 import com.EntertainmentViet.backend.exception.rest.EntityNotFoundException;
 import com.EntertainmentViet.backend.exception.rest.InconsistentEntityStateException;
@@ -55,6 +54,7 @@ public class Talent extends Users implements Advertisable {
   private Set<Package> packages;
 
   @OneToMany(mappedBy = PriorityScore_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
   private List<PriorityScore> priorityScores;
 
   // priority score for display in browsing page
@@ -64,13 +64,9 @@ public class Talent extends Users implements Advertisable {
   @PrimaryKeyJoinColumn
   private TalentDetail talentDetail;
 
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinTable(
-          name = "talent_category",
-          joinColumns = @JoinColumn( name = "talent_id", referencedColumnName = Talent_.ID),
-          inverseJoinColumns = @JoinColumn( name = "category_id", referencedColumnName = Category_.ID)
-  )
-  private Set<Category> offerCategories;
+  @OneToMany(mappedBy = TalentCategory_.TALENT, cascade = CascadeType.ALL, orphanRemoval = true)
+  @QueryInit("*.*")
+  private Set<TalentCategory> offerCategories;
 
   @Type(type = "list-array")
   @Column(
@@ -83,11 +79,15 @@ public class Talent extends Users implements Advertisable {
   private Boolean editorChoice;
 
   public void addOfferCategory(Category category) {
-    offerCategories.add(category);
+    offerCategories.add(new TalentCategory(this, category));
   }
 
   public void removeOfferCategory(Category category) {
-    offerCategories.remove(category);
+    for (var talentCategory: offerCategories) {
+      if (talentCategory.getCategory().equals(category)) {
+        offerCategories.remove(talentCategory);
+      }
+    }
   }
 
   public void addReview(Review review) {
