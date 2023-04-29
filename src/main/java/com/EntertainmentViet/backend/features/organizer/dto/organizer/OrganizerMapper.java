@@ -7,6 +7,7 @@ import com.EntertainmentViet.backend.features.booking.dto.location.LocationMappe
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.StandardTypeMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.event.EventMapper;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.JobOfferMapper;
 import org.mapstruct.BeanMapping;
@@ -20,6 +21,7 @@ import org.mapstruct.Mapping;
     EventMapper.class,
     BookingMapper.class,
     LocationMapper.class,
+    UserDealFeeRateMapper.class,
     StandardTypeMapper.class}, config = MappingConfig.class)
 public abstract class OrganizerMapper {
 
@@ -42,6 +44,7 @@ public abstract class OrganizerMapper {
   @Mapping(target = "bio", source = "organizerDetail.bio", qualifiedBy = UserInputTextMapper.ToTranslatedText.class)
   @Mapping(target = "accountType", source = "accountType", qualifiedBy = StandardTypeMapper.ToAccountTypeKey.class)
   @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserTypeKey.class)
+  @Mapping(target = "customFeeRate", source = ".", qualifiedBy = UserDealFeeRateMapper.ToCustomFeeRate.class)
   public abstract ReadOrganizerDto toDto(Organizer organizer);
 
   @Mapping(target = "id", ignore = true)
