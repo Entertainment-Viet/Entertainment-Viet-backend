@@ -1,6 +1,7 @@
 package com.EntertainmentViet.backend.features.booking.dto.category;
 
 import com.EntertainmentViet.backend.config.MappingConfig;
+import com.EntertainmentViet.backend.domain.entities.talent.TalentCategory;
 import com.EntertainmentViet.backend.domain.values.Category;
 import com.EntertainmentViet.backend.features.booking.dao.category.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ public abstract class CategoryMapper {
     @Mapping(target = "uid", ignore = true)
     @Mapping(target = "parent", source = "parentUid", qualifiedByName = "toParentCategory")
     public abstract Category toModel(CreateCategoryDto createCategoryDto);
+
+    public ReadCategoryDto fromTalentCategoryToDto(TalentCategory talentCategory) {
+        var category = talentCategory.getCategory();
+        return toDto(category);
+    }
 
     @ToCategory
     public Category toCategory(UUID categoryUid) {

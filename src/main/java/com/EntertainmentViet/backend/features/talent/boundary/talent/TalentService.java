@@ -2,12 +2,16 @@ package com.EntertainmentViet.backend.features.talent.boundary.talent;
 
 import com.EntertainmentViet.backend.config.properties.StaticResourceProperties;
 import com.EntertainmentViet.backend.domain.entities.Identifiable;
+import com.EntertainmentViet.backend.domain.entities.talent.Talent;
+import com.EntertainmentViet.backend.domain.entities.talent.TalentCategory;
 import com.EntertainmentViet.backend.domain.entities.talent.TalentDetail;
 import com.EntertainmentViet.backend.domain.standardTypes.AccountType;
 import com.EntertainmentViet.backend.domain.standardTypes.UserState;
+import com.EntertainmentViet.backend.features.booking.dto.category.CategoryMapper;
 import com.EntertainmentViet.backend.features.common.dto.CustomPage;
 import com.EntertainmentViet.backend.features.common.utils.EntityValidationUtils;
 import com.EntertainmentViet.backend.features.common.utils.RestUtils;
+import com.EntertainmentViet.backend.features.talent.dao.talent.TalentCategoryRepository;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentRepository;
 import com.EntertainmentViet.backend.features.talent.dto.talent.*;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,10 @@ import java.util.UUID;
 public class TalentService implements TalentBoundary {
 
     private final TalentRepository talentRepository;
+
+    private final TalentCategoryRepository talentCategoryRepository;
+
+    private final CategoryMapper categoryMapper;
 
     private final TalentMapper talentMapper;
 
@@ -74,6 +81,7 @@ public class TalentService implements TalentBoundary {
     public Optional<UUID> update(UpdateTalentDto updateTalentDto, UUID uid){
         return talentRepository.findByUid(uid)
                 .map(talent -> talent.updateInfo(talentMapper.fromUpdateDtoToModel(updateTalentDto)))
+                .map(talent -> populateTalentCategory(talent, updateTalentDto.getOfferCategories()))
                 .map(talentRepository::save)
                 .map(Identifiable::getUid);
     }
@@ -113,5 +121,22 @@ public class TalentService implements TalentBoundary {
         }
         talentRepository.save(talent);
         return true;
+    }
+
+    private Talent populateTalentCategory(Talent talent, List<UUID> offerCategories) {
+        var talentCategories = offerCategories.stream()
+            .map(uuid -> categoryMapper.toCategory(uuid))
+            .map(category -> {
+                var currentCategoriesMap = talent.getOfferCategories().stream()
+                    .collect(Collectors.toMap(TalentCategory::getCategory, Function.identity()));
+                if (currentCategoriesMap.containsKey(category)) {
+                    return currentCategoriesMap.get(category);
+                }
+                return new TalentCategory(talent, category);
+            })
+            .collect(Collectors.toSet());
+
+        talent.setOfferCategories(talentCategories);
+        return talent;
     }
 }
