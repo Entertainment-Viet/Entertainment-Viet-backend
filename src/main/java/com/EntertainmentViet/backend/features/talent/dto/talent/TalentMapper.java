@@ -8,6 +8,7 @@ import com.EntertainmentViet.backend.features.booking.dto.location.LocationMappe
 import com.EntertainmentViet.backend.features.common.dto.ExtensionsMapper;
 import com.EntertainmentViet.backend.features.common.dto.StandardTypeMapper;
 import com.EntertainmentViet.backend.features.common.dto.UserInputTextMapper;
+import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateMapper;
 import com.EntertainmentViet.backend.features.scoresystem.dto.ScoreMapper;
 import com.EntertainmentViet.backend.features.talent.dao.talent.TalentCategoryRepository;
 import com.EntertainmentViet.backend.features.talent.dto.packagetalent.PackageMapper;
@@ -26,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
         CategoryMapper.class,
         ScoreMapper.class,
         LocationMapper.class,
+        UserDealFeeRateMapper.class,
         StandardTypeMapper.class
     },
         config = MappingConfig.class)
@@ -59,6 +61,7 @@ public abstract class TalentMapper {
     @Mapping(target = "reviewCount", source = ".", qualifiedByName = "toReviewCount")
     @Mapping(target = "accountType", source = "accountType", qualifiedBy = StandardTypeMapper.ToAccountTypeKey.class)
     @Mapping(target = "userType", source = "userType", qualifiedBy = StandardTypeMapper.ToUserTypeKey.class)
+    @Mapping(target = "customFeeRate", source = ".", qualifiedBy = UserDealFeeRateMapper.ToCustomFeeRate.class)
     public abstract ReadTalentDto toDto(Talent talent);
 
     @BeanMapping(ignoreUnmappedSourceProperties = {"offerCategories"})
@@ -163,17 +166,6 @@ public abstract class TalentMapper {
         }
         return readTalentDto;
     }
-
-//    @Named("toOfferCategories")
-//    public Set<TalentCategory> toOfferCategories(List<UUID> offerCategoryUidList) {
-//        if (offerCategoryUidList == null) {
-//            return Collections.emptySet();
-//        }
-//
-//        var a = offerCategoryUidList.stream()
-//                .map(uuid -> categoryMapper.toCategory(uuid))
-////                .collect(Collectors.toSet());
-//    }
 
     @Named("toAvgReviewRate")
     public Double toAvgReviewRate(Talent talent) {

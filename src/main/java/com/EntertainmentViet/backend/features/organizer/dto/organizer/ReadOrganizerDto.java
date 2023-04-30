@@ -2,6 +2,7 @@ package com.EntertainmentViet.backend.features.organizer.dto.organizer;
 
 import com.EntertainmentViet.backend.features.booking.dto.booking.ReadBookingDto;
 import com.EntertainmentViet.backend.features.common.dto.ReadUserDto;
+import com.EntertainmentViet.backend.features.finance.dto.UserDealFeeRateDto;
 import com.EntertainmentViet.backend.features.organizer.dto.event.ReadEventDto;
 import com.EntertainmentViet.backend.features.organizer.dto.joboffer.ReadJobOfferDto;
 import lombok.Getter;
@@ -32,4 +33,6 @@ public class ReadOrganizerDto extends ReadUserDto {
   private List<String> businessPaper;
 
   private List<String> hashTag;
+
+  private UserDealFeeRateDto customFeeRate;
 }
