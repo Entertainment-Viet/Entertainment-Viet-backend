@@ -3,6 +3,7 @@ package com.EntertainmentViet.backend.domain.values;
 import com.EntertainmentViet.backend.domain.businessLogic.CronExpressionLogic;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import org.springframework.scheduling.support.CronExpression;
 
 import javax.persistence.Embeddable;
 import java.time.OffsetDateTime;
@@ -28,7 +29,7 @@ public class RepeatPattern {
 
   @Schema(hidden = true)
   public boolean isValid() {
-    return cronExpression != null && startPeriod != null && endPeriod != null;
+    return cronExpression != null && startPeriod != null && endPeriod != null && CronExpression.isValidExpression(cronExpression);
   }
 
   @Schema(hidden = true)

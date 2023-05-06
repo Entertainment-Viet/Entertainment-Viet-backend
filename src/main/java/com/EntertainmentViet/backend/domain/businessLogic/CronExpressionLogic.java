@@ -62,6 +62,8 @@ public class CronExpressionLogic {
           repeatPattern.getStartPeriod().format(cronDateTimeFormatter), repeatPattern.getEndPeriod().format(cronDateTimeFormatter), cronDescription);
     } catch (ParseException e) {
       throw new InconsistentEntityStateException("Can not get parse repeatPattern: "+repeatPattern.getCronExpression());
+    } catch (Exception e) {
+      throw new InconsistentEntityStateException("Can not get parse repeatPattern: "+repeatPattern.getCronExpression());
     }
   }
 

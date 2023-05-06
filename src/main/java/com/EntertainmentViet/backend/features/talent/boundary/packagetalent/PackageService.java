@@ -59,6 +59,10 @@ public class PackageService implements PackageBoundary {
     public Optional<UUID> create(CreatePackageDto createPackageDto, UUID talentId) {
         Talent talent = talentRepository.findByUid(talentId).orElse(null);
         Package aPackage = packageMapper.fromCreateDtoToModel(createPackageDto);
+
+        if (!aPackage.getRepeatPattern().isValid()) {
+            throw new InvalidInputException("Invalid repeatPattern cron expression");
+        }
         aPackage.setTalent(talent);
 
         if (!EntityValidationUtils.isTalentWithUid(talent, talentId)) {

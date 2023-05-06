@@ -1,8 +1,10 @@
 package com.EntertainmentViet.backend.exception.rest;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -13,6 +15,20 @@ import java.time.ZonedDateTime;
 @RestControllerAdvice
 @Slf4j
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+
+  @Override
+  public ResponseEntity<Object> handleExceptionInternal(Exception error, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    error.printStackTrace();
+
+    var apiError = ApiError.builder()
+        .error(error != null ? error.getClass().getSimpleName() : null)
+        .description(error != null ? error.getMessage() : null)
+        .timestamp(ZonedDateTime.now())
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .build();
+
+    return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
   @ExceptionHandler(InconsistentEntityStateException.class)
   public ResponseEntity<ApiError> handleInvalidEntityStateException(InconsistentEntityStateException ex, WebRequest request) {
@@ -56,7 +72,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     return buildError(HttpStatus.SERVICE_UNAVAILABLE, ex);
   }
 
-  private ResponseEntity<ApiError> buildError(HttpStatus httpStatus, AbstractRestException error) {
+  private ResponseEntity<ApiError> buildError(HttpStatus httpStatus, Exception error) {
     error.printStackTrace();
 
     var apiError = ApiError.builder()

@@ -64,6 +64,9 @@ public class TalentBookingService implements TalentBookingBoundary {
     @Override
     @Transactional
     public Optional<List<UUID>> create(UUID talentUid, CreateBookingDto createBookingDto) {
+        if (!createBookingDto.getRepeatPattern().isValid()) {
+            throw new InvalidInputException("Invalid repeatPattern cron expression");
+        }
         Booking booking = bookingMapper.fromCreateDtoToModel(createBookingDto);
         booking.setStatus(BookingStatus.ORGANIZER_PENDING);
 
